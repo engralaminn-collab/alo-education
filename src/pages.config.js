@@ -5,6 +5,9 @@ import Courses from './pages/Courses';
 import CourseMatcher from './pages/CourseMatcher';
 import Contact from './pages/Contact';
 import About from './pages/About';
+import StudentDashboard from './pages/StudentDashboard';
+import MyApplications from './pages/MyApplications';
+import MyDocuments from './pages/MyDocuments';
 import __Layout from './Layout.jsx';
 
 
@@ -16,6 +19,9 @@ export const PAGES = {
     "CourseMatcher": CourseMatcher,
     "Contact": Contact,
     "About": About,
+    "StudentDashboard": StudentDashboard,
+    "MyApplications": MyApplications,
+    "MyDocuments": MyDocuments,
 }
 
 export const pagesConfig = {
