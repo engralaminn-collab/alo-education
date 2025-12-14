@@ -11,6 +11,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { format, isBefore, addDays } from 'date-fns';
 import { motion } from 'framer-motion';
+import StageResources from './StageResources';
+import AINextSteps from './AINextSteps';
+import QuickDocumentUpload from './QuickDocumentUpload';
 
 const journeyStages = [
   { id: 'profile', label: 'Complete Profile', icon: FileText },
@@ -26,7 +29,8 @@ export default function MyJourney({
   studentProfile, 
   applications = [], 
   documents = [],
-  tasks = [] 
+  tasks = [],
+  universities = []
 }) {
   // Calculate current stage
   const profileComplete = (studentProfile?.profile_completeness || 0) >= 80;
@@ -58,48 +62,15 @@ export default function MyJourney({
     .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
     .slice(0, 3);
 
-  // Get recommended resources based on current stage and destination
-  const getRecommendedResources = () => {
-    const country = applications[0]?.university?.country || studentProfile?.preferred_countries?.[0];
-    const resources = [];
-
-    if (currentStageIndex === 0) {
-      resources.push({ title: 'Complete Your Profile', link: 'MyProfile', icon: FileText });
-    }
-    if (currentStageIndex === 1) {
-      resources.push({ title: 'Browse Universities', link: 'Universities', icon: MapPin });
-      resources.push({ title: 'Find Matching Courses', link: 'CourseMatcher', icon: GraduationCap });
-    }
-    if (currentStageIndex === 2) {
-      resources.push({ title: 'Upload Documents', link: 'MyDocuments', icon: FileText });
-    }
-    if (country) {
-      const countryPages = {
-        'UK': 'StudyInUK',
-        'United Kingdom': 'StudyInUK',
-        'USA': 'StudyInUSA',
-        'United States': 'StudyInUSA',
-        'Canada': 'StudyInCanada',
-        'Australia': 'StudyInAustralia',
-        'Ireland': 'StudyInIreland',
-        'New Zealand': 'StudyInNewZealand'
-      };
-      if (countryPages[country]) {
-        resources.push({ 
-          title: `Study in ${country} Guide`, 
-          link: countryPages[country], 
-          icon: MapPin 
-        });
-      }
-    }
-
-    return resources;
-  };
-
-  const resources = getRecommendedResources();
+  // Get destination country
+  const destinationCountry = applications.length > 0 && universities.length > 0
+    ? universities.find(u => u.id === applications[0].university_id)?.country
+    : studentProfile?.preferred_countries?.[0];
 
   return (
     <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-slate-900">My Journey</h2>
+      
       {/* Progress Overview */}
       <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-500 to-cyan-500 text-white">
         <CardContent className="p-6">
@@ -205,32 +176,6 @@ export default function MyJourney({
         </Card>
       )}
 
-      {/* Recommended Resources */}
-      {resources.length > 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-lg">Recommended for You</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {resources.map((resource, index) => {
-                const Icon = resource.icon;
-                return (
-                  <Link key={index} to={createPageUrl(resource.link)}>
-                    <div className="flex items-center justify-between p-3 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <Icon className="w-5 h-5 text-emerald-600" />
-                        <span className="font-medium text-slate-900">{resource.title}</span>
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-slate-400" />
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

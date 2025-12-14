@@ -178,6 +178,7 @@ export default function StudentDashboard() {
               applications={applications}
               documents={documents}
               tasks={[]}
+              universities={universities}
             />
 
             {/* AI Recommendations */}
