@@ -31,6 +31,7 @@ import StudyInDubai from './pages/StudyInDubai';
 import CRMTasks from './pages/CRMTasks';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import CRMTestimonials from './pages/CRMTestimonials';
+import TestimonialsPage from './pages/TestimonialsPage';
 import __Layout from './Layout.jsx';
 
 
@@ -68,6 +69,7 @@ export const PAGES = {
     "CRMTasks": CRMTasks,
     "SubmitTestimonial": SubmitTestimonial,
     "CRMTestimonials": CRMTestimonials,
+    "TestimonialsPage": TestimonialsPage,
 }
 
 export const pagesConfig = {
