@@ -28,6 +28,9 @@ import StudyInIreland from './pages/StudyInIreland';
 import StudyInNewZealand from './pages/StudyInNewZealand';
 import StudyInUSA from './pages/StudyInUSA';
 import StudyInDubai from './pages/StudyInDubai';
+import CRMTasks from './pages/CRMTasks';
+import SubmitTestimonial from './pages/SubmitTestimonial';
+import CRMTestimonials from './pages/CRMTestimonials';
 import __Layout from './Layout.jsx';
 
 
@@ -62,6 +65,9 @@ export const PAGES = {
     "StudyInNewZealand": StudyInNewZealand,
     "StudyInUSA": StudyInUSA,
     "StudyInDubai": StudyInDubai,
+    "CRMTasks": CRMTasks,
+    "SubmitTestimonial": SubmitTestimonial,
+    "CRMTestimonials": CRMTestimonials,
 }
 
 export const pagesConfig = {
