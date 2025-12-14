@@ -35,7 +35,6 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
 import CRMAIAssistant from './pages/CRMAIAssistant';
-import CourseFinder from './pages/CourseFinder';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import ApplicationForm from './pages/ApplicationForm';
@@ -106,7 +105,6 @@ export const PAGES = {
     "CRMAutomation": CRMAutomation,
     "CRMLeadNurturing": CRMLeadNurturing,
     "CRMAIAssistant": CRMAIAssistant,
-    "CourseFinder": CourseFinder,
     "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
     "ApplicationForm": ApplicationForm,

@@ -46,7 +46,6 @@ export default function Navbar() {
 
 
   const navLinks = [
-    { label: 'Course Finder', page: 'CourseFinder' },
     { label: 'Services', page: 'About' },
     { label: 'English Tests', page: 'EnglishTests' }
   ];
