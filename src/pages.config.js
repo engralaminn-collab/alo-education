@@ -9,6 +9,8 @@ import StudentDashboard from './pages/StudentDashboard';
 import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
 import CRMDashboard from './pages/CRMDashboard';
+import CRMStudents from './pages/CRMStudents';
+import CRMInquiries from './pages/CRMInquiries';
 import __Layout from './Layout.jsx';
 
 
@@ -24,6 +26,8 @@ export const PAGES = {
     "MyApplications": MyApplications,
     "MyDocuments": MyDocuments,
     "CRMDashboard": CRMDashboard,
+    "CRMStudents": CRMStudents,
+    "CRMInquiries": CRMInquiries,
 }
 
 export const pagesConfig = {
