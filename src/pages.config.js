@@ -13,6 +13,9 @@ import CRMStudents from './pages/CRMStudents';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMApplications from './pages/CRMApplications';
 import CRMUniversities from './pages/CRMUniversities';
+import CRMCourses from './pages/CRMCourses';
+import CRMCounselors from './pages/CRMCounselors';
+import CRMReports from './pages/CRMReports';
 import __Layout from './Layout.jsx';
 
 
@@ -32,6 +35,9 @@ export const PAGES = {
     "CRMInquiries": CRMInquiries,
     "CRMApplications": CRMApplications,
     "CRMUniversities": CRMUniversities,
+    "CRMCourses": CRMCourses,
+    "CRMCounselors": CRMCounselors,
+    "CRMReports": CRMReports,
 }
 
 export const pagesConfig = {
