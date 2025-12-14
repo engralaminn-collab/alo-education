@@ -14,6 +14,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import CompareUniversities from '@/components/universities/CompareUniversities';
+import UniversityComparisonModal from '@/components/universities/UniversityComparisonModal';
+import UniversitiesMap from '@/components/universities/UniversitiesMap';
 
 const countries = [
   { value: 'all', label: 'All Countries' },
@@ -34,6 +37,9 @@ export default function Universities() {
   const [rankingFilter, setRankingFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   // Read URL params
   useEffect(() => {
@@ -189,6 +195,22 @@ export default function Universities() {
                 Showing <span className="font-semibold text-slate-900">{filteredUniversities.length}</span> universities
               </p>
               <div className="flex items-center gap-3">
+                {selectedForCompare.length > 0 && (
+                  <Button
+                    onClick={() => setShowComparison(true)}
+                    disabled={selectedForCompare.length < 2}
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                  >
+                    Compare ({selectedForCompare.length})
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => setShowMap(!showMap)}
+                >
+                  <MapPin className="w-4 h-4 mr-2" />
+                  {showMap ? 'Hide Map' : 'Show Map'}
+                </Button>
                 {/* Mobile Filter Button */}
                 <Sheet open={showFilters} onOpenChange={setShowFilters}>
                   <SheetTrigger asChild>
@@ -229,6 +251,18 @@ export default function Universities() {
               </div>
             </div>
 
+            {/* Map View */}
+            {showMap && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-6"
+              >
+                <UniversitiesMap universities={filteredUniversities} />
+              </motion.div>
+            )}
+
             {/* University Grid/List */}
             {isLoading ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -268,10 +302,26 @@ export default function Universities() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`}>
-                        <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
-                          viewMode === 'list' ? 'flex flex-row' : ''
-                        }`}>
+                      <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
+                        viewMode === 'list' ? 'flex flex-row' : ''
+                      } ${selectedForCompare.some(u => u.id === uni.id) ? 'ring-2 ring-emerald-500' : ''}`}>
+                        <div className="absolute top-3 right-3 z-10">
+                          <input
+                            type="checkbox"
+                            checked={selectedForCompare.some(u => u.id === uni.id)}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              if (e.target.checked) {
+                                setSelectedForCompare([...selectedForCompare, uni]);
+                              } else {
+                                setSelectedForCompare(selectedForCompare.filter(u => u.id !== uni.id));
+                              }
+                            }}
+                            className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
+                            title="Select for comparison"
+                          />
+                        </div>
+                        <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`} className="flex-1">
                           <div className={`relative overflow-hidden ${
                             viewMode === 'list' ? 'w-48 h-36 shrink-0' : 'h-48'
                           }`}>
@@ -282,10 +332,17 @@ export default function Universities() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
                             {uni.ranking && (
-                              <Badge className="absolute top-3 left-3 bg-emerald-500 text-white border-0">
-                                <Star className="w-3 h-3 mr-1" />
-                                #{uni.ranking}
-                              </Badge>
+                              <div className="absolute top-3 left-3 flex flex-col gap-1">
+                                <Badge className="bg-emerald-500 text-white border-0">
+                                  <Star className="w-3 h-3 mr-1" />
+                                  World #{uni.ranking}
+                                </Badge>
+                                {uni.qs_ranking && (
+                                  <Badge className="bg-blue-500 text-white border-0 text-xs">
+                                    QS #{uni.qs_ranking}
+                                  </Badge>
+                                )}
+                              </div>
                             )}
                           </div>
                           <CardContent className={`${viewMode === 'list' ? 'flex-1 p-4' : 'p-5'}`}>
@@ -314,10 +371,10 @@ export default function Universities() {
                               View Details
                               <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                             </Button>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    </motion.div>
+                            </CardContent>
+                            </Link>
+                            </Card>
+                            </motion.div>
                   ))}
                 </motion.div>
               </AnimatePresence>
@@ -325,6 +382,18 @@ export default function Universities() {
           </div>
         </div>
       </div>
+
+      <CompareUniversities 
+        selectedUniversities={selectedForCompare}
+        onRemove={(id) => setSelectedForCompare(selectedForCompare.filter(u => u.id !== id))}
+        onClear={() => setSelectedForCompare([])}
+      />
+
+      <UniversityComparisonModal
+        universities={selectedForCompare}
+        open={showComparison}
+        onClose={() => setShowComparison(false)}
+      />
 
       <Footer />
     </div>
