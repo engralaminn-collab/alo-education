@@ -154,27 +154,111 @@ export default function UniversityDetails() {
               </TabsList>
 
               <TabsContent value="overview">
-                <Card className="border-0 shadow-sm">
-                  <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
-                      {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
-                    </p>
+                <div className="space-y-8">
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-8">
+                      <h2 className="text-3xl font-bold text-slate-900 mb-6">Overview</h2>
+                      <div className="prose prose-slate max-w-none">
+                        <p className="text-slate-600 leading-relaxed">
+                          {university.description || `The ${university.name}, founded in 1413, is the third oldest university in the English-speaking world and the UK's oldest university in Scotland. Situated in a small town on the east coast of Fife, St Andrews has long been a centre of Scottish political, intellectual, and religious life. This history is reflected in the town's distinctive architecture, including the restored medieval colleges of the University, integrating with its historic buildings and landscape.`}
+                        </p>
+                        <p className="text-slate-600 leading-relaxed mt-4">
+                          Scottish undergraduate courses typically last four years, offering students more academic flexibility compared to the three-year degree system in England. At St Andrews, students apply to one of four faculties – Arts, Divinity, Medicine, or Science – and select modules to contribute to their academic programme, encouraging interdisciplinary learning and a more rounded academic experience.
+                        </p>
+                      </div>
 
-                    {university.facilities && university.facilities.length > 0 && (
-                      <div className="mt-8">
-                        <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {university.facilities.map((facility, i) => (
-                            <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
-                              {facility}
-                            </Badge>
-                          ))}
+                      {university.facilities && university.facilities.length > 0 && (
+                        <div className="mt-8">
+                          <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {university.facilities.map((facility, i) => (
+                              <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
+                                {facility}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Services Card */}
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <Card className="border-0 bg-slate-800 text-white">
+                      <CardContent className="p-8">
+                        <h3 className="text-2xl font-bold mb-6">Services</h3>
+                        <p className="text-slate-300 leading-relaxed mb-6">
+                          The University of St Andrews offers robust support for international students, including pre-sessional and in-sessional English language programmes. The International Advice Service has two dedicated international student advisors who provide support, assisting incoming international students throughout their studies to ensure visa requirements, adjusting to life in the UK, and access to brilliant student welfare services.
+                        </p>
+                        <p className="text-slate-300 leading-relaxed">
+                          They provide opportunities across various disciplines. The University's research reputation is strong, with around 700 research opportunities and a range of research opportunities across various schools and institutes leading to innovative research.
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <div>
+                      <img 
+                        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop"
+                        alt="University Services"
+                        className="rounded-2xl shadow-lg w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Rankings Card */}
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-8">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-6">Rankings</h3>
+                      <ul className="space-y-2 text-slate-600">
+                        <li>• 2nd in the Times University Guide 2025</li>
+                        <li>• 2nd in the Guardian University Guide 2025</li>
+                        <li>• 4th in The Complete University Guide 2026</li>
+                        <li>• 185th in the Times Higher Education World University Rankings 2025</li>
+                      </ul>
+                      <p className="text-slate-600 leading-relaxed mt-6">
+                        St Andrews has maintained its position as the top university in Scotland for the last ten years according to The Times University Guide, and it was named the UK University of the Year by The Times and Sunday Times University Guide. Additionally, the University was awarded 2nd in the Teaching Excellence Framework (TEF) for its outstanding teaching and learning environment.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Accommodation Card */}
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                      <img 
+                        src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&h=400&fit=crop"
+                        alt="Student Accommodation"
+                        className="rounded-2xl shadow-lg w-full h-full object-cover"
+                      />
+                    </div>
+                    <Card className="border-0 bg-teal-800 text-white">
+                      <CardContent className="p-8">
+                        <h3 className="text-2xl font-bold mb-6">Accommodation</h3>
+                        <p className="text-teal-100 leading-relaxed mb-4">
+                          St Andrews guarantees an offer of university-managed accommodation for all first-year undergraduate and new postgraduate students, provided applications are made by the deadline.
+                        </p>
+                        <p className="text-teal-100 leading-relaxed mb-4">
+                          There are over 4,000 rooms spread across the town, with around 40% of these being catered accommodation. Students can choose from traditional hall of residence living, modern apartments, or themed rooms. Most accommodation is located throughout the town, rather than on a centralised campus, integrating students into the local community.
+                        </p>
+                        <p className="text-teal-100 leading-relaxed">
+                          The range of accommodation options at St Andrews is diverse. From traditional stone-built halls, full of history and character, like St Salvator's Hall, to modern, eco-friendly apartments.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Courses Section */}
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-8">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-2xl font-bold text-slate-900">Courses offered at {university.name}</h3>
+                        <div className="relative w-64">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <Input placeholder="Search" className="pl-10" />
                         </div>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
+                      <p className="text-slate-500">Browse available courses</p>
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
 
               <TabsContent value="courses">
