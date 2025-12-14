@@ -30,11 +30,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isHome = location.pathname === '/Home' || location.pathname === '/';
-  const navBg = isScrolled || !isHome 
-    ? 'bg-white/95 backdrop-blur-md shadow-sm' 
-    : 'bg-transparent';
-  const textColor = isScrolled || !isHome ? 'text-slate-800' : 'text-white';
+  const navBg = 'bg-white/95 backdrop-blur-md shadow-sm';
+  const textColor = 'text-slate-800';
 
   const destinations = [
     { label: 'United Kingdom', page: 'StudyInUK' },
