@@ -23,6 +23,8 @@ import AppointmentScheduler from '@/components/dashboard/AppointmentScheduler';
 import ApplicationProgressTracker from '@/components/dashboard/ApplicationProgressTracker';
 import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
 import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
+import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
+import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -78,6 +80,11 @@ export default function StudentDashboard() {
   const { data: courses = [] } = useQuery({
     queryKey: ['courses-list'],
     queryFn: () => base44.entities.Course.filter({ status: 'open' }),
+  });
+
+  const { data: scholarships = [] } = useQuery({
+    queryKey: ['scholarships-list'],
+    queryFn: () => base44.entities.Scholarship.filter({ status: 'active' }),
   });
 
   const universityMap = universities.reduce((acc, u) => { acc[u.id] = u; return acc; }, {});
@@ -314,6 +321,16 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Deadlines Tracker */}
+            <DeadlinesTracker 
+              applications={applications}
+              tasks={tasks}
+              scholarships={scholarships}
+            />
+
+            {/* Personalized Quick Links */}
+            <PersonalizedQuickLinks studentProfile={studentProfile} />
+
             {/* Appointment Scheduler */}
             <AppointmentScheduler studentProfile={studentProfile} />
 
