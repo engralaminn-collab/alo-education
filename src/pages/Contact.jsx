@@ -57,8 +57,12 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-20">
-        <div className="container mx-auto px-6">
+      <section 
+        className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 py-20 bg-cover bg-center"
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&h=600&fit=crop)' }}
+      >
+        <div className="absolute inset-0 bg-slate-900/70"></div>
+        <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center text-white">
             <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-80" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
