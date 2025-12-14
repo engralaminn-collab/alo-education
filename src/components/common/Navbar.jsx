@@ -46,6 +46,8 @@ export default function Navbar() {
     { label: 'Home', page: 'Home' },
     { label: 'Universities', page: 'Universities' },
     { label: 'Courses', page: 'Courses' },
+    { label: 'Scholarships', page: 'Scholarships' },
+    { label: 'Alumni', page: 'AlumniNetwork' },
     { label: 'About', page: 'About' },
     { label: 'Apply Now', page: 'ApplicationForm' },
     { label: 'Contact', page: 'Contact' },
