@@ -176,6 +176,26 @@ export default function MyJourney({
         </Card>
       )}
 
+      {/* AI Next Steps */}
+      <AINextSteps 
+        studentProfile={studentProfile}
+        applications={applications}
+        documents={documents}
+        currentStage={currentStageIndex}
+      />
+
+      {/* Quick Document Upload */}
+      <QuickDocumentUpload 
+        studentProfile={studentProfile}
+        documents={documents}
+      />
+
+      {/* Stage-Specific Resources */}
+      <StageResources 
+        currentStage={currentStageIndex}
+        country={destinationCountry}
+      />
+
     </div>
   );
 }
