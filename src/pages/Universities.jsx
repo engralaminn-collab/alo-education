@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Search, MapPin, Star, Users, DollarSign, Filter, X, ArrowRight, Grid, List, GraduationCap } from 'lucide-react';
+import { Search, MapPin, Star, Users, DollarSign, Filter, X, ArrowRight, Grid, List, GraduationCap, ArrowUpDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,6 +33,9 @@ export default function Universities() {
   const [selectedCountry, setSelectedCountry] = useState('all');
   const [tuitionRange, setTuitionRange] = useState([0, 100000]);
   const [rankingFilter, setRankingFilter] = useState('all');
+  const [degreeLevel, setDegreeLevel] = useState('all');
+  const [fieldOfStudy, setFieldOfStudy] = useState('all');
+  const [sortBy, setSortBy] = useState('ranking');
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedForCompare, setSelectedForCompare] = useState([]);
@@ -46,7 +49,12 @@ export default function Universities() {
 
   const { data: universities = [], isLoading } = useQuery({
     queryKey: ['universities'],
-    queryFn: () => base44.entities.University.filter({ status: 'active' }, '-ranking'),
+    queryFn: () => base44.entities.University.filter({ status: 'active' }),
+  });
+
+  const { data: courses = [] } = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => base44.entities.Course.list(),
   });
 
   const filteredUniversities = universities.filter(uni => {
@@ -60,7 +68,35 @@ export default function Universities() {
                            (rankingFilter === 'top50' && uni.ranking <= 50) ||
                            (rankingFilter === 'top100' && uni.ranking <= 100) ||
                            (rankingFilter === 'top200' && uni.ranking <= 200);
-    return matchesSearch && matchesCountry && matchesTuition && matchesRanking;
+    
+    // Filter by degree level - check if university has courses with this degree level
+    const matchesDegreeLevel = degreeLevel === 'all' || 
+                               courses.some(course => 
+                                 course.university_id === uni.id && 
+                                 course.degree_level === degreeLevel
+                               );
+    
+    // Filter by field of study - check if university offers courses in this field
+    const matchesFieldOfStudy = fieldOfStudy === 'all' || 
+                                courses.some(course => 
+                                  course.university_id === uni.id && 
+                                  course.field_of_study === fieldOfStudy
+                                );
+    
+    return matchesSearch && matchesCountry && matchesTuition && matchesRanking && 
+           matchesDegreeLevel && matchesFieldOfStudy;
+  }).sort((a, b) => {
+    // Sort functionality
+    if (sortBy === 'ranking') {
+      return (a.ranking || 9999) - (b.ranking || 9999);
+    } else if (sortBy === 'name') {
+      return (a.name || '').localeCompare(b.name || '');
+    } else if (sortBy === 'fees-low') {
+      return (a.tuition_range_min || 0) - (b.tuition_range_min || 0);
+    } else if (sortBy === 'fees-high') {
+      return (b.tuition_range_min || 0) - (a.tuition_range_min || 0);
+    }
+    return 0;
   });
 
   const clearFilters = () => {
@@ -68,11 +104,14 @@ export default function Universities() {
     setSelectedCountry('all');
     setTuitionRange([0, 100000]);
     setRankingFilter('all');
+    setDegreeLevel('all');
+    setFieldOfStudy('all');
   };
 
   const hasActiveFilters = searchQuery || selectedCountry !== 'all' || 
                            tuitionRange[0] > 0 || tuitionRange[1] < 100000 || 
-                           rankingFilter !== 'all';
+                           rankingFilter !== 'all' || degreeLevel !== 'all' || 
+                           fieldOfStudy !== 'all';
 
   const FiltersContent = () => (
     <div className="space-y-6">
@@ -86,6 +125,48 @@ export default function Universities() {
             {countries.map(c => (
               <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Degree Level</label>
+        <Select value={degreeLevel} onValueChange={setDegreeLevel}>
+          <SelectTrigger>
+            <SelectValue placeholder="All levels" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Levels</SelectItem>
+            <SelectItem value="foundation">Foundation</SelectItem>
+            <SelectItem value="bachelor">Bachelor's</SelectItem>
+            <SelectItem value="master">Master's</SelectItem>
+            <SelectItem value="phd">PhD</SelectItem>
+            <SelectItem value="diploma">Diploma</SelectItem>
+            <SelectItem value="certificate">Certificate</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Field of Study</label>
+        <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
+          <SelectTrigger>
+            <SelectValue placeholder="All fields" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Fields</SelectItem>
+            <SelectItem value="business">Business</SelectItem>
+            <SelectItem value="engineering">Engineering</SelectItem>
+            <SelectItem value="computer_science">Computer Science</SelectItem>
+            <SelectItem value="medicine">Medicine</SelectItem>
+            <SelectItem value="arts">Arts</SelectItem>
+            <SelectItem value="law">Law</SelectItem>
+            <SelectItem value="science">Science</SelectItem>
+            <SelectItem value="social_sciences">Social Sciences</SelectItem>
+            <SelectItem value="education">Education</SelectItem>
+            <SelectItem value="hospitality">Hospitality</SelectItem>
+            <SelectItem value="architecture">Architecture</SelectItem>
+            <SelectItem value="other">Other</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -186,11 +267,24 @@ export default function Universities() {
           {/* Main Content */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
               <p className="text-slate-600">
                 Showing <span className="font-semibold text-slate-900">{filteredUniversities.length}</span> universities
               </p>
               <div className="flex items-center gap-3">
+                {/* Sort Dropdown */}
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48">
+                    <ArrowUpDown className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ranking">Ranking (Best First)</SelectItem>
+                    <SelectItem value="name">Name (A-Z)</SelectItem>
+                    <SelectItem value="fees-low">Fees (Low to High)</SelectItem>
+                    <SelectItem value="fees-high">Fees (High to Low)</SelectItem>
+                  </SelectContent>
+                </Select>
                 {/* Mobile Filter Button */}
                 <Sheet open={showFilters} onOpenChange={setShowFilters}>
                   <SheetTrigger asChild>
