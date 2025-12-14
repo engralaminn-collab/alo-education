@@ -58,6 +58,12 @@ export default function StudentDashboard() {
     enabled: !!studentProfile?.id,
   });
 
+  const { data: tasks = [] } = useQuery({
+    queryKey: ['my-tasks', studentProfile?.id],
+    queryFn: () => base44.entities.Task.filter({ student_id: studentProfile?.id }),
+    enabled: !!studentProfile?.id,
+  });
+
   const { data: universities = [] } = useQuery({
     queryKey: ['universities-list'],
     queryFn: () => base44.entities.University.list(),
@@ -177,7 +183,7 @@ export default function StudentDashboard() {
               studentProfile={studentProfile}
               applications={applications}
               documents={documents}
-              tasks={[]}
+              tasks={tasks}
             />
 
             {/* AI Recommendations */}

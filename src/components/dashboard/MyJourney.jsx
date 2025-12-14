@@ -58,21 +58,70 @@ export default function MyJourney({
     .sort((a, b) => new Date(a.due_date) - new Date(b.due_date))
     .slice(0, 3);
 
+  // Get AI-powered recommendations based on profile and progress
+  const getAIRecommendations = () => {
+    const recommendations = [];
+    const degreeLevel = studentProfile?.preferred_degree_level;
+    const fields = studentProfile?.preferred_fields || [];
+    
+    // Stage-based recommendations
+    if (currentStageIndex === 0) {
+      recommendations.push({ 
+        title: 'Complete Your Profile', 
+        description: 'Add your education background and test scores',
+        link: 'MyProfile', 
+        icon: FileText,
+        priority: 'high'
+      });
+    }
+    
+    if (currentStageIndex === 1) {
+      if (fields.length > 0) {
+        recommendations.push({ 
+          title: 'AI Course Recommendations', 
+          description: `Explore ${fields[0]} programs tailored to your profile`,
+          link: 'Courses', 
+          icon: GraduationCap,
+          priority: 'high'
+        });
+      }
+      recommendations.push({ 
+        title: 'Compare Universities', 
+        description: 'Side-by-side comparison of top institutions',
+        link: 'Universities', 
+        icon: MapPin,
+        priority: 'medium'
+      });
+    }
+    
+    if (currentStageIndex === 2 && hasApplications) {
+      recommendations.push({ 
+        title: 'Document Checklist', 
+        description: 'Ensure all required documents are ready',
+        link: 'MyDocuments', 
+        icon: FileText,
+        priority: 'high'
+      });
+    }
+    
+    if (currentStageIndex >= 3) {
+      recommendations.push({ 
+        title: 'Visa Preparation Guide', 
+        description: 'Get ready for your visa interview',
+        link: 'MyApplications', 
+        icon: Plane,
+        priority: 'medium'
+      });
+    }
+
+    return recommendations;
+  };
+
   // Get recommended resources based on current stage and destination
   const getRecommendedResources = () => {
     const country = applications[0]?.university?.country || studentProfile?.preferred_countries?.[0];
     const resources = [];
 
-    if (currentStageIndex === 0) {
-      resources.push({ title: 'Complete Your Profile', link: 'MyProfile', icon: FileText });
-    }
-    if (currentStageIndex === 1) {
-      resources.push({ title: 'Browse Universities', link: 'Universities', icon: MapPin });
-      resources.push({ title: 'Find Matching Courses', link: 'CourseMatcher', icon: GraduationCap });
-    }
-    if (currentStageIndex === 2) {
-      resources.push({ title: 'Upload Documents', link: 'MyDocuments', icon: FileText });
-    }
     if (country) {
       const countryPages = {
         'UK': 'StudyInUK',
@@ -96,6 +145,7 @@ export default function MyJourney({
     return resources;
   };
 
+  const aiRecommendations = getAIRecommendations();
   const resources = getRecommendedResources();
 
   return (
@@ -205,11 +255,53 @@ export default function MyJourney({
         </Card>
       )}
 
-      {/* Recommended Resources */}
+      {/* AI-Powered Recommendations */}
+      {aiRecommendations.length > 0 && (
+        <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-blue-50">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-purple-600" />
+              AI Recommendations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {aiRecommendations.map((rec, index) => {
+                const Icon = rec.icon;
+                return (
+                  <Link key={index} to={createPageUrl(rec.link)}>
+                    <div className={`p-4 bg-white rounded-lg hover:shadow-md transition-all cursor-pointer border-l-4 ${
+                      rec.priority === 'high' ? 'border-l-red-500' : 'border-l-blue-500'
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0">
+                          <Icon className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-slate-900">{rec.title}</h4>
+                            {rec.priority === 'high' && (
+                              <Badge className="bg-red-100 text-red-700 text-xs">Priority</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-slate-600">{rec.description}</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-slate-400 mt-2" />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Country-Specific Resources */}
       {resources.length > 0 && (
         <Card className="border-0 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-lg">Recommended for You</CardTitle>
+            <CardTitle className="text-lg">Study Destination Guides</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
