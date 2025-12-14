@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ALO Education Brand Colors */
 :root {
   --alo-blue: #0B5ED7;
   --alo-orange: #F7941D;
@@ -16,38 +15,38 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground;
   }
 }
 
-/* ALO Brand Color Utilities */
-.bg-alo-blue {
-  background-color: var(--alo-blue);
+/* ALO Brand Color Classes */
+.alo-blue-bg {
+  background-color: var(--alo-blue) !important;
 }
 
-.bg-alo-orange {
-  background-color: var(--alo-orange);
+.alo-orange-bg {
+  background-color: var(--alo-orange) !important;
 }
 
-.text-alo-blue {
-  color: var(--alo-blue);
+.alo-blue-text {
+  color: var(--alo-blue) !important;
 }
 
-.text-alo-orange {
-  color: var(--alo-orange);
+.alo-orange-text {
+  color: var(--alo-orange) !important;
 }
 
-.border-alo-blue {
-  border-color: var(--alo-blue);
+.alo-blue-border {
+  border-color: var(--alo-blue) !important;
 }
 
-.border-alo-orange {
-  border-color: var(--alo-orange);
+.alo-orange-border {
+  border-color: var(--alo-orange) !important;
 }
 
-/* ALO Card Component */
+/* ALO Standard Card */
 .alo-card {
-  background: #fff;
+  background: white;
   border: 1px solid var(--alo-blue);
   border-radius: 12px;
   transition: all 0.2s ease;
@@ -63,29 +62,25 @@
   font-weight: 700;
 }
 
-/* ALO Button */
-.alo-button {
-  background: var(--alo-orange);
-  color: #fff;
+/* ALO Standard Button */
+.alo-btn-primary {
+  background-color: var(--alo-orange);
+  color: white;
   border-radius: 10px;
   padding: 12px 24px;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 
-.alo-button:hover {
+.alo-btn-primary:hover {
   opacity: 0.9;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 /* ALO Header */
 .alo-header {
-  background: var(--alo-blue);
-  color: #fff;
-}
-
-.alo-header a {
-  color: #fff;
+  background-color: var(--alo-blue);
+  color: white;
 }
 
 .alo-header a:hover {
@@ -93,55 +88,37 @@
 }
 
 /* ALO Footer */
-.alo-footer {
-  background: #fff;
-  color: var(--alo-text);
-}
-
-.alo-footer h4 {
-  color: var(--alo-blue);
-}
-
-.alo-footer a {
-  color: var(--alo-blue);
-}
-
-.alo-footer a:hover {
-  color: var(--alo-orange);
-}
-
-/* ALO Footer Bottom Bar - ALWAYS ALO BLUE */
 .alo-footer-bottom {
-  background: var(--alo-blue);
-  color: #fff;
+  background-color: var(--alo-blue);
+  color: white;
   padding: 14px 0;
 }
 
 .alo-footer-bottom a {
-  color: #fff;
+  color: white;
 }
 
 .alo-footer-bottom a:hover {
   color: var(--alo-orange);
 }
 
-/* Mobile Responsiveness */
+/* Responsive */
 @media (max-width: 768px) {
   .alo-header {
     position: sticky;
     top: 0;
     z-index: 50;
   }
-
+  
   .alo-card {
     border-radius: 12px;
   }
-
-  .alo-button {
+  
+  .alo-btn-primary {
     width: 100%;
     min-height: 44px;
   }
-
+  
   .alo-footer-bottom {
     text-align: center;
   }
