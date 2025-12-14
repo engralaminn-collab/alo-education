@@ -124,13 +124,10 @@ export default function MyJourney({
                       <p className="text-xs text-blue-600">In Progress</p>
                     )}
                   </div>
-                  {isCurrent && resources.length > 0 && (
-                    <Link to={createPageUrl(resources[0].link)}>
-                      <Button size="sm" variant="outline">
-                        Next Step
-                        <ArrowRight className="w-3 h-3 ml-1" />
-                      </Button>
-                    </Link>
+                  {isCurrent && (
+                    <Badge className="bg-blue-100 text-blue-700">
+                      Current
+                    </Badge>
                   )}
                 </motion.div>
               );
