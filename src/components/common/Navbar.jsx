@@ -82,7 +82,7 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'white' }}>
               <GraduationCap className="w-6 h-6" style={{ color: 'var(--alo-blue)' }} />
             </div>
-            <span className="text-xl font-bold text-white">ALO Education</span>
+            <span className="text-xl font-bold text-black">ALO Education</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -91,9 +91,9 @@ export default function Navbar() {
             <Dialog open={finderOpen} onOpenChange={setFinderOpen}>
               <DialogTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-black transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                   <Search className="w-4 h-4" />
                   Smart Finder
                 </button>
@@ -112,9 +112,9 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-black transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                   Destinations
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -134,10 +134,10 @@ export default function Navbar() {
             <Link
               key={link.page}
               to={createPageUrl(link.page)}
-              className="font-medium text-white transition-colors"
-              style={{ color: 'white' }}
+              className="font-medium text-black transition-colors"
+              style={{ color: 'black' }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+              onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                 {link.label}
               </Link>
             )}
@@ -146,9 +146,9 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-black transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                   Language Prep
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -168,9 +168,9 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-black transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                   Portal
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -190,9 +190,9 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-black transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
                   Resources
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -214,7 +214,7 @@ export default function Navbar() {
             {user ?
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
+                  <Button variant="ghost" className="gap-2 text-black hover:bg-black/5">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
                       {user.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
                     </div>
@@ -285,7 +285,7 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-black hover:bg-black/5">
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
