@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -20,15 +20,18 @@ export default function Footer() {
               Empowering students worldwide to achieve their international education dreams through personalized guidance and support.
             </p>
             <div className="flex gap-3">
-              {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-emerald-500 flex items-center justify-center transition-colors"
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-emerald-500 flex items-center justify-center transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-emerald-500 flex items-center justify-center transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-emerald-500 flex items-center justify-center transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-emerald-500 flex items-center justify-center transition-colors">
+                <Youtube className="w-5 h-5" />
+              </a>
             </div>
           </div>
           
@@ -78,15 +81,24 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-emerald-400 mt-0.5" />
-                <span>123 Education Tower, Business Bay, Dubai, UAE</span>
+                <div>
+                  <div className="font-medium text-white mb-1">Bangladesh Office:</div>
+                  <div>Barek Mansion-02 (5th Floor)</div>
+                  <div>58/9 Box Culvert Road, Panthapath</div>
+                  <div>Dhaka-1205, Bangladesh</div>
+                </div>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-emerald-400" />
-                <span>+971 4 123 4567</span>
+                <span>+88 01805020101-10</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-emerald-400" />
                 <span>info@aloeducation.com</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Clock className="w-5 h-5 text-emerald-400" />
+                <span>Sat-Thu: 10 AM - 6 PM</span>
               </li>
             </ul>
           </div>
