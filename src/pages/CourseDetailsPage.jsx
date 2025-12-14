@@ -36,6 +36,16 @@ export default function CourseDetailsPage() {
     enabled: !!course?.university_id,
   });
 
+  const { data: universities = [] } = useQuery({
+    queryKey: ['universities-for-similar'],
+    queryFn: () => base44.entities.University.list(),
+  });
+
+  const { data: allCourses = [] } = useQuery({
+    queryKey: ['all-courses-for-similar'],
+    queryFn: () => base44.entities.Course.filter({ status: 'open' }),
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
