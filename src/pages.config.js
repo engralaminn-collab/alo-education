@@ -18,6 +18,9 @@ import CRMCounselors from './pages/CRMCounselors';
 import CRMReports from './pages/CRMReports';
 import Messages from './pages/Messages';
 import MyProfile from './pages/MyProfile';
+import CRMSettings from './pages/CRMSettings';
+import CRMMessages from './pages/CRMMessages';
+import CourseDetails from './pages/CourseDetails';
 import __Layout from './Layout.jsx';
 
 
@@ -42,6 +45,9 @@ export const PAGES = {
     "CRMReports": CRMReports,
     "Messages": Messages,
     "MyProfile": MyProfile,
+    "CRMSettings": CRMSettings,
+    "CRMMessages": CRMMessages,
+    "CourseDetails": CourseDetails,
 }
 
 export const pagesConfig = {
