@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail
+  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -23,8 +23,9 @@ const menuItems = [
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
   { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
   { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
-  { icon: Workflow, label: 'Workflows', page: 'CRMWorkflows' },
+  { icon: GitBranch, label: 'Workflows', page: 'CRMWorkflows' },
   { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
+  { icon: TrendingUp, label: 'Counselor Analytics', page: 'CRMCounselorAnalytics' },
   { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];
