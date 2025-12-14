@@ -47,9 +47,9 @@ export default function Navbar() {
   ];
 
   const navLinks = [
-    { label: 'Company', page: 'About' },
-    { label: 'Services', page: 'Home', hash: '#services' },
     { label: 'Course Finder', page: 'CourseMatcher' },
+    { label: 'Services', page: 'Home', hash: '#services' },
+    { label: 'Language Prep', page: 'Contact' },
     { label: 'Resources', page: 'AlumniNetwork' },
   ];
 
