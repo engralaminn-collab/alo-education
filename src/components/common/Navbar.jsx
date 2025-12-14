@@ -45,7 +45,10 @@ export default function Navbar() {
   const navLinks = [
     { label: 'Course Finder', page: 'CourseFinder' },
     { label: 'Services', page: 'About' },
-    { label: 'Language Prep', page: 'Contact' },
+    { label: 'Language Prep', page: 'Contact' }
+  ];
+
+  const portals = [
     { label: 'Student Portal', page: 'StudentDashboard' },
     { label: 'Partner Portal', page: 'CRMDashboard' }
   ];
@@ -105,6 +108,28 @@ export default function Navbar() {
                 {link.label}
               </Link>
             )}
+
+            {/* Portal Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  Portal
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {portals.map((portal) =>
+                <DropdownMenuItem key={portal.page} asChild>
+                    <Link to={createPageUrl(portal.page)} className="cursor-pointer">
+                      {portal.label}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Resources Dropdown */}
             <DropdownMenu>
@@ -242,6 +267,25 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 )}
+
+                {/* Mobile Portal */}
+                <div>
+                  <p className="text-sm font-semibold mb-2" style={{ color: 'var(--alo-blue)' }}>Portal</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    {portals.map((portal) =>
+                    <Link
+                      key={portal.page}
+                      to={createPageUrl(portal.page)}
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-base font-medium transition-colors"
+                      style={{ color: 'var(--alo-blue)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
+                        {portal.label}
+                      </Link>
+                    )}
+                  </div>
+                </div>
 
                 {/* Mobile Resources */}
                 <div>
