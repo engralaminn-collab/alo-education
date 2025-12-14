@@ -164,12 +164,13 @@ export default function MyDocuments() {
                     />
                   </div>
                   <div>
-                    <Label>File</Label>
-                    <div className="mt-2 border-2 border-dashed border-slate-200 rounded-xl p-6 text-center">
+                    <Label>File *</Label>
+                    <div className="mt-2 border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-emerald-500 transition-colors">
                       {newDoc.file ? (
                         <div className="flex items-center justify-center gap-2">
                           <File className="w-5 h-5 text-emerald-500" />
-                          <span className="text-sm">{newDoc.file.name}</span>
+                          <span className="text-sm font-medium">{newDoc.file.name}</span>
+                          <span className="text-xs text-slate-500">({(newDoc.file.size / 1024).toFixed(1)} KB)</span>
                           <Button 
                             variant="ghost" 
                             size="sm"
@@ -179,17 +180,23 @@ export default function MyDocuments() {
                           </Button>
                         </div>
                       ) : (
-                        <label className="cursor-pointer">
+                        <label className="cursor-pointer block">
                           <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                          <p className="text-sm text-slate-500">Click to upload or drag and drop</p>
-                          <p className="text-xs text-slate-400 mt-1">PDF, JPG, PNG up to 10MB</p>
+                          <p className="text-sm font-medium text-slate-700">Click to upload or drag and drop</p>
+                          <p className="text-xs text-slate-500 mt-1">PDF, JPG, PNG up to 10MB</p>
+                          <p className="text-xs text-emerald-600 mt-2">🔒 Secure encrypted upload</p>
                           <input
                             type="file"
                             className="hidden"
                             accept=".pdf,.jpg,.jpeg,.png"
                             onChange={(e) => {
                               if (e.target.files?.[0]) {
-                                setNewDoc(prev => ({ ...prev, file: e.target.files[0] }));
+                                const file = e.target.files[0];
+                                if (file.size > 10 * 1024 * 1024) {
+                                  toast.error('File size must be less than 10MB');
+                                  return;
+                                }
+                                setNewDoc(prev => ({ ...prev, file }));
                               }
                             }}
                           />

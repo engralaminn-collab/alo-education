@@ -20,6 +20,9 @@ import MyJourney from '@/components/dashboard/MyJourney';
 import ResourcesHub from '@/components/dashboard/ResourcesHub';
 import SavedComparisons from '@/components/dashboard/SavedComparisons';
 import AppointmentScheduler from '@/components/dashboard/AppointmentScheduler';
+import ApplicationProgressTracker from '@/components/dashboard/ApplicationProgressTracker';
+import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
+import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -189,6 +192,20 @@ export default function StudentDashboard() {
               tasks={tasks}
             />
 
+            {/* Application Progress Tracker */}
+            <ApplicationProgressTracker 
+              applications={applications}
+              universities={universities}
+              courses={courses}
+            />
+
+            {/* Eligibility Checker */}
+            <EligibilityChecker 
+              studentProfile={studentProfile}
+              courses={courses}
+              universities={universities}
+            />
+
             {/* AI Recommendations */}
             <AIRecommendations 
               studentProfile={studentProfile}
@@ -299,6 +316,9 @@ export default function StudentDashboard() {
           <div className="space-y-6">
             {/* Appointment Scheduler */}
             <AppointmentScheduler studentProfile={studentProfile} />
+
+            {/* AI FAQ Helper */}
+            <AIFAQHelper studentProfile={studentProfile} />
 
             {/* Saved Comparisons */}
             <SavedComparisons studentProfile={studentProfile} />
