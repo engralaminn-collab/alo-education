@@ -87,27 +87,6 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
-            {/* Smart Course Finder */}
-            <Dialog open={finderOpen} onOpenChange={setFinderOpen}>
-              <DialogTrigger asChild>
-                <button
-                  className="font-medium text-black transition-colors flex items-center gap-1"
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'black'}>
-                  <Search className="w-4 h-4" />
-                  Smart Finder
-                </button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle className="text-2xl" style={{ color: 'var(--alo-blue)' }}>
-                    Smart Course Finder
-                  </DialogTitle>
-                </DialogHeader>
-                <SmartCourseFinder onClose={() => setFinderOpen(false)} />
-              </DialogContent>
-            </Dialog>
-
             {/* Destinations Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
