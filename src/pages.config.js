@@ -46,6 +46,7 @@ import CRMWorkflows from './pages/CRMWorkflows';
 import StudentAnalytics from './pages/StudentAnalytics';
 import CRMPerformance from './pages/CRMPerformance';
 import CompleteProfile from './pages/CompleteProfile';
+import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -98,6 +99,7 @@ export const PAGES = {
     "StudentAnalytics": StudentAnalytics,
     "CRMPerformance": CRMPerformance,
     "CompleteProfile": CompleteProfile,
+    "CRMCounselorAnalytics": CRMCounselorAnalytics,
 }
 
 export const pagesConfig = {
