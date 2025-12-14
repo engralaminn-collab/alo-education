@@ -53,6 +53,18 @@ import AICounselor from './pages/AICounselor';
 import EnglishTests from './pages/EnglishTests';
 import IELTSTest from './pages/IELTSTest';
 import PTETest from './pages/PTETest';
+import IELTSUKVITest from './pages/IELTSUKVITest';
+import OIETCTest from './pages/OIETCTest';
+import TOEFLTest from './pages/TOEFLTest';
+import DuolingoTest from './pages/DuolingoTest';
+import LanguageCertTest from './pages/LanguageCertTest';
+import KaplanTest from './pages/KaplanTest';
+import OETTest from './pages/OETTest';
+import CambridgeTest from './pages/CambridgeTest';
+import GRETest from './pages/GRETest';
+import GMATTest from './pages/GMATTest';
+import SATTest from './pages/SATTest';
+import ACTTest from './pages/ACTTest';
 import __Layout from './Layout.jsx';
 
 
@@ -112,6 +124,18 @@ export const PAGES = {
     "EnglishTests": EnglishTests,
     "IELTSTest": IELTSTest,
     "PTETest": PTETest,
+    "IELTSUKVITest": IELTSUKVITest,
+    "OIETCTest": OIETCTest,
+    "TOEFLTest": TOEFLTest,
+    "DuolingoTest": DuolingoTest,
+    "LanguageCertTest": LanguageCertTest,
+    "KaplanTest": KaplanTest,
+    "OETTest": OETTest,
+    "CambridgeTest": CambridgeTest,
+    "GRETest": GRETest,
+    "GMATTest": GMATTest,
+    "SATTest": SATTest,
+    "ACTTest": ACTTest,
 }
 
 export const pagesConfig = {
