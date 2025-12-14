@@ -49,6 +49,7 @@ export default function Navbar() {
     { label: 'Scholarships', page: 'Scholarships' },
     { label: 'Alumni', page: 'AlumniNetwork' },
     { label: 'About', page: 'About' },
+    { label: 'AI Counselor', page: 'AICounselor' },
     { label: 'Apply Now', page: 'ApplicationForm' },
     { label: 'Contact', page: 'Contact' },
   ];
