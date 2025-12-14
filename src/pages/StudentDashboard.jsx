@@ -204,6 +204,7 @@ export default function StudentDashboard() {
               applications={applications}
               universities={universities}
               courses={courses}
+              studentProfile={studentProfile}
             />
 
             {/* Eligibility Checker */}
