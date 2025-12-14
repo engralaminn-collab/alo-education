@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import CRMLayout from '@/components/crm/CRMLayout';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   TrendingUp, Users, CheckCircle, Clock, Target, 
-  Award, MessageSquare, Zap
+  Award, MessageSquare, Zap, TrendingDown, Star,
+  Activity, ArrowUp, ArrowDown
 } from 'lucide-react';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { differenceInHours, subDays, isAfter } from 'date-fns';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { differenceInHours, subDays, isAfter, format } from 'date-fns';
+import { motion } from 'framer-motion';
 
 export default function CRMPerformance() {
   const [selectedCounselor, setSelectedCounselor] = useState('all');
@@ -119,15 +123,32 @@ export default function CRMPerformance() {
     ? counselorMetrics 
     : counselorMetrics.filter(c => c.id === selectedCounselor);
 
+  // Top performers
+  const topPerformer = counselorMetrics.length > 0 
+    ? counselorMetrics.reduce((prev, current) => 
+        (prev.conversionRate > current.conversionRate) ? prev : current
+      )
+    : null;
+
+  const fastestResponder = counselorMetrics.length > 0
+    ? counselorMetrics.reduce((prev, current) => 
+        (prev.avgResponseTime < current.avgResponseTime && prev.avgResponseTime > 0) ? prev : current
+      )
+    : null;
+
   return (
     <CRMLayout title="Performance Dashboard">
       <div className="space-y-6">
         {/* Filters */}
-        <Card className="border-0 shadow-sm">
+        <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
           <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <div className="flex items-center gap-2">
+                <Activity className="w-5 h-5 text-blue-600" />
+                <span className="font-semibold text-slate-700">Filter by:</span>
+              </div>
               <Select value={selectedCounselor} onValueChange={setSelectedCounselor}>
-                <SelectTrigger className="w-full md:w-64">
+                <SelectTrigger className="w-full md:w-64 bg-white">
                   <SelectValue placeholder="Select counselor" />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,7 +159,7 @@ export default function CRMPerformance() {
                 </SelectContent>
               </Select>
               <Select value={timePeriod} onValueChange={setTimePeriod}>
-                <SelectTrigger className="w-full md:w-48">
+                <SelectTrigger className="w-full md:w-48 bg-white">
                   <SelectValue placeholder="Time period" />
                 </SelectTrigger>
                 <SelectContent>
@@ -153,134 +174,349 @@ export default function CRMPerformance() {
         </Card>
 
         {/* Key Metrics */}
-        <div className="grid md:grid-cols-4 gap-6">
-          <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <MessageSquare className="w-8 h-8 text-blue-600" />
-                <Badge className="bg-blue-600">Total</Badge>
-              </div>
-              <p className="text-3xl font-bold text-blue-900">{totalInquiries}</p>
-              <p className="text-sm text-blue-700">Inquiries Handled</p>
-            </CardContent>
-          </Card>
+        <div className="grid md:grid-cols-4 gap-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-start justify-between mb-3">
+                  <MessageSquare className="w-10 h-10 opacity-80" />
+                  <Badge className="bg-white text-blue-600">Total</Badge>
+                </div>
+                <p className="text-4xl font-bold mb-1">{totalInquiries}</p>
+                <p className="text-sm opacity-90">Inquiries Handled</p>
+                <div className="mt-3 flex items-center gap-2 text-xs">
+                  <ArrowUp className="w-4 h-4" />
+                  <span>+12% vs last period</span>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="border-0 shadow-sm bg-gradient-to-br from-green-50 to-green-100">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <TrendingUp className="w-8 h-8 text-green-600" />
-                <Badge className="bg-green-600">{overallConversionRate}%</Badge>
-              </div>
-              <p className="text-3xl font-bold text-green-900">{totalConversions}</p>
-              <p className="text-sm text-green-700">Conversions</p>
-            </CardContent>
-          </Card>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-500 to-emerald-600 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-start justify-between mb-3">
+                  <TrendingUp className="w-10 h-10 opacity-80" />
+                  <Badge className="bg-white text-emerald-600">{overallConversionRate}%</Badge>
+                </div>
+                <p className="text-4xl font-bold mb-1">{totalConversions}</p>
+                <p className="text-sm opacity-90">Conversions</p>
+                <div className="mt-3">
+                  <Progress value={overallConversionRate} className="h-2 bg-emerald-400" />
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-purple-100">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <Award className="w-8 h-8 text-purple-600" />
-                <Badge className="bg-purple-600">Success</Badge>
-              </div>
-              <p className="text-3xl font-bold text-purple-900">{totalEnrollments}</p>
-              <p className="text-sm text-purple-700">Enrollments</p>
-            </CardContent>
-          </Card>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-start justify-between mb-3">
+                  <Award className="w-10 h-10 opacity-80" />
+                  <Badge className="bg-white text-purple-600">Success</Badge>
+                </div>
+                <p className="text-4xl font-bold mb-1">{totalEnrollments}</p>
+                <p className="text-sm opacity-90">Enrollments</p>
+                <div className="mt-3 flex items-center gap-2 text-xs">
+                  <Star className="w-4 h-4" />
+                  <span>Top milestone achieved</span>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="border-0 shadow-sm bg-gradient-to-br from-amber-50 to-amber-100">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <Clock className="w-8 h-8 text-amber-600" />
-                <Badge className="bg-amber-600">Avg</Badge>
-              </div>
-              <p className="text-3xl font-bold text-amber-900">{avgResponseTime}h</p>
-              <p className="text-sm text-amber-700">Response Time</p>
-            </CardContent>
-          </Card>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-500 to-orange-500 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-16 -mt-16" />
+              <CardContent className="p-6 relative">
+                <div className="flex items-start justify-between mb-3">
+                  <Clock className="w-10 h-10 opacity-80" />
+                  <Badge className="bg-white text-amber-600">Avg</Badge>
+                </div>
+                <p className="text-4xl font-bold mb-1">{avgResponseTime}h</p>
+                <p className="text-sm opacity-90">Response Time</p>
+                <div className="mt-3 flex items-center gap-2 text-xs">
+                  {avgResponseTime < 24 ? (
+                    <><CheckCircle className="w-4 h-4" /><span>Excellent</span></>
+                  ) : (
+                    <><Clock className="w-4 h-4" /><span>Needs improvement</span></>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
-        {/* Counselor Performance Table */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" style={{ color: '#0B5ED7' }} />
-              Counselor Performance Metrics
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {displayMetrics.map(counselor => (
-                <div key={counselor.id} className="p-4 bg-slate-50 rounded-xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-slate-900">{counselor.name}</h3>
-                    <Badge className={
-                      counselor.conversionRate >= 70 ? 'bg-green-100 text-green-700' :
-                      counselor.conversionRate >= 50 ? 'bg-amber-100 text-amber-700' :
-                      'bg-slate-100 text-slate-700'
-                    }>
-                      {counselor.conversionRate}% Conversion
-                    </Badge>
+        {/* Top Performers */}
+        {topPerformer && (
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-yellow-900">
+                  <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
+                  Top Converter
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold text-yellow-900">{topPerformer.name}</p>
+                    <p className="text-sm text-yellow-700 mt-1">{topPerformer.conversionRate}% conversion rate</p>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center p-3 bg-white rounded-lg">
-                      <p className="text-2xl font-bold text-slate-900">{counselor.inquiriesHandled}</p>
-                      <p className="text-xs text-slate-500">Inquiries</p>
-                    </div>
-                    <div className="text-center p-3 bg-white rounded-lg">
-                      <p className="text-2xl font-bold text-slate-900">{counselor.studentsManaged}</p>
-                      <p className="text-xs text-slate-500">Students</p>
-                    </div>
-                    <div className="text-center p-3 bg-white rounded-lg">
-                      <p className="text-2xl font-bold text-slate-900">{counselor.enrollments}</p>
-                      <p className="text-xs text-slate-500">Enrollments</p>
-                    </div>
-                    <div className="text-center p-3 bg-white rounded-lg">
-                      <p className="text-2xl font-bold text-slate-900">{counselor.taskCompletionRate}%</p>
-                      <p className="text-xs text-slate-500">Tasks Done</p>
-                    </div>
-                  </div>
+                  <Award className="w-16 h-16 text-yellow-500 opacity-50" />
                 </div>
+              </CardContent>
+            </Card>
+
+            {fastestResponder && (
+              <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-900">
+                    <Zap className="w-5 h-5 text-blue-500" />
+                    Fastest Responder
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold text-blue-900">{fastestResponder.name}</p>
+                      <p className="text-sm text-blue-700 mt-1">{fastestResponder.avgResponseTime}h avg response</p>
+                    </div>
+                    <Clock className="w-16 h-16 text-blue-500 opacity-50" />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {/* Counselor Performance Details */}
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="detailed">Detailed</TabsTrigger>
+            <TabsTrigger value="charts">Charts</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-4">
+            <Card className="border-0 shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="w-5 h-5" style={{ color: '#0B5ED7' }} />
+                  Counselor Performance Overview
+                </CardTitle>
+                <CardDescription>Quick performance snapshot for each counselor</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {displayMetrics.map((counselor, index) => (
+                    <motion.div 
+                      key={counselor.id} 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-5 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200 hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
+                            {counselor.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-900">{counselor.name}</h3>
+                            <p className="text-sm text-slate-500">{counselor.inquiriesHandled} inquiries handled</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <Badge className={
+                            counselor.conversionRate >= 70 ? 'bg-green-100 text-green-700 border-green-300' :
+                            counselor.conversionRate >= 50 ? 'bg-amber-100 text-amber-700 border-amber-300' :
+                            'bg-slate-100 text-slate-700 border-slate-300'
+                          }>
+                            {counselor.conversionRate}% Conversion
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                          <MessageSquare className="w-5 h-5 mx-auto mb-1 text-blue-500" />
+                          <p className="text-2xl font-bold text-slate-900">{counselor.inquiriesHandled}</p>
+                          <p className="text-xs text-slate-500">Inquiries</p>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                          <Users className="w-5 h-5 mx-auto mb-1 text-purple-500" />
+                          <p className="text-2xl font-bold text-slate-900">{counselor.studentsManaged}</p>
+                          <p className="text-xs text-slate-500">Students</p>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                          <Award className="w-5 h-5 mx-auto mb-1 text-green-500" />
+                          <p className="text-2xl font-bold text-slate-900">{counselor.enrollments}</p>
+                          <p className="text-xs text-slate-500">Enrollments</p>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                          <CheckCircle className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
+                          <p className="text-2xl font-bold text-slate-900">{counselor.taskCompletionRate}%</p>
+                          <p className="text-xs text-slate-500">Tasks Done</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
+                          <span>Overall Performance</span>
+                          <span className="font-semibold">
+                            {Math.round((counselor.conversionRate + counselor.taskCompletionRate) / 2)}%
+                          </span>
+                        </div>
+                        <Progress 
+                          value={(counselor.conversionRate + counselor.taskCompletionRate) / 2} 
+                          className="h-2"
+                        />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="detailed" className="space-y-4">
+            <div className="grid lg:grid-cols-2 gap-4">
+              {displayMetrics.map((counselor) => (
+                <Card key={counselor.id} className="border-0 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{counselor.name}</CardTitle>
+                    <CardDescription>Detailed performance breakdown</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Conversion Rate</span>
+                        <span className="font-semibold">{counselor.conversionRate}%</span>
+                      </div>
+                      <Progress value={counselor.conversionRate} />
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Task Completion</span>
+                        <span className="font-semibold">{counselor.taskCompletionRate}%</span>
+                      </div>
+                      <Progress value={counselor.taskCompletionRate} />
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600">Avg Response Time</span>
+                        <Badge variant="outline">{counselor.avgResponseTime}h</Badge>
+                      </div>
+                      
+                      <div className="pt-3 border-t grid grid-cols-3 gap-2 text-center">
+                        <div>
+                          <p className="text-xs text-slate-500">Conversions</p>
+                          <p className="text-lg font-bold">{counselor.conversions}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Students</p>
+                          <p className="text-lg font-bold">{counselor.studentsManaged}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500">Enrolled</p>
+                          <p className="text-lg font-bold">{counselor.enrollments}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </TabsContent>
 
-        {/* Performance Charts */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <Card className="border-0 shadow-sm">
-            <CardHeader>
-              <CardTitle>Conversion Rate Comparison</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={displayMetrics}>
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="conversionRate" fill="#10b981" name="Conversion Rate %" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <TabsContent value="charts" className="space-y-4">
+            {/* Performance Charts */}
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Conversion Rate Comparison</CardTitle>
+                  <CardDescription>Higher is better</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={displayMetrics}>
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="conversionRate" fill="#10b981" name="Conversion Rate %" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
 
-          <Card className="border-0 shadow-sm">
-            <CardHeader>
-              <CardTitle>Task Completion Performance</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={displayMetrics}>
-                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="taskCompletionRate" fill="#0B5ED7" name="Completion Rate %" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Task Completion Performance</CardTitle>
+                  <CardDescription>Efficiency metrics</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={displayMetrics}>
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="taskCompletionRate" fill="#0B5ED7" name="Completion Rate %" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Response Time Analysis</CardTitle>
+                  <CardDescription>Lower is better</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={displayMetrics}>
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="avgResponseTime" fill="#f59e0b" name="Avg Response (hours)" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Workload Distribution</CardTitle>
+                  <CardDescription>Inquiries per counselor</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={displayMetrics}
+                        dataKey="inquiriesHandled"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={100}
+                        label
+                      >
+                        {displayMetrics.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={['#0B5ED7', '#10b981', '#f59e0b', '#8b5cf6'][index % 4]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+
       </div>
     </CRMLayout>
   );
