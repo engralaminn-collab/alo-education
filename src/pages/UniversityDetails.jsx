@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Star, Users, Globe, Calendar, Building2, 
   GraduationCap, DollarSign, Award, ChevronRight, 
-  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink, Search
+  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
