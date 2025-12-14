@@ -7,49 +7,74 @@ export default function Footer() {
   return (
     <footer className="bg-white text-slate-700">
       <div className="container mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid md:grid-cols-4 gap-12">
           {/* Brand */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'var(--alo-blue)' }}>
-                <GraduationCap className="w-7 h-7 text-white" />
-              </div>
-              <span className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>ALO Education</span>
-            </div>
-            <p className="text-slate-600 leading-relaxed mb-6 max-w-sm">
-              Empowering students worldwide to achieve their international education dreams through personalized guidance and support.
+          <div>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693e153b7a74643e7f576f5e/b2e2eb03f_fgdh.jpg" 
+              alt="ALO Education Logo" 
+              className="h-20 mb-4"
+            />
+            <p className="text-slate-600 text-sm mb-4">
+              From your ambition to admission, we're with you all the way.
             </p>
             <div className="flex gap-3">
-              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
-                <Facebook className="w-5 h-5" />
+              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
+                <Facebook className="w-4 h-4" />
               </a>
-              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
-                <Linkedin className="w-5 h-5" />
+              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
+                <Instagram className="w-4 h-4" />
               </a>
-              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
-                <Instagram className="w-5 h-5" />
+              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
+                <Linkedin className="w-4 h-4" />
               </a>
-              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
-                <Youtube className="w-5 h-5" />
+              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
+                <Youtube className="w-4 h-4" />
               </a>
             </div>
           </div>
           
+          {/* Destinations */}
+          <div>
+            <h4 className="font-semibold mb-4 text-sm" style={{ color: 'var(--alo-blue)' }}>Destinations:</h4>
+            <ul className="space-y-2 text-sm">
+              {[
+                { label: 'United Kingdom', page: 'StudyInUK' },
+                { label: 'United States', page: 'StudyInUSA' },
+                { label: 'Australia', page: 'StudyInAustralia' },
+                { label: 'Canada', page: 'StudyInCanada' },
+                { label: 'New Zealand', page: 'StudyInNewZealand' },
+                { label: 'Europe', page: 'Universities' }
+              ].map((dest) => (
+                <li key={dest.page}>
+                  <Link 
+                    to={createPageUrl(dest.page)} 
+                    className="transition-colors hover:underline"
+                    style={{ color: 'var(--alo-blue)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+                  >
+                    {dest.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Quick Links</h4>
-            <ul className="space-y-3">
+            <h4 className="font-semibold mb-4 text-sm" style={{ color: 'var(--alo-blue)' }}>Quick Links:</h4>
+            <ul className="space-y-2 text-sm">
               {[
-                { label: 'Home', page: 'Home' },
-                { label: 'Universities', page: 'Universities' },
-                { label: 'Courses', page: 'Courses' },
-                { label: 'About Us', page: 'About' },
-                { label: 'Contact', page: 'Contact' },
+                { label: 'Course Finder', page: 'Courses' },
+                { label: 'Services', page: 'About' },
+                { label: 'English Test Prep', page: 'Contact' },
+                { label: 'Blogs', page: 'Home' }
               ].map((link) => (
                 <li key={link.page}>
                   <Link 
                     to={createPageUrl(link.page)} 
-                    className="transition-colors"
+                    className="transition-colors hover:underline"
                     style={{ color: 'var(--alo-blue)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
@@ -61,66 +86,56 @@ export default function Footer() {
             </ul>
           </div>
           
-          {/* Destinations */}
+          {/* Company */}
           <div>
-            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Destinations</h4>
-            <ul className="space-y-3">
-              {['United Kingdom', 'United States', 'Canada', 'Australia', 'Germany', 'Ireland'].map((country) => (
-                <li key={country}>
+            <h4 className="font-semibold mb-4 text-sm" style={{ color: 'var(--alo-blue)' }}>Company:</h4>
+            <ul className="space-y-2 text-sm">
+              {[
+                { label: 'About Us', page: 'About' },
+                { label: 'Team', page: 'About' },
+                { label: 'Find Us', page: 'Contact' },
+                { label: 'Contact Us', page: 'Contact' }
+              ].map((link) => (
+                <li key={link.label}>
                   <Link 
-                    to={createPageUrl('Universities') + `?country=${country.toLowerCase()}`}
-                    className="transition-colors"
+                    to={createPageUrl(link.page)} 
+                    className="transition-colors hover:underline"
                     style={{ color: 'var(--alo-blue)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
                   >
-                    Study in {country}
+                    {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-          
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Contact Us</h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-0.5" style={{ color: '#F37021' }} />
-                <div>
-                  <div className="font-medium mb-1" style={{ color: '#0066CC' }}>Bangladesh Office:</div>
-                  <div>Barek Mansion-02 (5th Floor)</div>
-                  <div>58/9 Box Culvert Road, Panthapath</div>
-                  <div>Dhaka-1205, Bangladesh</div>
-                </div>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5" style={{ color: '#F37021' }} />
-                <span>+88 01805020101-10</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5" style={{ color: '#F37021' }} />
-                <span>info@aloeducation.com</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock className="w-5 h-5" style={{ color: '#F37021' }} />
-                <span>Sat-Thu: 10 AM - 6 PM</span>
-              </li>
-            </ul>
+        </div>
+        
+        {/* Decorative Graduation Caps */}
+        <div className="mt-8 mb-8 overflow-hidden" style={{ height: '60px' }}>
+          <div className="flex items-center gap-8 opacity-30">
+            {[...Array(20)].map((_, i) => (
+              <GraduationCap 
+                key={i} 
+                className="w-8 h-8 shrink-0" 
+                style={{ 
+                  color: i % 3 === 0 ? '#0066CC' : i % 3 === 1 ? '#F37021' : '#555555',
+                  transform: `rotate(${(i % 4) * 15}deg)`
+                }} 
+              />
+            ))}
           </div>
         </div>
         
-        <div className="mt-12" style={{ backgroundColor: '#0066CC', color: 'white', padding: '14px 0' }}>
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm">
-            © {new Date().getFullYear()} ALO Education. All Rights Reserved
+        {/* Bottom Bar */}
+        <div className="border-t pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm" style={{ color: 'var(--alo-grey)' }}>
+          <p>
+            © Copyright {new Date().getFullYear()} ALO Education. All Rights Reserved
           </p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Privacy Policy</a>
-            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Terms of Service</a>
-            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Cookie Policy</a>
+          <div className="flex gap-6">
+            <a href="#" className="transition-colors hover:underline" style={{ color: 'var(--alo-blue)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>Cookie policy</a>
           </div>
-        </div>
         </div>
       </div>
     </footer>
