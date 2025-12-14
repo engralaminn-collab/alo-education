@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
+import MyJourney from '@/components/dashboard/MyJourney';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -171,6 +172,14 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
+            {/* My Journey */}
+            <MyJourney 
+              studentProfile={studentProfile}
+              applications={applications}
+              documents={documents}
+              tasks={[]}
+            />
+
             {/* AI Recommendations */}
             <AIRecommendations 
               studentProfile={studentProfile}

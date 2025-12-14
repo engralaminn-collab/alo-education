@@ -32,6 +32,7 @@ import CRMTasks from './pages/CRMTasks';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import CRMTestimonials from './pages/CRMTestimonials';
 import TestimonialsPage from './pages/TestimonialsPage';
+import CRMAutomation from './pages/CRMAutomation';
 import __Layout from './Layout.jsx';
 
 
@@ -70,6 +71,7 @@ export const PAGES = {
     "SubmitTestimonial": SubmitTestimonial,
     "CRMTestimonials": CRMTestimonials,
     "TestimonialsPage": TestimonialsPage,
+    "CRMAutomation": CRMAutomation,
 }
 
 export const pagesConfig = {
