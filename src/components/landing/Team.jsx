@@ -13,7 +13,7 @@ const team = [
   {
     name: 'Al Aminn',
     title: 'Chief Operating Officer',
-    bio: 'Al Aminn, our COO, ensures the seamless operation of ALO Education's day-to-day activities. He oversees processes, maintains efficiency, and implements quality standards across all departments. His focus on operational excellence ensures that every student receives consistent, reliable, and professional guidance throughout their study abroad journey.',
+    bio: 'Al Aminn, our COO, ensures the seamless operation of ALO Education\'s day-to-day activities. He oversees processes, maintains efficiency, and implements quality standards across all departments. His focus on operational excellence ensures that every student receives consistent, reliable, and professional guidance throughout their study abroad journey.',
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400'
   },
   {
@@ -25,7 +25,7 @@ const team = [
   {
     name: 'Md Shakil Hossain',
     title: 'Head of Admission',
-    bio: 'Md Shakil Hossain manages the admissions process with precision and dedication. He provides personalized counseling, guides students through application procedures, and ensures that every step is smooth and transparent. Shakil's commitment to student success makes the journey of studying abroad efficient, stress-free, and rewarding.',
+    bio: 'Md Shakil Hossain manages the admissions process with precision and dedication. He provides personalized counseling, guides students through application procedures, and ensures that every step is smooth and transparent. Shakil\'s commitment to student success makes the journey of studying abroad efficient, stress-free, and rewarding.',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400'
   }
 ];
