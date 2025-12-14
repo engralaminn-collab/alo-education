@@ -1,33 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, GraduationCap, Globe, Users, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-
-const countries = [
-  { name: 'UK', image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1920' },
-  { name: 'USA', image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=1920' },
-  { name: 'Canada', image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=1920' },
-  { name: 'Australia', image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1920' },
-  { name: 'Germany', image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1920' },
-  { name: 'Ireland', image: 'https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=1920' },
-];
+import { motion } from 'framer-motion';
 
 export default function Hero({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [country, setCountry] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('');
-  const [currentCountryIndex, setCurrentCountryIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentCountryIndex((prev) => (prev + 1) % countries.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -39,19 +22,9 @@ export default function Hero({ onSearch }) {
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background with rotating images */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentCountryIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.2 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${countries[currentCountryIndex].image}')` }}
-          />
-        </AnimatePresence>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920')] bg-cover bg-center opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-slate-900/50" />
       </div>
 
@@ -92,20 +65,7 @@ export default function Hero({ onSearch }) {
             <span className="block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               Studying Abroad
             </span>
-            in the{' '}
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={currentCountryIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="inline-block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
-              >
-                {countries[currentCountryIndex].name}
-              </motion.span>
-            </AnimatePresence>
-            {' '}& More
+            in the UK, USA, Australia, Canada & More
           </motion.h1>
 
           <motion.p
