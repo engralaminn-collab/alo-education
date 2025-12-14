@@ -44,7 +44,7 @@ export default function Hero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % countries.length);
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -129,7 +129,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative h-[600px]"
+            className="relative h-[500px]"
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -142,7 +142,7 @@ export default function Hero() {
               >
                 {/* Isometric Container */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-[550px] h-[550px]" style={{ transform: 'perspective(1000px) rotateY(-10deg) rotateX(5deg)' }}>
+                  <div className="relative w-[450px] h-[450px]" style={{ transform: 'perspective(1000px) rotateY(-10deg) rotateX(5deg)' }}>
                     {/* Isometric Platform */}
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-3xl shadow-2xl" style={{ transform: 'translateZ(-50px)' }}>
                       {/* Country Image Overlay */}
