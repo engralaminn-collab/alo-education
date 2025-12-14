@@ -171,58 +171,102 @@ export default function CourseMatcher() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-16">
+      <section className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-20">
         <div className="container mx-auto px-6">
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-80" />
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Course Matcher
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-8 text-white text-center">
+              Explore courses
             </h1>
-            <p className="text-xl text-white/80">
-              Find courses that match your profile and eligibility
-            </p>
+            
+            <Card className="border-0 shadow-2xl">
+              <CardContent className="p-8">
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-slate-700 mb-2">Courses</Label>
+                      <Input 
+                        placeholder="Search courses..."
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-slate-700 mb-2">Universities</Label>
+                      <Input 
+                        placeholder="Search universities..."
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-slate-700 mb-2">I'm looking for:</Label>
+                    <Select>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select degree level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
+                        <SelectItem value="master">Master's Degree</SelectItem>
+                        <SelectItem value="phd">PhD</SelectItem>
+                        <SelectItem value="diploma">Diploma</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="text-slate-700 mb-2">I'm planning to study:</Label>
+                    <Select>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select field of study" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="business">Business</SelectItem>
+                        <SelectItem value="engineering">Engineering</SelectItem>
+                        <SelectItem value="computer_science">Computer Science</SelectItem>
+                        <SelectItem value="medicine">Medicine</SelectItem>
+                        <SelectItem value="arts">Arts</SelectItem>
+                        <SelectItem value="law">Law</SelectItem>
+                        <SelectItem value="science">Science</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="text-slate-700 mb-2">I want to study in:</Label>
+                    <Select>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="uk">United Kingdom</SelectItem>
+                        <SelectItem value="usa">United States</SelectItem>
+                        <SelectItem value="canada">Canada</SelectItem>
+                        <SelectItem value="australia">Australia</SelectItem>
+                        <SelectItem value="germany">Germany</SelectItem>
+                        <SelectItem value="ireland">Ireland</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white h-12 text-lg">
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Search
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-6 py-12">
-        <div className="max-w-3xl mx-auto">
-          {/* Progress Steps */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between mb-4">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all ${
-                    currentStep >= step.id 
-                      ? 'bg-emerald-500 text-white' 
-                      : 'bg-slate-200 text-slate-500'
-                  }`}>
-                    {currentStep > step.id ? (
-                      <Check className="w-5 h-5" />
-                    ) : (
-                      <step.icon className="w-5 h-5" />
-                    )}
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div className={`hidden md:block w-24 lg:w-32 h-1 mx-2 rounded ${
-                      currentStep > step.id ? 'bg-emerald-500' : 'bg-slate-200'
-                    }`} />
-                  )}
-                </div>
-              ))}
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-
+        <div className="max-w-5xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Step 1: Education */}
               {currentStep === 1 && (
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
@@ -524,37 +568,7 @@ export default function CourseMatcher() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation */}
-          <div className="flex justify-between mt-8">
-            <Button
-              variant="outline"
-              onClick={prevStep}
-              disabled={currentStep === 1}
-              className={currentStep === 1 ? 'invisible' : ''}
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            
-            {currentStep < 4 && (
-              <Button
-                onClick={nextStep}
-                className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
-              >
-                {currentStep === 3 ? 'Find Matches' : 'Continue'}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            )}
-            
-            {currentStep === 4 && (
-              <Link to={createPageUrl('Contact')}>
-                <Button className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white">
-                  Get Expert Guidance
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            )}
-          </div>
+
         </div>
       </div>
 
