@@ -44,8 +44,17 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Course Finder', page: 'CourseFinder' },
-    { label: 'Services', page: 'About' },
-    { label: 'Language Prep', page: 'Contact' }
+    { label: 'Services', page: 'About' }
+  ];
+
+  const languageTests = [
+    { label: 'IELTS', page: 'Contact' },
+    { label: 'PTE', page: 'Contact' },
+    { label: 'OIETC (ELLT)', page: 'Contact' },
+    { label: 'TOEFL', page: 'Contact' },
+    { label: 'Duolingo', page: 'Contact' },
+    { label: 'LanguageCert', page: 'Contact' },
+    { label: 'Kaplan Test', page: 'Contact' }
   ];
 
   const portals = [
@@ -108,6 +117,28 @@ export default function Navbar() {
                 {link.label}
               </Link>
             )}
+
+            {/* Language Prep Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  Language Prep
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {languageTests.map((test) =>
+                <DropdownMenuItem key={test.label} asChild>
+                    <Link to={createPageUrl(test.page)} className="cursor-pointer">
+                      {test.label}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Portal Dropdown */}
             <DropdownMenu>
@@ -267,6 +298,25 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 )}
+
+                {/* Mobile Language Prep */}
+                <div>
+                  <p className="text-sm font-semibold mb-2" style={{ color: 'var(--alo-blue)' }}>Language Prep</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    {languageTests.map((test) =>
+                    <Link
+                      key={test.label}
+                      to={createPageUrl(test.page)}
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-base font-medium transition-colors"
+                      style={{ color: 'var(--alo-blue)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
+                        {test.label}
+                      </Link>
+                    )}
+                  </div>
+                </div>
 
                 {/* Mobile Portal */}
                 <div>
