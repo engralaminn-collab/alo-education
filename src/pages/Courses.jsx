@@ -17,6 +17,7 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
+import CompareCourses from '@/components/courses/CompareCourses';
 
 const degreeLevels = [
   { value: 'all', label: 'All Levels' },
@@ -47,6 +48,7 @@ export default function Courses() {
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -269,8 +271,26 @@ export default function Courses() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
+                        <Card className={`border-0 shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                          selectedForCompare.some(c => c.id === course.id) ? 'ring-2 ring-emerald-500' : ''
+                        }`}>
                           <CardContent className="p-6">
+                            <div className="absolute top-4 right-4">
+                              <input
+                                type="checkbox"
+                                checked={selectedForCompare.some(c => c.id === course.id)}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  if (e.target.checked) {
+                                    setSelectedForCompare([...selectedForCompare, course]);
+                                  } else {
+                                    setSelectedForCompare(selectedForCompare.filter(c => c.id !== course.id));
+                                  }
+                                }}
+                                className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
+                                title="Select for comparison"
+                              />
+                            </div>
                             <div className="flex flex-col md:flex-row md:items-center gap-4">
                               <div className="flex-1">
                                 <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -342,6 +362,13 @@ export default function Courses() {
           </div>
         </div>
       </div>
+
+      <CompareCourses 
+        selectedCourses={selectedForCompare}
+        universities={universities}
+        onRemove={(id) => setSelectedForCompare(selectedForCompare.filter(c => c.id !== id))}
+        onClear={() => setSelectedForCompare([])}
+      />
 
       <Footer />
     </div>
