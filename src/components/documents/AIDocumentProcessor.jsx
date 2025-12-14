@@ -29,16 +29,22 @@ export default function AIDocumentProcessor({ studentId, applicationId }) {
 
         setProgress(((i + 1) / files.length) * 60);
 
-        // Use AI to categorize and extract info
+        // Use AI with OCR to categorize and extract info
         const aiResult = await base44.integrations.Core.InvokeLLM({
-          prompt: `Analyze this document and determine:
-1. Document type (passport, transcript, degree_certificate, english_test, sop, lor, cv, financial_proof, photo, visa_documents, offer_letter, other)
-2. A clean, professional filename based on the content
-3. Any important information like expiry dates
+          prompt: `Analyze this document using OCR to extract all text and information. Then determine:
+
+1. Document type from: passport, transcript, degree_certificate, english_test, sop, lor, cv, financial_proof, photo, visa_documents, offer_letter, other
+2. A clean, professional filename based on the extracted content
+3. Expiry dates if applicable (YYYY-MM-DD format)
+4. Extract key information to auto-fill student profile:
+   - If passport: extract name, nationality, date_of_birth, passport number
+   - If transcript/degree: extract institution, graduation_year, gpa, field_of_study
+   - If english test: extract test_type (ielts/toefl/pte), score, test_date
+   - If any document: extract any dates, names, or relevant data
 
 Original filename: ${file.name}
 
-Return JSON with: document_type, suggested_name, expiry_date (YYYY-MM-DD if applicable, null otherwise), notes`,
+Return JSON with all extracted information.`,
           file_urls: [fileUrl],
           response_json_schema: {
             type: "object",
@@ -46,7 +52,22 @@ Return JSON with: document_type, suggested_name, expiry_date (YYYY-MM-DD if appl
               document_type: { type: "string" },
               suggested_name: { type: "string" },
               expiry_date: { type: ["string", "null"] },
-              notes: { type: "string" }
+              notes: { type: "string" },
+              extracted_data: {
+                type: "object",
+                properties: {
+                  name: { type: ["string", "null"] },
+                  nationality: { type: ["string", "null"] },
+                  date_of_birth: { type: ["string", "null"] },
+                  institution: { type: ["string", "null"] },
+                  graduation_year: { type: ["number", "null"] },
+                  gpa: { type: ["number", "null"] },
+                  field_of_study: { type: ["string", "null"] },
+                  test_type: { type: ["string", "null"] },
+                  test_score: { type: ["number", "null"] },
+                  test_date: { type: ["string", "null"] }
+                }
+              }
             }
           }
         });
@@ -65,11 +86,50 @@ Return JSON with: document_type, suggested_name, expiry_date (YYYY-MM-DD if appl
           reviewer_notes: aiResult.notes,
         });
 
+        // Auto-fill student profile with extracted data
+        if (aiResult.extracted_data) {
+          const student = await base44.entities.StudentProfile.filter({ id: studentId });
+          if (student[0]) {
+            const updates = {};
+            const extracted = aiResult.extracted_data;
+            
+            // Only update fields that are empty
+            if (extracted.nationality && !student[0].nationality) updates.nationality = extracted.nationality;
+            if (extracted.date_of_birth && !student[0].date_of_birth) updates.date_of_birth = extracted.date_of_birth;
+            
+            // Update education info if available
+            if (extracted.institution || extracted.graduation_year || extracted.gpa || extracted.field_of_study) {
+              updates.education = {
+                ...student[0].education,
+                institution: extracted.institution || student[0].education?.institution,
+                graduation_year: extracted.graduation_year || student[0].education?.graduation_year,
+                gpa: extracted.gpa || student[0].education?.gpa,
+                field_of_study: extracted.field_of_study || student[0].education?.field_of_study,
+              };
+            }
+            
+            // Update english proficiency if available
+            if (extracted.test_type || extracted.test_score || extracted.test_date) {
+              updates.english_proficiency = {
+                ...student[0].english_proficiency,
+                test_type: extracted.test_type || student[0].english_proficiency?.test_type,
+                score: extracted.test_score || student[0].english_proficiency?.score,
+                test_date: extracted.test_date || student[0].english_proficiency?.test_date,
+              };
+            }
+            
+            if (Object.keys(updates).length > 0) {
+              await base44.entities.StudentProfile.update(studentId, updates);
+            }
+          }
+        }
+
         processedDocs.push({
           original_name: file.name,
           new_name: aiResult.suggested_name,
           type: aiResult.document_type,
-          status: 'success'
+          status: 'success',
+          auto_filled: aiResult.extracted_data ? Object.keys(aiResult.extracted_data).length : 0
         });
 
         setProgress(((i + 1) / files.length) * 100);
@@ -172,6 +232,11 @@ Return JSON with: document_type, suggested_name, expiry_date (YYYY-MM-DD if appl
                     <p className="text-xs text-slate-500">
                       Type: {doc.type.replace(/_/g, ' ')} • {doc.original_name}
                     </p>
+                    {doc.auto_filled > 0 && (
+                      <p className="text-xs text-green-600 mt-1">
+                        ✓ Auto-filled {doc.auto_filled} profile field(s)
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
