@@ -332,7 +332,7 @@ export default function CRMInquiries() {
               )}
 
               {/* Lead Scoring */}
-              <LeadScoring inquiry={selectedInquiry} />
+              <EnhancedLeadScoring inquiry={selectedInquiry} studentProfile={null} />
 
               <div>
                 <label className="text-sm font-medium">Assign To</label>
