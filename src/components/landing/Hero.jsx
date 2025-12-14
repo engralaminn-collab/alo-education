@@ -1,156 +1,162 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, GraduationCap, Globe, Users, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function Hero({ onSearch }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [country, setCountry] = useState('');
-  const [degreeLevel, setDegreeLevel] = useState('');
+const countries = [
+  {
+    name: 'Canada',
+    image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800',
+    landmark: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600'
+  },
+  {
+    name: 'United Kingdom',
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800',
+    landmark: 'https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=600'
+  },
+  {
+    name: 'Australia',
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800',
+    landmark: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600'
+  },
+  {
+    name: 'United States',
+    image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800',
+    landmark: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600'
+  },
+  {
+    name: 'Germany',
+    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800',
+    landmark: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600'
+  },
+  {
+    name: 'Ireland',
+    image: 'https://images.unsplash.com/photo-1590086782792-42dd2350140d?w=800',
+    landmark: 'https://images.unsplash.com/photo-1519145255040-947354638e1d?w=600'
+  }
+];
 
-  const handleSearch = () => {
-    const params = new URLSearchParams();
-    if (searchQuery) params.set('q', searchQuery);
-    if (country) params.set('country', country);
-    if (degreeLevel) params.set('degree', degreeLevel);
-    window.location.href = createPageUrl('Universities') + '?' + params.toString();
-  };
+export default function Hero() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % countries.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentCountry = countries[currentIndex];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920')] bg-cover bg-center opacity-20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-slate-900/50" />
-      </div>
-
-      {/* Floating Elements */}
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 0.1, y: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="absolute top-20 right-20 w-72 h-72 bg-emerald-500 rounded-full blur-3xl"
-      />
-      <motion.div 
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 0.1, y: 0 }}
-        transition={{ duration: 1, delay: 0.7 }}
-        className="absolute bottom-20 left-20 w-96 h-96 bg-blue-500 rounded-full blur-3xl"
-      />
-
-      <div className="relative container mx-auto px-6 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium mb-8">
-              <Globe className="w-4 h-4" />
-              Your Trusted Partner for Studying Abroad
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-          >
-            Your Trusted Partner for
-            <span className="block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Studying Abroad
-            </span>
-            in the UK, USA, Australia, Canada & More
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto"
-          >
-            From your ambition to admission, we're with you all the way.
-          </motion.p>
-
-          {/* Search Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="bg-white/10 backdrop-blur-xl rounded-2xl p-3 border border-white/10"
-          >
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <Input
-                  placeholder="Search universities, courses..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 bg-white/90 border-0 text-slate-800 placeholder:text-slate-500 rounded-xl"
+    <section className="relative min-h-[85vh] flex items-center bg-white overflow-hidden">
+      <div className="container mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="relative z-10">
+            {/* Yellow Arrow */}
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="absolute -left-20 -top-10 hidden xl:block"
+            >
+              <svg width="150" height="150" viewBox="0 0 150 150" fill="none">
+                <path 
+                  d="M10 140 L100 50 L90 60 L130 20 L90 60 L100 50" 
+                  stroke="#FFEB3B" 
+                  strokeWidth="15" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  fill="none"
                 />
-              </div>
-              <Select value={country} onValueChange={setCountry}>
-                <SelectTrigger className="w-full md:w-48 h-14 bg-white/90 border-0 rounded-xl">
-                  <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="usa">United States</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                  <SelectItem value="australia">Australia</SelectItem>
-                  <SelectItem value="germany">Germany</SelectItem>
-                  <SelectItem value="france">France</SelectItem>
-                  <SelectItem value="ireland">Ireland</SelectItem>
-                  <SelectItem value="netherlands">Netherlands</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={degreeLevel} onValueChange={setDegreeLevel}>
-                <SelectTrigger className="w-full md:w-48 h-14 bg-white/90 border-0 rounded-xl">
-                  <SelectValue placeholder="Degree Level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="bachelor">Bachelor's</SelectItem>
-                  <SelectItem value="master">Master's</SelectItem>
-                  <SelectItem value="phd">PhD</SelectItem>
-                  <SelectItem value="diploma">Diploma</SelectItem>
-                </SelectContent>
-              </Select>
-              <Link to={createPageUrl('Contact')}>
+              </svg>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight"
+            >
+              Your Trusted Partner
+              <br />
+              for Studying Abroad in{' '}
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={currentCountry.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-blue-600"
+                >
+                  {currentCountry.name}
+                </motion.span>
+              </AnimatePresence>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-xl text-slate-600 mb-8"
+            >
+              From your ambition to admission, we're with you all the way
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <Link to={createPageUrl('BookConsultation')}>
                 <Button 
-                  className="h-14 px-8 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold"
+                  size="lg"
+                  className="h-14 px-8 bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold rounded-lg"
                 >
                   Book a Free Consultation
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto"
+          {/* Right Image */}
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative h-[500px]"
           >
-            {[
-              { icon: GraduationCap, value: '200+', label: 'University Partners' },
-              { icon: Globe, value: '7', label: 'Countries' },
-              { icon: Users, value: '1000+', label: 'Students Guided' },
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3">
-                  <stat.icon className="w-6 h-6 text-emerald-400" />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentCountry.name}
+                initial={{ opacity: 0, scale: 0.9, rotateY: 90 }}
+                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                exit={{ opacity: 0, scale: 0.9, rotateY: -90 }}
+                transition={{ duration: 0.6 }}
+                className="relative w-full h-full"
+              >
+                {/* Isometric Container */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-[450px] h-[450px]" style={{ transform: 'perspective(1000px) rotateY(-10deg) rotateX(5deg)' }}>
+                    {/* Isometric Platform */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-3xl shadow-2xl" style={{ transform: 'translateZ(-50px)' }}>
+                      {/* Country Image Overlay */}
+                      <div 
+                        className="absolute inset-4 rounded-2xl bg-cover bg-center"
+                        style={{ backgroundImage: `url(${currentCountry.landmark})` }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-3xl font-bold text-white">{stat.value}</div>
-                <div className="text-slate-400 text-sm">{stat.label}</div>
-              </div>
-            ))}
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
         </div>
       </div>
