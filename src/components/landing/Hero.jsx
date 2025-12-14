@@ -51,7 +51,7 @@ export default function Hero({ onSearch }) {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium mb-8">
               <Globe className="w-4 h-4" />
-              Your Trusted Partner for Studying Abroad
+              Trusted by 10,000+ Students Worldwide
             </span>
           </motion.div>
 
@@ -61,11 +61,11 @@ export default function Hero({ onSearch }) {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Your Trusted Partner for
+            Your Journey to
             <span className="block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Studying Abroad
+              Study Abroad
             </span>
-            in the UK, USA, Australia, Canada & More
+            Starts Here
           </motion.h1>
 
           <motion.p
@@ -74,7 +74,7 @@ export default function Hero({ onSearch }) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto"
           >
-            From your ambition to admission, we're with you all the way.
+            Discover world-class universities, get personalized guidance, and turn your international education dreams into reality with ALO Education.
           </motion.p>
 
           {/* Search Box */}
@@ -120,14 +120,13 @@ export default function Hero({ onSearch }) {
                   <SelectItem value="diploma">Diploma</SelectItem>
                 </SelectContent>
               </Select>
-              <Link to={createPageUrl('Contact')}>
-                <Button 
-                  className="h-14 px-8 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold"
-                >
-                  Book a Free Consultation
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleSearch}
+                className="h-14 px-8 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold"
+              >
+                Search
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
           </motion.div>
 
@@ -139,9 +138,9 @@ export default function Hero({ onSearch }) {
             className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto"
           >
             {[
-              { icon: GraduationCap, value: '200+', label: 'University Partners' },
-              { icon: Globe, value: '7', label: 'Countries' },
-              { icon: Users, value: '1000+', label: 'Students Guided' },
+              { icon: GraduationCap, value: '500+', label: 'Universities' },
+              { icon: Globe, value: '50+', label: 'Countries' },
+              { icon: Users, value: '10K+', label: 'Students' },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3">

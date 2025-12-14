@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import CompareUniversities from '@/components/universities/CompareUniversities';
 
 const countries = [
   { value: 'all', label: 'All Countries' },
@@ -35,7 +34,6 @@ export default function Universities() {
   const [rankingFilter, setRankingFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedForCompare, setSelectedForCompare] = useState([]);
 
   // Read URL params
   useEffect(() => {
@@ -270,26 +268,10 @@ export default function Universities() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
-                        viewMode === 'list' ? 'flex flex-row' : ''
-                      } ${selectedForCompare.some(u => u.id === uni.id) ? 'ring-2 ring-emerald-500' : ''}`}>
-                        <div className="absolute top-3 right-3 z-10">
-                          <input
-                            type="checkbox"
-                            checked={selectedForCompare.some(u => u.id === uni.id)}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              if (e.target.checked) {
-                                setSelectedForCompare([...selectedForCompare, uni]);
-                              } else {
-                                setSelectedForCompare(selectedForCompare.filter(u => u.id !== uni.id));
-                              }
-                            }}
-                            className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
-                            title="Select for comparison"
-                          />
-                        </div>
-                        <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`} className="flex-1">
+                      <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`}>
+                        <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
+                          viewMode === 'list' ? 'flex flex-row' : ''
+                        }`}>
                           <div className={`relative overflow-hidden ${
                             viewMode === 'list' ? 'w-48 h-36 shrink-0' : 'h-48'
                           }`}>
@@ -332,10 +314,10 @@ export default function Universities() {
                               View Details
                               <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                             </Button>
-                            </CardContent>
-                            </Link>
-                            </Card>
-                            </motion.div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    </motion.div>
                   ))}
                 </motion.div>
               </AnimatePresence>
@@ -343,12 +325,6 @@ export default function Universities() {
           </div>
         </div>
       </div>
-
-      <CompareUniversities 
-        selectedUniversities={selectedForCompare}
-        onRemove={(id) => setSelectedForCompare(selectedForCompare.filter(u => u.id !== id))}
-        onClear={() => setSelectedForCompare([])}
-      />
 
       <Footer />
     </div>

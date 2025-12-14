@@ -4,20 +4,28 @@ import { Star, Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Tushar Imran Nahid",
-    university: "Ravensbourne University London",
-    course: "BSc Business Management",
-    image: "https://scontent.fdac31-1.fna.fbcdn.net/v/t39.30808-6/469828394_122150633858384088_8449471677932014423_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHy7oOlNCfQsDW8AxIEVjvfcFcK_1AUBvZwVwr_UBQG9itR-Ik1Q0wOxAshCr3wLdN_VGrm0L1FxKFCW3tKWCbV&_nc_ohc=4dKj9pPhNqUQ7kNvgFOA85d&_nc_zt=23&_nc_ht=scontent.fdac31-1.fna&_nc_gid=AInr33HRYmrn0zMz_fvdWAJ&oh=00_AYBiRWH1d5a-uNZjd9YCFHtC8HCOYl3f6D8xQMO6BHCVig&oe=67635047",
+    name: "Sarah Ahmed",
+    country: "Pakistan",
+    university: "University of Manchester",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
     rating: 5,
-    text: "I have recently received my UK student visa for my BSc in Business Management with International Year at Ravensbourne University London. Due to some technical issues, the process took a little longer than expected and both I and my family were quite stressed. However, ALO Education Consultancy gave me full support, courage, and proper guidance throughout the entire journey. I am extremely satisfied with their service and professionalism. I highly recommend everyone to apply for their visa through ALO Education. They are simply the best!"
+    text: "ALO Education made my dream of studying in the UK a reality. My counselor was incredibly supportive throughout the entire process, from choosing the right university to getting my visa approved."
   },
   {
-    name: "Ummaye Mayesha Mannan",
-    university: "University of Derby",
-    course: "MRes Leadership and Management",
-    image: "https://scontent.fdac31-1.fna.fbcdn.net/v/t39.30808-6/469859881_122150633876384088_1502542672464988169_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeErCtgEWxl1NVQ_gXjbV_NcxABtTk8hWe3EAG1OTyFZ7QpWRqy8eJWh9cZhx1eQGxHGFq86xcLHVpxpHcwZZqb4&_nc_ohc=qdvPUqCNhY0Q7kNvgE5UVPW&_nc_zt=23&_nc_ht=scontent.fdac31-1.fna&_nc_gid=AVlgFhgqJCOtDjF1P3qWY7i&oh=00_AYC_5AUTsUeHOnXL2BWu5IiVmrDCYxHT-TuJ40A7HYNt3A&oe=67632F24",
+    name: "Mohamed Hassan",
+    country: "Egypt",
+    university: "University of Toronto",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200",
     rating: 5,
-    text: "I recently received my UK student visa for Master of Research in Leadership and Management at University of Derby. ALO Education Consultancy provided full support, guidance, and encouragement throughout. I'm extremely satisfied with their professionalism and highly recommend their services."
+    text: "I was overwhelmed with the application process until I found ALO. They simplified everything and helped me secure a scholarship that covered 50% of my tuition!"
+  },
+  {
+    name: "Priya Sharma",
+    country: "India",
+    university: "MIT",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200",
+    rating: 5,
+    text: "The course matching feature helped me find programs I never knew existed. I'm now pursuing my Master's at my dream university, all thanks to ALO Education's guidance."
   }
 ];
 
@@ -45,7 +53,7 @@ export default function Testimonials() {
           </motion.h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
@@ -65,7 +73,7 @@ export default function Testimonials() {
                 />
                 <div>
                   <h4 className="font-bold text-slate-900">{testimonial.name}</h4>
-                  <p className="text-slate-500 text-sm">{testimonial.course}</p>
+                  <p className="text-slate-500 text-sm">{testimonial.country}</p>
                 </div>
               </div>
               

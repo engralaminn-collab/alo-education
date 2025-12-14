@@ -36,16 +36,6 @@ export default function Navbar() {
     : 'bg-transparent';
   const textColor = isScrolled || !isHome ? 'text-slate-800' : 'text-white';
 
-  const destinations = [
-    { label: 'United Kingdom', page: 'StudyInUK' },
-    { label: 'Australia', page: 'StudyInAustralia' },
-    { label: 'Canada', page: 'StudyInCanada' },
-    { label: 'Ireland', page: 'StudyInIreland' },
-    { label: 'New Zealand', page: 'StudyInNewZealand' },
-    { label: 'United States', page: 'StudyInUSA' },
-    { label: 'Dubai (UAE)', page: 'StudyInDubai' },
-  ];
-
   const navLinks = [
     { label: 'Home', page: 'Home' },
     { label: 'Universities', page: 'Universities' },
@@ -77,25 +67,6 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            
-            {/* Destinations Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className={`font-medium hover:text-emerald-500 transition-colors flex items-center gap-1 ${textColor}`}>
-                  Destinations
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {destinations.map((dest) => (
-                  <DropdownMenuItem key={dest.page} asChild>
-                    <Link to={createPageUrl(dest.page)} className="cursor-pointer">
-                      {dest.label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
 
           {/* Auth Buttons */}
@@ -186,24 +157,6 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                
-                {/* Mobile Destinations */}
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 mb-2">Destinations</p>
-                  <div className="flex flex-col gap-3 ml-2">
-                    {destinations.map((dest) => (
-                      <Link
-                        key={dest.page}
-                        to={createPageUrl(dest.page)}
-                        onClick={() => setIsMobileOpen(false)}
-                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
-                      >
-                        {dest.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                
                 <hr className="border-slate-200" />
                 {user ? (
                   <>
