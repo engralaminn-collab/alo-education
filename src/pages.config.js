@@ -33,8 +33,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import CRMTestimonials from './pages/CRMTestimonials';
 import TestimonialsPage from './pages/TestimonialsPage';
 import CRMAutomation from './pages/CRMAutomation';
-import CRMLeadNurturing from './pages/CRMLeadNurturing';
-import CRMAIAssistant from './pages/CRMAIAssistant';
 import __Layout from './Layout.jsx';
 
 
@@ -74,8 +72,6 @@ export const PAGES = {
     "CRMTestimonials": CRMTestimonials,
     "TestimonialsPage": TestimonialsPage,
     "CRMAutomation": CRMAutomation,
-    "CRMLeadNurturing": CRMLeadNurturing,
-    "CRMAIAssistant": CRMAIAssistant,
 }
 
 export const pagesConfig = {
