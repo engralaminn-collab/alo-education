@@ -10,13 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger } from
 "@/components/ui/dropdown-menu";
-import { GraduationCap, Menu, User, LogOut, LayoutDashboard, FileText, MessageSquare, ChevronDown } from 'lucide-react';
+import { GraduationCap, Menu, User, LogOut, LayoutDashboard, FileText, MessageSquare, ChevronDown, Search } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import SmartCourseFinder from '@/components/navbar/SmartCourseFinder';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [finderOpen, setFinderOpen] = useState(false);
   const location = useLocation();
 
   const { data: user } = useQuery({
@@ -84,6 +87,27 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
+            {/* Smart Course Finder */}
+            <Dialog open={finderOpen} onOpenChange={setFinderOpen}>
+              <DialogTrigger asChild>
+                <button
+                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  <Search className="w-4 h-4" />
+                  Smart Finder
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl" style={{ color: 'var(--alo-blue)' }}>
+                    Smart Course Finder
+                  </DialogTitle>
+                </DialogHeader>
+                <SmartCourseFinder onClose={() => setFinderOpen(false)} />
+              </DialogContent>
+            </Dialog>
+
             {/* Destinations Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
