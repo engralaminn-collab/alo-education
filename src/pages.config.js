@@ -39,6 +39,7 @@ import CourseFinder from './pages/CourseFinder';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import ApplicationForm from './pages/ApplicationForm';
+import CRMBulkEmail from './pages/CRMBulkEmail';
 import __Layout from './Layout.jsx';
 
 
@@ -84,6 +85,7 @@ export const PAGES = {
     "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
     "ApplicationForm": ApplicationForm,
+    "CRMBulkEmail": CRMBulkEmail,
 }
 
 export const pagesConfig = {

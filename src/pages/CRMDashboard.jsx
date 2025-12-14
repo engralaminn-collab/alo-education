@@ -14,6 +14,7 @@ import { createPageUrl } from '@/utils';
 import { format, subDays } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import CRMLayout from '@/components/crm/CRMLayout';
+import CounselorPerformance from '@/components/crm/CounselorPerformance';
 import { motion } from 'framer-motion';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
@@ -42,6 +43,11 @@ export default function CRMDashboard() {
   const { data: courses = [] } = useQuery({
     queryKey: ['crm-courses'],
     queryFn: () => base44.entities.Course.list(),
+  });
+
+  const { data: counselors = [] } = useQuery({
+    queryKey: ['crm-counselors'],
+    queryFn: () => base44.entities.Counselor.list(),
   });
 
   // Calculate stats
@@ -208,6 +214,15 @@ export default function CRMDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Counselor Performance */}
+      <div className="mb-8">
+        <CounselorPerformance 
+          counselors={counselors}
+          students={students}
+          applications={applications}
+        />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">

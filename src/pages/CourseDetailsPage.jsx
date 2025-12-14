@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
+import SimilarCourses from '@/components/courses/SimilarCourses';
 
 export default function CourseDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -295,6 +296,15 @@ export default function CourseDetailsPage() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Similar Courses */}
+        <div className="container mx-auto px-6 pb-16">
+          <SimilarCourses 
+            currentCourse={course}
+            allCourses={allCourses}
+            universities={universities}
+          />
         </div>
       </div>
 
