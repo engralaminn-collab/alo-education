@@ -37,6 +37,7 @@ import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import LanguagePrep from './pages/LanguagePrep';
 import Services from './pages/Services';
+import BookConsultation from './pages/BookConsultation';
 import __Layout from './Layout.jsx';
 
 
@@ -80,6 +81,7 @@ export const PAGES = {
     "AlumniProfile": AlumniProfile,
     "LanguagePrep": LanguagePrep,
     "Services": Services,
+    "BookConsultation": BookConsultation,
 }
 
 export const pagesConfig = {
