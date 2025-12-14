@@ -11,10 +11,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { 
   Search, Mail, Phone, Calendar, ArrowRight, 
-  CheckCircle, XCircle, Clock, User, MessageSquare
+  CheckCircle, XCircle, Clock, User, MessageSquare, Zap
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import CRMLayout from '@/components/crm/CRMLayout';
+import LeadScoring from '@/components/crm/LeadScoring';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const statusConfig = {
@@ -98,7 +101,17 @@ export default function CRMInquiries() {
   const convertedCount = inquiries.filter(i => i.status === 'converted').length;
 
   return (
-    <CRMLayout title="Inquiries">
+    <CRMLayout 
+      title="Inquiries"
+      actions={
+        <Link to={createPageUrl('CRMLeadNurturing')}>
+          <Button className="bg-purple-600 hover:bg-purple-700">
+            <Zap className="w-4 h-4 mr-2" />
+            Lead Nurturing
+          </Button>
+        </Link>
+      }
+    >
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <Card className="border-0 shadow-sm bg-emerald-50">
@@ -270,7 +283,7 @@ export default function CRMInquiries() {
 
       {/* Inquiry Detail Dialog */}
       <Dialog open={!!selectedInquiry && !convertDialogOpen} onOpenChange={(open) => !open && setSelectedInquiry(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Inquiry Details</DialogTitle>
           </DialogHeader>
@@ -317,6 +330,9 @@ export default function CRMInquiries() {
                   <p className="text-slate-600 bg-slate-50 p-4 rounded-lg">{selectedInquiry.message}</p>
                 </div>
               )}
+
+              {/* Lead Scoring */}
+              <LeadScoring inquiry={selectedInquiry} />
 
               <div>
                 <label className="text-sm font-medium">Assign To</label>
