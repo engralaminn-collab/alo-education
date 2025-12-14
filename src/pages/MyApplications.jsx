@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   FileText, Building2, Clock, CheckCircle, XCircle, 
   AlertCircle, ArrowRight, Calendar, DollarSign, 
-  ChevronRight, GraduationCap
+  ChevronRight, GraduationCap, Circle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -102,49 +102,73 @@ export default function MyApplications() {
           onClick={() => setSelectedApp(app)}
         >
           <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-                {university?.logo_url ? (
-                  <img src={university.logo_url} alt="" className="w-10 h-10 object-contain" />
-                ) : (
-                  <Building2 className="w-6 h-6 text-slate-400" />
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-1">
-                      {course?.name || 'Course Name'}
-                    </h3>
-                    <p className="text-slate-500 text-sm">
-                      {university?.name || 'University'} • {university?.country}
-                    </p>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                  {university?.logo_url ? (
+                    <img src={university.logo_url} alt="" className="w-10 h-10 object-contain" />
+                  ) : (
+                    <Building2 className="w-6 h-6 text-slate-400" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                      <h3 className="font-semibold text-slate-900 mb-1">
+                        {course?.name || 'Course Name'}
+                      </h3>
+                      <p className="text-slate-500 text-sm">
+                        {university?.name || 'University'} • {university?.country}
+                      </p>
+                    </div>
+                    <Badge className={config.color}>
+                      <StatusIcon className="w-3 h-3 mr-1" />
+                      {app.status?.replace(/_/g, ' ')}
+                    </Badge>
                   </div>
-                  <Badge className={config.color}>
-                    <StatusIcon className="w-3 h-3 mr-1" />
-                    {app.status?.replace(/_/g, ' ')}
-                  </Badge>
+                  
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mt-3">
+                    {app.intake && (
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        {app.intake}
+                      </span>
+                    )}
+                    {app.tuition_fee && (
+                      <span className="flex items-center gap-1">
+                        <DollarSign className="w-4 h-4" />
+                        {app.tuition_fee.toLocaleString()}/year
+                      </span>
+                    )}
+                    {app.applied_date && (
+                      <span>Applied: {format(new Date(app.applied_date), 'MMM d, yyyy')}</span>
+                    )}
+                  </div>
                 </div>
-                
-                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mt-3">
-                  {app.intake && (
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {app.intake}
-                    </span>
-                  )}
-                  {app.tuition_fee && (
-                    <span className="flex items-center gap-1">
-                      <DollarSign className="w-4 h-4" />
-                      {app.tuition_fee.toLocaleString()}/year
-                    </span>
-                  )}
-                  {app.applied_date && (
-                    <span>Applied: {format(new Date(app.applied_date), 'MMM d, yyyy')}</span>
-                  )}
-                </div>
+                <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
               </div>
-              <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
+
+              {/* Inline Milestone Progress */}
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center gap-2">
+                  {['documents_submitted', 'application_submitted', 'offer_received', 'visa_approved', 'enrolled'].map((key, i) => {
+                    const completed = app.milestones?.[key]?.completed;
+                    return (
+                      <div key={key} className="flex items-center flex-1">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          completed ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'
+                        }`}>
+                          {completed ? <CheckCircle className="w-4 h-4" /> : <Circle className="w-3 h-3" />}
+                        </div>
+                        {i < 4 && <div className={`flex-1 h-1 mx-1 rounded ${completed ? 'bg-emerald-500' : 'bg-slate-200'}`} />}
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  {Object.values(app.milestones || {}).filter(m => m?.completed).length} of 6 milestones completed
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>

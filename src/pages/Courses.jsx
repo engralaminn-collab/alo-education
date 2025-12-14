@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIRecommendations from '@/components/recommendations/AIRecommendations';
 
 const degreeLevels = [
   { value: 'all', label: 'All Levels' },
@@ -46,6 +47,20 @@ export default function Courses() {
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: async () => {
+      const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -191,6 +206,17 @@ export default function Courses() {
 
           {/* Main */}
           <div className="flex-1">
+            {/* AI Recommendations */}
+            {user && studentProfile && (
+              <div className="mb-8">
+                <AIRecommendations 
+                  studentProfile={studentProfile}
+                  courses={courses}
+                  universities={universities}
+                />
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-6">
               <p className="text-slate-600">
                 Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses

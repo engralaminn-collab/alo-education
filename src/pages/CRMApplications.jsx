@@ -14,8 +14,9 @@ import { toast } from "sonner";
 import { 
   Search, MoreVertical, FileText, Building2, 
   Calendar, DollarSign, CheckCircle, Clock, XCircle,
-  GraduationCap, User
+  GraduationCap, User, Send, Mail, Plane
 } from 'lucide-react';
+import MilestoneTracker from '@/components/applications/MilestoneTracker';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -282,6 +283,12 @@ export default function CRMApplications() {
               </TabsList>
               
               <TabsContent value="overview" className="space-y-6 mt-4">
+                {/* Milestone Tracker */}
+                <div>
+                  <h4 className="text-sm font-medium text-slate-500 mb-4">Application Milestones</h4>
+                  <MilestoneTracker application={selectedApp} variant="vertical" />
+                </div>
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <h4 className="text-sm font-medium text-slate-500 mb-2">Student</h4>
@@ -370,6 +377,52 @@ export default function CRMApplications() {
               <TabsContent value="notes" className="mt-4">
                 <div className="space-y-4">
                   <div>
+                    <h4 className="text-sm font-medium text-slate-500 mb-2">Update Milestones</h4>
+                    <div className="space-y-3 bg-slate-50 p-4 rounded-xl">
+                      {['documents_submitted', 'application_submitted', 'offer_received', 'visa_applied', 'visa_approved', 'enrolled'].map(key => {
+                        const milestone = selectedApp.milestones?.[key] || {};
+                        const labels = {
+                          documents_submitted: 'Documents Submitted',
+                          application_submitted: 'Application Submitted',
+                          offer_received: 'Offer Received',
+                          visa_applied: 'Visa Applied',
+                          visa_approved: 'Visa Approved',
+                          enrolled: 'Enrolled'
+                        };
+                        
+                        return (
+                          <div key={key} className="flex items-center gap-3 bg-white p-3 rounded-lg">
+                            <input
+                              type="checkbox"
+                              checked={milestone.completed || false}
+                              onChange={(e) => {
+                                const newMilestones = { 
+                                  ...selectedApp.milestones,
+                                  [key]: {
+                                    ...milestone,
+                                    completed: e.target.checked,
+                                    date: e.target.checked ? new Date().toISOString() : milestone.date
+                                  }
+                                };
+                                setSelectedApp({ ...selectedApp, milestones: newMilestones });
+                              }}
+                              className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
+                            />
+                            <label className="text-sm font-medium flex-1 cursor-pointer">
+                              {labels[key]}
+                            </label>
+                            {milestone.completed && milestone.date && (
+                              <span className="text-xs text-slate-400">
+                                {format(new Date(milestone.date), 'MMM d')}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
                     <h4 className="text-sm font-medium text-slate-500 mb-2">Counselor Notes</h4>
                     <Textarea 
                       rows={4}
@@ -396,6 +449,7 @@ export default function CRMApplications() {
                     tuition_fee: selectedApp.tuition_fee,
                     scholarship_amount: selectedApp.scholarship_amount,
                     counselor_notes: selectedApp.counselor_notes,
+                    milestones: selectedApp.milestones,
                   }
                 });
                 setSelectedApp(null);
