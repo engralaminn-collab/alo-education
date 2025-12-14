@@ -164,7 +164,7 @@ export default function CRMCounselorAnalytics() {
     : counselorMetrics.filter(m => m.id === selectedCounselor);
 
   // Top performers
-  const topByCon version = [...counselorMetrics].sort((a, b) => b.conversionRate - a.conversionRate).slice(0, 3);
+  const topByConversion = [...counselorMetrics].sort((a, b) => b.conversionRate - a.conversionRate).slice(0, 3);
   const topBySuccess = [...counselorMetrics].sort((a, b) => b.applicationSuccessRate - a.applicationSuccessRate).slice(0, 3);
   const topByResponse = [...counselorMetrics].filter(m => m.avgResponseTime > 0).sort((a, b) => a.avgResponseTime - b.avgResponseTime).slice(0, 3);
   const topBySatisfaction = [...counselorMetrics].sort((a, b) => b.satisfactionScore - a.satisfactionScore).slice(0, 3);
