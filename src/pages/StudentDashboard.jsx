@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { 
   GraduationCap, FileText, MessageSquare, User, 
   Clock, CheckCircle, AlertCircle, ArrowRight,
-  Calendar, Upload, Building2
+  Calendar, Upload, Building2, Award, Users
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -365,6 +365,18 @@ export default function StudentDashboard() {
                   <Button variant="outline" className="w-full justify-start">
                     <GraduationCap className="w-4 h-4 mr-2" />
                     Course Matcher
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('Scholarships')} className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Award className="w-4 h-4 mr-2" />
+                    Find Scholarships
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('AlumniNetwork')} className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Users className="w-4 h-4 mr-2" />
+                    Alumni Network
                   </Button>
                 </Link>
                 <Link to={createPageUrl('Contact')} className="block">

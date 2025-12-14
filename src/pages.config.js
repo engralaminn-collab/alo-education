@@ -47,6 +47,8 @@ import StudentAnalytics from './pages/StudentAnalytics';
 import CRMPerformance from './pages/CRMPerformance';
 import CompleteProfile from './pages/CompleteProfile';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
+import Scholarships from './pages/Scholarships';
+import AlumniNetwork from './pages/AlumniNetwork';
 import __Layout from './Layout.jsx';
 
 
@@ -100,6 +102,8 @@ export const PAGES = {
     "CRMPerformance": CRMPerformance,
     "CompleteProfile": CompleteProfile,
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
+    "Scholarships": Scholarships,
+    "AlumniNetwork": AlumniNetwork,
 }
 
 export const pagesConfig = {
