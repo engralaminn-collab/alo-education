@@ -23,6 +23,8 @@ const menuItems = [
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
   { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
   { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
+  { icon: Sparkles, label: 'Workflows', page: 'CRMWorkflows' },
+  { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
   { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];

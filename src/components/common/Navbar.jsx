@@ -135,6 +135,12 @@ export default function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to={createPageUrl('StudentAnalytics')} className="flex items-center gap-2">
+                      <FileText className="w-4 h-4" />
+                      My Analytics
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to={createPageUrl('Messages')} className="flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" />
                       Messages

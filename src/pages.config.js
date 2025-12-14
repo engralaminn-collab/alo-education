@@ -42,6 +42,9 @@ import ApplicationForm from './pages/ApplicationForm';
 import CRMBulkEmail from './pages/CRMBulkEmail';
 import MyFavorites from './pages/MyFavorites';
 import CRMTaskTemplates from './pages/CRMTaskTemplates';
+import CRMWorkflows from './pages/CRMWorkflows';
+import StudentAnalytics from './pages/StudentAnalytics';
+import CRMPerformance from './pages/CRMPerformance';
 import __Layout from './Layout.jsx';
 
 
@@ -90,6 +93,9 @@ export const PAGES = {
     "CRMBulkEmail": CRMBulkEmail,
     "MyFavorites": MyFavorites,
     "CRMTaskTemplates": CRMTaskTemplates,
+    "CRMWorkflows": CRMWorkflows,
+    "StudentAnalytics": StudentAnalytics,
+    "CRMPerformance": CRMPerformance,
 }
 
 export const pagesConfig = {
