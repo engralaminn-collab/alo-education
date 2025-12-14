@@ -208,12 +208,25 @@ export default function CourseMatcher() {
                 <div className="flex flex-col md:flex-row gap-4 items-end">
                   <div className="flex-1">
                     <Label className="text-slate-700 mb-2 block text-sm">I'm looking for:</Label>
-                    <Input 
-                      placeholder="Enter subject or course:"
-                      className="h-12"
-                      value={formData.field_of_study}
-                      onChange={(e) => updateField('field_of_study', e.target.value)}
-                    />
+                    <Select value={formData.field_of_study} onValueChange={(v) => updateField('field_of_study', v)}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Enter subject or course:" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="business">Business</SelectItem>
+                        <SelectItem value="engineering">Engineering</SelectItem>
+                        <SelectItem value="computer_science">Computer Science</SelectItem>
+                        <SelectItem value="medicine">Medicine</SelectItem>
+                        <SelectItem value="arts">Arts</SelectItem>
+                        <SelectItem value="law">Law</SelectItem>
+                        <SelectItem value="science">Science</SelectItem>
+                        <SelectItem value="social_sciences">Social Sciences</SelectItem>
+                        <SelectItem value="education">Education</SelectItem>
+                        <SelectItem value="hospitality">Hospitality</SelectItem>
+                        <SelectItem value="architecture">Architecture</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="flex-1">
@@ -223,10 +236,14 @@ export default function CourseMatcher() {
                         <SelectValue placeholder="Select course type" />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="foundation">Foundation</SelectItem>
                         <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
+                        <SelectItem value="pre_masters">Pre-Masters</SelectItem>
                         <SelectItem value="master">Master's Degree</SelectItem>
+                        <SelectItem value="mres">MRes (Research)</SelectItem>
                         <SelectItem value="phd">PhD</SelectItem>
                         <SelectItem value="diploma">Diploma</SelectItem>
+                        <SelectItem value="english_course">English Course</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -243,8 +260,8 @@ export default function CourseMatcher() {
                       <SelectContent>
                         <SelectItem value="uk">United Kingdom</SelectItem>
                         <SelectItem value="usa">United States</SelectItem>
-                        <SelectItem value="canada">Canada</SelectItem>
                         <SelectItem value="australia">Australia</SelectItem>
+                        <SelectItem value="canada">Canada</SelectItem>
                         <SelectItem value="germany">Germany</SelectItem>
                         <SelectItem value="ireland">Ireland</SelectItem>
                       </SelectContent>
