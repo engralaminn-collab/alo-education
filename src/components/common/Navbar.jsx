@@ -50,6 +50,7 @@ export default function Navbar() {
     { label: 'Home', page: 'Home' },
     { label: 'Universities', page: 'Universities' },
     { label: 'Courses', page: 'Courses' },
+    { label: 'Alumni', page: 'AlumniNetwork' },
     { label: 'About', page: 'About' },
     { label: 'Contact', page: 'Contact' },
   ];
