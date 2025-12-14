@@ -1,13 +1,14 @@
+css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --alo-blue: #0B5ED7;
-  --alo-orange: #F7941D;
-  --alo-white: #FFFFFF;
-  --alo-text: #1F2937;
-  --alo-grey: #6B7280;
+  --alo-orange: #F37021;
+  --alo-blue: #0066CC;
+  --alo-sunshine: #FFB347;
+  --alo-black: #000000;
+  --alo-grey: #555555;
 }
 
 @layer base {
