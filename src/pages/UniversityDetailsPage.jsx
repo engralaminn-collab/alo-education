@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
+import UniversityFavoriteButton from '@/components/universities/UniversityFavoriteButton';
 
 export default function UniversityDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);

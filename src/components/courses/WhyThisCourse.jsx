@@ -9,17 +9,41 @@ export default function WhyThisCourse({ course, university, studentProfile }) {
   const [aiReason, setAiReason] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [messages, setMessages] = useState([]);
+  const [applications, setApplications] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!studentProfile) return;
+      
+      const msgs = await base44.entities.Message.filter({ 
+        sender_id: studentProfile.id 
+      }, '-created_date', 10);
+      setMessages(msgs);
+
+      const apps = await base44.entities.Application.filter({ 
+        student_id: studentProfile.id 
+      });
+      setApplications(apps);
+    };
+
+    fetchData();
+  }, [studentProfile?.id]);
+
   useEffect(() => {
     if (!course || !studentProfile) {
       setLoading(false);
       return;
     }
     generateReasons();
-  }, [course?.id, studentProfile?.id]);
+  }, [course?.id, studentProfile?.id, messages.length]);
 
   const generateReasons = async () => {
     setLoading(true);
     try {
+      const recentMessages = messages.slice(0, 3).map(m => m.content).join('; ');
+      const previousApps = applications.map(a => a.status).join(', ');
+
       const prompt = `As an education counselor, explain why "${course.course_title}" at ${university?.university_name || 'this university'} would be a great fit for this student:
 
 Student Profile:
@@ -29,6 +53,9 @@ Student Profile:
 - Education: ${studentProfile.education?.highest_degree || 'Not specified'} in ${studentProfile.education?.field_of_study || 'Not specified'}
 - GPA: ${studentProfile.education?.gpa || 'Not specified'}/${studentProfile.education?.gpa_scale || 4.0}
 - English: ${studentProfile.english_proficiency?.test_type || 'Not specified'} ${studentProfile.english_proficiency?.score || ''}
+- Recent communication: ${recentMessages || 'No messages'}
+- Previous applications: ${previousApps || 'None'}
+- Counselor notes: ${studentProfile.notes || 'None'}
 
 Course Details:
 - Title: ${course.course_title}
