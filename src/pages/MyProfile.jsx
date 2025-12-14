@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   User, GraduationCap, Globe, Briefcase, Target,
-  Save, Camera, CheckCircle
+  Save, Camera, CheckCircle, Plus
 } from 'lucide-react';
 import Footer from '@/components/landing/Footer';
 
@@ -107,6 +107,7 @@ export default function MyProfile() {
       score: '',
       test_date: '',
     },
+    education_history: [],
     work_experience_years: '',
     preferred_countries: [],
     preferred_degree_level: '',
@@ -141,6 +142,7 @@ export default function MyProfile() {
         living_studying_other_country: studentProfile.living_studying_other_country || false,
         living_studying_country: studentProfile.living_studying_country || '',
         education: studentProfile.education || { highest_degree: '', field_of_study: '', institution: '', graduation_year: '', gpa: '', gpa_scale: '4' },
+        education_history: studentProfile.education_history || [],
         english_proficiency: studentProfile.english_proficiency || { test_type: '', score: '', test_date: '' },
         work_experience_years: studentProfile.work_experience_years || '',
         preferred_countries: studentProfile.preferred_countries || [],
@@ -901,78 +903,273 @@ export default function MyProfile() {
             <div className="space-y-6">
               <Card className="border-0 shadow-sm">
                 <CardHeader>
-                  <CardTitle>Academic Background</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Education History</CardTitle>
+                      <CardDescription>Add your academic qualifications</CardDescription>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const newHistory = [...(formData.education_history || []), {
+                          academic_level: '',
+                          institution_name: '',
+                          board_name: '',
+                          group_subject: '',
+                          result_type: '',
+                          result_value: '',
+                          primary_language: '',
+                          country: '',
+                          state: '',
+                          city: '',
+                          start_date: '',
+                          end_date: ''
+                        }];
+                        updateField('education_history', newHistory);
+                      }}
+                      className="gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Qualification
+                    </Button>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <Label>Highest Degree</Label>
-                      <Select 
-                        value={formData.education.highest_degree} 
-                        onValueChange={(v) => updateField('education.highest_degree', v)}
-                      >
-                        <SelectTrigger className="mt-1">
-                          <SelectValue placeholder="Select degree" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {degreeTypes.map(d => (
-                            <SelectItem key={d} value={d} className="capitalize">
-                              {d.replace(/_/g, ' ')}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>Field of Study</Label>
-                      <Select 
-                        value={formData.education.field_of_study} 
-                        onValueChange={(v) => updateField('education.field_of_study', v)}
-                      >
-                        <SelectTrigger className="mt-1">
-                          <SelectValue placeholder="Select field" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {fields.map(f => (
-                            <SelectItem key={f} value={f} className="capitalize">
-                              {f.replace(/_/g, ' ')}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                <CardContent className="space-y-8">
+                  {(formData.education_history && formData.education_history.length > 0) ? (
+                    formData.education_history.map((edu, index) => (
+                      <div key={index} className="p-6 border rounded-lg space-y-6 relative">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
+                            Qualification {index + 1}
+                          </h4>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newHistory = formData.education_history.filter((_, i) => i !== index);
+                              updateField('education_history', newHistory);
+                            }}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Remove
+                          </Button>
+                        </div>
 
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div>
-                      <Label>Institution</Label>
-                      <Input
-                        value={formData.education.institution}
-                        onChange={(e) => updateField('education.institution', e.target.value)}
-                        className="mt-1"
-                      />
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Level of Study *</Label>
+                            <Select 
+                              value={edu.academic_level} 
+                              onValueChange={(v) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].academic_level = v;
+                                updateField('education_history', newHistory);
+                              }}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Select level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="SSC/Grade 10th">SSC/Grade 10th</SelectItem>
+                                <SelectItem value="HSC/Grade 12th">HSC/Grade 12th</SelectItem>
+                                <SelectItem value="Undergraduate/Bachelor 4 Years">Undergraduate/Bachelor 4 Years</SelectItem>
+                                <SelectItem value="Undergraduate/Bachelor 3 Years">Undergraduate/Bachelor 3 Years</SelectItem>
+                                <SelectItem value="Postgraduate/Masters">Postgraduate/Masters</SelectItem>
+                                <SelectItem value="PGD">PGD</SelectItem>
+                                <SelectItem value="PhD">PhD</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label>Name of Institution *</Label>
+                            <Input
+                              value={edu.institution_name}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].institution_name = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                              placeholder="e.g., Pura D. C. High School"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                          <div>
+                            <Label>Country of Study *</Label>
+                            <Select 
+                              value={edu.country} 
+                              onValueChange={(v) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].country = v;
+                                updateField('education_history', newHistory);
+                              }}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Select country" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {countries.map(c => (
+                                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label>State of Study</Label>
+                            <Input
+                              value={edu.state}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].state = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                            />
+                          </div>
+
+                          <div>
+                            <Label>City of Study *</Label>
+                            <Input
+                              value={edu.city}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].city = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Name of Board / University *</Label>
+                            <Input
+                              value={edu.board_name}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].board_name = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                              placeholder="e.g., Dhaka"
+                            />
+                          </div>
+
+                          <div>
+                            <Label>Qualification Achieved / Degree Awarded</Label>
+                            <Input
+                              value={edu.group_subject}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].group_subject = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                              placeholder="e.g., Secondary School Certificate"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                          <div>
+                            <Label>Grading System *</Label>
+                            <Select 
+                              value={edu.result_type} 
+                              onValueChange={(v) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].result_type = v;
+                                updateField('education_history', newHistory);
+                              }}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue placeholder="Select type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Grade">Grade (Out of 5)</SelectItem>
+                                <SelectItem value="Percentage">Percentage</SelectItem>
+                                <SelectItem value="GPA">GPA (Out of 4)</SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div>
+                            <Label>Score *</Label>
+                            <Input
+                              type="number"
+                              step="0.01"
+                              value={edu.result_value}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].result_value = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                              placeholder="e.g., 3.44"
+                            />
+                          </div>
+
+                          <div>
+                            <Label>Primary Language of Instruction *</Label>
+                            <Input
+                              value={edu.primary_language}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].primary_language = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                              placeholder="e.g., Bangla"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Start Date *</Label>
+                            <Input
+                              type="date"
+                              value={edu.start_date}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].start_date = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                            />
+                          </div>
+
+                          <div>
+                            <Label>End Date *</Label>
+                            <Input
+                              type="date"
+                              value={edu.end_date}
+                              onChange={(e) => {
+                                const newHistory = [...formData.education_history];
+                                newHistory[index].end_date = e.target.value;
+                                updateField('education_history', newHistory);
+                              }}
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-slate-500">
+                      <GraduationCap className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>No qualifications added yet</p>
+                      <p className="text-sm">Click "Add Qualification" to get started</p>
                     </div>
-                    <div>
-                      <Label>Graduation Year</Label>
-                      <Input
-                        type="number"
-                        value={formData.education.graduation_year}
-                        onChange={(e) => updateField('education.graduation_year', e.target.value)}
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label>GPA</Label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={formData.education.gpa}
-                        onChange={(e) => updateField('education.gpa', e.target.value)}
-                        className="mt-1"
-                        placeholder="e.g. 3.5"
-                      />
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
 
