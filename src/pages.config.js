@@ -45,6 +45,7 @@ import CRMTaskTemplates from './pages/CRMTaskTemplates';
 import CRMWorkflows from './pages/CRMWorkflows';
 import StudentAnalytics from './pages/StudentAnalytics';
 import CRMPerformance from './pages/CRMPerformance';
+import CompleteProfile from './pages/CompleteProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -96,6 +97,7 @@ export const PAGES = {
     "CRMWorkflows": CRMWorkflows,
     "StudentAnalytics": StudentAnalytics,
     "CRMPerformance": CRMPerformance,
+    "CompleteProfile": CompleteProfile,
 }
 
 export const pagesConfig = {
