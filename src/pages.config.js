@@ -8,6 +8,7 @@ import About from './pages/About';
 import StudentDashboard from './pages/StudentDashboard';
 import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
+import CRMDashboard from './pages/CRMDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +23,7 @@ export const PAGES = {
     "StudentDashboard": StudentDashboard,
     "MyApplications": MyApplications,
     "MyDocuments": MyDocuments,
+    "CRMDashboard": CRMDashboard,
 }
 
 export const pagesConfig = {
