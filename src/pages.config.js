@@ -21,6 +21,13 @@ import MyProfile from './pages/MyProfile';
 import CRMSettings from './pages/CRMSettings';
 import CRMMessages from './pages/CRMMessages';
 import CourseDetails from './pages/CourseDetails';
+import StudyInUK from './pages/StudyInUK';
+import StudyInAustralia from './pages/StudyInAustralia';
+import StudyInCanada from './pages/StudyInCanada';
+import StudyInIreland from './pages/StudyInIreland';
+import StudyInNewZealand from './pages/StudyInNewZealand';
+import StudyInUSA from './pages/StudyInUSA';
+import StudyInDubai from './pages/StudyInDubai';
 import __Layout from './Layout.jsx';
 
 
@@ -48,6 +55,13 @@ export const PAGES = {
     "CRMSettings": CRMSettings,
     "CRMMessages": CRMMessages,
     "CourseDetails": CourseDetails,
+    "StudyInUK": StudyInUK,
+    "StudyInAustralia": StudyInAustralia,
+    "StudyInCanada": StudyInCanada,
+    "StudyInIreland": StudyInIreland,
+    "StudyInNewZealand": StudyInNewZealand,
+    "StudyInUSA": StudyInUSA,
+    "StudyInDubai": StudyInDubai,
 }
 
 export const pagesConfig = {
