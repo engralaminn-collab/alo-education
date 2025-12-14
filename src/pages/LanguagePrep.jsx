@@ -71,38 +71,162 @@ export default function LanguagePrep() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-20">
-        <div className="container mx-auto px-6">
+      <section 
+        className="relative bg-gradient-to-br from-blue-600 to-blue-700 py-20 bg-cover bg-center"
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1920&h=600&fit=crop)' }}
+      >
+        <div className="absolute inset-0 bg-blue-900/80"></div>
+        <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center text-white">
             <Globe className="w-12 h-12 mx-auto mb-4 opacity-80" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Study English for university entry
+              Language Prep
             </h1>
-            <p className="text-xl text-slate-300">
-              Qualify for admission to your preferred university by taking an English language proficiency test with expert support from ALO Education.
+            <p className="text-xl text-white/90">
+              IELTS for university entry. Access study materials, practice tests, and one-on-one tutoring with ALO Education, giving yourself the best chance of hitting the score you need.
             </p>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-6 py-16">
-        {/* Why Section */}
-        <div className="max-w-4xl mx-auto mb-16">
+        {/* What is IELTS Section */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">What is IELTS?</h2>
+          </div>
           <Card className="border-0 shadow-lg">
             <CardContent className="p-8">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">
-                Why take an English language proficiency test to study abroad?
-              </h2>
-              <p className="text-slate-600 leading-relaxed mb-4">
-                Universities require international students to meet specific English language proficiency standards to ensure they can understand course materials and successfully complete their studies. A variety of proficiency tests, such as IELTS and PTE, are widely accepted as proof of English language skills.
+              <p className="text-slate-700 leading-relaxed mb-6">
+                IELTS, the International English Language Testing System, is a test of English language proficiency and one of the world's most popular and respected forms of English in education and migration. Intended for non-native speakers who are looking to study or work in an English-speaking environment, IELTS training is an internationally recognised system for testing English language ability in four categories:
               </p>
-              <p className="text-slate-600 leading-relaxed mb-4">
-                These standardised tests can be challenging, but with the right preparation, you can improve your performance. Many tests also allow retakes to help you achieve the required score.
+              <div className="grid md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-blue-50 p-6 rounded-lg text-center">
+                  <BookOpen className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <h3 className="font-semibold text-slate-900">Reading</h3>
+                </div>
+                <div className="bg-blue-50 p-6 rounded-lg text-center">
+                  <Globe className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <h3 className="font-semibold text-slate-900">Speaking</h3>
+                </div>
+                <div className="bg-blue-50 p-6 rounded-lg text-center">
+                  <Award className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <h3 className="font-semibold text-slate-900">Writing</h3>
+                </div>
+                <div className="bg-blue-50 p-6 rounded-lg text-center">
+                  <CheckCircle className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                  <h3 className="font-semibold text-slate-900">Listening</h3>
+                </div>
+              </div>
+              <p className="text-slate-700 leading-relaxed mb-6">
+                Since its introduction in 1989, IELTS preparation has become one of the most trusted forms of English-language assessment and is accepted by over 8,000 universities, employers, and immigration organisations worldwide.
               </p>
-              <p className="text-slate-600 leading-relaxed">
-                ALO Education's English language training courses offer personalised support to help you improve your English proficiency and secure the score you need for admission to your chosen university.
+              <p className="text-slate-700 leading-relaxed">
+                At ALO Education, you have access to a range of free and paid resources and IELTS coaching, giving you a better chance of meeting the entry requirements of your preferred university.
               </p>
             </CardContent>
+          </Card>
+        </div>
+
+        {/* IELTS Course Types */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">IELTS course types</h2>
+            <p className="text-slate-600">There are two different types of IELTS tests, and once graded, your IELTS score is valid for two years.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-0 shadow-lg">
+              <CardHeader className="bg-blue-50">
+                <CardTitle className="text-2xl text-blue-900">Academic IELTS</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <p className="text-slate-700 leading-relaxed">
+                  Academic IELTS is for international students who wish to study at a university or join an institute of higher education.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-lg">
+              <CardHeader className="bg-blue-50">
+                <CardTitle className="text-2xl text-blue-900">General IELTS</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <p className="text-slate-700 leading-relaxed">
+                  Classes focus on English survival skills and social and workplace language, ideal for those planning to migrate to English-speaking countries such as Australia, Canada, or New Zealand.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* IELTS Band Scale */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">IELTS 9-Band Scale</h2>
+          </div>
+          <Card className="border-0 shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-blue-600 text-white">
+                  <tr>
+                    <th className="px-6 py-4 text-left font-semibold">Band Score</th>
+                    <th className="px-6 py-4 text-left font-semibold">Skill Level</th>
+                    <th className="px-6 py-4 text-left font-semibold">Skill Overview</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 9</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Expert</td>
+                    <td className="px-6 py-4 text-slate-700">Fully operational command of the language. Accurate and fluent with complete understanding</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 8</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Very good</td>
+                    <td className="px-6 py-4 text-slate-700">Fully operational command with occasional minor errors. Handles complex language well</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 7</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Good</td>
+                    <td className="px-6 py-4 text-slate-700">Strong command with occasional inaccuracies and misunderstandings in unfamiliar situations</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 6</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Competent</td>
+                    <td className="px-6 py-4 text-slate-700">Generally effective command, though with some errors and misunderstandings</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 5</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Modest</td>
+                    <td className="px-6 py-4 text-slate-700">Partial command, coping with overall meaning but frequent errors</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 4</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Limited</td>
+                    <td className="px-6 py-4 text-slate-700">Basic competence in familiar situations, but difficulties in understanding and expressing complex ideas</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 3</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Extremely limited</td>
+                    <td className="px-6 py-4 text-slate-700">Conveys and understands only the general meaning in very familiar situations and experiences frequent breakdowns in communication</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 2</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Intermittent</td>
+                    <td className="px-6 py-4 text-slate-700">Great difficulty understanding spoken and written English and struggles to communicate basic ideas</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 1</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Non-user</td>
+                    <td className="px-6 py-4 text-slate-700">No ability to use the language except for a few isolated words</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">Band 0</td>
+                    <td className="px-6 py-4 font-semibold text-blue-600">Did not attempt</td>
+                    <td className="px-6 py-4 text-slate-700">The test was not taken, or there is no assessable English proficiency</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
 
@@ -124,7 +248,7 @@ export default function LanguagePrep() {
                 key={country}
                 variant={selectedCountry === country ? 'default' : 'outline'}
                 onClick={() => setSelectedCountry(country)}
-                className={selectedCountry === country ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+                className={selectedCountry === country ? 'bg-blue-600 hover:bg-blue-700' : ''}
               >
                 {country}
               </Button>
@@ -142,8 +266,8 @@ export default function LanguagePrep() {
               >
                 <Card className="border-0 shadow-md hover:shadow-lg transition-all h-full">
                   <CardHeader>
-                    <div className="w-12 h-12 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
-                      <BookOpen className="w-6 h-6 text-emerald-600" />
+                    <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center mb-3">
+                      <BookOpen className="w-6 h-6 text-blue-600" />
                     </div>
                     <CardTitle>{test.name}</CardTitle>
                   </CardHeader>
@@ -186,13 +310,13 @@ export default function LanguagePrep() {
 
         {/* CTA */}
         <div className="max-w-4xl mx-auto">
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-600 to-cyan-600 text-white">
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white">
             <CardContent className="p-12 text-center">
               <h2 className="text-3xl font-bold mb-4">
                 Take the first step towards studying abroad!
               </h2>
               <Link to={createPageUrl('Contact')}>
-                <Button size="lg" className="bg-white text-emerald-600 hover:bg-slate-100">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-100">
                   Book free counselling
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
