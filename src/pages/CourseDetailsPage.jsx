@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 import SimilarCourses from '@/components/courses/SimilarCourses';
+import WhyThisCourse from '@/components/courses/WhyThisCourse';
+import FavoriteButton from '@/components/courses/FavoriteButton';
 
 export default function CourseDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -46,6 +48,20 @@ export default function CourseDetailsPage() {
     queryFn: () => base44.entities.Course.filter({ status: 'open' }),
   });
 
+  const { data: user } = useQuery({
+    queryKey: ['current-user-course-details'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile-course', user?.email],
+    queryFn: async () => {
+      const profiles = await base44.entities.StudentProfile.filter({ email: user.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -77,9 +93,12 @@ export default function CourseDetailsPage() {
       <section style={{ background: 'var(--alo-blue)' }} className="py-12">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl">
-            <Badge className="mb-4" style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
-              {course.level}
-            </Badge>
+            <div className="flex items-center justify-between mb-4">
+              <Badge style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
+                {course.level}
+              </Badge>
+              <FavoriteButton courseId={course.id} size="sm" />
+            </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
               {course.course_title}
             </h1>
@@ -102,7 +121,16 @@ export default function CourseDetailsPage() {
       <div className="container mx-auto px-6 py-10">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
+            {/* Why This Course AI Section */}
+            {studentProfile && (
+              <WhyThisCourse 
+                course={course}
+                university={university}
+                studentProfile={studentProfile}
+              />
+            )}
+
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="w-full justify-start mb-6">
                 <TabsTrigger value="overview">Overview</TabsTrigger>

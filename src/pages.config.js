@@ -40,6 +40,8 @@ import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMBulkEmail from './pages/CRMBulkEmail';
+import MyFavorites from './pages/MyFavorites';
+import CRMTaskTemplates from './pages/CRMTaskTemplates';
 import __Layout from './Layout.jsx';
 
 
@@ -86,6 +88,8 @@ export const PAGES = {
     "UniversityDetailsPage": UniversityDetailsPage,
     "ApplicationForm": ApplicationForm,
     "CRMBulkEmail": CRMBulkEmail,
+    "MyFavorites": MyFavorites,
+    "CRMTaskTemplates": CRMTaskTemplates,
 }
 
 export const pagesConfig = {
