@@ -17,6 +17,8 @@ import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
 import MyJourney from '@/components/dashboard/MyJourney';
+import ResourcesHub from '@/components/dashboard/ResourcesHub';
+import SavedComparisons from '@/components/dashboard/SavedComparisons';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -55,6 +57,12 @@ export default function StudentDashboard() {
   const { data: documents = [] } = useQuery({
     queryKey: ['my-documents', studentProfile?.id],
     queryFn: () => base44.entities.Document.filter({ student_id: studentProfile?.id }),
+    enabled: !!studentProfile?.id,
+  });
+
+  const { data: tasks = [] } = useQuery({
+    queryKey: ['my-tasks', studentProfile?.id],
+    queryFn: () => base44.entities.Task.filter({ student_id: studentProfile?.id }),
     enabled: !!studentProfile?.id,
   });
 
@@ -177,7 +185,7 @@ export default function StudentDashboard() {
               studentProfile={studentProfile}
               applications={applications}
               documents={documents}
-              tasks={[]}
+              tasks={tasks}
             />
 
             {/* AI Recommendations */}
@@ -186,6 +194,10 @@ export default function StudentDashboard() {
               courses={courses}
               universities={universities}
             />
+
+            {/* Resources Hub */}
+            <ResourcesHub studentProfile={studentProfile} />
+
             {/* Profile Completeness */}
             {profileCompleteness < 100 && (
               <Card className="border-0 shadow-sm border-l-4 border-l-amber-500">
@@ -284,6 +296,9 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Saved Comparisons */}
+            <SavedComparisons studentProfile={studentProfile} />
+
             {/* Counselor Card */}
             {studentProfile?.counselor_id && (
               <Card className="border-0 shadow-sm">

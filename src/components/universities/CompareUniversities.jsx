@@ -107,7 +107,19 @@ export default function CompareUniversities({
       <Dialog open={showComparison} onOpenChange={setShowComparison}>
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl">University Comparison</DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-2xl">University Comparison</DialogTitle>
+              {user && (
+                <Button
+                  size="sm"
+                  onClick={() => setShowSaveDialog(true)}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Bookmark className="w-4 h-4 mr-2" />
+                  Save Comparison
+                </Button>
+              )}
+            </div>
           </DialogHeader>
 
           <div className="overflow-x-auto">
@@ -301,6 +313,50 @@ export default function CompareUniversities({
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Save Comparison Dialog */}
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save University Comparison</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Comparison Name</label>
+              <Input
+                placeholder="e.g., UK Top Universities"
+                value={comparisonName}
+                onChange={(e) => setComparisonName(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">Notes (Optional)</label>
+              <Textarea
+                placeholder="Add any notes about this comparison..."
+                value={comparisonNotes}
+                onChange={(e) => setComparisonNotes(e.target.value)}
+                rows={3}
+              />
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setShowSaveDialog(false)}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => saveComparison.mutate()}
+                disabled={saveComparison.isPending}
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
+              >
+                {saveComparison.isPending ? 'Saving...' : 'Save Comparison'}
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
