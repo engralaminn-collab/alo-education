@@ -80,9 +80,12 @@ export default function UniversityDetailsPage() {
                 />
               )}
               <div className="flex-1 text-white">
-                <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                  {university.university_name || university.name}
-                </h1>
+                <div className="flex items-start justify-between">
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                    {university.university_name || university.name}
+                  </h1>
+                  <UniversityFavoriteButton universityId={university.id} size="sm" />
+                </div>
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />
