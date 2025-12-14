@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --alo-blue: #0B5ED7;
+  --alo-orange: #F7941D;
+  --alo-white: #FFFFFF;
+  --alo-text: #1F2937;
+  --alo-grey: #6B7280;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-white text-foreground;
+  }
+}
+
+/* ALO Brand Color Classes */
+.alo-blue-bg {
+  background-color: var(--alo-blue) !important;
+}
+
+.alo-orange-bg {
+  background-color: var(--alo-orange) !important;
+}
+
+.alo-blue-text {
+  color: var(--alo-blue) !important;
+}
+
+.alo-orange-text {
+  color: var(--alo-orange) !important;
+}
+
+.alo-blue-border {
+  border-color: var(--alo-blue) !important;
+}
+
+.alo-orange-border {
+  border-color: var(--alo-orange) !important;
+}
+
+/* ALO Standard Card */
+.alo-card {
+  background: white;
+  border: 1px solid var(--alo-blue);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.alo-card:hover {
+  border-color: var(--alo-orange);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.alo-card-title {
+  color: var(--alo-blue);
+  font-weight: 700;
+}
+
+/* ALO Standard Button */
+.alo-btn-primary {
+  background-color: var(--alo-orange);
+  color: white;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.alo-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ALO Header */
+.alo-header {
+  background-color: var(--alo-blue);
+  color: white;
+}
+
+.alo-header a:hover {
+  color: var(--alo-orange);
+}
+
+/* ALO Footer */
+.alo-footer-bottom {
+  background-color: var(--alo-blue);
+  color: white;
+  padding: 14px 0;
+}
+
+.alo-footer-bottom a {
+  color: white;
+}
+
+.alo-footer-bottom a:hover {
+  color: var(--alo-orange);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alo-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  
+  .alo-card {
+    border-radius: 12px;
+  }
+  
+  .alo-btn-primary {
+    width: 100%;
+    min-height: 44px;
+  }
+  
+  .alo-footer-bottom {
+    text-align: center;
+  }
+}
