@@ -34,8 +34,8 @@ export default function Hero({ onSearch }) {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+            transition={{ duration: 0.8 }}>
+
             <h1 className="text-5xl md:text-7xl font-bold text-black mb-6 leading-tight">
               Your Trusted Partner for Studying Abroad in
             </h1>
@@ -44,21 +44,21 @@ export default function Hero({ onSearch }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl text-slate-600 mb-8"
-            >
+              className="text-xl text-slate-600 mb-8">
+
               From your ambition to admission, we're with you all the way.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
+              transition={{ duration: 0.8, delay: 0.3 }}>
+
               <Link to={createPageUrl('Contact')}>
-                <Button 
+                <Button
                   className="h-14 px-8 text-white rounded-xl font-semibold text-lg"
-                  style={{ backgroundColor: '#F37021' }}
-                >
+                  style={{ backgroundColor: '#F37021' }}>
+
                   Book a Free Consultation
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
@@ -70,16 +70,16 @@ export default function Hero({ onSearch }) {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="hidden lg:block"
-          >
+            className="hidden lg:block">
+
             <img
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693e153b7a74643e7f576f5e/fec3f3e93_fgdh.jpg"
-              alt="Study Abroad"
-              className="w-full h-auto rounded-2xl"
-            />
+              alt="Study Abroad" className="bg-fuchsia-700 rounded-2xl w-full h-auto" />
+
+
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
