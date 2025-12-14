@@ -47,10 +47,11 @@ export default function Navbar() {
   ];
 
   const navLinks = [
-    { label: 'Course Finder', page: 'CourseMatcher' },
-    { label: 'Services', page: 'Home', hash: '#services' },
-    { label: 'Language Prep', page: 'Contact' },
-    { label: 'Resources', page: 'AlumniNetwork' },
+    { label: 'Home', page: 'Home' },
+    { label: 'Universities', page: 'Universities' },
+    { label: 'Courses', page: 'Courses' },
+    { label: 'About', page: 'About' },
+    { label: 'Contact', page: 'Contact' },
   ];
 
   return (
@@ -66,11 +67,11 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.page}
-                to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                to={createPageUrl(link.page)}
                 className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
               >
                 {link.label}
@@ -95,13 +96,6 @@ export default function Navbar() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <Link
-              to={createPageUrl('Contact')}
-              className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
-            >
-              Book Free Counselling
-            </Link>
           </div>
 
           {/* Auth Buttons */}
@@ -110,8 +104,10 @@ export default function Navbar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className={`gap-2 ${textColor}`}>
-                    <User className="w-5 h-5" />
-                    <span>Portal</span>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-sm font-semibold">
+                      {user.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
+                    </div>
+                    <span>{user.full_name || 'Account'}</span>
                     <ChevronDown className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -159,8 +155,13 @@ export default function Navbar() {
                   className={textColor}
                   onClick={() => base44.auth.redirectToLogin()}
                 >
-                  <User className="w-5 h-5 mr-2" />
-                  Portal
+                  Sign In
+                </Button>
+                <Button 
+                  className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+                  onClick={() => base44.auth.redirectToLogin()}
+                >
+                  Get Started
                 </Button>
               </>
             )}
@@ -178,7 +179,7 @@ export default function Navbar() {
                 {navLinks.map((link) => (
                   <Link
                     key={link.page}
-                    to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                    to={createPageUrl(link.page)}
                     onClick={() => setIsMobileOpen(false)}
                     className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
                   >
@@ -202,14 +203,6 @@ export default function Navbar() {
                     ))}
                   </div>
                 </div>
-
-                <Link
-                  to={createPageUrl('Contact')}
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
-                >
-                  Book Free Counselling
-                </Link>
                 
                 <hr className="border-slate-200" />
                 {user ? (
@@ -219,7 +212,7 @@ export default function Navbar() {
                       onClick={() => setIsMobileOpen(false)}
                       className="text-lg font-medium text-slate-800"
                     >
-                      Portal / Dashboard
+                      Dashboard
                     </Link>
                     <Button 
                       variant="outline" 
@@ -234,7 +227,7 @@ export default function Navbar() {
                     className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
                     onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}
                   >
-                    Portal Login
+                    Get Started
                   </Button>
                 )}
               </div>

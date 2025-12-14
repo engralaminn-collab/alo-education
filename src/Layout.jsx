@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '@/components/common/Navbar';
-import WhatsAppChat from '@/components/common/WhatsAppChat';
 
 export default function Layout({ children, currentPageName }) {
   // Pages that should have transparent navbar on top
@@ -8,7 +7,7 @@ export default function Layout({ children, currentPageName }) {
   const hasTransparentNav = transparentNavPages.includes(currentPageName);
   
   // CRM pages that don't need public navbar
-  const crmPages = ['CRMDashboard', 'CRMStudents', 'CRMApplications', 'CRMUniversities', 'CRMCourses', 'CRMInquiries', 'CRMCounselors', 'CRMReports', 'CRMSettings', 'CRMTasks', 'CRMTestimonials', 'CRMAutomation', 'CRMMessages'];
+  const crmPages = ['CRMDashboard', 'CRMStudents', 'CRMApplications', 'CRMUniversities', 'CRMCourses', 'CRMInquiries', 'CRMCounselors', 'CRMReports', 'CRMSettings'];
   const isCRMPage = crmPages.includes(currentPageName);
 
   if (isCRMPage) {
@@ -21,7 +20,6 @@ export default function Layout({ children, currentPageName }) {
       <main className={hasTransparentNav ? '' : 'pt-20'}>
         {children}
       </main>
-      <WhatsAppChat />
     </div>
   );
 }

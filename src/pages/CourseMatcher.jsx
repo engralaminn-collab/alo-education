@@ -169,109 +169,60 @@ export default function CourseMatcher() {
   const progress = (currentStep / steps.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="py-20">
+      <section className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-16">
         <div className="container mx-auto px-6">
-          <div className="max-w-5xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold mb-12 text-slate-900 text-center">
-              Explore courses
+          <div className="max-w-3xl mx-auto text-center text-white">
+            <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-80" />
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Course Matcher
             </h1>
-            
-            {/* Tabs */}
-            <div className="flex gap-3 mb-8 justify-center">
-              <Button 
-                className={`px-8 py-6 text-base font-medium rounded-full ${
-                  currentStep === 1 
-                    ? 'bg-slate-900 text-white hover:bg-slate-800' 
-                    : 'bg-white text-slate-900 hover:bg-slate-100'
-                }`}
-                onClick={() => setCurrentStep(1)}
-              >
-                COURSES
-              </Button>
-              <Button 
-                className={`px-8 py-6 text-base font-medium rounded-full ${
-                  currentStep === 2 
-                    ? 'bg-slate-900 text-white hover:bg-slate-800' 
-                    : 'bg-white text-slate-900 hover:bg-slate-100'
-                }`}
-                onClick={() => setCurrentStep(2)}
-              >
-                UNIVERSITIES
-              </Button>
-            </div>
-            
-            {/* Search Form */}
-            <Card className="border-0 shadow-xl bg-white">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row gap-4 items-end">
-                  <div className="flex-1">
-                    <Label className="text-slate-700 mb-2 block text-sm">I'm looking for:</Label>
-                    <Input 
-                      placeholder="Enter subject or course:"
-                      className="h-12"
-                      value={formData.field_of_study}
-                      onChange={(e) => updateField('field_of_study', e.target.value)}
-                    />
-                  </div>
-
-                  <div className="flex-1">
-                    <Label className="text-slate-700 mb-2 block text-sm">I'm planning to study:</Label>
-                    <Select value={formData.preferred_degree} onValueChange={(v) => updateField('preferred_degree', v)}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select course type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
-                        <SelectItem value="master">Master's Degree</SelectItem>
-                        <SelectItem value="phd">PhD</SelectItem>
-                        <SelectItem value="diploma">Diploma</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex-1">
-                    <Label className="text-slate-700 mb-2 block text-sm">I want to study in:</Label>
-                    <Select 
-                      value={formData.preferred_countries[0] || ''} 
-                      onValueChange={(v) => updateField('preferred_countries', [v])}
-                    >
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
-                        <SelectItem value="usa">United States</SelectItem>
-                        <SelectItem value="canada">Canada</SelectItem>
-                        <SelectItem value="australia">Australia</SelectItem>
-                        <SelectItem value="germany">Germany</SelectItem>
-                        <SelectItem value="ireland">Ireland</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button 
-                    className="bg-red-600 hover:bg-red-700 text-white h-12 px-8"
-                    onClick={() => setCurrentStep(4)}
-                  >
-                    <Sparkles className="w-5 h-5" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <p className="text-xl text-white/80">
+              Find courses that match your profile and eligibility
+            </p>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-6 py-12">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-3xl mx-auto">
+          {/* Progress Steps */}
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-full font-semibold transition-all ${
+                    currentStep >= step.id 
+                      ? 'bg-emerald-500 text-white' 
+                      : 'bg-slate-200 text-slate-500'
+                  }`}>
+                    {currentStep > step.id ? (
+                      <Check className="w-5 h-5" />
+                    ) : (
+                      <step.icon className="w-5 h-5" />
+                    )}
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div className={`hidden md:block w-24 lg:w-32 h-1 mx-2 rounded ${
+                      currentStep > step.id ? 'bg-emerald-500' : 'bg-slate-200'
+                    }`} />
+                  )}
+                </div>
+              ))}
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
           <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
+              {/* Step 1: Education */}
               {currentStep === 1 && (
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
@@ -573,7 +524,37 @@ export default function CourseMatcher() {
             </motion.div>
           </AnimatePresence>
 
-
+          {/* Navigation */}
+          <div className="flex justify-between mt-8">
+            <Button
+              variant="outline"
+              onClick={prevStep}
+              disabled={currentStep === 1}
+              className={currentStep === 1 ? 'invisible' : ''}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+            
+            {currentStep < 4 && (
+              <Button
+                onClick={nextStep}
+                className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
+              >
+                {currentStep === 3 ? 'Find Matches' : 'Continue'}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            )}
+            
+            {currentStep === 4 && (
+              <Link to={createPageUrl('Contact')}>
+                <Button className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white">
+                  Get Expert Guidance
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
