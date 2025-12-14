@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import CRMSidebar from './CRMSidebar';
 import NotificationCenter from './NotificationCenter';
 import AutomatedTaskTrigger from './AutomatedTaskTrigger';
+import WorkflowExecutionEngine from './WorkflowExecutionEngine';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ export default function CRMLayout({ children, title, actions }) {
   return (
     <div className="min-h-screen bg-slate-100">
       <AutomatedTaskTrigger />
+      <WorkflowExecutionEngine />
       <CRMSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       
       <div className={cn(
