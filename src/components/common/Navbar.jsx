@@ -30,11 +30,17 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isHome = location.pathname === '/Home' || location.pathname === '/';
-  const navBg = isScrolled || !isHome 
-    ? 'bg-white/95 backdrop-blur-md shadow-sm' 
-    : 'bg-transparent';
-  const textColor = isScrolled || !isHome ? 'text-slate-800' : 'text-white';
+  const navBg = 'alo-header';
+
+  const destinations = [
+    { label: 'United Kingdom', page: 'StudyInUK' },
+    { label: 'Australia', page: 'StudyInAustralia' },
+    { label: 'Canada', page: 'StudyInCanada' },
+    { label: 'Ireland', page: 'StudyInIreland' },
+    { label: 'New Zealand', page: 'StudyInNewZealand' },
+    { label: 'United States', page: 'StudyInUSA' },
+    { label: 'Dubai (UAE)', page: 'StudyInDubai' },
+  ];
 
   const navLinks = [
     { label: 'Home', page: 'Home' },
@@ -50,10 +56,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to={createPageUrl('Home')} className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'white' }}>
+              <GraduationCap className="w-6 h-6" style={{ color: 'var(--alo-blue)' }} />
             </div>
-            <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+            <span className="text-xl font-bold text-white">ALO Education</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -62,11 +68,37 @@ export default function Navbar() {
               <Link
                 key={link.page}
                 to={createPageUrl(link.page)}
-                className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
+                className="font-medium text-white transition-colors"
+                style={{ color: 'white' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
               >
                 {link.label}
               </Link>
             ))}
+            
+            {/* Destinations Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
+                >
+                  Destinations
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {destinations.map((dest) => (
+                  <DropdownMenuItem key={dest.page} asChild>
+                    <Link to={createPageUrl(dest.page)} className="cursor-pointer">
+                      {dest.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Auth Buttons */}
@@ -74,8 +106,8 @@ export default function Navbar() {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className={`gap-2 ${textColor}`}>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-sm font-semibold">
+                  <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
                       {user.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
                     </div>
                     <span>{user.full_name || 'Account'}</span>
@@ -123,16 +155,17 @@ export default function Navbar() {
               <>
                 <Button 
                   variant="ghost" 
-                  className={textColor}
+                  className="text-white hover:bg-white/10"
                   onClick={() => base44.auth.redirectToLogin()}
                 >
                   Sign In
                 </Button>
                 <Button 
-                  className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white"
+                  className="text-white hover:opacity-90"
+                  style={{ backgroundColor: 'var(--alo-orange)' }}
                   onClick={() => base44.auth.redirectToLogin()}
                 >
-                  Get Started
+                  Book Free Counselling
                 </Button>
               </>
             )}
@@ -141,7 +174,7 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className={textColor}>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
@@ -152,18 +185,43 @@ export default function Navbar() {
                     key={link.page}
                     to={createPageUrl(link.page)}
                     onClick={() => setIsMobileOpen(false)}
-                    className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
+                    className="text-lg font-medium transition-colors"
+                    style={{ color: 'var(--alo-blue)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
                   >
                     {link.label}
                   </Link>
                 ))}
+                
+                {/* Mobile Destinations */}
+                <div>
+                  <p className="text-sm font-semibold mb-2" style={{ color: 'var(--alo-blue)' }}>Destinations</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    {destinations.map((dest) => (
+                      <Link
+                        key={dest.page}
+                        to={createPageUrl(dest.page)}
+                        onClick={() => setIsMobileOpen(false)}
+                        className="text-base font-medium transition-colors"
+                        style={{ color: 'var(--alo-blue)' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+                      >
+                        {dest.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                
                 <hr className="border-slate-200" />
                 {user ? (
                   <>
                     <Link
                       to={createPageUrl('StudentDashboard')}
                       onClick={() => setIsMobileOpen(false)}
-                      className="text-lg font-medium text-slate-800"
+                      className="text-lg font-medium"
+                      style={{ color: 'var(--alo-blue)' }}
                     >
                       Dashboard
                     </Link>
@@ -177,10 +235,11 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Button 
-                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
+                    className="text-white"
+                    style={{ backgroundColor: 'var(--alo-orange)' }}
                     onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}
                   >
-                    Get Started
+                    Book Free Counselling
                   </Button>
                 )}
               </div>
