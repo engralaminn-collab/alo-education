@@ -20,16 +20,16 @@ export default function Footer() {
               Empowering students worldwide to achieve their international education dreams through personalized guidance and support.
             </p>
             <div className="flex gap-3">
-              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-blue)'}>
+              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-blue)'}>
+              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-blue)'}>
+              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--alo-blue)'}>
+              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
@@ -86,41 +86,41 @@ export default function Footer() {
             <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
+                <MapPin className="w-5 h-5 mt-0.5" style={{ color: '#F37021' }} />
                 <div>
-                  <div className="font-medium mb-1" style={{ color: 'var(--alo-blue)' }}>Bangladesh Office:</div>
+                  <div className="font-medium mb-1" style={{ color: '#0066CC' }}>Bangladesh Office:</div>
                   <div>Barek Mansion-02 (5th Floor)</div>
                   <div>58/9 Box Culvert Road, Panthapath</div>
                   <div>Dhaka-1205, Bangladesh</div>
                 </div>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
+                <Phone className="w-5 h-5" style={{ color: '#F37021' }} />
                 <span>+88 01805020101-10</span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
+                <Mail className="w-5 h-5" style={{ color: '#F37021' }} />
                 <span>info@aloeducation.com</span>
               </li>
               <li className="flex items-center gap-3">
-                <Clock className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
+                <Clock className="w-5 h-5" style={{ color: '#F37021' }} />
                 <span>Sat-Thu: 10 AM - 6 PM</span>
               </li>
             </ul>
           </div>
         </div>
         
-        <div className="alo-footer-bottom mt-12">
-          <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm">
-              © {new Date().getFullYear()} ALO Education. All Rights Reserved
-            </p>
-            <div className="flex gap-6 text-sm">
-              <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Privacy Policy</a>
-              <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Terms of Service</a>
-              <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Cookie Policy</a>
-            </div>
+        <div className="mt-12" style={{ backgroundColor: '#0066CC', color: 'white', padding: '14px 0' }}>
+        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm">
+            © {new Date().getFullYear()} ALO Education. All Rights Reserved
+          </p>
+          <div className="flex gap-6 text-sm">
+            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Privacy Policy</a>
+            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Terms of Service</a>
+            <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Cookie Policy</a>
           </div>
+        </div>
         </div>
       </div>
     </footer>
