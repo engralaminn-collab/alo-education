@@ -83,14 +83,3 @@ export default function Hero({ onSearch }) {
     </section>
   );
 }
-
-function HeroOld() {
-  return (
-    <section className="relative min-h-[50vh] flex items-center overflow-hidden bg-white pt-20">
-      <div className="relative container mx-auto px-6 py-16">
-        <div className="max-w-4xl mx-auto text-center">
-
-
-    </section>
-  );
-}
