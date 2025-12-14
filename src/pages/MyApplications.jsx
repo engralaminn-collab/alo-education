@@ -15,6 +15,7 @@ import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import MilestoneTracker from '@/components/applications/MilestoneTracker';
 
 const statusConfig = {
   draft: { color: 'bg-slate-100 text-slate-700', icon: FileText },
@@ -257,38 +258,10 @@ export default function MyApplications() {
               {selectedApp ? (
                 <Card className="border-0 shadow-sm sticky top-24">
                   <CardHeader>
-                    <CardTitle className="text-lg">Application Progress</CardTitle>
+                    <CardTitle className="text-lg">Application Milestones</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {/* Progress Steps */}
-                    <div className="space-y-4 mb-6">
-                      {statusSteps.slice(0, 6).map((step, index) => {
-                        const currentIndex = getStepIndex(selectedApp.status);
-                        const isComplete = index < currentIndex;
-                        const isCurrent = index === currentIndex;
-                        
-                        return (
-                          <div key={step} className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                              isComplete ? 'bg-emerald-500 text-white' :
-                              isCurrent ? 'bg-emerald-100 text-emerald-600 ring-2 ring-emerald-500' :
-                              'bg-slate-100 text-slate-400'
-                            }`}>
-                              {isComplete ? (
-                                <CheckCircle className="w-4 h-4" />
-                              ) : (
-                                <span className="text-sm font-medium">{index + 1}</span>
-                              )}
-                            </div>
-                            <span className={`text-sm capitalize ${
-                              isComplete || isCurrent ? 'text-slate-900' : 'text-slate-400'
-                            }`}>
-                              {step.replace(/_/g, ' ')}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <MilestoneTracker application={selectedApp} variant="vertical" />
 
                     {/* Details */}
                     <div className="space-y-4 pt-4 border-t">
