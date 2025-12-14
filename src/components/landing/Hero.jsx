@@ -21,62 +21,49 @@ export default function Hero({ onSearch }) {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-white" />
-      </div>
-
-
+    <section 
+      className="relative min-h-[80vh] flex items-center bg-cover bg-center"
+      style={{ 
+        backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920)',
+      }}
+    >
+      {/* Blue Overlay 70% */}
+      <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 102, 204, 0.7)' }}></div>
 
       <div className="relative container mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}>
-
-            <h1 className="text-5xl md:text-7xl font-bold text-black mb-6 leading-tight">
-              Your Trusted Partner for Studying Abroad in
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Unlock a world-class education abroad with expert guidance
             </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl text-slate-600 mb-8">
+            <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-3xl">
+              Study abroad with globally recognised education, strong career prospects, and a welcoming environment for international students. At ALO Education, we guide you every step of the way—from choosing the right course to submitting a strong application.
+            </p>
 
-              From your ambition to admission, we're with you all the way.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}>
-
+            <div className="flex flex-wrap gap-4">
               <Link to={createPageUrl('Contact')}>
                 <Button
+                  size="lg"
                   className="h-14 px-8 text-white rounded-xl font-semibold text-lg"
-                  style={{ backgroundColor: '#F37021' }}>
-
-                  Book a Free Consultation
+                  style={{ backgroundColor: '#F37021' }}
+                >
+                  Book Free Counselling
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="hidden lg:block">
-
-            <img
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693e153b7a74643e7f576f5e/fec3f3e93_fgdh.jpg"
-              alt="Study Abroad" className="bg-fuchsia-700 rounded-2xl w-full h-auto" />
-
-
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-14 px-8 text-white border-2 border-white rounded-xl font-semibold text-lg hover:bg-white hover:text-blue-600"
+              >
+                Download Education Guide
+              </Button>
+            </div>
           </motion.div>
         </div>
       </div>
