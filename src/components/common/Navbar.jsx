@@ -58,11 +58,12 @@ export default function Navbar() {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to={createPageUrl('Home')} className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
-            <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+          <Link to={createPageUrl('Home')} className="flex items-center gap-2">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693e153b7a74643e7f576f5e/9b7d5f81d_logo.jpg" 
+              alt="ALO Education"
+              className="h-12"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -71,7 +72,7 @@ export default function Navbar() {
               <Link
                 key={link.page}
                 to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
-                className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
+                className={`font-medium hover:text-orange-500 transition-colors ${textColor}`}
               >
                 {link.label}
               </Link>
@@ -180,7 +181,7 @@ export default function Navbar() {
                     key={link.page}
                     to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
                     onClick={() => setIsMobileOpen(false)}
-                    className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
+                    className="text-lg font-medium text-slate-800 hover:text-orange-500 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -195,7 +196,7 @@ export default function Navbar() {
                         key={dest.page}
                         to={createPageUrl(dest.page)}
                         onClick={() => setIsMobileOpen(false)}
-                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
+                        className="text-base font-medium text-slate-700 hover:text-orange-500 transition-colors"
                       >
                         {dest.label}
                       </Link>
@@ -231,7 +232,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Button 
-                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                     onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}
                   >
                     Portal Login
