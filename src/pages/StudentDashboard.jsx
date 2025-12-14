@@ -187,6 +187,14 @@ export default function StudentDashboard() {
               courses={courses}
               universities={universities}
             />
+
+            {/* Application Tracker */}
+            <ApplicationTracker 
+              applications={applications}
+              universities={universities}
+              courses={courses}
+            />
+
             {/* Profile Completeness */}
             {profileCompleteness < 100 && (
               <Card className="border-0 shadow-sm border-l-4 border-l-amber-500">

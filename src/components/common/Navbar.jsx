@@ -46,7 +46,8 @@ export default function Navbar() {
   const navLinks = [
     { label: 'Course Finder', page: 'CourseMatcher' },
     { label: 'Services', page: 'Home', hash: '#services' },
-    { label: 'Language Prep', page: 'Contact' },
+    { label: 'Language Prep', page: 'LanguagePrep' },
+    { label: 'Events', page: 'Events' },
     { label: 'Resources', page: 'AlumniNetwork' },
   ];
 

@@ -31,6 +31,7 @@ const countries = [
 export default function Universities() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('all');
+  const [selectedCourse, setSelectedCourse] = useState('');
   const [tuitionRange, setTuitionRange] = useState([0, 100000]);
   const [rankingFilter, setRankingFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
@@ -49,28 +50,38 @@ export default function Universities() {
     queryFn: () => base44.entities.University.filter({ status: 'active' }, '-ranking'),
   });
 
+  const { data: courses = [] } = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => base44.entities.Course.list(),
+  });
+
   const filteredUniversities = universities.filter(uni => {
     const matchesSearch = uni.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           uni.city?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCountry = selectedCountry === 'all' || 
                            uni.country?.toLowerCase().includes(selectedCountry.toLowerCase());
+    const matchesCourse = !selectedCourse || courses.some(c => 
+      c.university_id === uni.id && 
+      c.field_of_study?.toLowerCase().includes(selectedCourse.toLowerCase())
+    );
     const matchesTuition = (!uni.tuition_range_min || uni.tuition_range_min >= tuitionRange[0]) &&
                            (!uni.tuition_range_max || uni.tuition_range_max <= tuitionRange[1]);
     const matchesRanking = rankingFilter === 'all' ||
                            (rankingFilter === 'top50' && uni.ranking <= 50) ||
                            (rankingFilter === 'top100' && uni.ranking <= 100) ||
                            (rankingFilter === 'top200' && uni.ranking <= 200);
-    return matchesSearch && matchesCountry && matchesTuition && matchesRanking;
+    return matchesSearch && matchesCountry && matchesCourse && matchesTuition && matchesRanking;
   });
 
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCountry('all');
+    setSelectedCourse('');
     setTuitionRange([0, 100000]);
     setRankingFilter('all');
   };
 
-  const hasActiveFilters = searchQuery || selectedCountry !== 'all' || 
+  const hasActiveFilters = searchQuery || selectedCountry !== 'all' || selectedCourse ||
                            tuitionRange[0] > 0 || tuitionRange[1] < 100000 || 
                            rankingFilter !== 'all';
 
@@ -86,6 +97,26 @@ export default function Universities() {
             {countries.map(c => (
               <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Field of Study</label>
+        <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+          <SelectTrigger>
+            <SelectValue placeholder="All Fields" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={null}>All Fields</SelectItem>
+            <SelectItem value="business">Business</SelectItem>
+            <SelectItem value="engineering">Engineering</SelectItem>
+            <SelectItem value="computer_science">Computer Science</SelectItem>
+            <SelectItem value="medicine">Medicine</SelectItem>
+            <SelectItem value="arts">Arts</SelectItem>
+            <SelectItem value="law">Law</SelectItem>
+            <SelectItem value="science">Science</SelectItem>
+            <SelectItem value="social_sciences">Social Sciences</SelectItem>
           </SelectContent>
         </Select>
       </div>
