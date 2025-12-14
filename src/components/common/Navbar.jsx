@@ -43,15 +43,19 @@ export default function Navbar() {
 
 
   const navLinks = [
-  { label: 'Home', page: 'Home' },
-  { label: 'Universities', page: 'Universities' },
-  { label: 'Courses', page: 'Courses' },
-  { label: 'Scholarships', page: 'Scholarships' },
-  { label: 'Alumni', page: 'AlumniNetwork' },
-  { label: 'About', page: 'About' },
-  { label: 'AI Counselor', page: 'AICounselor' },
-  { label: 'Apply Now', page: 'ApplicationForm' },
-  { label: 'Contact', page: 'Contact' }];
+    { label: 'Course Finder', page: 'CourseFinder' },
+    { label: 'Services', page: 'About' },
+    { label: 'Language Prep', page: 'Contact' },
+    { label: 'Student Portal', page: 'StudentDashboard' },
+    { label: 'Partner Portal', page: 'CRMDashboard' }
+  ];
+
+  const resources = [
+    { label: 'Scholarships', page: 'Scholarships' },
+    { label: 'Alumni Network', page: 'AlumniNetwork' },
+    { label: 'AI Counselor', page: 'AICounselor' },
+    { label: 'Blog & Guides', page: 'Contact' }
+  ];
 
 
   return (
@@ -68,6 +72,28 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
+            {/* Destinations Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  Destinations
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                {destinations.map((dest) =>
+                <DropdownMenuItem key={dest.page} asChild>
+                    <Link to={createPageUrl(dest.page)} className="cursor-pointer">
+                      {dest.label}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {navLinks.map((link) =>
             <Link
               key={link.page}
@@ -76,28 +102,26 @@ export default function Navbar() {
               style={{ color: 'white' }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
-
                 {link.label}
               </Link>
             )}
-            
-            {/* Destinations Dropdown */}
+
+            {/* Resources Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   className="font-medium text-white transition-colors flex items-center gap-1"
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                   onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
-
-                  Destinations
+                  Resources
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                {destinations.map((dest) =>
-                <DropdownMenuItem key={dest.page} asChild>
-                    <Link to={createPageUrl(dest.page)} className="cursor-pointer">
-                      {dest.label}
+                {resources.map((res) =>
+                <DropdownMenuItem key={res.page} asChild>
+                    <Link to={createPageUrl(res.page)} className="cursor-pointer">
+                      {res.label}
                     </Link>
                   </DropdownMenuItem>
                 )}
@@ -168,22 +192,13 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu> :
 
-            <>
-                <Button
-                variant="ghost"
-                className="text-white hover:bg-white/10"
-                onClick={() => base44.auth.redirectToLogin()}>
-
-                  Sign In
-                </Button>
-                <Button
+            <Link to={createPageUrl('Contact')}>
+              <Button
                 className="text-white hover:opacity-90"
-                style={{ backgroundColor: 'var(--alo-orange)' }}
-                onClick={() => base44.auth.redirectToLogin()}>
-
-                  Book Free Counselling
-                </Button>
-              </>
+                style={{ backgroundColor: 'var(--alo-orange)' }}>
+                Book Free Counselling
+              </Button>
+            </Link>
             }
           </div>
 
@@ -196,20 +211,6 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-6 mt-8">
-                {navLinks.map((link) =>
-                <Link
-                  key={link.page}
-                  to={createPageUrl(link.page)}
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-lg font-medium transition-colors"
-                  style={{ color: 'var(--alo-blue)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
-
-                    {link.label}
-                  </Link>
-                )}
-                
                 {/* Mobile Destinations */}
                 <div>
                   <p className="text-sm font-semibold mb-2" style={{ color: 'var(--alo-blue)' }}>Destinations</p>
@@ -223,8 +224,39 @@ export default function Navbar() {
                       style={{ color: 'var(--alo-blue)' }}
                       onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                       onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
-
                         {dest.label}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                {navLinks.map((link) =>
+                <Link
+                  key={link.page}
+                  to={createPageUrl(link.page)}
+                  onClick={() => setIsMobileOpen(false)}
+                  className="text-lg font-medium transition-colors"
+                  style={{ color: 'var(--alo-blue)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
+                    {link.label}
+                  </Link>
+                )}
+
+                {/* Mobile Resources */}
+                <div>
+                  <p className="text-sm font-semibold mb-2" style={{ color: 'var(--alo-blue)' }}>Resources</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    {resources.map((res) =>
+                    <Link
+                      key={res.page}
+                      to={createPageUrl(res.page)}
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-base font-medium transition-colors"
+                      style={{ color: 'var(--alo-blue)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}>
+                        {res.label}
                       </Link>
                     )}
                   </div>
@@ -238,26 +270,24 @@ export default function Navbar() {
                     onClick={() => setIsMobileOpen(false)}
                     className="text-lg font-medium"
                     style={{ color: 'var(--alo-blue)' }}>
-
                       Dashboard
                     </Link>
                     <Button
                     variant="outline"
                     onClick={() => {base44.auth.logout();setIsMobileOpen(false);}}
                     className="text-red-600 border-red-200">
-
                       Sign Out
                     </Button>
                   </> :
-
-                <Button
-                  className="text-white"
-                  style={{ backgroundColor: 'var(--alo-orange)' }}
-                  onClick={() => {base44.auth.redirectToLogin();setIsMobileOpen(false);}}>
-
+                null
+                }
+                <Link to={createPageUrl('Contact')} onClick={() => setIsMobileOpen(false)}>
+                  <Button
+                    className="text-white w-full"
+                    style={{ backgroundColor: 'var(--alo-orange)' }}>
                     Book Free Counselling
                   </Button>
-                }
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
