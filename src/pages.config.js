@@ -38,6 +38,7 @@ import CRMAIAssistant from './pages/CRMAIAssistant';
 import CourseFinder from './pages/CourseFinder';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
+import ApplicationForm from './pages/ApplicationForm';
 import __Layout from './Layout.jsx';
 
 
@@ -82,6 +83,7 @@ export const PAGES = {
     "CourseFinder": CourseFinder,
     "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
+    "ApplicationForm": ApplicationForm,
 }
 
 export const pagesConfig = {
