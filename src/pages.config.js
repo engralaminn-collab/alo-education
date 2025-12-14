@@ -51,6 +51,8 @@ import Scholarships from './pages/Scholarships';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AICounselor from './pages/AICounselor';
 import EnglishTests from './pages/EnglishTests';
+import IELTSTest from './pages/IELTSTest';
+import PTETest from './pages/PTETest';
 import __Layout from './Layout.jsx';
 
 
@@ -108,6 +110,8 @@ export const PAGES = {
     "AlumniNetwork": AlumniNetwork,
     "AICounselor": AICounselor,
     "EnglishTests": EnglishTests,
+    "IELTSTest": IELTSTest,
+    "PTETest": PTETest,
 }
 
 export const pagesConfig = {

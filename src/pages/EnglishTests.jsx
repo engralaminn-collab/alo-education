@@ -7,48 +7,121 @@ import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 
 export default function EnglishTests() {
-  const tests = [
+  const englishTests = [
     {
       name: 'IELTS',
       fullName: 'International English Language Testing System',
       description: 'The most widely accepted English test globally, required by UK universities and visa authorities.',
       icon: Globe,
-      color: 'bg-red-50 text-red-600'
+      color: 'bg-red-50 text-red-600',
+      page: 'IELTSTest'
     },
     {
-      name: 'PTE',
+      name: 'IELTS UKVI',
+      fullName: 'IELTS for UK Visas and Immigration',
+      description: 'Specific IELTS test required for UK visa applications and some UK university programs.',
+      icon: Award,
+      color: 'bg-red-50 text-red-700',
+      page: 'IELTSUKVITest'
+    },
+    {
+      name: 'PTE Academic',
       fullName: 'Pearson Test of English Academic',
       description: 'Computer-based test with fast results, accepted by universities in UK, Australia, and Canada.',
-      icon: Award,
-      color: 'bg-blue-50 text-blue-600'
-    },
-    {
-      name: 'TOEFL',
-      fullName: 'Test of English as a Foreign Language',
-      description: 'Popular in US and Canadian universities, measures academic English proficiency.',
       icon: BookOpen,
-      color: 'bg-green-50 text-green-600'
+      color: 'bg-blue-50 text-blue-600',
+      page: 'PTETest'
     },
     {
-      name: 'Duolingo',
+      name: 'OIETC – ELLT',
+      fullName: 'Oxford International English Language Test',
+      description: 'Accepted by select UK universities for admission purposes.',
+      icon: FileText,
+      color: 'bg-purple-50 text-purple-600',
+      page: 'OIETCTest'
+    },
+    {
+      name: 'TOEFL iBT',
+      fullName: 'Test of English as a Foreign Language (Internet-Based)',
+      description: 'Popular in US and Canadian universities, measures academic English proficiency.',
+      icon: Globe,
+      color: 'bg-green-50 text-green-600',
+      page: 'TOEFLTest'
+    },
+    {
+      name: 'Duolingo English Test',
       fullName: 'Duolingo English Test',
       description: 'Online, affordable test accepted by universities in USA, Canada, and UK.',
       icon: MessageSquare,
-      color: 'bg-emerald-50 text-emerald-600'
+      color: 'bg-emerald-50 text-emerald-600',
+      page: 'DuolingoTest'
     },
     {
-      name: 'OIETC',
-      fullName: 'Oxford International English Test Centre',
-      description: 'Accepted by select UK universities for admission purposes.',
-      icon: FileText,
-      color: 'bg-purple-50 text-purple-600'
+      name: 'LanguageCert',
+      fullName: 'LanguageCert International ESOL',
+      description: 'UK-approved English test for university admission and visa purposes.',
+      icon: Award,
+      color: 'bg-indigo-50 text-indigo-600',
+      page: 'LanguageCertTest'
     },
     {
-      name: 'University Internal Tests',
-      fullName: 'Medium of Instruction (MOI)',
-      description: 'Some universities offer their own English tests or accept MOI certificates.',
+      name: 'Kaplan English Test',
+      fullName: 'Kaplan International English Test',
+      description: 'Widely accepted English proficiency test for university admissions.',
+      icon: BookOpen,
+      color: 'bg-cyan-50 text-cyan-600',
+      page: 'KaplanTest'
+    },
+    {
+      name: 'OET (for Health)',
+      fullName: 'Occupational English Test',
+      description: 'English test for healthcare professionals seeking to practice in English-speaking countries.',
       icon: CheckCircle,
-      color: 'bg-amber-50 text-amber-600'
+      color: 'bg-pink-50 text-pink-600',
+      page: 'OETTest'
+    },
+    {
+      name: 'CAE / CPE',
+      fullName: 'Cambridge Advanced / Proficiency English',
+      description: 'Advanced Cambridge English qualifications accepted by universities worldwide.',
+      icon: Award,
+      color: 'bg-orange-50 text-orange-600',
+      page: 'CambridgeTest'
+    }
+  ];
+
+  const aptitudeTests = [
+    {
+      name: 'GRE',
+      fullName: 'Graduate Record Examination',
+      description: 'Required for most graduate programs in USA, measures verbal, quantitative, and analytical writing.',
+      icon: BookOpen,
+      color: 'bg-violet-50 text-violet-600',
+      page: 'GRETest'
+    },
+    {
+      name: 'GMAT',
+      fullName: 'Graduate Management Admission Test',
+      description: 'Required for MBA and business school admissions, assesses analytical and problem-solving skills.',
+      icon: Award,
+      color: 'bg-blue-50 text-blue-700',
+      page: 'GMATTest'
+    },
+    {
+      name: 'SAT',
+      fullName: 'Scholastic Assessment Test',
+      description: 'Standardized test for undergraduate admissions in US universities.',
+      icon: FileText,
+      color: 'bg-teal-50 text-teal-600',
+      page: 'SATTest'
+    },
+    {
+      name: 'ACT',
+      fullName: 'American College Testing',
+      description: 'Alternative to SAT for US undergraduate admissions, tests English, math, reading, and science.',
+      icon: CheckCircle,
+      color: 'bg-amber-50 text-amber-600',
+      page: 'ACTTest'
     }
   ];
 
@@ -124,12 +197,12 @@ export default function EnglishTests() {
         </div>
       </section>
 
-      {/* Types of Tests */}
+      {/* English Language Tests */}
       <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--alo-blue)' }}>
-              Types of English Language Tests
+              English Language Tests
             </h2>
             <p className="text-center text-slate-600 mb-12 max-w-3xl mx-auto">
               Universities accept different English tests depending on country of study, level of study (Foundation, UG, PG, PhD), 
@@ -137,25 +210,67 @@ export default function EnglishTests() {
             </p>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tests.map((test, index) => {
+              {englishTests.map((test, index) => {
                 const Icon = test.icon;
                 return (
-                  <Card key={index} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300">
-                    <CardContent className="p-6">
-                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${test.color}`}>
-                        <Icon className="w-7 h-7" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>
-                        {test.name}
-                      </h3>
-                      <p className="text-sm text-slate-500 mb-3 font-medium">
-                        {test.fullName}
-                      </p>
-                      <p className="text-slate-600 leading-relaxed">
-                        {test.description}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <Link key={index} to={createPageUrl(test.page)}>
+                    <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
+                      <CardContent className="p-6">
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${test.color}`}>
+                          <Icon className="w-7 h-7" />
+                        </div>
+                        <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>
+                          {test.name}
+                        </h3>
+                        <p className="text-sm text-slate-500 mb-3 font-medium">
+                          {test.fullName}
+                        </p>
+                        <p className="text-slate-600 leading-relaxed">
+                          {test.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Academic / Aptitude Tests */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--alo-blue)' }}>
+              Academic / Aptitude Tests
+            </h2>
+            <p className="text-center text-slate-600 mb-12 max-w-3xl mx-auto">
+              Standardized tests required for graduate and undergraduate admissions in USA and other countries.
+            </p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {aptitudeTests.map((test, index) => {
+                const Icon = test.icon;
+                return (
+                  <Link key={index} to={createPageUrl(test.page)}>
+                    <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
+                      <CardContent className="p-6">
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${test.color}`}>
+                          <Icon className="w-7 h-7" />
+                        </div>
+                        <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>
+                          {test.name}
+                        </h3>
+                        <p className="text-sm text-slate-500 mb-3 font-medium">
+                          {test.fullName}
+                        </p>
+                        <p className="text-slate-600 leading-relaxed text-sm">
+                          {test.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 );
               })}
             </div>
