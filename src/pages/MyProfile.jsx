@@ -42,12 +42,58 @@ export default function MyProfile() {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
+    email: '',
     phone: '',
-    nationality: '',
+    alternative_email: '',
+    alternative_phone: '',
     date_of_birth: '',
-    address: '',
-    city: '',
-    country: '',
+    city_of_birth: '',
+    country_of_birth: '',
+    gender: '',
+    marital_status: '',
+    nationality: '',
+    citizenship: '',
+    present_address: {
+      address_1: '',
+      address_2: '',
+      country: '',
+      state_district: '',
+      city: '',
+      zip_code: ''
+    },
+    permanent_address: {
+      address_1: '',
+      address_2: '',
+      country: '',
+      state_district: '',
+      city: '',
+      zip_code: '',
+      same_as_present: false
+    },
+    passport_details: {
+      has_passport: true,
+      passport_number: '',
+      place_of_issue: '',
+      issue_country: '',
+      issue_date: '',
+      expiry_date: ''
+    },
+    emergency_contact: {
+      name: '',
+      phone: '',
+      email: '',
+      relation: ''
+    },
+    background_info: {
+      applied_for_immigration: false,
+      medical_condition: false,
+      visa_refusal: false,
+      criminal_offence: false
+    },
+    multiple_citizenship: false,
+    multiple_citizenship_countries: '',
+    living_studying_other_country: false,
+    living_studying_country: '',
     education: {
       highest_degree: '',
       field_of_study: '',
@@ -74,15 +120,27 @@ export default function MyProfile() {
       setFormData({
         first_name: studentProfile.first_name || '',
         last_name: studentProfile.last_name || '',
+        email: studentProfile.email || '',
         phone: studentProfile.phone || '',
-        nationality: studentProfile.nationality || '',
+        alternative_email: studentProfile.alternative_email || '',
+        alternative_phone: studentProfile.alternative_phone || '',
         date_of_birth: studentProfile.date_of_birth || '',
-        address: studentProfile.address || '',
-        city: studentProfile.city || '',
-        country: studentProfile.country || '',
-        education: studentProfile.education || {
-          highest_degree: '', field_of_study: '', institution: '', graduation_year: '', gpa: '', gpa_scale: '4'
-        },
+        city_of_birth: studentProfile.city_of_birth || '',
+        country_of_birth: studentProfile.country_of_birth || '',
+        gender: studentProfile.gender || '',
+        marital_status: studentProfile.marital_status || '',
+        nationality: studentProfile.nationality || '',
+        citizenship: studentProfile.citizenship || '',
+        present_address: studentProfile.present_address || { address_1: '', address_2: '', country: '', state_district: '', city: '', zip_code: '' },
+        permanent_address: studentProfile.permanent_address || { address_1: '', address_2: '', country: '', state_district: '', city: '', zip_code: '', same_as_present: false },
+        passport_details: studentProfile.passport_details || { has_passport: true, passport_number: '', place_of_issue: '', issue_country: '', issue_date: '', expiry_date: '' },
+        emergency_contact: studentProfile.emergency_contact || { name: '', phone: '', email: '', relation: '' },
+        background_info: studentProfile.background_info || { applied_for_immigration: false, medical_condition: false, visa_refusal: false, criminal_offence: false },
+        multiple_citizenship: studentProfile.multiple_citizenship || false,
+        multiple_citizenship_countries: studentProfile.multiple_citizenship_countries || '',
+        living_studying_other_country: studentProfile.living_studying_other_country || false,
+        living_studying_country: studentProfile.living_studying_country || '',
+        education: studentProfile.education || { highest_degree: '', field_of_study: '', institution: '', graduation_year: '', gpa: '', gpa_scale: '4' },
         english_proficiency: studentProfile.english_proficiency || { test_type: '', score: '', test_date: '' },
         work_experience_years: studentProfile.work_experience_years || '',
         preferred_countries: studentProfile.preferred_countries || [],
@@ -218,14 +276,26 @@ export default function MyProfile() {
         </Card>
 
         <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="bg-white shadow-sm p-1 rounded-xl">
+          <TabsList className="bg-white shadow-sm p-1 rounded-xl flex-wrap h-auto">
             <TabsTrigger value="personal" className="rounded-lg">
               <User className="w-4 h-4 mr-2" />
               Personal
             </TabsTrigger>
+            <TabsTrigger value="address" className="rounded-lg">
+              <Globe className="w-4 h-4 mr-2" />
+              Address
+            </TabsTrigger>
+            <TabsTrigger value="passport" className="rounded-lg">
+              <Globe className="w-4 h-4 mr-2" />
+              Passport
+            </TabsTrigger>
             <TabsTrigger value="education" className="rounded-lg">
               <GraduationCap className="w-4 h-4 mr-2" />
               Education
+            </TabsTrigger>
+            <TabsTrigger value="background" className="rounded-lg">
+              <Briefcase className="w-4 h-4 mr-2" />
+              Background
             </TabsTrigger>
             <TabsTrigger value="preferences" className="rounded-lg">
               <Target className="w-4 h-4 mr-2" />
@@ -233,77 +303,595 @@ export default function MyProfile() {
             </TabsTrigger>
           </TabsList>
 
+          {/* Personal Information */}
           <TabsContent value="personal">
+            <div className="space-y-6">
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Personal Information</CardTitle>
+                  <CardDescription>Basic personal details</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>First Name *</Label>
+                      <Input
+                        value={formData.first_name}
+                        onChange={(e) => updateField('first_name', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Last Name *</Label>
+                      <Input
+                        value={formData.last_name}
+                        onChange={(e) => updateField('last_name', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Email *</Label>
+                      <Input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => updateField('email', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Alternative Email</Label>
+                      <Input
+                        type="email"
+                        value={formData.alternative_email}
+                        onChange={(e) => updateField('alternative_email', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Phone *</Label>
+                      <Input
+                        value={formData.phone}
+                        onChange={(e) => updateField('phone', e.target.value)}
+                        className="mt-1"
+                        placeholder="+8801768520331"
+                      />
+                    </div>
+                    <div>
+                      <Label>Alternative Phone</Label>
+                      <Input
+                        value={formData.alternative_phone}
+                        onChange={(e) => updateField('alternative_phone', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <Label>Date of Birth *</Label>
+                      <Input
+                        type="date"
+                        value={formData.date_of_birth}
+                        onChange={(e) => updateField('date_of_birth', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Gender *</Label>
+                      <Select 
+                        value={formData.gender} 
+                        onValueChange={(v) => updateField('gender', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Marital Status</Label>
+                      <Select 
+                        value={formData.marital_status} 
+                        onValueChange={(v) => updateField('marital_status', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Single">Single</SelectItem>
+                          <SelectItem value="Married">Married</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>City of Birth</Label>
+                      <Input
+                        value={formData.city_of_birth}
+                        onChange={(e) => updateField('city_of_birth', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Country of Birth *</Label>
+                      <Select 
+                        value={formData.country_of_birth} 
+                        onValueChange={(v) => updateField('country_of_birth', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map(c => (
+                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Nationality</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Nationality *</Label>
+                      <Select 
+                        value={formData.nationality} 
+                        onValueChange={(v) => updateField('nationality', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select nationality" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map(c => (
+                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Citizenship *</Label>
+                      <Select 
+                        value={formData.citizenship} 
+                        onValueChange={(v) => updateField('citizenship', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select citizenship" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map(c => (
+                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Is the applicant a citizen of more than one country? *</Label>
+                    <Select 
+                      value={formData.multiple_citizenship ? 'yes' : 'no'} 
+                      onValueChange={(v) => updateField('multiple_citizenship', v === 'yes')}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.multiple_citizenship && (
+                    <div>
+                      <Label>Please specify countries</Label>
+                      <Input
+                        value={formData.multiple_citizenship_countries}
+                        onChange={(e) => updateField('multiple_citizenship_countries', e.target.value)}
+                        className="mt-1"
+                        placeholder="e.g., Bangladesh, USA"
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <Label>Is the applicant living and studying in any other country? *</Label>
+                    <Select 
+                      value={formData.living_studying_other_country ? 'yes' : 'no'} 
+                      onValueChange={(v) => updateField('living_studying_other_country', v === 'yes')}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {formData.living_studying_other_country && (
+                    <div>
+                      <Label>Please specify country</Label>
+                      <Input
+                        value={formData.living_studying_country}
+                        onChange={(e) => updateField('living_studying_country', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Emergency Contact</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Name</Label>
+                      <Input
+                        value={formData.emergency_contact.name}
+                        onChange={(e) => updateField('emergency_contact.name', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Relation with Applicant</Label>
+                      <Input
+                        value={formData.emergency_contact.relation}
+                        onChange={(e) => updateField('emergency_contact.relation', e.target.value)}
+                        className="mt-1"
+                        placeholder="e.g., Father"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Phone</Label>
+                      <Input
+                        value={formData.emergency_contact.phone}
+                        onChange={(e) => updateField('emergency_contact.phone', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Email</Label>
+                      <Input
+                        type="email"
+                        value={formData.emergency_contact.email}
+                        onChange={(e) => updateField('emergency_contact.email', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Address Information */}
+          <TabsContent value="address">
+            <div className="space-y-6">
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Mailing Address</CardTitle>
+                  <CardDescription>Current mailing address</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label>Address 1 *</Label>
+                    <Input
+                      value={formData.present_address.address_1}
+                      onChange={(e) => updateField('present_address.address_1', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>Address 2</Label>
+                    <Input
+                      value={formData.present_address.address_2}
+                      onChange={(e) => updateField('present_address.address_2', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>Country *</Label>
+                      <Select 
+                        value={formData.present_address.country} 
+                        onValueChange={(v) => updateField('present_address.country', v)}
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map(c => (
+                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>State / District</Label>
+                      <Input
+                        value={formData.present_address.state_district}
+                        onChange={(e) => updateField('present_address.state_district', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <Label>City *</Label>
+                      <Input
+                        value={formData.present_address.city}
+                        onChange={(e) => updateField('present_address.city', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label>Pincode / Zip Code</Label>
+                      <Input
+                        value={formData.present_address.zip_code}
+                        onChange={(e) => updateField('present_address.zip_code', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Permanent Address</CardTitle>
+                  <CardDescription>Permanent residential address</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.permanent_address.same_as_present}
+                      onChange={(e) => {
+                        updateField('permanent_address.same_as_present', e.target.checked);
+                        if (e.target.checked) {
+                          updateField('permanent_address', { 
+                            ...formData.present_address, 
+                            same_as_present: true 
+                          });
+                        }
+                      }}
+                      className="w-4 h-4"
+                    />
+                    <Label>Same as mailing address</Label>
+                  </div>
+
+                  {!formData.permanent_address.same_as_present && (
+                    <>
+                      <div>
+                        <Label>Address 1 *</Label>
+                        <Input
+                          value={formData.permanent_address.address_1}
+                          onChange={(e) => updateField('permanent_address.address_1', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label>Address 2</Label>
+                        <Input
+                          value={formData.permanent_address.address_2}
+                          onChange={(e) => updateField('permanent_address.address_2', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <Label>Country *</Label>
+                          <Select 
+                            value={formData.permanent_address.country} 
+                            onValueChange={(v) => updateField('permanent_address.country', v)}
+                          >
+                            <SelectTrigger className="mt-1">
+                              <SelectValue placeholder="Select country" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {countries.map(c => (
+                                <SelectItem key={c} value={c}>{c}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>State / District</Label>
+                          <Input
+                            value={formData.permanent_address.state_district}
+                            onChange={(e) => updateField('permanent_address.state_district', e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <Label>City *</Label>
+                          <Input
+                            value={formData.permanent_address.city}
+                            onChange={(e) => updateField('permanent_address.city', e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div>
+                          <Label>Pincode / Zip Code</Label>
+                          <Input
+                            value={formData.permanent_address.zip_code}
+                            onChange={(e) => updateField('permanent_address.zip_code', e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Passport Information */}
+          <TabsContent value="passport">
             <Card className="border-0 shadow-sm">
               <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
-                <CardDescription>Your basic contact details</CardDescription>
+                <CardTitle>Passport Information</CardTitle>
+                <CardDescription>Your passport details</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <Label>First Name</Label>
+                    <Label>Passport Number *</Label>
                     <Input
-                      value={formData.first_name}
-                      onChange={(e) => updateField('first_name', e.target.value)}
+                      value={formData.passport_details.passport_number}
+                      onChange={(e) => updateField('passport_details.passport_number', e.target.value)}
                       className="mt-1"
                     />
                   </div>
                   <div>
-                    <Label>Last Name</Label>
+                    <Label>Place of Issue</Label>
                     <Input
-                      value={formData.last_name}
-                      onChange={(e) => updateField('last_name', e.target.value)}
+                      value={formData.passport_details.place_of_issue}
+                      onChange={(e) => updateField('passport_details.place_of_issue', e.target.value)}
                       className="mt-1"
                     />
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-3 gap-6">
                   <div>
-                    <Label>Phone</Label>
-                    <Input
-                      value={formData.phone}
-                      onChange={(e) => updateField('phone', e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label>Date of Birth</Label>
+                    <Label>Issue Date *</Label>
                     <Input
                       type="date"
-                      value={formData.date_of_birth}
-                      onChange={(e) => updateField('date_of_birth', e.target.value)}
+                      value={formData.passport_details.issue_date}
+                      onChange={(e) => updateField('passport_details.issue_date', e.target.value)}
                       className="mt-1"
                     />
                   </div>
+                  <div>
+                    <Label>Expiry Date *</Label>
+                    <Input
+                      type="date"
+                      value={formData.passport_details.expiry_date}
+                      onChange={(e) => updateField('passport_details.expiry_date', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>Issue Country *</Label>
+                    <Select 
+                      value={formData.passport_details.issue_country} 
+                      onValueChange={(v) => updateField('passport_details.issue_country', v)}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countries.map(c => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
+          {/* Background Information */}
+          <TabsContent value="background">
+            <Card className="border-0 shadow-sm">
+              <CardHeader>
+                <CardTitle>Background Information</CardTitle>
+                <CardDescription>Important background details</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div>
-                  <Label>Nationality</Label>
+                  <Label>Has applicant applied for any type of immigration into any country? *</Label>
                   <Select 
-                    value={formData.nationality} 
-                    onValueChange={(v) => updateField('nationality', v)}
+                    value={formData.background_info.applied_for_immigration ? 'yes' : 'no'} 
+                    onValueChange={(v) => updateField('background_info.applied_for_immigration', v === 'yes')}
                   >
                     <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select nationality" />
+                      <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      {countries.map(c => (
-                        <SelectItem key={c} value={c}>{c}</SelectItem>
-                      ))}
+                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="yes">Yes</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label>Address</Label>
-                  <Textarea
-                    value={formData.address}
-                    onChange={(e) => updateField('address', e.target.value)}
-                    className="mt-1"
-                    rows={2}
-                  />
+                  <Label>Does applicant suffer from a serious medical condition? *</Label>
+                  <Select 
+                    value={formData.background_info.medical_condition ? 'yes' : 'no'} 
+                    onValueChange={(v) => updateField('background_info.medical_condition', v === 'yes')}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Has applicant Visa refusal for any country? *</Label>
+                  <Select 
+                    value={formData.background_info.visa_refusal ? 'yes' : 'no'} 
+                    onValueChange={(v) => updateField('background_info.visa_refusal', v === 'yes')}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Has applicant ever been convicted of a criminal offence? *</Label>
+                  <Select 
+                    value={formData.background_info.criminal_offence ? 'yes' : 'no'} 
+                    onValueChange={(v) => updateField('background_info.criminal_offence', v === 'yes')}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="no">No</SelectItem>
+                      <SelectItem value="yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
