@@ -32,7 +32,7 @@ const countries = [
   },
   {
     name: 'New Zealand',
-    tagline: 'Study in breathtaking landscapes with world-class education — we're here for you.',
+    tagline: 'Study in breathtaking landscapes with world-class education — we are here for you.',
     image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=2400&h=1800&fit=crop'
   }
 ];
