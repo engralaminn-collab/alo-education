@@ -219,6 +219,7 @@ export default function StudentDashboard() {
               studentProfile={studentProfile}
               courses={courses}
               universities={universities}
+              applications={applications}
             />
 
             {/* Resources Hub */}

@@ -325,6 +325,7 @@ export default function Courses() {
                   studentProfile={studentProfile}
                   courses={courses}
                   universities={universities}
+                  applications={[]}
                 />
               </div>
             )}
