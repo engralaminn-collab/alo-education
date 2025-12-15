@@ -19,11 +19,16 @@ import DocumentUploadModal from '@/components/applications/DocumentUploadModal';
 const statusConfig = {
   draft: { label: 'Draft', color: 'bg-slate-100 text-slate-700', icon: FileText },
   documents_pending: { label: 'Documents Pending', color: 'bg-amber-100 text-amber-700', icon: AlertCircle },
+  application_received: { label: 'Application Received', color: 'bg-purple-100 text-purple-700', icon: CheckCircle },
   under_review: { label: 'Under Review', color: 'bg-blue-100 text-blue-700', icon: Clock },
+  interview_scheduled: { label: 'Interview Scheduled', color: 'bg-indigo-100 text-indigo-700', icon: Calendar },
+  additional_info_requested: { label: 'Additional Info Requested', color: 'bg-yellow-100 text-yellow-700', icon: AlertCircle },
   submitted_to_university: { label: 'Submitted', color: 'bg-purple-100 text-purple-700', icon: Building2 },
   conditional_offer: { label: 'Conditional Offer', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
   unconditional_offer: { label: 'Unconditional Offer', color: 'bg-green-100 text-green-700', icon: CheckCircle },
+  offer_accepted: { label: 'Offer Accepted', color: 'bg-green-200 text-green-800', icon: CheckCircle },
   visa_processing: { label: 'Visa Processing', color: 'bg-cyan-100 text-cyan-700', icon: Clock },
+  visa_approved: { label: 'Visa Approved', color: 'bg-teal-100 text-teal-700', icon: CheckCircle },
   enrolled: { label: 'Enrolled', color: 'bg-emerald-500 text-white', icon: GraduationCap },
   rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700', icon: XCircle },
   withdrawn: { label: 'Withdrawn', color: 'bg-slate-100 text-slate-500', icon: XCircle },
@@ -99,10 +104,32 @@ export default function MyApplications() {
 
   const getUpcomingDeadlines = () => {
     const now = new Date();
-    return applications
-      .filter(app => app.offer_deadline && new Date(app.offer_deadline) > now)
-      .sort((a, b) => new Date(a.offer_deadline) - new Date(b.offer_deadline))
-      .slice(0, 3);
+    const allDeadlines = [];
+    
+    applications.forEach(app => {
+      if (app.deadlines) {
+        Object.entries(app.deadlines).forEach(([type, date]) => {
+          if (date && new Date(date) > now) {
+            allDeadlines.push({
+              ...app,
+              deadlineType: type.replace(/_/g, ' '),
+              deadlineDate: date
+            });
+          }
+        });
+      }
+      if (app.offer_deadline && new Date(app.offer_deadline) > now) {
+        allDeadlines.push({
+          ...app,
+          deadlineType: 'offer response',
+          deadlineDate: app.offer_deadline
+        });
+      }
+    });
+    
+    return allDeadlines
+      .sort((a, b) => new Date(a.deadlineDate) - new Date(b.deadlineDate))
+      .slice(0, 5);
   };
 
   const calculateProgress = (application) => {
@@ -173,6 +200,19 @@ export default function MyApplications() {
                   </div>
                   <Progress value={progress} className="h-2" />
                 </div>
+
+                {/* Interview Info */}
+                {application.interview_date && (
+                  <div className="mb-3 p-3 bg-indigo-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Calendar className="w-4 h-4 text-indigo-600" />
+                      <span className="font-semibold text-indigo-900">Interview Scheduled</span>
+                    </div>
+                    <div className="text-sm text-indigo-700 mt-1">
+                      {new Date(application.interview_date).toLocaleString()} • {application.interview_type || 'Not specified'}
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-sm text-slate-500">
@@ -342,18 +382,19 @@ export default function MyApplications() {
                     <p className="text-sm text-slate-500">No upcoming deadlines</p>
                   ) : (
                     <div className="space-y-3">
-                      {getUpcomingDeadlines().map((app) => {
+                      {getUpcomingDeadlines().map((app, idx) => {
                         const university = universityMap[app.university_id];
-                        const daysLeft = Math.ceil((new Date(app.offer_deadline) - new Date()) / (1000 * 60 * 60 * 24));
+                        const daysLeft = Math.ceil((new Date(app.deadlineDate) - new Date()) / (1000 * 60 * 60 * 24));
+                        const isUrgent = daysLeft <= 7;
                         return (
-                          <div key={app.id} className="p-3 bg-amber-50 rounded-lg">
+                          <div key={`${app.id}-${idx}`} className={`p-3 rounded-lg ${isUrgent ? 'bg-red-50' : 'bg-amber-50'}`}>
                             <div className="font-semibold text-sm mb-1" style={{ color: 'var(--alo-blue)' }}>
                               {university?.university_name}
                             </div>
-                            <div className="text-xs text-slate-600 mb-1">
-                              Deadline: {new Date(app.offer_deadline).toLocaleDateString()}
+                            <div className="text-xs text-slate-600 mb-1 capitalize">
+                              {app.deadlineType}: {new Date(app.deadlineDate).toLocaleDateString()}
                             </div>
-                            <Badge className="bg-amber-100 text-amber-700 text-xs">
+                            <Badge className={`text-xs ${isUrgent ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                               <Clock className="w-3 h-3 mr-1" />
                               {daysLeft} days left
                             </Badge>

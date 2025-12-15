@@ -9,9 +9,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 const quickQuestions = [
   "How do I apply to universities?",
   "What are the English test requirements?",
-  "Tell me about scholarships",
+  "What's the status of my applications?",
   "What documents do I need?",
-  "How long does the application process take?"
+  "Tell me about upcoming deadlines"
 ];
 
 export default function AIChatbot() {
@@ -44,14 +44,51 @@ export default function AIChatbot() {
     setIsLoading(true);
 
     try {
+      // Fetch user applications for personalized responses
+      let applicationsContext = '';
+      try {
+        const user = await base44.auth.me();
+        if (user?.email) {
+          const profiles = await base44.entities.StudentProfile.filter({ email: user.email });
+          if (profiles[0]) {
+            const apps = await base44.entities.Application.filter({ student_id: profiles[0].id });
+            if (apps.length > 0) {
+              const universities = await base44.entities.University.list();
+              const courses = await base44.entities.Course.list();
+              const uniMap = universities.reduce((acc, u) => ({ ...acc, [u.id]: u }), {});
+              const courseMap = courses.reduce((acc, c) => ({ ...acc, [c.id]: c }), {});
+              
+              applicationsContext = '\n\nStudent\'s Current Applications:\n' + apps.map((app, i) => {
+                const uni = uniMap[app.university_id];
+                const course = courseMap[app.course_id];
+                let deadlines = '';
+                if (app.deadlines) {
+                  deadlines = Object.entries(app.deadlines)
+                    .filter(([_, date]) => date)
+                    .map(([type, date]) => `${type.replace(/_/g, ' ')}: ${date}`)
+                    .join(', ');
+                }
+                return `${i + 1}. ${uni?.university_name || 'University'} - ${course?.course_title || 'Course'}
+   Status: ${app.status.replace(/_/g, ' ')}
+   ${app.interview_date ? `Interview: ${new Date(app.interview_date).toLocaleString()}` : ''}
+   ${deadlines ? `Deadlines: ${deadlines}` : ''}`;
+              }).join('\n');
+            }
+          }
+        }
+      } catch (e) {
+        // User not logged in or error fetching data
+      }
+
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a helpful study abroad counselor for ALO Education. Answer the following question about studying abroad, university applications, English tests, or general inquiries. Keep responses concise and helpful.
+        prompt: `You are a helpful study abroad counselor for ALO Education. Answer the following question about studying abroad, university applications, English tests, application status, or general inquiries. Keep responses concise and helpful.
 
 Context: ALO Education helps students apply to universities in UK, USA, Canada, Australia, and other countries. We provide guidance on applications, English tests (IELTS, PTE, TOEFL), scholarships, and visa requirements.
+${applicationsContext}
 
 Student Question: ${message}
 
-Provide a helpful, friendly response:`,
+Provide a helpful, friendly response. If asked about application status or deadlines, use the information provided above. If no applications exist, politely let them know they haven't started any applications yet.`,
         add_context_from_internet: false
       });
 
