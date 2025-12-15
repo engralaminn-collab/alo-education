@@ -51,6 +51,7 @@ export default function Navbar() {
   const resources = [
   { label: 'Universities', page: 'Universities' },
   { label: 'Scholarships', page: 'Scholarships' },
+  { label: 'Scholarship Helper', page: 'ScholarshipHelper' },
   { label: 'Alumni Network', page: 'AlumniNetwork' },
   { label: 'AI Counselor', page: 'AICounselor' },
   { label: 'Testimonials', page: 'TestimonialsPage' }];
