@@ -62,18 +62,16 @@ export default function Navbar() {
 
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style={{ backgroundColor: 'var(--alo-blue)' }}>
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-sm">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to={createPageUrl('Home')} className="flex flex-col gap-0">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white">
-                <GraduationCap className="w-6 h-6" style={{ color: 'var(--alo-blue)' }} />
-              </div>
-              <span className="text-xl font-bold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>ALO Education</span>
-            </div>
-            <p className="text-xs italic ml-14" style={{ color: 'var(--alo-orange)', marginTop: '-2px' }}>Your Dream, Our Commitment</p>
+          <Link to={createPageUrl('Home')} className="flex items-center gap-3">
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693e153b7a74643e7f576f5e/408bda5ad_AloLogowithTaglineJPG.jpg" 
+              alt="ALO Education" 
+              className="h-14 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -82,10 +80,10 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-slate-900 transition-colors flex items-center gap-1"
                   style={{ fontFamily: 'Montserrat, sans-serif' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
                   Destinations
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -101,26 +99,67 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            <Link
+              to={createPageUrl('CourseMatcher')}
+              className="font-medium text-slate-900 transition-colors"
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
+                Course Finder
+              </Link>
+
             {navLinks.map((link) =>
             <Link
               key={link.page}
               to={createPageUrl(link.page)}
-              className="font-medium text-white transition-colors"
+              className="font-medium text-slate-900 transition-colors"
               style={{ fontFamily: 'Montserrat, sans-serif' }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+              onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
                 {link.label}
               </Link>
             )}
 
-            {/* Portal Dropdown */}
+            <Link
+              to={createPageUrl('EnglishTests')}
+              className="font-medium text-slate-900 transition-colors"
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
+                Language Prep
+              </Link>
+
+            {/* Resources Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium text-slate-900 transition-colors flex items-center gap-1"
                   style={{ fontFamily: 'Montserrat, sans-serif' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
+                  Resources
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {resources.map((res) =>
+                <DropdownMenuItem key={res.page} asChild>
+                    <Link to={createPageUrl(res.page)} className="cursor-pointer">
+                      {res.label}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Portal Link */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="font-medium text-slate-900 transition-colors flex items-center gap-1"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
                   Portal
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -136,28 +175,7 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Resources Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
-                  style={{ fontFamily: 'Montserrat, sans-serif' }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
-                  Resources
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {resources.map((res) =>
-                <DropdownMenuItem key={res.page} asChild>
-                    <Link to={createPageUrl(res.page)} className="cursor-pointer">
-                      {res.label}
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+
           </div>
 
           {/* Auth Buttons */}
@@ -165,7 +183,7 @@ export default function Navbar() {
             {user ?
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
+                  <Button variant="ghost" className="gap-2 text-slate-900 hover:bg-slate-100">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
                       {user.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
                     </div>
@@ -236,7 +254,7 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="text-slate-900 hover:bg-slate-100">
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
