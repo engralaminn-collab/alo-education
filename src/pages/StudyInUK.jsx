@@ -26,6 +26,121 @@ export default function StudyInUK() {
     { name: 'University of Warwick', city: 'Coventry', ranking: 67, intake: 'September 2026' }
   ];
 
+  const allUKUniversities = [
+    { name: 'Aberystwyth University', city: 'Aberystwyth', ranking: 401, intake: 'September 2026' },
+    { name: 'Anglia Ruskin University', city: 'Cambridge/Chelmsford', ranking: 801, intake: 'September 2026' },
+    { name: 'Arts University Bournemouth', city: 'Bournemouth', ranking: null, intake: 'September 2026' },
+    { name: 'Aston University', city: 'Birmingham', ranking: 485, intake: 'September 2026' },
+    { name: 'Bangor University', city: 'Bangor', ranking: 601, intake: 'September 2026' },
+    { name: 'Bath Spa University', city: 'Bath', ranking: null, intake: 'September 2026' },
+    { name: 'University of Bath', city: 'Bath', ranking: 148, intake: 'September 2026' },
+    { name: 'University of Bedfordshire', city: 'Luton/Bedford', ranking: null, intake: 'September 2026' },
+    { name: 'Birkbeck, University of London', city: 'London', ranking: 332, intake: 'September 2026' },
+    { name: 'Birmingham City University', city: 'Birmingham', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Birmingham', city: 'Birmingham', ranking: 84, intake: 'September 2026' },
+    { name: 'University of Bolton', city: 'Bolton', ranking: null, intake: 'September 2026' },
+    { name: 'Bournemouth University', city: 'Bournemouth', ranking: 701, intake: 'September 2026' },
+    { name: 'University of Bradford', city: 'Bradford', ranking: 601, intake: 'September 2026' },
+    { name: 'Brunel University London', city: 'London', ranking: 343, intake: 'September 2026' },
+    { name: 'University of Buckingham', city: 'Buckingham', ranking: null, intake: 'January/September 2026' },
+    { name: 'Canterbury Christ Church University', city: 'Canterbury', ranking: null, intake: 'September 2026' },
+    { name: 'Cardiff Metropolitan University', city: 'Cardiff', ranking: 801, intake: 'September 2026' },
+    { name: 'Cardiff University', city: 'Cardiff', ranking: 154, intake: 'September 2026' },
+    { name: 'University of Central Lancashire', city: 'Preston', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Chester', city: 'Chester', ranking: null, intake: 'September 2026' },
+    { name: 'University of Chichester', city: 'Chichester', ranking: null, intake: 'September 2026' },
+    { name: 'City, University of London', city: 'London', ranking: 355, intake: 'September 2026' },
+    { name: 'Coventry University', city: 'Coventry', ranking: 571, intake: 'September 2026' },
+    { name: 'Cranfield University', city: 'Cranfield', ranking: 267, intake: 'September 2026' },
+    { name: 'University of Creative Arts', city: 'Farnham', ranking: null, intake: 'September 2026' },
+    { name: 'De Montfort University', city: 'Leicester', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Derby', city: 'Derby', ranking: null, intake: 'September 2026' },
+    { name: 'University of Dundee', city: 'Dundee', ranking: 354, intake: 'September 2026' },
+    { name: 'Durham University', city: 'Durham', ranking: 78, intake: 'September 2026' },
+    { name: 'University of East Anglia', city: 'Norwich', ranking: 295, intake: 'September 2026' },
+    { name: 'University of East London', city: 'London', ranking: 801, intake: 'September 2026' },
+    { name: 'Edge Hill University', city: 'Ormskirk', ranking: null, intake: 'September 2026' },
+    { name: 'University of Edinburgh', city: 'Edinburgh', ranking: 22, intake: 'September 2026' },
+    { name: 'Edinburgh Napier University', city: 'Edinburgh', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Essex', city: 'Colchester', ranking: 459, intake: 'September 2026' },
+    { name: 'University of Exeter', city: 'Exeter', ranking: 153, intake: 'September 2026' },
+    { name: 'University of the Arts London', city: 'London', ranking: null, intake: 'September 2026' },
+    { name: 'University of Glasgow', city: 'Glasgow', ranking: 76, intake: 'September 2026' },
+    { name: 'Glasgow Caledonian University', city: 'Glasgow', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Gloucestershire', city: 'Cheltenham', ranking: null, intake: 'September 2026' },
+    { name: 'University of Greenwich', city: 'London', ranking: 701, intake: 'September 2026' },
+    { name: 'Harper Adams University', city: 'Newport', ranking: null, intake: 'September 2026' },
+    { name: 'University of Hertfordshire', city: 'Hatfield', ranking: 801, intake: 'September 2026' },
+    { name: 'Heriot-Watt University', city: 'Edinburgh', ranking: 281, intake: 'September 2026' },
+    { name: 'University of the Highlands and Islands', city: 'Inverness', ranking: null, intake: 'September 2026' },
+    { name: 'University of Huddersfield', city: 'Huddersfield', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Hull', city: 'Hull', ranking: 601, intake: 'September 2026' },
+    { name: 'Imperial College London', city: 'London', ranking: 6, intake: 'September 2026' },
+    { name: 'University of Kent', city: 'Canterbury', ranking: 375, intake: 'September 2026' },
+    { name: "King's College London", city: 'London', ranking: 35, intake: 'September 2026' },
+    { name: 'Kingston University', city: 'London', ranking: 601, intake: 'September 2026' },
+    { name: 'Lancaster University', city: 'Lancaster', ranking: 122, intake: 'September 2026' },
+    { name: 'University of Leeds', city: 'Leeds', ranking: 75, intake: 'September 2026' },
+    { name: 'Leeds Arts University', city: 'Leeds', ranking: null, intake: 'September 2026' },
+    { name: 'Leeds Beckett University', city: 'Leeds', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Leicester', city: 'Leicester', ranking: 272, intake: 'September 2026' },
+    { name: 'University of Lincoln', city: 'Lincoln', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Liverpool', city: 'Liverpool', ranking: 190, intake: 'September 2026' },
+    { name: 'Liverpool Hope University', city: 'Liverpool', ranking: null, intake: 'September 2026' },
+    { name: 'Liverpool John Moores University', city: 'Liverpool', ranking: 801, intake: 'September 2026' },
+    { name: 'London Metropolitan University', city: 'London', ranking: null, intake: 'September 2026' },
+    { name: 'London South Bank University', city: 'London', ranking: 801, intake: 'September 2026' },
+    { name: 'Loughborough University', city: 'Loughborough', ranking: 256, intake: 'September 2026' },
+    { name: 'University of Manchester', city: 'Manchester', ranking: 27, intake: 'September 2026' },
+    { name: 'Manchester Metropolitan University', city: 'Manchester', ranking: 801, intake: 'September 2026' },
+    { name: 'Middlesex University', city: 'London', ranking: 601, intake: 'September 2026' },
+    { name: 'Newcastle University', city: 'Newcastle', ranking: 110, intake: 'September 2026' },
+    { name: 'Newman University', city: 'Birmingham', ranking: null, intake: 'September 2026' },
+    { name: 'University of Northampton', city: 'Northampton', ranking: null, intake: 'September 2026' },
+    { name: 'Northumbria University', city: 'Newcastle', ranking: 601, intake: 'September 2026' },
+    { name: 'Norwich University of the Arts', city: 'Norwich', ranking: null, intake: 'September 2026' },
+    { name: 'University of Nottingham', city: 'Nottingham', ranking: 100, intake: 'September 2026' },
+    { name: 'Nottingham Trent University', city: 'Nottingham', ranking: 601, intake: 'September 2026' },
+    { name: 'The Open University', city: 'Milton Keynes', ranking: null, intake: 'Multiple Intakes' },
+    { name: 'University of Oxford', city: 'Oxford', ranking: 1, intake: 'September 2026' },
+    { name: 'Oxford Brookes University', city: 'Oxford', ranking: 429, intake: 'September 2026' },
+    { name: 'University of Plymouth', city: 'Plymouth', ranking: 651, intake: 'September 2026' },
+    { name: 'University of Portsmouth', city: 'Portsmouth', ranking: 501, intake: 'September 2026' },
+    { name: 'Queen Margaret University', city: 'Edinburgh', ranking: null, intake: 'September 2026' },
+    { name: 'Queen Mary University of London', city: 'London', ranking: 145, intake: 'September 2026' },
+    { name: "Queen's University Belfast", city: 'Belfast', ranking: 198, intake: 'September 2026' },
+    { name: 'University of Reading', city: 'Reading', ranking: 169, intake: 'September 2026' },
+    { name: 'Robert Gordon University', city: 'Aberdeen', ranking: 801, intake: 'September 2026' },
+    { name: 'Roehampton University', city: 'London', ranking: 801, intake: 'September 2026' },
+    { name: 'Royal Holloway, University of London', city: 'Egham', ranking: 308, intake: 'September 2026' },
+    { name: 'University of the West of England', city: 'Bristol', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Salford', city: 'Salford', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Sheffield', city: 'Sheffield', ranking: 105, intake: 'September 2026' },
+    { name: 'Sheffield Hallam University', city: 'Sheffield', ranking: 801, intake: 'September 2026' },
+    { name: 'University of South Wales', city: 'Pontypridd', ranking: 801, intake: 'September 2026' },
+    { name: 'University of Southampton', city: 'Southampton', ranking: 78, intake: 'September 2026' },
+    { name: 'University of St Andrews', city: 'St Andrews', ranking: 95, intake: 'September 2026' },
+    { name: "St Mary's University, Twickenham", city: 'London', ranking: null, intake: 'September 2026' },
+    { name: 'University of Stirling', city: 'Stirling', ranking: 485, intake: 'September 2026' },
+    { name: 'University of Strathclyde', city: 'Glasgow', ranking: 276, intake: 'September 2026' },
+    { name: 'University of Suffolk', city: 'Ipswich', ranking: null, intake: 'September 2026' },
+    { name: 'University of Sunderland', city: 'Sunderland', ranking: null, intake: 'September 2026' },
+    { name: 'University of Surrey', city: 'Guildford', ranking: 267, intake: 'September 2026' },
+    { name: 'University of Sussex', city: 'Brighton', ranking: 218, intake: 'September 2026' },
+    { name: 'Swansea University', city: 'Swansea', ranking: 425, intake: 'September 2026' },
+    { name: 'Teesside University', city: 'Middlesbrough', ranking: 801, intake: 'September 2026' },
+    { name: 'University of the West of Scotland', city: 'Paisley', ranking: 801, intake: 'September 2026' },
+    { name: 'Ulster University', city: 'Belfast', ranking: 601, intake: 'September 2026' },
+    { name: 'University of Wales Trinity Saint David', city: 'Carmarthen', ranking: null, intake: 'September 2026' },
+    { name: 'University of Warwick', city: 'Coventry', ranking: 67, intake: 'September 2026' },
+    { name: 'University of Westminster', city: 'London', ranking: 701, intake: 'September 2026' },
+    { name: 'University of Winchester', city: 'Winchester', ranking: null, intake: 'September 2026' },
+    { name: 'University of Wolverhampton', city: 'Wolverhampton', ranking: null, intake: 'September 2026' },
+    { name: 'University of Worcester', city: 'Worcester', ranking: null, intake: 'September 2026' },
+    { name: 'University of York', city: 'York', ranking: 167, intake: 'September 2026' },
+    { name: 'York St John University', city: 'York', ranking: null, intake: 'September 2026' }
+  ];
+
   const popularSubjects = [
     'Business', 'Computing', 'Data Science/AI', 'Engineering', 
     'Public Health', 'Nursing', 'Law', 'Finance'
@@ -165,12 +280,59 @@ export default function StudyInUK() {
                   </div>
                 </div>
 
-                <div className="text-center">
-                  <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
-                    <Button size="lg" style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white font-semibold">
-                      View All Universities <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
+                {/* All UK Universities */}
+                <div className="mt-16">
+                  <h3 className="text-3xl font-bold mb-8 text-center" style={{ color: 'var(--alo-blue)' }}>
+                    All UK Universities
+                  </h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {allUKUniversities.map((uni, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: Math.min(idx * 0.02, 1) }}
+                      >
+                        <Card className="h-full border-2 transition-all duration-300 hover:shadow-lg group" 
+                          style={{ borderColor: 'var(--alo-blue)' }}
+                          onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--alo-orange)'}
+                          onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--alo-blue)'}
+                        >
+                          <CardContent className="p-6 flex flex-col h-full">
+                            <h4 className="font-bold text-lg mb-3 min-h-[3.5rem]" style={{ color: 'var(--alo-orange)' }}>
+                              {uni.name}
+                            </h4>
+                            <div className="space-y-2 mb-4 flex-grow">
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <MapPin className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
+                                <span>{uni.city}</span>
+                              </div>
+                              {uni.ranking && (
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Star className="w-4 h-4 text-amber-500" />
+                                  <span className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
+                                    World Rank #{uni.ranking}
+                                  </span>
+                                </div>
+                              )}
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <Calendar className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
+                                <span>{uni.intake}</span>
+                              </div>
+                            </div>
+                            <Link to={createPageUrl('Universities') + '?search=' + encodeURIComponent(uni.name)}>
+                              <Button 
+                                className="w-full text-white font-semibold transition-all"
+                                style={{ backgroundColor: 'var(--alo-orange)' }}
+                              >
+                                APPLY NOW
+                              </Button>
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </TabsContent>
