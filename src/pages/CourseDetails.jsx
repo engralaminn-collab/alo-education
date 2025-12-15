@@ -13,6 +13,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import CourseReviewsList from '@/components/reviews/CourseReviewsList';
+import AIReviewAnalysis from '@/components/reviews/AIReviewAnalysis';
+import ReviewForm from '@/components/reviews/ReviewForm';
 
 export default function CourseDetails() {
   const urlParams = new URLSearchParams(window.location.search);
