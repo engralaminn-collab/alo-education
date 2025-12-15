@@ -34,7 +34,7 @@ export default function Footer() {
               </div>
               <div>
                 <span className="text-2xl font-bold block" style={{ color: 'var(--alo-blue)' }}>ALO Education</span>
-                <span className="text-sm italic" style={{ color: 'var(--alo-orange)' }}>Your Dream - Our Commitment</span>
+                <span className="text-sm italic" style={{ color: 'var(--alo-orange)' }}>Your Dream – Our Commitment</span>
               </div>
             </div>
             <p className="text-slate-600 leading-relaxed mb-6 max-w-sm mt-4">
@@ -54,31 +54,6 @@ export default function Footer() {
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
-          </div>
-          
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Quick Links</h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'Course Finder', page: 'Courses' },
-                { label: 'Services', page: 'About' },
-                { label: 'Language Prep', page: 'Contact' },
-                { label: 'Scholarships', page: 'Scholarships' },
-              ].map((link) => (
-                <li key={link.page}>
-                  <Link 
-                    to={createPageUrl(link.page)} 
-                    className="transition-colors"
-                    style={{ color: 'var(--alo-blue)' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
           
           {/* Destinations */}
@@ -108,6 +83,58 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Quick Links</h4>
+            <ul className="space-y-3">
+              {[
+                { label: 'Course Finder', page: 'Courses' },
+                { label: 'Services', page: 'About' },
+                { label: 'Language Prep', page: 'Contact' },
+                { label: 'Scholarships', page: 'Scholarships' },
+              ].map((link) => (
+                <li key={link.page}>
+                  <Link 
+                    to={createPageUrl(link.page)} 
+                    className="transition-colors"
+                    style={{ color: 'var(--alo-blue)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Company</h4>
+            <ul className="space-y-3">
+              {[
+                { label: 'About Us', page: 'About' },
+                { label: 'Contact Us', page: 'Contact' },
+                { label: 'Global Offices', page: 'About' },
+                { label: 'Code of Conduct', page: 'About' },
+                { label: 'Student Complaint Policy', page: 'About' },
+                { label: 'AQF Compliance', page: 'About' }
+              ].map((link, idx) => (
+                <li key={idx}>
+                  <Link 
+                    to={createPageUrl(link.page)} 
+                    className="transition-colors text-sm"
+                    style={{ color: 'var(--alo-blue)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           
           {/* Contact */}
           <div>
@@ -123,25 +150,25 @@ export default function Footer() {
                     className="hover:underline"
                   >
                     <div className="font-medium mb-1" style={{ color: 'var(--alo-blue)' }}>Bangladesh Office:</div>
-                    <div>Barek Mansion-02 (5th Floor)</div>
-                    <div>58/9 Box Culvert Road, Panthapath</div>
-                    <div>Dhaka-1205, Bangladesh</div>
+                    <div className="text-sm">Barek Mansion-02 (5th Floor)</div>
+                    <div className="text-sm">58/9 Box Culvert Road, Panthapath</div>
+                    <div className="text-sm">Dhaka-1205, Bangladesh</div>
                   </a>
                 </div>
               </li>
               <li className="flex items-center gap-3">
                 <MessageCircle className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
-                <a href="https://wa.me/8801805020101" target="_blank" rel="noopener noreferrer" className="hover:underline">
+                <a href="https://wa.me/8801805020101" target="_blank" rel="noopener noreferrer" className="hover:underline text-sm">
                   +8801805020101 (WhatsApp)
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
-                <span>+8801805020101-10</span>
+                <span className="text-sm">+8801805020101-10</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
-                <a href="mailto:info@aloeducation.com" className="hover:underline">
+                <a href="mailto:info@aloeducation.com" className="hover:underline text-sm">
                   info@aloeducation.com
                 </a>
               </li>
@@ -155,13 +182,13 @@ export default function Footer() {
           className="mt-12 py-8 border-t border-slate-200 overflow-hidden"
         >
           <div className="flex justify-center gap-12">
-            {[...Array(5)].map((_, i) => (
+            {[...Array(7)].map((_, i) => (
               <div 
                 key={i}
                 className="cap-icon transition-transform duration-300"
                 style={{ 
-                  color: i % 2 === 0 ? 'var(--alo-blue)' : 'var(--alo-orange)',
-                  animation: `float 3s ease-in-out infinite ${i * 0.5}s`
+                  color: i % 3 === 0 ? 'var(--alo-blue)' : i % 3 === 1 ? 'var(--alo-orange)' : 'var(--alo-sunshine)',
+                  animation: `float 3s ease-in-out infinite ${i * 0.4}s`
                 }}
               >
                 <GraduationCap className="w-8 h-8 opacity-30" />
@@ -171,15 +198,10 @@ export default function Footer() {
         </div>
 
         <div className="py-6" style={{ backgroundColor: 'var(--alo-blue)' }}>
-          <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-white">
+          <div className="container mx-auto px-6 flex flex-col md:flex-row justify-center items-center gap-4">
+            <p className="text-sm text-white text-center">
               © {new Date().getFullYear()} ALO Education. All Rights Reserved
             </p>
-            <div className="flex gap-6 text-sm text-white">
-              <a href="#" className="transition-colors hover:opacity-80">Privacy Policy</a>
-              <a href="#" className="transition-colors hover:opacity-80">Terms of Service</a>
-              <a href="#" className="transition-colors hover:opacity-80">Cookie Policy</a>
-            </div>
           </div>
         </div>
       </div>
