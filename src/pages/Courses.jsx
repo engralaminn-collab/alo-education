@@ -44,11 +44,39 @@ const fieldsOfStudy = [
   { value: 'hospitality', label: 'Hospitality' },
 ];
 
+const universityTypes = [
+  { value: 'all', label: 'All Types' },
+  { value: 'russell_group', label: 'Russell Group' },
+  { value: 'redbrick', label: 'Redbrick' },
+  { value: 'post_92', label: 'Post-92' },
+  { value: 'ivy_league', label: 'Ivy League' },
+  { value: 'research_intensive', label: 'Research Intensive' },
+];
+
+const scholarshipTypes = [
+  { value: 'all', label: 'All Scholarships' },
+  { value: 'full', label: 'Full Scholarship' },
+  { value: 'partial', label: 'Partial Scholarship' },
+  { value: 'none', label: 'No Scholarship' },
+];
+
+const durationOptions = [
+  { value: 'all', label: 'All Durations' },
+  { value: '0-12', label: 'Up to 1 year' },
+  { value: '12-24', label: '1-2 years' },
+  { value: '24-36', label: '2-3 years' },
+  { value: '36-48', label: '3-4 years' },
+  { value: '48+', label: '4+ years' },
+];
+
 export default function Courses() {
   const [searchQuery, setSearchQuery] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('all');
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
-  const [scholarshipOnly, setScholarshipOnly] = useState(false);
+  const [scholarshipType, setScholarshipType] = useState('all');
+  const [universityType, setUniversityType] = useState('all');
+  const [durationFilter, setDurationFilter] = useState('all');
+  const [selectedIntake, setSelectedIntake] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
   const [tuitionRange, setTuitionRange] = useState([0, 100000]);
@@ -90,6 +118,14 @@ export default function Courses() {
     return acc;
   }, {});
 
+  // Generate available intakes from courses
+  const availableIntakes = [...new Set(
+    courses.flatMap(c => c.intake_dates || []).filter(Boolean)
+  )].sort().map(intake => ({
+    value: intake,
+    label: new Date(intake + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  }));
+
   const filteredCourses = courses.filter(course => {
     const university = universityMap[course.university_id];
     
@@ -98,7 +134,26 @@ export default function Courses() {
     const matchesDegree = degreeLevel === 'all' || course.level?.toLowerCase() === degreeLevel.toLowerCase();
     const matchesField = fieldOfStudy === 'all' || 
                         course.subject_area?.toLowerCase().includes(fieldOfStudy.toLowerCase());
-    const matchesScholarship = !scholarshipOnly || course.scholarship_available;
+    
+    // Scholarship type filter
+    const matchesScholarship = scholarshipType === 'all' || 
+                               (scholarshipType === 'none' && !course.scholarship_available) ||
+                               (scholarshipType === 'full' && course.scholarship_type === 'full') ||
+                               (scholarshipType === 'partial' && course.scholarship_type === 'partial');
+    
+    // University type filter
+    const matchesUniversityType = universityType === 'all' || university?.university_type === universityType;
+    
+    // Duration filter
+    const matchesDuration = durationFilter === 'all' || (() => {
+      const months = course.duration_months || 0;
+      const [min, max] = durationFilter.split('-').map(v => v === '+' ? 999 : parseInt(v));
+      return months >= min && months <= (max || 999);
+    })();
+    
+    // Intake filter
+    const matchesIntake = selectedIntake === 'all' || 
+                         course.intake_dates?.includes(selectedIntake);
     
     // Tuition range filter
     const courseFee = course.tuition_fee_min || course.tuition_fee_max || 0;
@@ -114,7 +169,8 @@ export default function Courses() {
                           selectedCountries.includes(course.country);
     
     return matchesSearch && matchesDegree && matchesField && 
-           matchesScholarship && matchesTuition && matchesRanking && matchesCountry;
+           matchesScholarship && matchesTuition && matchesRanking && 
+           matchesCountry && matchesUniversityType && matchesDuration && matchesIntake;
   });
 
   // Sort courses
@@ -129,6 +185,10 @@ export default function Courses() {
         return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
       case 'tuition_high':
         return (b.tuition_fee_max || 0) - (a.tuition_fee_max || 0);
+      case 'scholarship':
+        return (b.scholarship_available ? 1 : 0) - (a.scholarship_available ? 1 : 0);
+      case 'duration':
+        return (a.duration_months || 0) - (b.duration_months || 0);
       case 'name':
         return (a.course_title || '').localeCompare(b.course_title || '');
       default:
@@ -143,7 +203,10 @@ export default function Courses() {
     setSearchQuery('');
     setDegreeLevel('all');
     setFieldOfStudy('all');
-    setScholarshipOnly(false);
+    setScholarshipType('all');
+    setUniversityType('all');
+    setDurationFilter('all');
+    setSelectedIntake('all');
     setTuitionRange([0, 100000]);
     setRankingFilter('all');
     setSelectedCountries([]);
@@ -187,6 +250,65 @@ export default function Courses() {
           </SelectContent>
         </Select>
       </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Scholarship Type</label>
+        <Select value={scholarshipType} onValueChange={setScholarshipType}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {scholarshipTypes.map(s => (
+              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">University Type</label>
+        <Select value={universityType} onValueChange={setUniversityType}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {universityTypes.map(t => (
+              <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Duration</label>
+        <Select value={durationFilter} onValueChange={setDurationFilter}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {durationOptions.map(d => (
+              <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {availableIntakes.length > 0 && (
+        <div>
+          <label className="text-sm font-medium text-slate-700 mb-2 block">Program Intake</label>
+          <Select value={selectedIntake} onValueChange={setSelectedIntake}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Intakes" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Intakes</SelectItem>
+              {availableIntakes.map(intake => (
+                <SelectItem key={intake.value} value={intake.value}>{intake.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div>
         <label className="text-sm font-medium text-slate-700 mb-2 block">University Ranking</label>
@@ -238,17 +360,6 @@ export default function Courses() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Checkbox 
-          id="scholarship" 
-          checked={scholarshipOnly}
-          onCheckedChange={setScholarshipOnly}
-        />
-        <label htmlFor="scholarship" className="text-sm text-slate-700 cursor-pointer">
-          Scholarship Available
-        </label>
       </div>
 
       <Button variant="outline" onClick={clearFilters} className="w-full">
@@ -345,6 +456,8 @@ export default function Courses() {
                     <SelectItem value="ranking">University Ranking</SelectItem>
                     <SelectItem value="tuition_low">Tuition: Low to High</SelectItem>
                     <SelectItem value="tuition_high">Tuition: High to Low</SelectItem>
+                    <SelectItem value="scholarship">Scholarship Availability</SelectItem>
+                    <SelectItem value="duration">Duration (Shortest First)</SelectItem>
                     <SelectItem value="name">Name (A-Z)</SelectItem>
                   </SelectContent>
                 </Select>
