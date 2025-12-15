@@ -51,6 +51,7 @@ import Scholarships from './pages/Scholarships';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AICounselor from './pages/AICounselor';
 import LanguagePrep from './pages/LanguagePrep';
+import Compare from './pages/Compare';
 import __Layout from './Layout.jsx';
 
 
@@ -108,6 +109,7 @@ export const PAGES = {
     "AlumniNetwork": AlumniNetwork,
     "AICounselor": AICounselor,
     "LanguagePrep": LanguagePrep,
+    "Compare": Compare,
 }
 
 export const pagesConfig = {
