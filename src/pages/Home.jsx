@@ -17,6 +17,7 @@ import { base44 } from '@/api/base44Client';
 
 export default function Home() {
   const [courseTab, setCourseTab] = useState('courses');
+  const [currentCountryIndex, setCurrentCountryIndex] = useState(0);
   const [courseFilters, setCourseFilters] = useState({
     subject: '',
     courseType: '',
@@ -33,6 +34,44 @@ export default function Home() {
     queryFn: () => base44.entities.Testimonial.filter({ status: 'approved' }, '-created_date', 3),
   });
 
+  const heroCountries = [
+    { 
+      name: 'Canada', 
+      tagline: 'From counselling to admission to visa support — ALO Education is with you at every step.',
+      image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=1600&q=80'
+    },
+    { 
+      name: 'United Kingdom', 
+      tagline: 'Experience world-class education in historic universities — we guide you through every milestone.',
+      image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600&q=80'
+    },
+    { 
+      name: 'Australia', 
+      tagline: 'Discover exceptional opportunities in a vibrant, welcoming environment — your journey starts here.',
+      image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1600&q=80'
+    },
+    { 
+      name: 'USA', 
+      tagline: 'Achieve your American dream with personalized guidance at every stage of your journey.',
+      image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=1600&q=80'
+    },
+    { 
+      name: 'Ireland', 
+      tagline: 'Study in Europe\'s tech hub with comprehensive support from start to success.',
+      image: 'https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=1600&q=80'
+    },
+    { 
+      name: 'New Zealand', 
+      tagline: 'Embrace quality education in stunning landscapes — we\'re with you every step.',
+      image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=1600&q=80'
+    },
+    { 
+      name: 'Dubai', 
+      tagline: 'Study in a global city of innovation — complete guidance from application to arrival.',
+      image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80'
+    }
+  ];
+
   const destinations = [
     { name: 'United Kingdom', page: 'StudyInUK', image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80' },
     { name: 'Australia', page: 'StudyInAustralia', image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&q=80' },
@@ -42,6 +81,14 @@ export default function Home() {
     { name: 'USA', page: 'StudyInUSA', image: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=800&q=80' },
     { name: 'Dubai', page: 'StudyInDubai', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' }
   ];
+
+  // Auto-rotate countries every 4 seconds
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCountryIndex((prev) => (prev + 1) % heroCountries.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const services = [
     { icon: MessageSquare, title: 'Counselling', description: 'Expert guidance tailored to your goals' },
@@ -87,32 +134,49 @@ export default function Home() {
             >
               <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                 <span style={{ color: 'var(--alo-blue)' }}>Turn your dreams of studying in </span>
-                <span style={{ color: 'var(--alo-orange)' }}>Canada</span>
+                <motion.span
+                  key={currentCountryIndex}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  style={{ color: 'var(--alo-orange)', display: 'inline-block' }}
+                >
+                  {heroCountries[currentCountryIndex].name}
+                </motion.span>
                 <span style={{ color: 'var(--alo-blue)' }}> into reality</span>
               </h1>
-              <p className="text-xl text-slate-600 mb-8" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-                From counselling to admission to visa support — ALO Education is with you at every step.
-              </p>
+              <motion.p
+                key={`tagline-${currentCountryIndex}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-xl text-slate-600 mb-8"
+                style={{ fontFamily: 'Open Sans, sans-serif' }}
+              >
+                {heroCountries[currentCountryIndex].tagline}
+              </motion.p>
               <Link to={createPageUrl('Contact')}>
                 <Button 
                   size="lg" 
-                  className="text-white text-lg px-8 py-6"
-                  style={{ backgroundColor: 'var(--alo-orange)', fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}
+                  className="text-lg px-8 py-6"
+                  style={{ backgroundColor: 'var(--alo-orange)', color: '#000000', fontFamily: 'Montserrat, sans-serif', fontWeight: 600 }}
                 >
-                  Book Counselling
+                  Book a Free Consultation
                 </Button>
               </Link>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              key={`image-${currentCountryIndex}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
               className="relative"
             >
               <img 
-                src="https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=1600&q=80" 
-                alt="Study in Canada"
+                src={heroCountries[currentCountryIndex].image}
+                alt={`Study in ${heroCountries[currentCountryIndex].name}`}
                 className="rounded-3xl shadow-2xl w-full h-auto"
               />
             </motion.div>

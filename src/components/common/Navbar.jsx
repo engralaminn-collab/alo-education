@@ -44,8 +44,7 @@ export default function Navbar() {
 
 
   const navLinks = [
-    { label: 'Services', page: 'About' },
-    { label: 'English Tests', page: 'EnglishTests' }
+    { label: 'Services', page: 'About' }
   ];
 
   const portals = [
@@ -119,15 +118,6 @@ export default function Navbar() {
                 {link.label}
               </Link>
             )}
-
-            <Link
-              to={createPageUrl('EnglishTests')}
-              className="font-medium text-slate-900 transition-colors"
-              style={{ fontFamily: 'Montserrat, sans-serif' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = '#0f172a'}>
-                Language Prep
-              </Link>
 
             {/* Resources Dropdown */}
             <DropdownMenu>
