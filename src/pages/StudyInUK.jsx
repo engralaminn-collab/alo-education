@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   GraduationCap, DollarSign, BookOpen, Calendar, 
-  TrendingUp, ArrowRight, CheckCircle
+  TrendingUp, ArrowRight, CheckCircle, MapPin, Star
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -14,6 +14,17 @@ import Footer from '@/components/landing/Footer';
 
 export default function StudyInUK() {
   const [activeTab, setActiveTab] = React.useState('universities');
+
+  const popularUniversities = [
+    { name: 'University of Oxford', city: 'Oxford', ranking: 1, intake: 'September 2026' },
+    { name: 'University of Cambridge', city: 'Cambridge', ranking: 2, intake: 'October 2026' },
+    { name: 'Imperial College London', city: 'London', ranking: 6, intake: 'September 2026' },
+    { name: 'University College London', city: 'London', ranking: 9, intake: 'September 2026' },
+    { name: 'University of Edinburgh', city: 'Edinburgh', ranking: 22, intake: 'September 2026' },
+    { name: 'University of Manchester', city: 'Manchester', ranking: 27, intake: 'September 2026' },
+    { name: "King's College London", city: 'London', ranking: 35, intake: 'September 2026' },
+    { name: 'University of Warwick', city: 'Coventry', ranking: 67, intake: 'September 2026' }
+  ];
 
   const popularSubjects = [
     'Business', 'Computing', 'Data Science/AI', 'Engineering', 
@@ -91,7 +102,7 @@ export default function StudyInUK() {
                     className="rounded-2xl w-full"
                   />
                   <div>
-                    <h2 className="text-3xl font-bold mb-4">Top universities</h2>
+                    <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--alo-blue)' }}>Top universities</h2>
                     <p className="text-slate-700 leading-relaxed">
                       The UK is home to some of the world's most prestigious and historic universities, with over 160 higher education institutions offering a wealth of academic opportunities. Many are consistently ranked among the best globally, recognised for their research, teaching excellence, and strong industry connections.
                     </p>
@@ -100,10 +111,64 @@ export default function StudyInUK() {
                     </p>
                   </div>
                 </div>
+
+                {/* Popular Universities Grid */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-bold mb-8 text-center" style={{ color: 'var(--alo-blue)' }}>
+                    Popular Universities in the UK
+                  </h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {popularUniversities.map((uni, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                      >
+                        <Card className="h-full border-2 transition-all duration-300 hover:shadow-lg group" 
+                          style={{ borderColor: 'var(--alo-blue)' }}
+                          onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--alo-orange)'}
+                          onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--alo-blue)'}
+                        >
+                          <CardContent className="p-6 flex flex-col h-full">
+                            <h4 className="font-bold text-lg mb-3 min-h-[3.5rem]" style={{ color: 'var(--alo-orange)' }}>
+                              {uni.name}
+                            </h4>
+                            <div className="space-y-2 mb-4 flex-grow">
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <MapPin className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
+                                <span>{uni.city}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <Star className="w-4 h-4 text-amber-500" />
+                                <span className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
+                                  World Rank #{uni.ranking}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <Calendar className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
+                                <span>Next Intake: {uni.intake}</span>
+                              </div>
+                            </div>
+                            <Link to={createPageUrl('Universities') + '?search=' + encodeURIComponent(uni.name)}>
+                              <Button 
+                                className="w-full text-white font-semibold transition-all"
+                                style={{ backgroundColor: 'var(--alo-orange)' }}
+                              >
+                                APPLY NOW
+                              </Button>
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="text-center">
                   <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
-                    <Button style={{ backgroundColor: '#0066CC' }} className="text-white">
-                      View all universities <ArrowRight className="w-4 h-4 ml-2" />
+                    <Button size="lg" style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white font-semibold">
+                      View All Universities <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </div>
