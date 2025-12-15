@@ -25,6 +25,7 @@ import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
 import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
+import CareerGuidance from '@/components/dashboard/CareerGuidance';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -220,6 +221,13 @@ export default function StudentDashboard() {
               courses={courses}
               universities={universities}
               applications={applications}
+            />
+
+            {/* Career Guidance */}
+            <CareerGuidance 
+              studentProfile={studentProfile}
+              courses={courses}
+              universities={universities}
             />
 
             {/* Resources Hub */}
