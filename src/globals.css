@@ -103,6 +103,16 @@ css
   color: var(--alo-orange);
 }
 
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .alo-header {
@@ -110,16 +120,16 @@ css
     top: 0;
     z-index: 50;
   }
-  
+
   .alo-card {
     border-radius: 12px;
   }
-  
+
   .alo-btn-primary {
     width: 100%;
     min-height: 44px;
   }
-  
+
   .alo-footer-bottom {
     text-align: center;
   }
