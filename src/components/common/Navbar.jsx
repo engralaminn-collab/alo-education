@@ -30,7 +30,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navBg = 'alo-header';
+  const navBg = 'bg-white shadow-sm';
 
   const destinations = [
   { label: 'United Kingdom', page: 'StudyInUK' },
@@ -65,7 +65,10 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'white' }}>
               <GraduationCap className="w-6 h-6" style={{ color: 'var(--alo-blue)' }} />
             </div>
-            <span className="text-xl font-bold text-white">ALO Education</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold" style={{ color: 'var(--alo-blue)' }}>ALO Education</span>
+              <span className="text-xs italic" style={{ color: 'var(--alo-orange)' }}>Your Dream - Our Commitment</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -74,9 +77,10 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium transition-colors flex items-center gap-1"
+                  style={{ color: '#000000' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}>
                   Destinations
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -96,10 +100,10 @@ export default function Navbar() {
             <Link
               key={link.page}
               to={createPageUrl(link.page)}
-              className="font-medium text-white transition-colors"
-              style={{ color: 'white' }}
+              className="font-medium transition-colors"
+              style={{ color: '#000000' }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+              onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}>
                 {link.label}
               </Link>
             )}
@@ -108,9 +112,10 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="font-medium text-white transition-colors flex items-center gap-1"
+                  className="font-medium transition-colors flex items-center gap-1"
+                  style={{ color: '#000000' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}>
                   Resources
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -132,7 +137,7 @@ export default function Navbar() {
             {user ?
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
+                  <Button variant="ghost" className="gap-2 hover:bg-slate-100" style={{ color: '#000000' }}>
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
                       {user.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
                     </div>
@@ -193,10 +198,10 @@ export default function Navbar() {
             <>
               <Link to={createPageUrl('Contact')}>
                 <Button
-                  className="text-white hover:opacity-90"
-                  style={{ backgroundColor: 'var(--alo-orange)' }}
+                  className="font-semibold hover:opacity-90"
+                  style={{ backgroundColor: 'var(--alo-orange)', color: '#000000' }}
                 >
-                  Book Free Counselling
+                  Book Free Consultation
                 </Button>
               </Link>
             </>
@@ -206,7 +211,7 @@ export default function Navbar() {
           {/* Mobile Menu */}
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+              <Button variant="ghost" size="icon" className="hover:bg-slate-100" style={{ color: '#000000' }}>
                 <Menu className="w-6 h-6" />
               </Button>
             </SheetTrigger>
@@ -285,10 +290,10 @@ export default function Navbar() {
 
                 <Link to={createPageUrl('Contact')}>
                   <Button
-                    className="text-white w-full"
-                    style={{ backgroundColor: 'var(--alo-orange)' }}
+                    className="w-full font-semibold"
+                    style={{ backgroundColor: 'var(--alo-orange)', color: '#000000' }}
                     onClick={() => setIsMobileOpen(false)}>
-                      Book Free Counselling
+                      Book Free Consultation
                     </Button>
                 </Link>
                 }
