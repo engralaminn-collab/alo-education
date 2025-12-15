@@ -50,6 +50,7 @@ import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import Scholarships from './pages/Scholarships';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AICounselor from './pages/AICounselor';
+import LanguagePrep from './pages/LanguagePrep';
 import __Layout from './Layout.jsx';
 
 
@@ -106,6 +107,7 @@ export const PAGES = {
     "Scholarships": Scholarships,
     "AlumniNetwork": AlumniNetwork,
     "AICounselor": AICounselor,
+    "LanguagePrep": LanguagePrep,
 }
 
 export const pagesConfig = {
