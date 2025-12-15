@@ -53,6 +53,7 @@ import AICounselor from './pages/AICounselor';
 import LanguagePrep from './pages/LanguagePrep';
 import Compare from './pages/Compare';
 import ScholarshipHelper from './pages/ScholarshipHelper';
+import VisaAssistant from './pages/VisaAssistant';
 import __Layout from './Layout.jsx';
 
 
@@ -112,6 +113,7 @@ export const PAGES = {
     "LanguagePrep": LanguagePrep,
     "Compare": Compare,
     "ScholarshipHelper": ScholarshipHelper,
+    "VisaAssistant": VisaAssistant,
 }
 
 export const pagesConfig = {

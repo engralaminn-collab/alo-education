@@ -52,6 +52,7 @@ export default function Navbar() {
   { label: 'Universities', page: 'Universities' },
   { label: 'Scholarships', page: 'Scholarships' },
   { label: 'Scholarship Helper', page: 'ScholarshipHelper' },
+  { label: 'Visa Assistant', page: 'VisaAssistant' },
   { label: 'Alumni Network', page: 'AlumniNetwork' },
   { label: 'AI Counselor', page: 'AICounselor' },
   { label: 'Testimonials', page: 'TestimonialsPage' }];
