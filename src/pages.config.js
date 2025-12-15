@@ -54,6 +54,7 @@ import LanguagePrep from './pages/LanguagePrep';
 import Compare from './pages/Compare';
 import ScholarshipHelper from './pages/ScholarshipHelper';
 import VisaAssistant from './pages/VisaAssistant';
+import UniversityMatcher from './pages/UniversityMatcher';
 import __Layout from './Layout.jsx';
 
 
@@ -114,6 +115,7 @@ export const PAGES = {
     "Compare": Compare,
     "ScholarshipHelper": ScholarshipHelper,
     "VisaAssistant": VisaAssistant,
+    "UniversityMatcher": UniversityMatcher,
 }
 
 export const pagesConfig = {

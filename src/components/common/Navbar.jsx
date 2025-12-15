@@ -50,6 +50,7 @@ export default function Navbar() {
   
   const resources = [
   { label: 'Universities', page: 'Universities' },
+  { label: 'University Matcher', page: 'UniversityMatcher' },
   { label: 'Scholarships', page: 'Scholarships' },
   { label: 'Scholarship Helper', page: 'ScholarshipHelper' },
   { label: 'Visa Assistant', page: 'VisaAssistant' },
