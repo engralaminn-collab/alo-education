@@ -35,6 +35,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
 import CRMAIAssistant from './pages/CRMAIAssistant';
+import CourseFinder from './pages/CourseFinder';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import ApplicationForm from './pages/ApplicationForm';
@@ -49,21 +50,6 @@ import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import Scholarships from './pages/Scholarships';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AICounselor from './pages/AICounselor';
-import EnglishTests from './pages/EnglishTests';
-import IELTSTest from './pages/IELTSTest';
-import PTETest from './pages/PTETest';
-import IELTSUKVITest from './pages/IELTSUKVITest';
-import OIETCTest from './pages/OIETCTest';
-import TOEFLTest from './pages/TOEFLTest';
-import DuolingoTest from './pages/DuolingoTest';
-import LanguageCertTest from './pages/LanguageCertTest';
-import KaplanTest from './pages/KaplanTest';
-import OETTest from './pages/OETTest';
-import CambridgeTest from './pages/CambridgeTest';
-import GRETest from './pages/GRETest';
-import GMATTest from './pages/GMATTest';
-import SATTest from './pages/SATTest';
-import ACTTest from './pages/ACTTest';
 import __Layout from './Layout.jsx';
 
 
@@ -105,6 +91,7 @@ export const PAGES = {
     "CRMAutomation": CRMAutomation,
     "CRMLeadNurturing": CRMLeadNurturing,
     "CRMAIAssistant": CRMAIAssistant,
+    "CourseFinder": CourseFinder,
     "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
     "ApplicationForm": ApplicationForm,
@@ -119,21 +106,6 @@ export const PAGES = {
     "Scholarships": Scholarships,
     "AlumniNetwork": AlumniNetwork,
     "AICounselor": AICounselor,
-    "EnglishTests": EnglishTests,
-    "IELTSTest": IELTSTest,
-    "PTETest": PTETest,
-    "IELTSUKVITest": IELTSUKVITest,
-    "OIETCTest": OIETCTest,
-    "TOEFLTest": TOEFLTest,
-    "DuolingoTest": DuolingoTest,
-    "LanguageCertTest": LanguageCertTest,
-    "KaplanTest": KaplanTest,
-    "OETTest": OETTest,
-    "CambridgeTest": CambridgeTest,
-    "GRETest": GRETest,
-    "GMATTest": GMATTest,
-    "SATTest": SATTest,
-    "ACTTest": ACTTest,
 }
 
 export const pagesConfig = {

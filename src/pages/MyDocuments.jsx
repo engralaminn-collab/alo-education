@@ -16,7 +16,6 @@ import {
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import AIDocumentAssistant from '@/components/documents/AIDocumentAssistant';
 
 const documentTypes = [
   { value: 'passport', label: 'Passport' },
@@ -67,11 +66,6 @@ export default function MyDocuments() {
     queryKey: ['my-documents', studentProfile?.id],
     queryFn: () => base44.entities.Document.filter({ student_id: studentProfile?.id }, '-created_date'),
     enabled: !!studentProfile?.id,
-  });
-
-  const { data: universities = [] } = useQuery({
-    queryKey: ['universities'],
-    queryFn: () => base44.entities.University.filter({ status: 'active' }),
   });
 
   const uploadMutation = useMutation({
@@ -235,42 +229,29 @@ export default function MyDocuments() {
       </div>
 
       <div className="container mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-3 gap-8 mb-8">
-          {/* AI Document Assistant */}
-          <div className="lg:col-span-2">
-            <AIDocumentAssistant 
-              studentProfile={studentProfile}
-              documents={documents}
-              universities={universities}
-            />
-          </div>
-
-          {/* Missing Documents Alert */}
-          <div>
-            {missingDocs.length > 0 && (
-              <Card className="border-0 shadow-sm border-l-4 border-l-amber-500">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
-                    <div>
-                      <h3 className="font-semibold text-slate-900 mb-1">Missing Documents</h3>
-                      <p className="text-slate-600 text-sm mb-3">
-                        Commonly required documents:
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {missingDocs.map(doc => (
-                          <Badge key={doc.value} variant="outline" className="bg-amber-50">
-                            {doc.label}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
+        {/* Missing Documents Alert */}
+        {missingDocs.length > 0 && (
+          <Card className="border-0 shadow-sm border-l-4 border-l-amber-500 mb-8">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-slate-900 mb-1">Missing Documents</h3>
+                  <p className="text-slate-600 text-sm mb-3">
+                    The following documents are commonly required. Please upload them when available:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {missingDocs.map(doc => (
+                      <Badge key={doc.value} variant="outline" className="bg-amber-50">
+                        {doc.label}
+                      </Badge>
+                    ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Documents Grid */}
         {isLoading ? (
