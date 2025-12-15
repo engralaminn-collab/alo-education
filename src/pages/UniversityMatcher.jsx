@@ -165,7 +165,7 @@ Be specific, data-driven, and personalized.`;
   if (!studentProfile) {
     return (
       <div className="min-h-screen bg-slate-50">
-        <section className="py-16 bg-gradient-to-br from-indigo-600 to-purple-600">
+        <section style={{ background: 'linear-gradient(135deg, #ec4899 0%, #f97316 100%)' }} className="py-16">
           <div className="container mx-auto px-6 text-center">
             <Sparkles className="w-16 h-16 text-white mx-auto mb-4" />
             <h1 className="text-4xl font-bold text-white mb-4">AI University Matcher</h1>
@@ -196,7 +196,7 @@ Be specific, data-driven, and personalized.`;
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <section className="py-16 bg-gradient-to-br from-indigo-600 to-purple-600">
+      <section style={{ background: 'linear-gradient(135deg, #ec4899 0%, #f97316 100%)' }} className="py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center">
             <Sparkles className="w-16 h-16 text-white mx-auto mb-4" />

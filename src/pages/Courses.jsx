@@ -372,7 +372,7 @@ export default function Courses() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
+      <section style={{ background: 'linear-gradient(135deg, var(--alo-orange) 0%, #ff8c42 100%)' }} className="py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
