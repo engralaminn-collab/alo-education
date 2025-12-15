@@ -39,6 +39,26 @@ export default function CourseDetails() {
     enabled: !!course?.university_id,
   });
 
+  const { data: user } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: async () => {
+      const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
+  });
+
+  const { data: reviews = [] } = useQuery({
+    queryKey: ['course-reviews', courseId],
+    queryFn: () => base44.entities.CourseReview.filter({ course_id: courseId, status: 'approved' }),
+    enabled: !!courseId,
+  });
+
   if (courseLoading) {
     return (
       <div className="min-h-screen bg-slate-50 pt-20">
@@ -304,6 +324,29 @@ export default function CourseDetails() {
                 </CardContent>
               </Card>
             )}
+          </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="container mx-auto px-6 pb-12">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Student Reviews</h2>
+          <div className="space-y-6">
+            {user && studentProfile && (
+              <ReviewForm
+                type="course"
+                courseId={course.id}
+                universityId={course.university_id}
+                studentProfile={studentProfile}
+              />
+            )}
+            <AIReviewAnalysis 
+              reviews={reviews} 
+              type="course"
+            />
+            <CourseReviewsList
+              courseId={course.id}
+              studentProfile={studentProfile}
+            />
           </div>
         </div>
       </div>
