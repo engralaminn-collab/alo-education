@@ -25,6 +25,7 @@ import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
 import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
+import TopMatches from '@/components/dashboard/TopMatches';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -191,6 +192,9 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Top Matches - Personalized Recommendations */}
+            <TopMatches studentProfile={studentProfile} />
+
             {/* My Journey */}
             <MyJourney 
               studentProfile={studentProfile}
