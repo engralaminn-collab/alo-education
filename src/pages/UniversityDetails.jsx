@@ -16,6 +16,11 @@ import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import UniversityReviewsSection from '@/components/universities/UniversityReviewsSection';
+import WhyChooseUniversity from '@/components/universities/WhyChooseUniversity';
+import CampusLifeSection from '@/components/universities/CampusLifeSection';
+import AccommodationSection from '@/components/universities/AccommodationSection';
+import ResearchSection from '@/components/universities/ResearchSection';
+import VirtualTourSection from '@/components/universities/VirtualTourSection';
 
 export default function UniversityDetails() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -35,6 +40,20 @@ export default function UniversityDetails() {
     queryKey: ['university-courses', universityId],
     queryFn: () => base44.entities.Course.filter({ university_id: universityId, status: 'open' }),
     enabled: !!universityId,
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: async () => {
+      const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
   });
 
   if (uniLoading) {
@@ -148,13 +167,15 @@ export default function UniversityDetails() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="overview" className="space-y-8">
-              <TabsList className="bg-white shadow-sm p-1 rounded-xl">
-                <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
-                <TabsTrigger value="courses" className="rounded-lg">Courses ({courses.length})</TabsTrigger>
-                <TabsTrigger value="requirements" className="rounded-lg">Requirements</TabsTrigger>
-                <TabsTrigger value="campus" className="rounded-lg">Campus Life</TabsTrigger>
-                <TabsTrigger value="location" className="rounded-lg">Location</TabsTrigger>
-                <TabsTrigger value="reviews" className="rounded-lg">Reviews</TabsTrigger>
+              <TabsList className="bg-white shadow-sm p-1 rounded-xl grid grid-cols-4 md:grid-cols-8 gap-1">
+                <TabsTrigger value="overview" className="rounded-lg text-xs md:text-sm">Overview</TabsTrigger>
+                <TabsTrigger value="why-choose" className="rounded-lg text-xs md:text-sm">Why Choose</TabsTrigger>
+                <TabsTrigger value="courses" className="rounded-lg text-xs md:text-sm">Courses</TabsTrigger>
+                <TabsTrigger value="campus" className="rounded-lg text-xs md:text-sm">Campus Life</TabsTrigger>
+                <TabsTrigger value="accommodation" className="rounded-lg text-xs md:text-sm">Housing</TabsTrigger>
+                <TabsTrigger value="research" className="rounded-lg text-xs md:text-sm">Research</TabsTrigger>
+                <TabsTrigger value="virtual-tour" className="rounded-lg text-xs md:text-sm">Virtual Tour</TabsTrigger>
+                <TabsTrigger value="reviews" className="rounded-lg text-xs md:text-sm">Reviews</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview">
@@ -221,6 +242,10 @@ export default function UniversityDetails() {
                 </Card>
               </TabsContent>
 
+              <TabsContent value="why-choose">
+                <WhyChooseUniversity university={university} studentProfile={studentProfile} />
+              </TabsContent>
+
               <TabsContent value="courses">
                 <div className="space-y-4">
                   {courses.length === 0 ? (
@@ -281,79 +306,20 @@ export default function UniversityDetails() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="requirements">
-                <Card className="border-0 shadow-sm">
-                  <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-6">General Requirements</h2>
-                    <div className="space-y-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                          <GraduationCap className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-slate-900">Academic Requirements</h4>
-                          <p className="text-slate-600 mt-1">Minimum GPA varies by program. Bachelor's require high school diploma; Master's require bachelor's degree.</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-                          <Globe className="w-5 h-5 text-emerald-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-slate-900">English Proficiency</h4>
-                          <p className="text-slate-600 mt-1">IELTS 6.0-7.5 or TOEFL 80-100+ depending on program level.</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-                          <Calendar className="w-5 h-5 text-purple-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-slate-900">Intake Periods</h4>
-                          <p className="text-slate-600 mt-1">
-                            {university.intake_months?.join(', ') || 'September and January intakes available'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <TabsContent value="campus">
+                <CampusLifeSection university={university} />
               </TabsContent>
 
-              <TabsContent value="campus">
-                <Card className="border-0 shadow-sm">
-                  <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--alo-blue)' }}>Campus Life</h2>
-                    <p className="text-slate-600 leading-relaxed mb-8">
-                      Experience vibrant campus life with state-of-the-art facilities, diverse student organizations, 
-                      and a welcoming community. From sports facilities to cultural events, there's something for everyone.
-                    </p>
+              <TabsContent value="accommodation">
+                <AccommodationSection university={university} />
+              </TabsContent>
 
-                    {/* Campus Highlights */}
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="p-6 bg-blue-50 rounded-xl">
-                        <Home className="w-8 h-8 mb-3" style={{ color: 'var(--alo-blue)' }} />
-                        <h4 className="font-semibold text-slate-900 mb-2">Accommodation</h4>
-                        <p className="text-sm text-slate-600">Modern on-campus housing with various options for international students</p>
-                      </div>
-                      <div className="p-6 bg-emerald-50 rounded-xl">
-                        <Users className="w-8 h-8 mb-3 text-emerald-600" />
-                        <h4 className="font-semibold text-slate-900 mb-2">Student Life</h4>
-                        <p className="text-sm text-slate-600">100+ clubs and societies, sports teams, and cultural events throughout the year</p>
-                      </div>
-                      <div className="p-6 bg-purple-50 rounded-xl">
-                        <BookOpen className="w-8 h-8 mb-3 text-purple-600" />
-                        <h4 className="font-semibold text-slate-900 mb-2">Library & Resources</h4>
-                        <p className="text-sm text-slate-600">World-class libraries with extensive digital and physical resources</p>
-                      </div>
-                      <div className="p-6 bg-amber-50 rounded-xl">
-                        <Briefcase className="w-8 h-8 mb-3 text-amber-600" />
-                        <h4 className="font-semibold text-slate-900 mb-2">Career Support</h4>
-                        <p className="text-sm text-slate-600">Dedicated career services, internships, and industry connections</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <TabsContent value="research">
+                <ResearchSection university={university} />
+              </TabsContent>
+
+              <TabsContent value="virtual-tour">
+                <VirtualTourSection university={university} />
               </TabsContent>
 
               <TabsContent value="location">
