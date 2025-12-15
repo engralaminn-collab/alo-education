@@ -1,165 +1,259 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  GraduationCap, DollarSign, BookOpen, Calendar, 
-  TrendingUp, ArrowRight, CheckCircle
-} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { 
+  GraduationCap, DollarSign, FileText, Home, Star,
+  CheckCircle, ArrowRight, Globe
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 
 export default function StudyInAustralia() {
-  const popularSubjects = [
-    'IT', 'Engineering', 'Business', 'Nursing', 
-    'Public Health', 'Cyber Security', 'Data Analytics'
+  const { data: universities = [] } = useQuery({
+    queryKey: ['australia-universities'],
+    queryFn: () => base44.entities.University.filter({ country: 'Australia', status: 'active' }, '-ranking', 6),
+  });
+
+  const { data: testimonials = [] } = useQuery({
+    queryKey: ['australia-testimonials'],
+    queryFn: () => base44.entities.Testimonial.filter({ country: 'Australia', status: 'approved' }, '-created_date', 3),
+  });
+
+  const whyAustralia = [
+    '7 of the world\'s top 100 universities',
+    'Post-study work visa for 2-4 years',
+    'Safe, multicultural, and welcoming environment',
+    'World-class research and innovation',
+    'Beautiful climate and outdoor lifestyle'
+  ];
+
+  const popularCourses = [
+    'Engineering', 'Business & Management', 'IT & Data Science',
+    'Healthcare & Nursing', 'Hospitality', 'Environmental Science'
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="py-20" style={{ backgroundColor: 'white' }}>
-        <div className="container mx-auto px-6">
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <section 
+        className="relative py-32"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1920&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0, 102, 204, 0.88)' }} />
+        <div className="container mx-auto px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl"
+            className="max-w-3xl text-white"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <img 
-                src="https://flagcdn.com/w80/au.png" 
-                alt="Australia Flag" 
-                className="w-16 h-12 rounded-lg shadow-lg"
-              />
-              <h1 className="text-4xl md:text-5xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                Study in <span style={{ color: 'var(--alo-orange)' }}>Australia</span>
-              </h1>
-            </div>
-            <p className="text-xl mb-8" style={{ color: 'var(--alo-text)' }}>
-              High-quality education, vibrant student life, and excellent post-study work opportunities.
+            <h1 className="text-5xl md:text-6xl font-bold mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+              Study in <span style={{ color: 'var(--alo-orange)' }}>Australia</span>
+            </h1>
+            <p className="text-xl mb-8" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+              Experience exceptional education, vibrant cities, and a high quality of life in one of the world's most desirable study destinations.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to={createPageUrl('Contact')}>
-                <Button size="lg" className="text-white" style={{ backgroundColor: 'var(--alo-orange)' }}>
-                  <GraduationCap className="w-5 h-5 mr-2" />
-                  Book Free Counselling
-                </Button>
-              </Link>
-              <Link to={createPageUrl('Courses') + '?country=australia'}>
-                <Button size="lg" variant="outline" style={{ borderColor: 'var(--alo-blue)', color: 'var(--alo-blue)' }}>
-                  Find Courses
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
+            <Link to={createPageUrl('Contact')}>
+              <Button 
+                size="lg" 
+                className="text-white text-lg px-8 py-6"
+                style={{ backgroundColor: 'var(--alo-orange)' }}
+              >
+                Book Counselling
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
 
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="w-6 h-6 text-amber-600" />
-                Tuition Fees (International)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-amber-50 p-4 rounded-xl">
-                <h4 className="font-semibold text-amber-900 mb-2">Undergraduate</h4>
-                <p className="text-2xl font-bold text-amber-600">AUD 15,000 – 33,000</p>
-                <p className="text-sm text-amber-700">per year</p>
-              </div>
-              <div className="bg-orange-50 p-4 rounded-xl">
-                <h4 className="font-semibold text-orange-900 mb-2">Postgraduate</h4>
-                <p className="text-2xl font-bold text-orange-600">AUD 20,000 – 37,000</p>
-                <p className="text-sm text-orange-700">per year</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-6 h-6 text-emerald-600" />
-                Entry Requirements
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-slate-900 mb-2">Undergraduate</h4>
-                <p className="text-slate-600">HSC/A-Level/Foundation + IELTS 6.0–6.5</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-900 mb-2">Postgraduate</h4>
-                <p className="text-slate-600">Bachelor degree + IELTS 6.5 (some need higher)</p>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Why Australia */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--alo-blue)', fontFamily: 'Montserrat, sans-serif' }}>
+            Why Study in Australia?
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {whyAustralia.map((reason, index) => (
+              <Card key={index} className="border-0 shadow-md">
+                <CardContent className="p-6 flex items-start gap-4">
+                  <CheckCircle className="w-6 h-6 shrink-0" style={{ color: 'var(--alo-orange)' }} />
+                  <p className="font-medium">{reason}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
+      </section>
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-6 h-6 text-purple-600" />
-                Intakes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                  <span className="font-medium">February</span>
-                  <Badge className="bg-purple-600 text-white">Main</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                  <span className="font-medium">July</span>
-                  <Badge className="bg-purple-600 text-white">Major</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <span className="font-medium">November</span>
-                  <Badge variant="outline">Limited</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-amber-600" />
-                Popular Subjects
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {popularSubjects.map(subject => (
-                  <Badge key={subject} className="bg-amber-100 text-amber-700 hover:bg-amber-200">
-                    {subject}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+      {/* Top Universities */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--alo-blue)', fontFamily: 'Montserrat, sans-serif' }}>
+            Top Universities in Australia
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {universities.slice(0, 6).map((uni) => (
+              <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?universityId=${uni.id}`}>
+                <Card className="border-0 shadow-md hover:shadow-xl transition-shadow h-full">
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>
+                      {uni.university_name}
+                    </h3>
+                    <p className="text-slate-600 flex items-center gap-2">
+                      <Globe className="w-4 h-4" />
+                      {uni.city}, {uni.country}
+                    </p>
+                    {uni.qs_ranking && (
+                      <p className="text-sm text-slate-500 mt-2">QS Ranking: {uni.qs_ranking}</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link to={createPageUrl('Universities') + '?country=Australia'}>
+              <Button variant="outline" style={{ borderColor: 'var(--alo-blue)', color: 'var(--alo-blue)' }}>
+                View All Australian Universities
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </div>
+      </section>
 
-        <Card className="border-0 shadow-xl text-white" style={{ backgroundColor: 'var(--alo-blue)' }}>
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Ready to Study Down Under?</h3>
-            <p className="mb-6 text-white/90">
-              Get personalized guidance from our expert counselors
-            </p>
-            <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="text-white" style={{ backgroundColor: 'var(--alo-orange)' }}>
-                Book Free Counselling
+      {/* Popular Courses */}
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--alo-blue)', fontFamily: 'Montserrat, sans-serif' }}>
+            Popular Courses
+          </h2>
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {popularCourses.map((course) => (
+              <span 
+                key={course} 
+                className="px-6 py-3 rounded-full text-white font-medium"
+                style={{ backgroundColor: 'var(--alo-blue)' }}
+              >
+                {course}
+              </span>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link to={createPageUrl('Courses') + '?country=australia'}>
+              <Button 
+                size="lg"
+                className="text-white"
+                style={{ backgroundColor: 'var(--alo-orange)' }}
+              >
+                Explore All Courses
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visa & Costs */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--alo-blue)', fontFamily: 'Montserrat, sans-serif' }}>
+            Visa & Living Costs
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <DollarSign className="w-12 h-12 mb-4" style={{ color: 'var(--alo-orange)' }} />
+                <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>Tuition Fees</h3>
+                <p className="text-2xl font-bold text-slate-900 mb-2">AUD 20,000 - 45,000</p>
+                <p className="text-slate-600">per year (varies by course)</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <Home className="w-12 h-12 mb-4" style={{ color: 'var(--alo-orange)' }} />
+                <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>Living Costs</h3>
+                <p className="text-2xl font-bold text-slate-900 mb-2">AUD 21,000 - 27,000</p>
+                <p className="text-slate-600">per year (official estimate)</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <FileText className="w-12 h-12 mb-4" style={{ color: 'var(--alo-orange)' }} />
+                <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--alo-blue)' }}>Student Visa</h3>
+                <p className="text-2xl font-bold text-slate-900 mb-2">AUD 710</p>
+                <p className="text-slate-600">application fee (subclass 500)</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <section className="py-20 bg-slate-50">
+          <div className="container mx-auto px-6">
+            <h2 className="text-4xl font-bold text-center mb-12" style={{ color: 'var(--alo-blue)', fontFamily: 'Montserrat, sans-serif' }}>
+              Student Success Stories
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.id} className="border-0 shadow-lg">
+                  <CardContent className="p-6">
+                    <div className="flex mb-3">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-slate-600 mb-4">{testimonial.testimonial_text}</p>
+                    <div className="flex items-center gap-3">
+                      {testimonial.student_photo && (
+                        <img src={testimonial.student_photo} alt={testimonial.student_name} className="w-12 h-12 rounded-full" />
+                      )}
+                      <div>
+                        <h4 className="font-bold" style={{ color: 'var(--alo-blue)' }}>{testimonial.student_name}</h4>
+                        <p className="text-sm text-slate-600">{testimonial.university}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA */}
+      <section className="py-20" style={{ backgroundColor: 'var(--alo-blue)' }}>
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+            Ready to Start Your Australia Journey?
+          </h2>
+          <p className="text-xl text-white/90 mb-8" style={{ fontFamily: 'Open Sans, sans-serif' }}>
+            Get expert guidance from our counselors
+          </p>
+          <Link to={createPageUrl('Contact')}>
+            <Button 
+              size="lg"
+              className="text-white text-lg px-8 py-6"
+              style={{ backgroundColor: 'var(--alo-orange)' }}
+            >
+              Book Free Consultation
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
+        </div>
+      </section>
 
       <Footer />
     </div>
