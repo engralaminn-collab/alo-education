@@ -61,6 +61,7 @@ import KaplanTest from './pages/KaplanTest';
 import OETTest from './pages/OETTest';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
+import PartnerPortal from './pages/PartnerPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -128,6 +129,7 @@ export const PAGES = {
     "OETTest": OETTest,
     "ApplicationForm": ApplicationForm,
     "CRMLeadGeneration": CRMLeadGeneration,
+    "PartnerPortal": PartnerPortal,
 }
 
 export const pagesConfig = {
