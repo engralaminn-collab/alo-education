@@ -190,7 +190,7 @@ export default function StudyInUK() {
                         <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
                       </div>
                     )}
-                    <CardTitle className="text-lg leading-tight group-hover:text-[#F37021] transition-colors" style={{ color: '#F37021' }}>
+                    <CardTitle className="text-lg leading-tight" style={{ color: '#F37021' }}>
                       {uni.university_name}
                     </CardTitle>
                   </CardHeader>
@@ -213,7 +213,7 @@ export default function StudyInUK() {
                         <span>{uni.intakes}</span>
                       </div>
                     )}
-                    <Button className="w-full mt-4 font-semibold" style={{ backgroundColor: '#0066CC', color: 'white' }}>
+                    <Button className="w-full mt-4 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
                       Learn More
                     </Button>
                   </CardContent>
