@@ -30,6 +30,9 @@ import CareerGuidanceWidget from '@/components/dashboard/CareerGuidanceWidget';
 import SavedItems from '@/components/dashboard/SavedItems';
 import TestPrepProgress from '@/components/dashboard/TestPrepProgress';
 import CounsellorChatHistory from '@/components/dashboard/CounsellorChatHistory';
+import InterviewSchedule from '@/components/dashboard/InterviewSchedule';
+import RequirementsComparison from '@/components/dashboard/RequirementsComparison';
+import DocumentCard from '@/components/documents/DocumentCard';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -306,32 +309,59 @@ export default function StudentDashboard() {
               </CardContent>
             </Card>
 
-            {/* Pending Documents */}
-            {pendingDocs > 0 && (
-              <Card className="border-0 shadow-sm border-l-4 border-l-amber-500">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-amber-500" />
-                    Documents Pending Review
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-600 mb-4">
-                    You have {pendingDocs} document(s) awaiting verification.
-                  </p>
-                  <Link to={createPageUrl('MyDocuments')}>
-                    <Button variant="outline">
-                      View Documents
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            )}
+            {/* Recent Documents - Read Only View */}
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  My Documents
+                </CardTitle>
+                <Link to={createPageUrl('MyDocuments')}>
+                  <Button variant="ghost" size="sm">
+                    View All
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
+              </CardHeader>
+              <CardContent>
+                {documents.length === 0 ? (
+                  <div className="text-center py-6">
+                    <FileText className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                    <p className="text-sm text-slate-500 mb-3">No documents uploaded yet</p>
+                    <Link to={createPageUrl('MyDocuments')}>
+                      <Button size="sm">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Documents
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {documents.slice(0, 3).map(doc => (
+                      <DocumentCard key={doc.id} document={doc} isStudent={true} />
+                    ))}
+                    {pendingDocs > 0 && (
+                      <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <p className="text-sm text-amber-800">
+                          <AlertCircle className="w-4 h-4 inline mr-1" />
+                          {pendingDocs} document(s) pending review
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Interview Schedule */}
+            <InterviewSchedule studentId={studentProfile?.id} />
+
+            {/* Requirements Comparison */}
+            <RequirementsComparison studentProfile={studentProfile} />
+
             {/* Upcoming Deadlines */}
             <DeadlinesTracker 
               applications={applications}

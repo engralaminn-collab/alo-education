@@ -31,20 +31,21 @@ export default function AIDocumentProcessor({ studentId, applicationId }) {
 
         // Use AI with OCR to categorize and extract info
         const aiResult = await base44.integrations.Core.InvokeLLM({
-          prompt: `Analyze this document using OCR to extract all text and information. Then determine:
+          prompt: `Use OCR to extract ALL text from this document. Then analyze and determine:
 
-1. Document type from: passport, transcript, degree_certificate, english_test, sop, lor, cv, financial_proof, photo, visa_documents, offer_letter, other
-2. A clean, professional filename based on the extracted content
-3. Expiry dates if applicable (YYYY-MM-DD format)
-4. Extract key information to auto-fill student profile:
-   - If passport: extract name, nationality, date_of_birth, passport number
-   - If transcript/degree: extract institution, graduation_year, gpa, field_of_study
-   - If english test: extract test_type (ielts/toefl/pte), score, test_date
-   - If any document: extract any dates, names, or relevant data
+1. Document type: passport, transcript, degree_certificate, english_test, sop, lor, cv, financial_proof, photo, visa_documents, offer_letter, other
+2. Suggested professional filename (e.g., "Passport - John Doe - 2025", "IELTS Score - 7.5 Overall")
+3. Expiry date if found (YYYY-MM-DD format)
+4. Extract ALL relevant student information:
+   - Personal: full name, nationality, date of birth, passport number
+   - Academic: institution name, degree name, graduation year, GPA/percentage, field of study, board/university
+   - Test scores: test type (IELTS/TOEFL/PTE/GRE/GMAT), overall score, individual section scores, test date
+   - Dates: any relevant dates (issue, expiry, completion)
+   - Other: any other relevant information
 
 Original filename: ${file.name}
 
-Return JSON with all extracted information.`,
+Be thorough in extraction - extract everything you can read from the document.`,
           file_urls: [fileUrl],
           response_json_schema: {
             type: "object",
@@ -59,15 +60,24 @@ Return JSON with all extracted information.`,
                   name: { type: ["string", "null"] },
                   nationality: { type: ["string", "null"] },
                   date_of_birth: { type: ["string", "null"] },
+                  passport_number: { type: ["string", "null"] },
                   institution: { type: ["string", "null"] },
+                  degree_name: { type: ["string", "null"] },
                   graduation_year: { type: ["number", "null"] },
                   gpa: { type: ["number", "null"] },
                   field_of_study: { type: ["string", "null"] },
                   test_type: { type: ["string", "null"] },
                   test_score: { type: ["number", "null"] },
-                  test_date: { type: ["string", "null"] }
+                  listening: { type: ["number", "null"] },
+                  reading: { type: ["number", "null"] },
+                  writing: { type: ["number", "null"] },
+                  speaking: { type: ["number", "null"] },
+                  test_date: { type: ["string", "null"] },
+                  other_info: { type: ["string", "null"] }
                 }
-              }
+              },
+              ocr_confidence: { type: "string" },
+              extraction_summary: { type: "string" }
             }
           }
         });
@@ -129,7 +139,9 @@ Return JSON with all extracted information.`,
           new_name: aiResult.suggested_name,
           type: aiResult.document_type,
           status: 'success',
-          auto_filled: aiResult.extracted_data ? Object.keys(aiResult.extracted_data).length : 0
+          auto_filled: aiResult.extracted_data ? Object.keys(aiResult.extracted_data).filter(k => aiResult.extracted_data[k]).length : 0,
+          extraction_summary: aiResult.extraction_summary || '',
+          confidence: aiResult.ocr_confidence || 'N/A'
         });
 
         setProgress(((i + 1) / files.length) * 100);
@@ -173,7 +185,7 @@ Return JSON with all extracted information.`,
           AI Document Processor
         </CardTitle>
         <CardDescription>
-          Upload multiple documents and AI will automatically categorize and rename them
+          Upload multiple documents - AI uses OCR to extract text, categorize, and auto-fill student profiles
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -235,6 +247,11 @@ Return JSON with all extracted information.`,
                     {doc.auto_filled > 0 && (
                       <p className="text-xs text-green-600 mt-1">
                         ✓ Auto-filled {doc.auto_filled} profile field(s)
+                      </p>
+                    )}
+                    {doc.extraction_summary && (
+                      <p className="text-xs text-blue-600 mt-1">
+                        📄 {doc.extraction_summary}
                       </p>
                     )}
                   </div>
