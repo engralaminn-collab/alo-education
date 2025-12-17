@@ -64,6 +64,7 @@ import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import PartnerPortal from './pages/PartnerPortal';
 import CRMLeadNurturingWorkflows from './pages/CRMLeadNurturingWorkflows';
 import CRMReportsAnalytics from './pages/CRMReportsAnalytics';
+import CRMEmailCampaigns from './pages/CRMEmailCampaigns';
 import __Layout from './Layout.jsx';
 
 
@@ -134,6 +135,7 @@ export const PAGES = {
     "PartnerPortal": PartnerPortal,
     "CRMLeadNurturingWorkflows": CRMLeadNurturingWorkflows,
     "CRMReportsAnalytics": CRMReportsAnalytics,
+    "CRMEmailCampaigns": CRMEmailCampaigns,
 }
 
 export const pagesConfig = {

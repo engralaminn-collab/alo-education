@@ -15,6 +15,7 @@ import PartnerApplications from '@/components/partner/PartnerApplications';
 import PartnerCommission from '@/components/partner/PartnerCommission';
 import PartnerSubmitLead from '@/components/partner/PartnerSubmitLead';
 import PartnerDownloads from '@/components/partner/PartnerDownloads';
+import UniversityIntegration from '@/components/partner/UniversityIntegration';
 
 export default function PartnerPortal() {
   const { data: user } = useQuery({
@@ -173,6 +174,7 @@ export default function PartnerPortal() {
           <TabsList>
             <TabsTrigger value="submit">Submit New Student</TabsTrigger>
             <TabsTrigger value="students">Submitted Students</TabsTrigger>
+            <TabsTrigger value="integration">University Integration</TabsTrigger>
             <TabsTrigger value="commission">Commission Summary</TabsTrigger>
             <TabsTrigger value="downloads">Downloads</TabsTrigger>
           </TabsList>
@@ -183,6 +185,10 @@ export default function PartnerPortal() {
 
           <TabsContent value="students">
             <PartnerApplications applications={applications} students={students} />
+          </TabsContent>
+
+          <TabsContent value="integration">
+            <UniversityIntegration />
           </TabsContent>
 
           <TabsContent value="commission">
