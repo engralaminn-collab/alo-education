@@ -140,6 +140,16 @@ export default function CourseDetailsPage() {
               </TabsList>
 
               <TabsContent value="overview">
+                {studentProfile && (
+                  <div className="mb-6">
+                    <AIApplicationAssistant 
+                      studentProfile={studentProfile}
+                      universityId={course.university_id}
+                      courseId={courseId}
+                    />
+                  </div>
+                )}
+
                 <Card className="alo-card">
                   <CardHeader>
                     <CardTitle className="alo-card-title flex items-center gap-2">
