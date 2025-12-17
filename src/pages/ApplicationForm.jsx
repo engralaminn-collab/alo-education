@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { 
   CheckCircle, ArrowRight, ArrowLeft, Upload, FileText,
-  User, GraduationCap, BookOpen, File
+  User, GraduationCap, BookOpen, File, X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
@@ -18,8 +18,11 @@ import Footer from '@/components/landing/Footer';
 const steps = [
   { id: 1, title: 'Personal Information', icon: User },
   { id: 2, title: 'Academic History', icon: GraduationCap },
-  { id: 3, title: 'Course Selection', icon: BookOpen },
-  { id: 4, title: 'Documents', icon: File },
+  { id: 3, title: 'Test Scores', icon: FileText },
+  { id: 4, title: 'Work Experience', icon: File },
+  { id: 5, title: 'Background', icon: File },
+  { id: 6, title: 'Course Selection', icon: BookOpen },
+  { id: 7, title: 'Documents', icon: File },
 ];
 
 export default function ApplicationForm() {
@@ -33,22 +36,104 @@ export default function ApplicationForm() {
     last_name: '',
     email: '',
     phone: '',
+    alternative_phone: '',
     date_of_birth: '',
+    city_of_birth: '',
+    country_of_birth: '',
     nationality: '',
-    address: '',
-    city: '',
-    country: '',
-    // Academic
-    highest_degree: '',
-    field_of_study: '',
-    institution: '',
-    graduation_year: '',
-    gpa: '',
-    gpa_scale: '',
-    // English
-    test_type: '',
-    score: '',
-    test_date: '',
+    dual_citizenship: false,
+    second_nationality: '',
+    // Mailing Address
+    mailing_address: '',
+    mailing_city: '',
+    mailing_state: '',
+    mailing_country: '',
+    mailing_zip: '',
+    // Permanent Address
+    permanent_same_as_mailing: true,
+    permanent_address: '',
+    permanent_city: '',
+    permanent_state: '',
+    permanent_country: '',
+    permanent_zip: '',
+    // Emergency Contact
+    emergency_name: '',
+    emergency_relation: '',
+    emergency_phone: '',
+    emergency_email: '',
+    // Passport
+    has_passport: false,
+    passport_number: '',
+    passport_issue_date: '',
+    passport_expiry_date: '',
+    passport_issue_country: '',
+    passport_issue_city: '',
+    // Academic - Grade 10
+    grade_10_institution: '',
+    grade_10_board: '',
+    grade_10_result: '',
+    grade_10_year: '',
+    // Academic - Grade 12
+    grade_12_institution: '',
+    grade_12_board: '',
+    grade_12_stream: '',
+    grade_12_result: '',
+    grade_12_year: '',
+    // Academic - Bachelor
+    bachelor_degree: '',
+    bachelor_field: '',
+    bachelor_institution: '',
+    bachelor_year: '',
+    bachelor_gpa: '',
+    bachelor_scale: '',
+    // Academic - Master (optional)
+    has_masters: false,
+    master_degree: '',
+    master_field: '',
+    master_institution: '',
+    master_year: '',
+    master_gpa: '',
+    master_scale: '',
+    // English Tests
+    has_ielts: false,
+    ielts_overall: '',
+    ielts_listening: '',
+    ielts_reading: '',
+    ielts_writing: '',
+    ielts_speaking: '',
+    ielts_date: '',
+    has_toefl: false,
+    toefl_total: '',
+    toefl_reading: '',
+    toefl_listening: '',
+    toefl_speaking: '',
+    toefl_writing: '',
+    toefl_date: '',
+    has_pte: false,
+    pte_overall: '',
+    pte_date: '',
+    has_duolingo: false,
+    duolingo_score: '',
+    duolingo_date: '',
+    has_gre: false,
+    gre_verbal: '',
+    gre_quant: '',
+    gre_writing: '',
+    gre_date: '',
+    has_gmat: false,
+    gmat_total: '',
+    gmat_date: '',
+    has_moi: false,
+    moi_details: '',
+    // Work Experience
+    work_experiences: [],
+    // Background
+    visa_refusal: false,
+    visa_refusal_details: '',
+    medical_condition: '',
+    criminal_record: false,
+    criminal_details: '',
+    immigration_history: '',
     // Course preferences
     preferred_degree_level: '',
     preferred_fields: [],
@@ -64,6 +149,40 @@ export default function ApplicationForm() {
     queryKey: ['current-user'],
     queryFn: () => base44.auth.me(),
   });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: () => base44.entities.StudentProfile.filter({ email: user?.email }).then(res => res[0]),
+    enabled: !!user?.email,
+  });
+
+  // Autofill from profile
+  React.useEffect(() => {
+    if (studentProfile) {
+      setFormData(prev => ({
+        ...prev,
+        first_name: studentProfile.first_name || prev.first_name,
+        last_name: studentProfile.last_name || prev.last_name,
+        email: studentProfile.email || prev.email,
+        phone: studentProfile.phone || prev.phone,
+        date_of_birth: studentProfile.date_of_birth || prev.date_of_birth,
+        nationality: studentProfile.nationality || prev.nationality,
+        city_of_birth: studentProfile.city_of_birth || prev.city_of_birth,
+        country_of_birth: studentProfile.country_of_birth || prev.country_of_birth,
+        mailing_address: studentProfile.present_address?.address || prev.mailing_address,
+        mailing_city: studentProfile.present_address?.city || prev.mailing_city,
+        mailing_state: studentProfile.present_address?.state_district || prev.mailing_state,
+        mailing_country: studentProfile.present_address?.country || prev.mailing_country,
+        mailing_zip: studentProfile.present_address?.zip_code || prev.mailing_zip,
+        permanent_address: studentProfile.permanent_address?.address || prev.permanent_address,
+        permanent_city: studentProfile.permanent_address?.city || prev.permanent_city,
+        permanent_state: studentProfile.permanent_address?.state_district || prev.permanent_state,
+        permanent_country: studentProfile.permanent_address?.country || prev.permanent_country,
+        permanent_zip: studentProfile.permanent_address?.zip_code || prev.permanent_zip,
+        permanent_same_as_mailing: studentProfile.permanent_address?.same_as_present || prev.permanent_same_as_mailing,
+      }));
+    }
+  }, [studentProfile]);
 
   const { data: courses = [] } = useQuery({
     queryKey: ['courses-for-application'],
@@ -225,20 +344,48 @@ export default function ApplicationForm() {
     });
   };
 
+  const addWorkExperience = () => {
+    setFormData(prev => ({
+      ...prev,
+      work_experiences: [...prev.work_experiences, {
+        company: '',
+        designation: '',
+        start_date: '',
+        end_date: '',
+        currently_working: false,
+      }]
+    }));
+  };
+
+  const updateWorkExperience = (index, field, value) => {
+    setFormData(prev => {
+      const updated = [...prev.work_experiences];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, work_experiences: updated };
+    });
+  };
+
+  const removeWorkExperience = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      work_experiences: prev.work_experiences.filter((_, i) => i !== index)
+    }));
+  };
+
   const validateStep = () => {
     if (currentStep === 1) {
-      if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone) {
+      if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone || !formData.emergency_name || !formData.emergency_phone) {
         toast.error('Please fill in all required fields');
         return false;
       }
     }
     if (currentStep === 2) {
-      if (!formData.highest_degree || !formData.institution) {
+      if (!formData.grade_10_institution || !formData.grade_12_institution || !formData.bachelor_degree) {
         toast.error('Please fill in your academic information');
         return false;
       }
     }
-    if (currentStep === 3) {
+    if (currentStep === 6) {
       if (!formData.preferred_degree_level || formData.preferred_countries.length === 0) {
         toast.error('Please select your course preferences');
         return false;
@@ -384,6 +531,13 @@ export default function ApplicationForm() {
                   {/* Step 1: Personal Information */}
                   {currentStep === 1 && (
                     <>
+                      {studentProfile && (
+                        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6">
+                          <p className="text-sm text-emerald-800 font-medium">
+                            ✓ Form auto-filled from your profile
+                          </p>
+                        </div>
+                      )}
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <Label>First Name *</Label>
@@ -423,7 +577,15 @@ export default function ApplicationForm() {
                       </div>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                          <Label>Date of Birth</Label>
+                          <Label>Alternative Phone</Label>
+                          <Input
+                            value={formData.alternative_phone}
+                            onChange={(e) => updateField('alternative_phone', e.target.value)}
+                            className="mt-2"
+                          />
+                        </div>
+                        <div>
+                          <Label>Date of Birth *</Label>
                           <Input
                             type="date"
                             value={formData.date_of_birth}
@@ -431,40 +593,271 @@ export default function ApplicationForm() {
                             className="mt-2"
                           />
                         </div>
-                        <div>
-                          <Label>Nationality</Label>
-                          <Input
-                            value={formData.nationality}
-                            onChange={(e) => updateField('nationality', e.target.value)}
-                            className="mt-2"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Address</Label>
-                        <Input
-                          value={formData.address}
-                          onChange={(e) => updateField('address', e.target.value)}
-                          className="mt-2"
-                        />
                       </div>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                          <Label>City</Label>
+                          <Label>City of Birth</Label>
                           <Input
-                            value={formData.city}
-                            onChange={(e) => updateField('city', e.target.value)}
+                            value={formData.city_of_birth}
+                            onChange={(e) => updateField('city_of_birth', e.target.value)}
                             className="mt-2"
                           />
                         </div>
                         <div>
-                          <Label>Country</Label>
+                          <Label>Country of Birth</Label>
                           <Input
-                            value={formData.country}
-                            onChange={(e) => updateField('country', e.target.value)}
+                            value={formData.country_of_birth}
+                            onChange={(e) => updateField('country_of_birth', e.target.value)}
                             className="mt-2"
                           />
                         </div>
+                      </div>
+                      
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Nationality</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Nationality *</Label>
+                            <Input
+                              value={formData.nationality}
+                              onChange={(e) => updateField('nationality', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={formData.dual_citizenship}
+                                onChange={(e) => updateField('dual_citizenship', e.target.checked)}
+                                className="w-4 h-4"
+                              />
+                              Dual Citizenship
+                            </Label>
+                            {formData.dual_citizenship && (
+                              <Input
+                                value={formData.second_nationality}
+                                onChange={(e) => updateField('second_nationality', e.target.value)}
+                                placeholder="Second nationality"
+                                className="mt-2"
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Mailing Address</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <Label>Address Line *</Label>
+                            <Input
+                              value={formData.mailing_address}
+                              onChange={(e) => updateField('mailing_address', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div className="grid md:grid-cols-3 gap-4">
+                            <div>
+                              <Label>City *</Label>
+                              <Input
+                                value={formData.mailing_city}
+                                onChange={(e) => updateField('mailing_city', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>State/District</Label>
+                              <Input
+                                value={formData.mailing_state}
+                                onChange={(e) => updateField('mailing_state', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>ZIP Code</Label>
+                              <Input
+                                value={formData.mailing_zip}
+                                onChange={(e) => updateField('mailing_zip', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label>Country *</Label>
+                            <Input
+                              value={formData.mailing_country}
+                              onChange={(e) => updateField('mailing_country', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-semibold">Permanent Address</h3>
+                          <Label className="flex items-center gap-2 cursor-pointer text-sm">
+                            <input
+                              type="checkbox"
+                              checked={formData.permanent_same_as_mailing}
+                              onChange={(e) => updateField('permanent_same_as_mailing', e.target.checked)}
+                              className="w-4 h-4"
+                            />
+                            Same as Mailing Address
+                          </Label>
+                        </div>
+                        {!formData.permanent_same_as_mailing && (
+                          <div className="space-y-4">
+                            <div>
+                              <Label>Address Line</Label>
+                              <Input
+                                value={formData.permanent_address}
+                                onChange={(e) => updateField('permanent_address', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-4">
+                              <div>
+                                <Label>City</Label>
+                                <Input
+                                  value={formData.permanent_city}
+                                  onChange={(e) => updateField('permanent_city', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                              <div>
+                                <Label>State/District</Label>
+                                <Input
+                                  value={formData.permanent_state}
+                                  onChange={(e) => updateField('permanent_state', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                              <div>
+                                <Label>ZIP Code</Label>
+                                <Input
+                                  value={formData.permanent_zip}
+                                  onChange={(e) => updateField('permanent_zip', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label>Country</Label>
+                              <Input
+                                value={formData.permanent_country}
+                                onChange={(e) => updateField('permanent_country', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Emergency Contact</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Name *</Label>
+                            <Input
+                              value={formData.emergency_name}
+                              onChange={(e) => updateField('emergency_name', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Relation *</Label>
+                            <Input
+                              value={formData.emergency_relation}
+                              onChange={(e) => updateField('emergency_relation', e.target.value)}
+                              placeholder="e.g., Father, Mother, Spouse"
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Phone *</Label>
+                            <Input
+                              value={formData.emergency_phone}
+                              onChange={(e) => updateField('emergency_phone', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Email</Label>
+                            <Input
+                              type="email"
+                              value={formData.emergency_email}
+                              onChange={(e) => updateField('emergency_email', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Passport Information</h3>
+                        <div className="mb-4">
+                          <Label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={formData.has_passport}
+                              onChange={(e) => updateField('has_passport', e.target.checked)}
+                              className="w-4 h-4"
+                            />
+                            I have a passport
+                          </Label>
+                        </div>
+                        {formData.has_passport && (
+                          <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div>
+                                <Label>Passport Number *</Label>
+                                <Input
+                                  value={formData.passport_number}
+                                  onChange={(e) => updateField('passport_number', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                              <div>
+                                <Label>Issue Country *</Label>
+                                <Input
+                                  value={formData.passport_issue_country}
+                                  onChange={(e) => updateField('passport_issue_country', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4">
+                              <div>
+                                <Label>Issue City</Label>
+                                <Input
+                                  value={formData.passport_issue_city}
+                                  onChange={(e) => updateField('passport_issue_city', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                              <div>
+                                <Label>Issue Date *</Label>
+                                <Input
+                                  type="date"
+                                  value={formData.passport_issue_date}
+                                  onChange={(e) => updateField('passport_issue_date', e.target.value)}
+                                  className="mt-2"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <Label>Expiry Date *</Label>
+                              <Input
+                                type="date"
+                                value={formData.passport_expiry_date}
+                                onChange={(e) => updateField('passport_expiry_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </>
                   )}
@@ -472,118 +865,743 @@ export default function ApplicationForm() {
                   {/* Step 2: Academic History */}
                   {currentStep === 2 && (
                     <>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <Label>Highest Degree *</Label>
-                          <Select value={formData.highest_degree} onValueChange={(v) => updateField('highest_degree', v)}>
-                            <SelectTrigger className="mt-2">
-                              <SelectValue placeholder="Select degree" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="high_school">High School</SelectItem>
-                              <SelectItem value="bachelor">Bachelor's</SelectItem>
-                              <SelectItem value="master">Master's</SelectItem>
-                              <SelectItem value="phd">PhD</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Field of Study</Label>
-                          <Input
-                            value={formData.field_of_study}
-                            onChange={(e) => updateField('field_of_study', e.target.value)}
-                            className="mt-2"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <Label>Institution *</Label>
-                          <Input
-                            value={formData.institution}
-                            onChange={(e) => updateField('institution', e.target.value)}
-                            className="mt-2"
-                          />
-                        </div>
-                        <div>
-                          <Label>Graduation Year</Label>
-                          <Input
-                            type="number"
-                            value={formData.graduation_year}
-                            onChange={(e) => updateField('graduation_year', e.target.value)}
-                            className="mt-2"
-                            placeholder="2020"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <Label>GPA</Label>
-                          <Input
-                            type="number"
-                            step="0.01"
-                            value={formData.gpa}
-                            onChange={(e) => updateField('gpa', e.target.value)}
-                            className="mt-2"
-                            placeholder="3.5"
-                          />
-                        </div>
-                        <div>
-                          <Label>GPA Scale</Label>
-                          <Input
-                            type="number"
-                            step="0.1"
-                            value={formData.gpa_scale}
-                            onChange={(e) => updateField('gpa_scale', e.target.value)}
-                            className="mt-2"
-                            placeholder="4.0"
-                          />
-                        </div>
-                      </div>
-                      <div className="pt-6 border-t">
-                        <h3 className="font-semibold mb-4">English Proficiency</h3>
-                        <div className="grid md:grid-cols-3 gap-6">
+                      <div className="pt-0 mb-6">
+                        <h3 className="font-semibold mb-4">Grade 10th / SSC</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
                           <div>
-                            <Label>Test Type</Label>
-                            <Select value={formData.test_type} onValueChange={(v) => updateField('test_type', v)}>
+                            <Label>Institution Name *</Label>
+                            <Input
+                              value={formData.grade_10_institution}
+                              onChange={(e) => updateField('grade_10_institution', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Board/Examination Body *</Label>
+                            <Input
+                              value={formData.grade_10_board}
+                              onChange={(e) => updateField('grade_10_board', e.target.value)}
+                              placeholder="e.g., CBSE, ICSE, State Board"
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Result (GPA/Percentage) *</Label>
+                            <Input
+                              value={formData.grade_10_result}
+                              onChange={(e) => updateField('grade_10_result', e.target.value)}
+                              placeholder="e.g., 85% or 3.8 GPA"
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Year of Completion *</Label>
+                            <Input
+                              type="number"
+                              value={formData.grade_10_year}
+                              onChange={(e) => updateField('grade_10_year', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Grade 12th / HSC</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Institution Name *</Label>
+                            <Input
+                              value={formData.grade_12_institution}
+                              onChange={(e) => updateField('grade_12_institution', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Board/Examination Body *</Label>
+                            <Input
+                              value={formData.grade_12_board}
+                              onChange={(e) => updateField('grade_12_board', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Stream *</Label>
+                            <Select value={formData.grade_12_stream} onValueChange={(v) => updateField('grade_12_stream', v)}>
                               <SelectTrigger className="mt-2">
-                                <SelectValue placeholder="Select test" />
+                                <SelectValue placeholder="Select stream" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="ielts">IELTS</SelectItem>
-                                <SelectItem value="toefl">TOEFL</SelectItem>
-                                <SelectItem value="pte">PTE</SelectItem>
-                                <SelectItem value="duolingo">Duolingo</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
+                                <SelectItem value="science">Science</SelectItem>
+                                <SelectItem value="commerce">Commerce</SelectItem>
+                                <SelectItem value="arts">Arts/Humanities</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
                           <div>
-                            <Label>Score</Label>
+                            <Label>Result (GPA/Percentage) *</Label>
                             <Input
-                              type="number"
-                              step="0.5"
-                              value={formData.score}
-                              onChange={(e) => updateField('score', e.target.value)}
+                              value={formData.grade_12_result}
+                              onChange={(e) => updateField('grade_12_result', e.target.value)}
                               className="mt-2"
                             />
                           </div>
                           <div>
-                            <Label>Test Date</Label>
+                            <Label>Year of Completion *</Label>
                             <Input
-                              type="date"
-                              value={formData.test_date}
-                              onChange={(e) => updateField('test_date', e.target.value)}
+                              type="number"
+                              value={formData.grade_12_year}
+                              onChange={(e) => updateField('grade_12_year', e.target.value)}
                               className="mt-2"
                             />
                           </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Bachelor's Degree</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <Label>Degree Name *</Label>
+                            <Input
+                              value={formData.bachelor_degree}
+                              onChange={(e) => updateField('bachelor_degree', e.target.value)}
+                              placeholder="e.g., B.Tech, B.Com, B.A."
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Field of Study *</Label>
+                            <Input
+                              value={formData.bachelor_field}
+                              onChange={(e) => updateField('bachelor_field', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Institution Name *</Label>
+                            <Input
+                              value={formData.bachelor_institution}
+                              onChange={(e) => updateField('bachelor_institution', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>Graduation Year</Label>
+                            <Input
+                              type="number"
+                              value={formData.bachelor_year}
+                              onChange={(e) => updateField('bachelor_year', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>GPA/CGPA</Label>
+                            <Input
+                              type="number"
+                              step="0.01"
+                              value={formData.bachelor_gpa}
+                              onChange={(e) => updateField('bachelor_gpa', e.target.value)}
+                              className="mt-2"
+                            />
+                          </div>
+                          <div>
+                            <Label>GPA Scale</Label>
+                            <Input
+                              type="number"
+                              step="0.1"
+                              value={formData.bachelor_scale}
+                              onChange={(e) => updateField('bachelor_scale', e.target.value)}
+                              placeholder="e.g., 4.0 or 10.0"
+                              className="mt-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-semibold">Master's Degree (Optional)</h3>
+                          <Label className="flex items-center gap-2 cursor-pointer text-sm">
+                            <input
+                              type="checkbox"
+                              checked={formData.has_masters}
+                              onChange={(e) => updateField('has_masters', e.target.checked)}
+                              className="w-4 h-4"
+                            />
+                            I have a Master's degree
+                          </Label>
+                        </div>
+                        {formData.has_masters && (
+                          <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                              <Label>Degree Name</Label>
+                              <Input
+                                value={formData.master_degree}
+                                onChange={(e) => updateField('master_degree', e.target.value)}
+                                placeholder="e.g., M.Tech, MBA, M.A."
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Field of Study</Label>
+                              <Input
+                                value={formData.master_field}
+                                onChange={(e) => updateField('master_field', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Institution Name</Label>
+                              <Input
+                                value={formData.master_institution}
+                                onChange={(e) => updateField('master_institution', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Graduation Year</Label>
+                              <Input
+                                type="number"
+                                value={formData.master_year}
+                                onChange={(e) => updateField('master_year', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>GPA/CGPA</Label>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={formData.master_gpa}
+                                onChange={(e) => updateField('master_gpa', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>GPA Scale</Label>
+                              <Input
+                                type="number"
+                                step="0.1"
+                                value={formData.master_scale}
+                                onChange={(e) => updateField('master_scale', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 3: Test Scores */}
+                  {currentStep === 3 && (
+                    <>
+                      <p className="text-slate-600 mb-6">
+                        Provide your standardized test scores (if available)
+                      </p>
+
+                      {/* IELTS */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_ielts}
+                            onChange={(e) => updateField('has_ielts', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">IELTS</span>
+                        </Label>
+                        {formData.has_ielts && (
+                          <div className="grid md:grid-cols-3 gap-4">
+                            <div>
+                              <Label>Overall Score</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.ielts_overall}
+                                onChange={(e) => updateField('ielts_overall', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Listening</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.ielts_listening}
+                                onChange={(e) => updateField('ielts_listening', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Reading</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.ielts_reading}
+                                onChange={(e) => updateField('ielts_reading', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Writing</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.ielts_writing}
+                                onChange={(e) => updateField('ielts_writing', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Speaking</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.ielts_speaking}
+                                onChange={(e) => updateField('ielts_speaking', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.ielts_date}
+                                onChange={(e) => updateField('ielts_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* TOEFL */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_toefl}
+                            onChange={(e) => updateField('has_toefl', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">TOEFL</span>
+                        </Label>
+                        {formData.has_toefl && (
+                          <div className="grid md:grid-cols-3 gap-4">
+                            <div>
+                              <Label>Total Score</Label>
+                              <Input
+                                type="number"
+                                value={formData.toefl_total}
+                                onChange={(e) => updateField('toefl_total', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Reading</Label>
+                              <Input
+                                type="number"
+                                value={formData.toefl_reading}
+                                onChange={(e) => updateField('toefl_reading', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Listening</Label>
+                              <Input
+                                type="number"
+                                value={formData.toefl_listening}
+                                onChange={(e) => updateField('toefl_listening', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Speaking</Label>
+                              <Input
+                                type="number"
+                                value={formData.toefl_speaking}
+                                onChange={(e) => updateField('toefl_speaking', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Writing</Label>
+                              <Input
+                                type="number"
+                                value={formData.toefl_writing}
+                                onChange={(e) => updateField('toefl_writing', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.toefl_date}
+                                onChange={(e) => updateField('toefl_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* PTE */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_pte}
+                            onChange={(e) => updateField('has_pte', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">PTE</span>
+                        </Label>
+                        {formData.has_pte && (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Overall Score</Label>
+                              <Input
+                                type="number"
+                                value={formData.pte_overall}
+                                onChange={(e) => updateField('pte_overall', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.pte_date}
+                                onChange={(e) => updateField('pte_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Duolingo */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_duolingo}
+                            onChange={(e) => updateField('has_duolingo', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">Duolingo English Test</span>
+                        </Label>
+                        {formData.has_duolingo && (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Score</Label>
+                              <Input
+                                type="number"
+                                value={formData.duolingo_score}
+                                onChange={(e) => updateField('duolingo_score', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.duolingo_date}
+                                onChange={(e) => updateField('duolingo_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* GRE */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_gre}
+                            onChange={(e) => updateField('has_gre', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">GRE</span>
+                        </Label>
+                        {formData.has_gre && (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Verbal</Label>
+                              <Input
+                                type="number"
+                                value={formData.gre_verbal}
+                                onChange={(e) => updateField('gre_verbal', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Quantitative</Label>
+                              <Input
+                                type="number"
+                                value={formData.gre_quant}
+                                onChange={(e) => updateField('gre_quant', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Analytical Writing</Label>
+                              <Input
+                                type="number"
+                                step="0.5"
+                                value={formData.gre_writing}
+                                onChange={(e) => updateField('gre_writing', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.gre_date}
+                                onChange={(e) => updateField('gre_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* GMAT */}
+                      <div className="border rounded-lg p-6 mb-4">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_gmat}
+                            onChange={(e) => updateField('has_gmat', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">GMAT</span>
+                        </Label>
+                        {formData.has_gmat && (
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Total Score</Label>
+                              <Input
+                                type="number"
+                                value={formData.gmat_total}
+                                onChange={(e) => updateField('gmat_total', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Test Date</Label>
+                              <Input
+                                type="date"
+                                value={formData.gmat_date}
+                                onChange={(e) => updateField('gmat_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* MOI */}
+                      <div className="border rounded-lg p-6">
+                        <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                          <input
+                            type="checkbox"
+                            checked={formData.has_moi}
+                            onChange={(e) => updateField('has_moi', e.target.checked)}
+                            className="w-4 h-4"
+                          />
+                          <span className="font-semibold">Medium of Instruction (MOI)</span>
+                        </Label>
+                        {formData.has_moi && (
+                          <div>
+                            <Label>MOI Details</Label>
+                            <Textarea
+                              value={formData.moi_details}
+                              onChange={(e) => updateField('moi_details', e.target.value)}
+                              placeholder="Describe your medium of instruction waiver eligibility"
+                              className="mt-2"
+                              rows={3}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {/* Step 4: Work Experience */}
+                  {currentStep === 4 && (
+                    <>
+                      <p className="text-slate-600 mb-6">
+                        Add your work experience (optional but recommended for Master's programs)
+                      </p>
+                      {formData.work_experiences.map((exp, idx) => (
+                        <div key={idx} className="border rounded-lg p-6 mb-4">
+                          <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-semibold">Experience {idx + 1}</h4>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeWorkExperience(idx)}
+                              className="text-red-600"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Company Name</Label>
+                              <Input
+                                value={exp.company}
+                                onChange={(e) => updateWorkExperience(idx, 'company', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Designation/Title</Label>
+                              <Input
+                                value={exp.designation}
+                                onChange={(e) => updateWorkExperience(idx, 'designation', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>Start Date</Label>
+                              <Input
+                                type="date"
+                                value={exp.start_date}
+                                onChange={(e) => updateWorkExperience(idx, 'start_date', e.target.value)}
+                                className="mt-2"
+                              />
+                            </div>
+                            <div>
+                              <Label>End Date</Label>
+                              <Input
+                                type="date"
+                                value={exp.end_date}
+                                onChange={(e) => updateWorkExperience(idx, 'end_date', e.target.value)}
+                                disabled={exp.currently_working}
+                                className="mt-2"
+                              />
+                              <Label className="flex items-center gap-2 mt-2 cursor-pointer text-sm">
+                                <input
+                                  type="checkbox"
+                                  checked={exp.currently_working}
+                                  onChange={(e) => updateWorkExperience(idx, 'currently_working', e.target.checked)}
+                                  className="w-4 h-4"
+                                />
+                                Currently working here
+                              </Label>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={addWorkExperience}
+                        className="w-full"
+                      >
+                        + Add Work Experience
+                      </Button>
+                    </>
+                  )}
+
+                  {/* Step 5: Background Information */}
+                  {currentStep === 5 && (
+                    <>
+                      <p className="text-slate-600 mb-6">
+                        Please provide background information for visa and admission purposes
+                      </p>
+                      
+                      <div className="space-y-6">
+                        <div className="border rounded-lg p-6">
+                          <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                            <input
+                              type="checkbox"
+                              checked={formData.visa_refusal}
+                              onChange={(e) => updateField('visa_refusal', e.target.checked)}
+                              className="w-4 h-4"
+                            />
+                            <span className="font-semibold">Have you ever been refused a visa?</span>
+                          </Label>
+                          {formData.visa_refusal && (
+                            <div>
+                              <Label>Please provide details *</Label>
+                              <Textarea
+                                value={formData.visa_refusal_details}
+                                onChange={(e) => updateField('visa_refusal_details', e.target.value)}
+                                placeholder="Include country, date, and reason for refusal"
+                                className="mt-2"
+                                rows={3}
+                              />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="border rounded-lg p-6">
+                          <Label className="mb-2 block font-semibold">Immigration History</Label>
+                          <p className="text-sm text-slate-600 mb-3">
+                            List countries you have visited in the last 10 years
+                          </p>
+                          <Textarea
+                            value={formData.immigration_history}
+                            onChange={(e) => updateField('immigration_history', e.target.value)}
+                            placeholder="e.g., USA (2020, 2022), UK (2021)"
+                            className="mt-2"
+                            rows={3}
+                          />
+                        </div>
+
+                        <div className="border rounded-lg p-6">
+                          <Label className="mb-2 block font-semibold">Medical Conditions</Label>
+                          <p className="text-sm text-slate-600 mb-3">
+                            Any serious medical conditions we should be aware of?
+                          </p>
+                          <Textarea
+                            value={formData.medical_condition}
+                            onChange={(e) => updateField('medical_condition', e.target.value)}
+                            placeholder="Leave blank if none"
+                            className="mt-2"
+                            rows={2}
+                          />
+                        </div>
+
+                        <div className="border rounded-lg p-6">
+                          <Label className="flex items-center gap-2 cursor-pointer mb-4">
+                            <input
+                              type="checkbox"
+                              checked={formData.criminal_record}
+                              onChange={(e) => updateField('criminal_record', e.target.checked)}
+                              className="w-4 h-4"
+                            />
+                            <span className="font-semibold">Have you ever been convicted of a criminal offense?</span>
+                          </Label>
+                          {formData.criminal_record && (
+                            <div>
+                              <Label>Please provide details *</Label>
+                              <Textarea
+                                value={formData.criminal_details}
+                                onChange={(e) => updateField('criminal_details', e.target.value)}
+                                placeholder="Include nature of offense, date, and outcome"
+                                className="mt-2"
+                                rows={3}
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>
                   )}
 
-                  {/* Step 3: Course Selection */}
-                  {currentStep === 3 && (
+                  {/* Step 6: Course Selection */}
+                  {currentStep === 6 && (
                     <>
                       <div>
                         <Label>Preferred Degree Level *</Label>
@@ -678,8 +1696,8 @@ export default function ApplicationForm() {
                     </>
                   )}
 
-                  {/* Step 4: Documents */}
-                  {currentStep === 4 && (
+                  {/* Step 7: Documents */}
+                  {currentStep === 7 && (
                     <>
                       <p className="text-slate-600">
                         Upload supporting documents (optional but recommended for faster processing)
