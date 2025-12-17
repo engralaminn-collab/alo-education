@@ -281,82 +281,11 @@ export default function MyDocuments() {
             </CardContent>
           </Card>
         ) : (
-          <AnimatePresence>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {documents.map((doc, index) => {
-                const status = statusConfig[doc.status] || statusConfig.pending;
-                const StatusIcon = status.icon;
-                const docType = documentTypes.find(dt => dt.value === doc.document_type);
-                
-                return (
-                  <motion.div
-                    key={doc.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Card className="border-0 shadow-sm hover:shadow-lg transition-all group">
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-                            <FileText className="w-6 h-6 text-slate-400" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-slate-900 truncate mb-1">
-                              {doc.name}
-                            </h3>
-                            <p className="text-slate-500 text-sm mb-2">
-                              {docType?.label || doc.document_type}
-                            </p>
-                            <Badge className={status.color}>
-                              <StatusIcon className="w-3 h-3 mr-1" />
-                              {status.label}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        {doc.reviewer_notes && (
-                          <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-slate-600">
-                            {doc.reviewer_notes}
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-2 mt-4 pt-4 border-t">
-                          <span className="text-xs text-slate-400">
-                            Uploaded {format(new Date(doc.created_date), 'MMM d, yyyy')}
-                          </span>
-                          <div className="flex-1" />
-                          <a href={doc.file_url} target="_blank" rel="noopener noreferrer">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </a>
-                          <a href={doc.file_url} download>
-                            <Button variant="ghost" size="sm">
-                              <Download className="w-4 h-4" />
-                            </Button>
-                          </a>
-                          {doc.status !== 'approved' && (
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => {
-                                if (confirm('Delete this document?')) {
-                                  deleteMutation.mutate(doc.id);
-                                }
-                              }}
-                            >
-                              <Trash2 className="w-4 h-4 text-red-500" />
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </AnimatePresence>
+          <div className="grid md:grid-cols-2 gap-6">
+            {documents.map((doc) => (
+              <DocumentCard key={doc.id} document={doc} isStudent={true} />
+            ))}
+          </div>
         )}
       </div>
 
