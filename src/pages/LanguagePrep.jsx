@@ -85,7 +85,7 @@ export default function LanguagePrep() {
       </CardHeader>
       <CardContent>
         <Button 
-          className="w-full text-white"
+          className="w-full text-white hover:opacity-90"
           style={{ backgroundColor: 'var(--alo-orange)' }}
           onClick={() => window.location.href = createPageUrl('Contact') + `?test=${test.id}`}
         >

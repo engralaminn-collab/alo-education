@@ -8,32 +8,38 @@ const countries = [
   {
     name: 'Canada',
     tagline: 'From counselling to admission to visa support — ALO Education is with you at every step.',
-    image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=2400&h=1800&fit=crop',
+    color: '#F37021'
   },
   {
     name: 'United Kingdom',
     tagline: 'Experience world-class education in historic universities — we guide you through every milestone.',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=2400&h=1800&fit=crop',
+    color: '#0066CC'
   },
   {
     name: 'Australia',
     tagline: 'Discover unlimited opportunities down under — ALO Education makes your journey seamless.',
-    image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=2400&h=1800&fit=crop',
+    color: '#FFB347'
   },
   {
     name: 'United States',
     tagline: 'Turn your American dream into reality — expert guidance from start to finish.',
-    image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=2400&h=1800&fit=crop',
+    color: '#dc2626'
   },
   {
     name: 'Ireland',
     tagline: 'Join the global hub of innovation and culture — ALO Education supports your ambitions.',
-    image: 'https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1590089415225-401ed6f9db8e?w=2400&h=1800&fit=crop',
+    color: '#10b981'
   },
   {
     name: 'New Zealand',
     tagline: 'Study in breathtaking landscapes with world-class education — we are here for you.',
-    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=2400&h=1800&fit=crop'
+    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=2400&h=1800&fit=crop',
+    color: '#8b5cf6'
   }
 ];
 
@@ -69,7 +75,7 @@ export default function HeroRotating() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  style={{ color: 'var(--alo-orange)' }}
+                  style={{ color: current.color }}
                   className="inline-block"
                 >
                   {current.name}
@@ -94,8 +100,8 @@ export default function HeroRotating() {
             <Link to={createPageUrl('Contact')}>
               <Button 
                 size="lg"
-                className="text-lg px-8 py-6 font-semibold hover:opacity-90 transition-all"
-                style={{ backgroundColor: 'var(--alo-orange)', color: '#000000' }}
+                className="text-lg px-8 py-6 font-semibold hover:opacity-90 transition-all text-white"
+                style={{ backgroundColor: 'var(--alo-orange)' }}
               >
                 Book Free Consultation
               </Button>
