@@ -62,7 +62,7 @@ export default function IELTSTest() {
                   <h3 className="font-bold text-lg mb-3" style={{ color: '#0066CC' }}>IELTS Academic</h3>
                   <p className="text-slate-700 mb-3">Designed for students applying to:</p>
                   <div className="space-y-2">
-                    {['Undergraduate programs', 'Postgraduate (Master's) programs', 'PhD and research degrees'].map(item => (
+                    {['Undergraduate programs', 'Postgraduate Masters programs', 'PhD and research degrees'].map(item => (
                       <div key={item} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" style={{ color: '#0066CC' }} />
                         <span className="text-slate-700">{item}</span>
@@ -88,7 +88,7 @@ export default function IELTSTest() {
                     Required for UK visa purposes under Secure English Language Test (SELT) rules. This is mandatory for:
                   </p>
                   <div className="space-y-2">
-                    {['UK Foundation & Pathway programs', 'Certain Student Visa routes', 'UK Pre-sessional English courses'].map(item => (
+                    {['UK Foundation and Pathway programs', 'Certain Student Visa routes', 'UK Pre-sessional English courses'].map(item => (
                       <div key={item} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" style={{ color: '#0066CC' }} />
                         <span className="text-slate-700">{item}</span>

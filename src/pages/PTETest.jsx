@@ -46,9 +46,9 @@ export default function PTETest() {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
                   {[
-                    'Fast results (usually within 2-5 days)',
+                    'Fast results usually within 2-5 days',
                     'No face-to-face speaking test',
-                    'Accepted by universities in UK, Australia, Canada, Europe',
+                    'Accepted by universities in UK Australia Canada Europe',
                     'Increasingly accepted for UK student visas',
                     'AI-based objective scoring',
                     'Flexible test dates and locations'

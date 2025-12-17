@@ -59,7 +59,7 @@ export default function OIETCTest() {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    'Students applying for UK Foundation, IY1, or Pre-Masters',
+                    'Students applying for UK Foundation IY1 or Pre-Masters',
                     'Students seeking an alternative to IELTS',
                     'Applicants with lower IELTS scores',
                     'Students looking for fast pathway admission'

@@ -48,7 +48,7 @@ export default function LanguageCertTest() {
                   <h3 className="font-bold text-lg mb-3" style={{ color: '#0066CC' }}>LanguageCert Academic</h3>
                   <p className="text-slate-700 mb-2">For students applying to:</p>
                   <div className="space-y-2">
-                    {['Undergraduate programs', 'Postgraduate programs', 'Foundation & Pre-Master's pathways'].map(item => (
+                    {['Undergraduate programs', 'Postgraduate programs', 'Foundation and Pre-Masters pathways'].map(item => (
                       <div key={item} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" style={{ color: '#0066CC' }} />
                         <span className="text-slate-700">{item}</span>
@@ -60,7 +60,7 @@ export default function LanguageCertTest() {
                   <h3 className="font-bold text-lg mb-3" style={{ color: '#0066CC' }}>LanguageCert SELT (UKVI Approved)</h3>
                   <p className="text-slate-700 mb-2">Approved by UK Home Office for:</p>
                   <div className="space-y-2">
-                    {['UK Student Visa', 'Skilled Worker Visa', 'Family & settlement routes'].map(item => (
+                    {['UK Student Visa', 'Skilled Worker Visa', 'Family and settlement routes'].map(item => (
                       <div key={item} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" style={{ color: '#0066CC' }} />
                         <span className="text-slate-700">{item}</span>

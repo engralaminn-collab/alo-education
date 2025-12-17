@@ -47,7 +47,7 @@ export default function KaplanTest() {
                 <div className="space-y-3">
                   {[
                     'Students applying to Kaplan partner universities',
-                    'Applicants to UK Foundation, IY1, or Pre-Master's programs',
+                    'Applicants to UK Foundation IY1 or Pre-Masters programs',
                     'Students seeking an alternative to IELTS',
                     'Students who want a simpler and faster English assessment'
                   ].map(item => (
