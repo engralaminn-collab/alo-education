@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AICourseRecommendations from '@/components/courses/AICourseRecommendations';
 
 export default function CourseFinder() {
   const [activeTab, setActiveTab] = useState('courses');
@@ -27,6 +28,16 @@ export default function CourseFinder() {
   const { data: user } = useQuery({
     queryKey: ['current-user'],
     queryFn: () => base44.auth.me().catch(() => null),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const profiles = await base44.entities.StudentProfile.filter({ email: user.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
   });
 
   const { data: courses = [], isLoading } = useQuery({
@@ -325,6 +336,17 @@ export default function CourseFinder() {
           </div>
         </div>
       </section>
+
+      {/* AI Recommendations */}
+      {studentProfile && activeTab === 'courses' && (
+        <section className="container mx-auto px-6 py-6">
+          <AICourseRecommendations 
+            studentProfile={studentProfile}
+            courses={courses}
+            universities={universities}
+          />
+        </section>
+      )}
 
       {/* Results */}
       <section className="container mx-auto px-6 py-10">
