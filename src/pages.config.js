@@ -38,7 +38,6 @@ import CRMAIAssistant from './pages/CRMAIAssistant';
 import CourseFinder from './pages/CourseFinder';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import ApplicationForm from './pages/ApplicationForm';
 import CRMBulkEmail from './pages/CRMBulkEmail';
 import MyFavorites from './pages/MyFavorites';
 import CRMTaskTemplates from './pages/CRMTaskTemplates';
@@ -104,7 +103,6 @@ export const PAGES = {
     "CourseFinder": CourseFinder,
     "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "ApplicationForm": ApplicationForm,
     "CRMBulkEmail": CRMBulkEmail,
     "MyFavorites": MyFavorites,
     "CRMTaskTemplates": CRMTaskTemplates,
