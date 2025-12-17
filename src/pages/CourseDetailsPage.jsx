@@ -16,8 +16,10 @@ import AIApplicationAssistant from '@/components/applications/AIApplicationAssis
 import SimilarCourses from '@/components/courses/SimilarCourses';
 import WhyThisCourse from '@/components/courses/WhyThisCourse';
 import FavoriteButton from '@/components/courses/FavoriteButton';
+import ApplyModal from '@/components/courses/ApplyModal';
 
 export default function CourseDetailsPage() {
+  const [showApplyModal, setShowApplyModal] = React.useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const courseId = urlParams.get('id');
 
@@ -319,15 +321,36 @@ export default function CourseDetailsPage() {
                 <CardContent className="p-6 text-center">
                   <h3 className="text-xl font-bold mb-3">Ready to Apply?</h3>
                   <p className="text-white/90 mb-4">
-                    Book a free consultation with our expert counselors
+                    Submit your application now or talk to our counselors
                   </p>
-                  <Link to={createPageUrl('Contact')}>
-                    <Button className="alo-btn-primary w-full">
-                      Book Counselling
+                  <div className="space-y-3">
+                    <Button 
+                      className="w-full font-bold"
+                      style={{ backgroundColor: '#F37021', color: '#000000' }}
+                      onClick={() => setShowApplyModal(true)}
+                    >
+                      Apply Now
                     </Button>
-                  </Link>
+                    <Button 
+                      className="w-full"
+                      style={{ backgroundColor: '#25D366', color: 'white' }}
+                      onClick={() => {
+                        const message = `Hi ALO Education, I'm interested in ${course.course_title}. Please guide me.`;
+                        window.open(`https://wa.me/8801805020101?text=${encodeURIComponent(message)}`, '_blank');
+                      }}
+                    >
+                      Chat on WhatsApp
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
+
+              <ApplyModal 
+                open={showApplyModal}
+                onClose={() => setShowApplyModal(false)}
+                course={course}
+                university={university}
+              />
 
               {/* University Link */}
               {university && (
