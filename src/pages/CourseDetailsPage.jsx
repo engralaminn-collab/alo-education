@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
+import AIApplicationAssistant from '@/components/applications/AIApplicationAssistant';
 import SimilarCourses from '@/components/courses/SimilarCourses';
 import WhyThisCourse from '@/components/courses/WhyThisCourse';
 import FavoriteButton from '@/components/courses/FavoriteButton';

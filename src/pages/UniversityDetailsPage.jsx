@@ -16,10 +16,28 @@ import UniversityFavoriteButton from '@/components/universities/UniversityFavori
 import AIUniversitySummary from '@/components/universities/AIUniversitySummary';
 import PopularCourses from '@/components/universities/PopularCourses';
 import StudentReviews from '@/components/universities/StudentReviews';
+import UniversityComparison from '@/components/universities/UniversityComparison';
+import AIApplicationAssistant from '@/components/applications/AIApplicationAssistant';
 
 export default function UniversityDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const universityId = urlParams.get('id');
+  const [showComparison, setShowComparison] = React.useState(false);
+  const [compareIds, setCompareIds] = React.useState([]);
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile', user?.email],
+    queryFn: async () => {
+      const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
+      return profiles[0];
+    },
+    enabled: !!user?.email,
+  });
 
   const { data: university, isLoading } = useQuery({
     queryKey: ['university', universityId],
@@ -144,6 +162,13 @@ export default function UniversityDetailsPage() {
                   </Card>
 
                   <StudentReviews university={university} />
+
+                  {studentProfile && (
+                    <AIApplicationAssistant 
+                      studentProfile={studentProfile}
+                      universityId={universityId}
+                    />
+                  )}
                 </div>
               </TabsContent>
 
@@ -311,6 +336,26 @@ export default function UniversityDetailsPage() {
                 </CardContent>
               </Card>
 
+              {/* Compare CTA */}
+              <Card className="alo-card border-2" style={{ borderColor: '#F37021' }}>
+                <CardContent className="p-6 text-center">
+                  <h3 className="text-lg font-bold mb-2" style={{ color: '#0066CC' }}>Compare Universities</h3>
+                  <p className="text-slate-600 text-sm mb-4">
+                    Compare this university with others side-by-side
+                  </p>
+                  <Button 
+                    onClick={() => {
+                      setCompareIds([universityId]);
+                      setShowComparison(true);
+                    }}
+                    className="w-full"
+                    style={{ backgroundColor: '#F37021', color: 'white' }}
+                  >
+                    Start Comparison
+                  </Button>
+                </CardContent>
+              </Card>
+
               {/* CTA */}
               <Card style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white border-0">
                 <CardContent className="p-6 text-center">
@@ -323,9 +368,9 @@ export default function UniversityDetailsPage() {
                       Book Free Consultation
                     </Button>
                   </Link>
-                  <Link to={createPageUrl('CourseFinder')}>
+                  <Link to={createPageUrl('CareerGuidance')}>
                     <Button variant="outline" className="w-full bg-white/10 border-white/20 text-white hover:bg-white/20">
-                      Browse Courses
+                      Get Career Guidance
                     </Button>
                   </Link>
                 </CardContent>
@@ -334,6 +379,13 @@ export default function UniversityDetailsPage() {
           </div>
         </div>
       </div>
+
+      {showComparison && compareIds.length > 0 && (
+        <UniversityComparison 
+          universityIds={compareIds}
+          onClose={() => setShowComparison(false)}
+        />
+      )}
 
       <Footer />
     </div>

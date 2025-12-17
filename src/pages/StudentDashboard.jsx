@@ -26,6 +26,7 @@ import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
 import ApplicationTracker from '@/components/dashboard/ApplicationTracker';
+import CareerGuidanceWidget from '@/components/dashboard/CareerGuidanceWidget';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -331,6 +332,9 @@ export default function StudentDashboard() {
               tasks={tasks}
               scholarships={scholarships}
             />
+
+            {/* Career Guidance Widget */}
+            <CareerGuidanceWidget />
 
             {/* Personalized Quick Links */}
             <PersonalizedQuickLinks studentProfile={studentProfile} />
