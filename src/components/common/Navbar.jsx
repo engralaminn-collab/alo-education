@@ -96,9 +96,23 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link to={createPageUrl('StudentDashboard')} className="font-medium text-slate-900 hover:text-[#F37021] transition-colors">
-              Portal
-            </Link>
+            {/* Portals Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="font-medium text-slate-900 hover:text-[#F37021] transition-colors flex items-center gap-1">
+                  Portals
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('StudentDashboard')}>Student Portal</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('PartnerPortal')}>Partner Portal</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Auth Buttons */}
@@ -185,9 +199,17 @@ export default function Navbar() {
                 <Link to={createPageUrl('LanguagePrep')} onClick={() => setIsMobileOpen(false)} className="text-lg font-medium text-slate-900">
                   Language Prep
                 </Link>
-                <Link to={createPageUrl('StudentDashboard')} onClick={() => setIsMobileOpen(false)} className="text-lg font-medium text-slate-900">
-                  Portal
-                </Link>
+                <div>
+                  <p className="text-sm font-semibold mb-2 text-slate-600">Portals</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    <Link to={createPageUrl('StudentDashboard')} onClick={() => setIsMobileOpen(false)} className="text-base font-medium text-slate-900">
+                      Student Portal
+                    </Link>
+                    <Link to={createPageUrl('PartnerPortal')} onClick={() => setIsMobileOpen(false)} className="text-base font-medium text-slate-900">
+                      Partner Portal
+                    </Link>
+                  </div>
+                </div>
                 
                 <div>
                   <p className="text-sm font-semibold mb-2 text-slate-600">Destinations</p>
