@@ -57,7 +57,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }} className="py-20">
+      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-20">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center text-white">
             <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-80" />

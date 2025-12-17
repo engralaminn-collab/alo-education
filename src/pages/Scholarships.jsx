@@ -75,7 +75,7 @@ export default function Scholarships() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }} className="py-16">
+      <div className="bg-gradient-to-br from-slate-900 to-emerald-900 py-16">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -5,39 +5,44 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import { 
-  ArrowRight, Clock, CheckCircle, XCircle, AlertCircle, 
-  FileText, Calendar, Building2, GraduationCap, Upload, Eye, Download
+  FileText, Building2, Clock, CheckCircle, XCircle, 
+  AlertCircle, ArrowRight, Calendar, DollarSign, 
+  ChevronRight, GraduationCap, Circle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { motion } from 'framer-motion';
+import { format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import DocumentUploadModal from '@/components/applications/DocumentUploadModal';
+import MilestoneTracker from '@/components/applications/MilestoneTracker';
 
 const statusConfig = {
-  draft: { label: 'Draft', color: 'bg-slate-100 text-slate-700', icon: FileText },
-  documents_pending: { label: 'Documents Pending', color: 'bg-amber-100 text-amber-700', icon: AlertCircle },
-  application_received: { label: 'Application Received', color: 'bg-purple-100 text-purple-700', icon: CheckCircle },
-  under_review: { label: 'Under Review', color: 'bg-blue-100 text-blue-700', icon: Clock },
-  interview_scheduled: { label: 'Interview Scheduled', color: 'bg-indigo-100 text-indigo-700', icon: Calendar },
-  additional_info_requested: { label: 'Additional Info Requested', color: 'bg-yellow-100 text-yellow-700', icon: AlertCircle },
-  submitted_to_university: { label: 'Submitted', color: 'bg-purple-100 text-purple-700', icon: Building2 },
-  conditional_offer: { label: 'Conditional Offer', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-  unconditional_offer: { label: 'Unconditional Offer', color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  offer_accepted: { label: 'Offer Accepted', color: 'bg-green-200 text-green-800', icon: CheckCircle },
-  visa_processing: { label: 'Visa Processing', color: 'bg-cyan-100 text-cyan-700', icon: Clock },
-  visa_approved: { label: 'Visa Approved', color: 'bg-teal-100 text-teal-700', icon: CheckCircle },
-  enrolled: { label: 'Enrolled', color: 'bg-emerald-500 text-white', icon: GraduationCap },
-  rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700', icon: XCircle },
-  withdrawn: { label: 'Withdrawn', color: 'bg-slate-100 text-slate-500', icon: XCircle },
+  draft: { color: 'bg-slate-100 text-slate-700', icon: FileText },
+  documents_pending: { color: 'bg-amber-100 text-amber-700', icon: AlertCircle },
+  under_review: { color: 'bg-blue-100 text-blue-700', icon: Clock },
+  submitted_to_university: { color: 'bg-purple-100 text-purple-700', icon: Building2 },
+  conditional_offer: { color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
+  unconditional_offer: { color: 'bg-green-100 text-green-700', icon: CheckCircle },
+  visa_processing: { color: 'bg-cyan-100 text-cyan-700', icon: Clock },
+  enrolled: { color: 'bg-emerald-500 text-white', icon: GraduationCap },
+  rejected: { color: 'bg-red-100 text-red-700', icon: XCircle },
+  withdrawn: { color: 'bg-slate-100 text-slate-500', icon: XCircle },
 };
 
+const statusSteps = [
+  'draft',
+  'documents_pending',
+  'under_review',
+  'submitted_to_university',
+  'conditional_offer',
+  'unconditional_offer',
+  'visa_processing',
+  'enrolled'
+];
+
 export default function MyApplications() {
-  const [selectedApplication, setSelectedApplication] = useState(null);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [uploadingForApp, setUploadingForApp] = useState(null);
+  const [selectedApp, setSelectedApp] = useState(null);
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -60,192 +65,109 @@ export default function MyApplications() {
   });
 
   const { data: universities = [] } = useQuery({
-    queryKey: ['universities-for-applications'],
+    queryKey: ['universities'],
     queryFn: () => base44.entities.University.list(),
   });
 
   const { data: courses = [] } = useQuery({
-    queryKey: ['courses-for-applications'],
+    queryKey: ['courses'],
     queryFn: () => base44.entities.Course.list(),
   });
 
-  const { data: documents = [] } = useQuery({
-    queryKey: ['application-documents', studentProfile?.id],
-    queryFn: () => base44.entities.Document.filter({ student_id: studentProfile?.id }),
-    enabled: !!studentProfile?.id,
-  });
+  const universityMap = universities.reduce((acc, u) => { acc[u.id] = u; return acc; }, {});
+  const courseMap = courses.reduce((acc, c) => { acc[c.id] = c; return acc; }, {});
 
-  const universityMap = universities.reduce((acc, uni) => {
-    acc[uni.id] = uni;
-    return acc;
-  }, {});
+  const activeApps = applications.filter(a => !['rejected', 'withdrawn'].includes(a.status));
+  const completedApps = applications.filter(a => ['enrolled'].includes(a.status));
+  const closedApps = applications.filter(a => ['rejected', 'withdrawn'].includes(a.status));
 
-  const courseMap = courses.reduce((acc, course) => {
-    acc[course.id] = course;
-    return acc;
-  }, {});
+  const getStepIndex = (status) => statusSteps.indexOf(status);
 
-  const activeApplications = applications.filter(a => 
-    !['rejected', 'withdrawn', 'enrolled'].includes(a.status)
-  );
-  const completedApplications = applications.filter(a => a.status === 'enrolled');
-  const closedApplications = applications.filter(a => 
-    ['rejected', 'withdrawn'].includes(a.status)
-  );
-
-  const handleUploadDocument = (application) => {
-    setUploadingForApp(application);
-    setShowUploadModal(true);
-  };
-
-  const getApplicationDocuments = (appId) => {
-    return documents.filter(doc => doc.application_id === appId);
-  };
-
-  const getUpcomingDeadlines = () => {
-    const now = new Date();
-    const allDeadlines = [];
-    
-    applications.forEach(app => {
-      if (app.deadlines) {
-        Object.entries(app.deadlines).forEach(([type, date]) => {
-          if (date && new Date(date) > now) {
-            allDeadlines.push({
-              ...app,
-              deadlineType: type.replace(/_/g, ' '),
-              deadlineDate: date
-            });
-          }
-        });
-      }
-      if (app.offer_deadline && new Date(app.offer_deadline) > now) {
-        allDeadlines.push({
-          ...app,
-          deadlineType: 'offer response',
-          deadlineDate: app.offer_deadline
-        });
-      }
-    });
-    
-    return allDeadlines
-      .sort((a, b) => new Date(a.deadlineDate) - new Date(b.deadlineDate))
-      .slice(0, 5);
-  };
-
-  const calculateProgress = (application) => {
-    if (!application.milestones) return 0;
-    const milestones = Object.values(application.milestones);
-    const completed = milestones.filter(m => m?.completed).length;
-    return Math.round((completed / milestones.length) * 100);
-  };
-
-  const ApplicationCard = ({ application }) => {
-    const university = universityMap[application.university_id];
-    const course = courseMap[application.course_id];
-    const statusInfo = statusConfig[application.status] || statusConfig.draft;
-    const StatusIcon = statusInfo.icon;
-    const appDocuments = getApplicationDocuments(application.id);
-    const progress = calculateProgress(application);
-
-    const milestones = [
-      { key: 'documents_submitted', label: 'Documents Submitted' },
-      { key: 'application_submitted', label: 'Application Submitted' },
-      { key: 'offer_received', label: 'Offer Received' },
-      { key: 'visa_applied', label: 'Visa Applied' },
-      { key: 'visa_approved', label: 'Visa Approved' },
-      { key: 'enrolled', label: 'Enrolled' }
-    ];
-
-    const completedMilestones = milestones.filter(
-      m => application.milestones?.[m.key]?.completed
-    ).length;
+  const ApplicationCard = ({ app }) => {
+    const course = courseMap[app.course_id];
+    const university = universityMap[app.university_id];
+    const config = statusConfig[app.status] || statusConfig.draft;
+    const StatusIcon = config.icon;
 
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
       >
-        <Card className="border-0 shadow-sm hover:shadow-lg transition-all">
+        <Card 
+          className={`border-0 shadow-sm hover:shadow-lg transition-all cursor-pointer ${
+            selectedApp?.id === app.id ? 'ring-2 ring-emerald-500' : ''
+          }`}
+          onClick={() => setSelectedApp(app)}
+        >
           <CardContent className="p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-                {university?.logo ? (
-                  <img src={university.logo} alt="" className="w-12 h-12 object-contain" />
-                ) : (
-                  <Building2 className="w-8 h-8 text-slate-400" />
-                )}
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                  {university?.logo_url ? (
+                    <img src={university.logo_url} alt="" className="w-10 h-10 object-contain" />
+                  ) : (
+                    <Building2 className="w-6 h-6 text-slate-400" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                      <h3 className="font-semibold text-slate-900 mb-1">
+                        {course?.name || 'Course Name'}
+                      </h3>
+                      <p className="text-slate-500 text-sm">
+                        {university?.name || 'University'} • {university?.country}
+                      </p>
+                    </div>
+                    <Badge className={config.color}>
+                      <StatusIcon className="w-3 h-3 mr-1" />
+                      {app.status?.replace(/_/g, ' ')}
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mt-3">
+                    {app.intake && (
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        {app.intake}
+                      </span>
+                    )}
+                    {app.tuition_fee && (
+                      <span className="flex items-center gap-1">
+                        <DollarSign className="w-4 h-4" />
+                        {app.tuition_fee.toLocaleString()}/year
+                      </span>
+                    )}
+                    {app.applied_date && (
+                      <span>Applied: {format(new Date(app.applied_date), 'MMM d, yyyy')}</span>
+                    )}
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
               </div>
 
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-bold text-lg mb-1" style={{ color: 'var(--alo-blue)' }}>
-                      {course?.course_title || 'Course'}
-                    </h3>
-                    <p className="text-slate-600 text-sm">
-                      {university?.university_name || 'University'} • {university?.country}
-                    </p>
-                  </div>
-                  <Badge className={statusInfo.color}>
-                    <StatusIcon className="w-3 h-3 mr-1" />
-                    {statusInfo.label}
-                  </Badge>
+              {/* Inline Milestone Progress */}
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center gap-2">
+                  {['documents_submitted', 'application_submitted', 'offer_received', 'visa_approved', 'enrolled'].map((key, i) => {
+                    const completed = app.milestones?.[key]?.completed;
+                    return (
+                      <div key={key} className="flex items-center flex-1">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          completed ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'
+                        }`}>
+                          {completed ? <CheckCircle className="w-4 h-4" /> : <Circle className="w-3 h-3" />}
+                        </div>
+                        {i < 4 && <div className={`flex-1 h-1 mx-1 rounded ${completed ? 'bg-emerald-500' : 'bg-slate-200'}`} />}
+                      </div>
+                    );
+                  })}
                 </div>
-
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-slate-600">Progress</span>
-                    <span className="font-semibold" style={{ color: 'var(--alo-blue)' }}>{progress}%</span>
-                  </div>
-                  <Progress value={progress} className="h-2" />
-                </div>
-
-                {/* Interview Info */}
-                {application.interview_date && (
-                  <div className="mb-3 p-3 bg-indigo-50 rounded-lg">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="w-4 h-4 text-indigo-600" />
-                      <span className="font-semibold text-indigo-900">Interview Scheduled</span>
-                    </div>
-                    <div className="text-sm text-indigo-700 mt-1">
-                      {new Date(application.interview_date).toLocaleString()} • {application.interview_type || 'Not specified'}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-sm text-slate-500">
-                    Applied: {application.applied_date ? new Date(application.applied_date).toLocaleDateString() : 'Not submitted'}
-                  </div>
-                  <div className="flex items-center gap-1 text-sm">
-                    <FileText className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
-                    <span className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
-                      {appDocuments.length} docs
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleUploadDocument(application)}
-                    className="flex-1"
-                  >
-                    <Upload className="w-4 h-4 mr-1" />
-                    Upload
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedApplication(application)}
-                    className="flex-1"
-                    style={{ borderColor: 'var(--alo-blue)', color: 'var(--alo-blue)' }}
-                  >
-                    View Details
-                  </Button>
-                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  {Object.values(app.milestones || {}).filter(m => m?.completed).length} of 6 milestones completed
+                </p>
               </div>
             </div>
           </CardContent>
@@ -256,57 +178,26 @@ export default function MyApplications() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-      <section className="py-16" style={{ background: 'linear-gradient(135deg, var(--alo-blue) 0%, #004999 100%)' }}>
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 py-12">
         <div className="container mx-auto px-6">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              My Applications
-            </h1>
-            
-            {/* Quick Stats */}
-            <div className="grid md:grid-cols-4 gap-4 mt-8">
-              <Card className="bg-white/10 backdrop-blur border-0">
-                <CardContent className="p-4">
-                  <div className="text-white/80 text-sm mb-1">Total Applications</div>
-                  <div className="text-3xl font-bold text-white">{applications.length}</div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white/10 backdrop-blur border-0">
-                <CardContent className="p-4">
-                  <div className="text-white/80 text-sm mb-1">In Progress</div>
-                  <div className="text-3xl font-bold text-white">
-                    {activeApplications.length}
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white/10 backdrop-blur border-0">
-                <CardContent className="p-4">
-                  <div className="text-white/80 text-sm mb-1">Offers Received</div>
-                  <div className="text-3xl font-bold text-white">
-                    {applications.filter(a => a.status === 'conditional_offer' || a.status === 'unconditional_offer').length}
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white/10 backdrop-blur border-0">
-                <CardContent className="p-4">
-                  <div className="text-white/80 text-sm mb-1">Documents</div>
-                  <div className="text-3xl font-bold text-white">{documents.length}</div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">My Applications</h1>
+          <p className="text-slate-300">Track and manage your university applications</p>
         </div>
-      </section>
+      </div>
 
-      <div className="container mx-auto px-6 py-10">
+      <div className="container mx-auto px-6 py-8">
         {isLoading ? (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
             {[1, 2, 3].map(i => (
-              <Card key={i} className="animate-pulse border-0 shadow-sm">
+              <Card key={i} className="animate-pulse">
                 <CardContent className="p-6">
-                  <div className="h-6 bg-slate-200 rounded w-2/3 mb-4" />
-                  <div className="h-4 bg-slate-200 rounded w-1/2" />
+                  <div className="flex gap-4">
+                    <div className="w-14 h-14 bg-slate-200 rounded-xl" />
+                    <div className="flex-1">
+                      <div className="h-5 bg-slate-200 rounded w-1/3 mb-2" />
+                      <div className="h-4 bg-slate-200 rounded w-1/4" />
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -314,17 +205,24 @@ export default function MyApplications() {
         ) : applications.length === 0 ? (
           <Card className="border-0 shadow-sm">
             <CardContent className="p-12 text-center">
-              <GraduationCap className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+              <FileText className="w-16 h-16 text-slate-300 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-slate-900 mb-2">No Applications Yet</h2>
               <p className="text-slate-500 mb-6">
                 Start your study abroad journey by finding the perfect course for you.
               </p>
-              <Link to={createPageUrl('Courses')}>
-                <Button className="text-white" style={{ backgroundColor: 'var(--alo-orange)' }}>
-                  Find Courses
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
+              <div className="flex gap-3 justify-center">
+                <Link to={createPageUrl('CourseMatcher')}>
+                  <Button className="bg-emerald-500 hover:bg-emerald-600">
+                    <GraduationCap className="w-4 h-4 mr-2" />
+                    Find Courses
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('Universities')}>
+                  <Button variant="outline">
+                    Browse Universities
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         ) : (
@@ -333,176 +231,104 @@ export default function MyApplications() {
             <div className="lg:col-span-2">
               <Tabs defaultValue="active">
                 <TabsList className="mb-6">
-                  <TabsTrigger value="active">Active ({activeApplications.length})</TabsTrigger>
-                  <TabsTrigger value="completed">Completed ({completedApplications.length})</TabsTrigger>
-                  <TabsTrigger value="closed">Closed ({closedApplications.length})</TabsTrigger>
+                  <TabsTrigger value="active">
+                    Active ({activeApps.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="completed">
+                    Completed ({completedApps.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="closed">
+                    Closed ({closedApps.length})
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="active" className="space-y-4">
-                  {activeApplications.map(app => (
-                    <ApplicationCard key={app.id} application={app} />
-                  ))}
-                  {activeApplications.length === 0 && (
+                  <AnimatePresence>
+                    {activeApps.map(app => (
+                      <ApplicationCard key={app.id} app={app} />
+                    ))}
+                  </AnimatePresence>
+                  {activeApps.length === 0 && (
                     <p className="text-center text-slate-500 py-8">No active applications</p>
                   )}
                 </TabsContent>
 
                 <TabsContent value="completed" className="space-y-4">
-                  {completedApplications.map(app => (
-                    <ApplicationCard key={app.id} application={app} />
-                  ))}
-                  {completedApplications.length === 0 && (
+                  <AnimatePresence>
+                    {completedApps.map(app => (
+                      <ApplicationCard key={app.id} app={app} />
+                    ))}
+                  </AnimatePresence>
+                  {completedApps.length === 0 && (
                     <p className="text-center text-slate-500 py-8">No completed applications</p>
                   )}
                 </TabsContent>
 
                 <TabsContent value="closed" className="space-y-4">
-                  {closedApplications.map(app => (
-                    <ApplicationCard key={app.id} application={app} />
-                  ))}
-                  {closedApplications.length === 0 && (
+                  <AnimatePresence>
+                    {closedApps.map(app => (
+                      <ApplicationCard key={app.id} app={app} />
+                    ))}
+                  </AnimatePresence>
+                  {closedApps.length === 0 && (
                     <p className="text-center text-slate-500 py-8">No closed applications</p>
                   )}
                 </TabsContent>
               </Tabs>
             </div>
 
-            {/* Sidebar - Deadlines and Documents */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* Upcoming Deadlines */}
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Calendar className="w-5 h-5" style={{ color: 'var(--alo-orange)' }} />
-                    Upcoming Deadlines
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {getUpcomingDeadlines().length === 0 ? (
-                    <p className="text-sm text-slate-500">No upcoming deadlines</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {getUpcomingDeadlines().map((app, idx) => {
-                        const university = universityMap[app.university_id];
-                        const daysLeft = Math.ceil((new Date(app.deadlineDate) - new Date()) / (1000 * 60 * 60 * 24));
-                        const isUrgent = daysLeft <= 7;
-                        return (
-                          <div key={`${app.id}-${idx}`} className={`p-3 rounded-lg ${isUrgent ? 'bg-red-50' : 'bg-amber-50'}`}>
-                            <div className="font-semibold text-sm mb-1" style={{ color: 'var(--alo-blue)' }}>
-                              {university?.university_name}
-                            </div>
-                            <div className="text-xs text-slate-600 mb-1 capitalize">
-                              {app.deadlineType}: {new Date(app.deadlineDate).toLocaleDateString()}
-                            </div>
-                            <Badge className={`text-xs ${isUrgent ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
-                              <Clock className="w-3 h-3 mr-1" />
-                              {daysLeft} days left
-                            </Badge>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Milestones - Only show when application selected */}
-              {selectedApplication && (
-                <Card className="border-0 shadow-lg">
+            {/* Application Details */}
+            <div className="lg:col-span-1">
+              {selectedApp ? (
+                <Card className="border-0 shadow-sm sticky top-24">
                   <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span>Application Milestones</span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedApplication(null)}
-                      >
-                        ×
-                      </Button>
-                    </CardTitle>
+                    <CardTitle className="text-lg">Application Milestones</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      {[
-                        { key: 'documents_submitted', label: 'Documents Submitted', icon: FileText },
-                        { key: 'application_submitted', label: 'Application Submitted', icon: CheckCircle },
-                        { key: 'offer_received', label: 'Offer Received', icon: CheckCircle },
-                        { key: 'visa_applied', label: 'Visa Applied', icon: Clock },
-                        { key: 'visa_approved', label: 'Visa Approved', icon: CheckCircle },
-                        { key: 'enrolled', label: 'Enrolled', icon: GraduationCap }
-                      ].map((milestone, idx) => {
-                        const Icon = milestone.icon;
-                        const completed = selectedApplication.milestones?.[milestone.key]?.completed;
-                        return (
-                          <div key={milestone.key} className="flex items-start gap-3">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                              completed ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
-                            }`}>
-                              <Icon className="w-4 h-4" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="font-medium text-sm">{milestone.label}</div>
-                              {completed && selectedApplication.milestones[milestone.key].date && (
-                                <div className="text-xs text-slate-500">
-                                  {new Date(selectedApplication.milestones[milestone.key].date).toLocaleDateString()}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <MilestoneTracker application={selectedApp} variant="vertical" />
+
+                    {/* Details */}
+                    <div className="space-y-4 pt-4 border-t">
+                      {selectedApp.offer_deadline && (
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Offer Deadline</span>
+                          <span className="font-medium text-red-600">
+                            {format(new Date(selectedApp.offer_deadline), 'MMM d, yyyy')}
+                          </span>
+                        </div>
+                      )}
+                      {selectedApp.scholarship_amount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Scholarship</span>
+                          <span className="font-medium text-emerald-600">
+                            ${selectedApp.scholarship_amount.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-6 space-y-2">
+                      <Link to={createPageUrl('MyDocuments') + `?application=${selectedApp.id}`}>
+                        <Button className="w-full">
+                          Manage Documents
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </Link>
+                      <Link to={createPageUrl('Messages')}>
+                        <Button variant="outline" className="w-full">
+                          Contact Counselor
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
-              )}
-
-              {/* Documents Section */}
-              {selectedApplication && (
-                <Card className="border-0 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <FileText className="w-5 h-5" style={{ color: 'var(--alo-blue)' }} />
-                      Documents ({getApplicationDocuments(selectedApplication.id).length})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Button
-                      onClick={() => handleUploadDocument(selectedApplication)}
-                      className="w-full mb-4 text-white"
-                      style={{ backgroundColor: 'var(--alo-orange)' }}
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      Upload Document
-                    </Button>
-                    
-                    <div className="space-y-2">
-                      {getApplicationDocuments(selectedApplication.id).map((doc) => (
-                        <div key={doc.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                          <div className="flex items-center gap-2 flex-1">
-                            <FileText className="w-4 h-4" style={{ color: 'var(--alo-blue)' }} />
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-medium truncate">{doc.name}</div>
-                              <div className="text-xs text-slate-500 capitalize">{doc.document_type.replace(/_/g, ' ')}</div>
-                            </div>
-                          </div>
-                          <div className="flex gap-1">
-                            <a href={doc.file_url} target="_blank" rel="noopener noreferrer">
-                              <Button variant="ghost" size="sm">
-                                <Eye className="w-4 h-4" />
-                              </Button>
-                            </a>
-                            <a href={doc.file_url} download>
-                              <Button variant="ghost" size="sm">
-                                <Download className="w-4 h-4" />
-                              </Button>
-                            </a>
-                          </div>
-                        </div>
-                      ))}
-                      {getApplicationDocuments(selectedApplication.id).length === 0 && (
-                        <p className="text-sm text-slate-500 text-center py-4">No documents uploaded yet</p>
-                      )}
-                    </div>
+              ) : (
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-6 text-center">
+                    <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                    <p className="text-slate-500">
+                      Select an application to view details
+                    </p>
                   </CardContent>
                 </Card>
               )}
@@ -510,17 +336,6 @@ export default function MyApplications() {
           </div>
         )}
       </div>
-
-      {/* Document Upload Modal */}
-      <DocumentUploadModal
-        open={showUploadModal}
-        onClose={() => {
-          setShowUploadModal(false);
-          setUploadingForApp(null);
-        }}
-        applicationId={uploadingForApp?.id}
-        studentId={studentProfile?.id}
-      />
 
       <Footer />
     </div>

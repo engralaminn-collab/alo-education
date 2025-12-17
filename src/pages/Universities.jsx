@@ -134,13 +134,13 @@ export default function Universities() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <section className="bg-white py-16 border-b-4" style={{ borderColor: 'var(--alo-blue)' }}>
+      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'var(--alo-blue)' }}>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Explore Universities
             </h1>
-            <p className="text-xl text-slate-600">
+            <p className="text-xl text-slate-300">
               Discover {universities.length}+ world-class institutions across the globe
             </p>
           </div>
@@ -153,11 +153,11 @@ export default function Universities() {
                 placeholder="Search universities, cities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 border-2 rounded-xl text-lg" style={{ borderColor: 'var(--alo-blue)' }}
+                className="pl-12 h-14 bg-white border-0 rounded-xl text-lg"
               />
             </div>
             <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-              <SelectTrigger className="w-full md:w-56 h-14 border-2 rounded-xl" style={{ borderColor: 'var(--alo-blue)' }}>
+              <SelectTrigger className="w-full md:w-56 h-14 bg-white border-0 rounded-xl">
                 <SelectValue placeholder="All Countries" />
               </SelectTrigger>
               <SelectContent>

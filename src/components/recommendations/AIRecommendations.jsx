@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function AIRecommendations({ studentProfile, courses = [], universities = [], applications = [] }) {
+export default function AIRecommendations({ studentProfile, courses = [], universities = [] }) {
   const [recommendations, setRecommendations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,109 +20,62 @@ export default function AIRecommendations({ studentProfile, courses = [], univer
 
     setIsLoading(true);
 
-    try {
-      // Build application history context
-      const appliedCourses = applications.map(app => app.course_id);
-      const appliedFields = applications.map(app => {
-        const course = courses.find(c => c.id === app.course_id);
-        return course?.subject_area;
-      }).filter(Boolean);
-
-      // Get education history
-      const educationLevel = studentProfile.education_history?.[0]?.academic_level || 
-                             studentProfile.admission_preferences?.study_level || 
-                             'Undergraduate';
-      
-      // Get English test scores
-      const englishTest = studentProfile.english_proficiency?.test_type || 'Not taken';
-      const englishScore = studentProfile.english_proficiency?.overall_score || 0;
-
-      const prompt = `Analyze this student profile and application history to recommend the top 5 most suitable courses from the provided list.
+    const prompt = `Analyze this student profile and recommend the top 3 most suitable courses from the provided list.
 
 Student Profile:
-- Name: ${studentProfile.first_name} ${studentProfile.last_name}
-- Education Level: ${educationLevel}
-- Previous Education: ${studentProfile.education_history?.map(e => `${e.academic_level} in ${e.group_subject} (${e.result_value})`).join(', ') || 'Not specified'}
-- English Proficiency: ${englishTest} ${englishScore > 0 ? `(Overall: ${englishScore})` : ''}
-- Nationality: ${studentProfile.nationality || 'Not specified'}
-- Study Destination Preference: ${studentProfile.admission_preferences?.study_destination || studentProfile.country || 'Any'}
-- Study Area Interest: ${studentProfile.admission_preferences?.study_area || 'Any'}
-- Work Experience: ${studentProfile.work_experience?.length || 0} roles (${studentProfile.work_experience?.map(w => w.job_role).join(', ') || 'None'})
-- Funding: ${studentProfile.funding_information?.funding_status || 'Not specified'}
-- Applied Previously: ${appliedFields.length > 0 ? appliedFields.join(', ') : 'No previous applications'}
+- Education: ${studentProfile.education?.highest_degree || 'Not specified'} in ${studentProfile.education?.field_of_study || 'general'}
+- GPA: ${studentProfile.education?.gpa || 'N/A'} out of ${studentProfile.education?.gpa_scale || 4}
+- English: ${studentProfile.english_proficiency?.test_type || 'Not taken'} ${studentProfile.english_proficiency?.score || ''}
+- Preferred Countries: ${studentProfile.preferred_countries?.join(', ') || 'Any'}
+- Preferred Degree: ${studentProfile.preferred_degree_level || 'Any'}
+- Preferred Fields: ${studentProfile.preferred_fields?.join(', ') || 'Any'}
+- Budget: Up to $${studentProfile.budget_max || 'Flexible'}/year
+- Work Experience: ${studentProfile.work_experience_years || 0} years
 
-Available Courses:
-${courses.slice(0, 50).map(c => {
+Available Courses (ID, Name, University, Degree, Field, Tuition, Requirements):
+${courses.slice(0, 20).map(c => {
   const uni = universities.find(u => u.id === c.university_id);
-  return `ID: ${c.id}
-Title: ${c.course_title}
-University: ${uni?.university_name} (${uni?.country})
-Level: ${c.level}
-Subject: ${c.subject_area}
-Duration: ${c.duration}
-Fee: ${c.tuition_fee_min || 0}-${c.tuition_fee_max || 0} ${c.currency || 'USD'}
-IELTS: ${c.ielts_overall || 'N/A'}
-Scholarship: ${c.scholarship_available ? 'Yes' : 'No'}
----`;
+  return `${c.id}|${c.name}|${uni?.name}|${c.degree_level}|${c.field_of_study}|${c.tuition_fee} ${c.currency}|GPA:${c.requirements?.min_gpa || 'N/A'},IELTS:${c.requirements?.ielts_score || 'N/A'}`;
 }).join('\n')}
 
-Based on the student's profile, education history, interests, and application history, provide the top 5 course recommendations. Consider:
-1. Academic qualifications and match
-2. English proficiency requirements
-3. Country/destination preferences
-4. Field of study alignment
-5. Financial considerations (scholarships, fees)
-6. Career progression potential
+Provide the top 3 recommendations with match score (0-100) and reasoning.`;
 
-For each recommendation, provide:
-- Match score (0-100) based on overall fit
-- Clear reasoning explaining why this course suits the student
-- 3-4 specific highlights/benefits
-- Any concerns or requirements the student should be aware of`;
-
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            recommendations: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  course_id: { type: "string" },
-                  match_score: { type: "number" },
-                  reasoning: { type: "string" },
-                  highlights: {
-                    type: "array",
-                    items: { type: "string" }
-                  },
-                  concerns: { type: "string" }
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          recommendations: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                course_id: { type: "string" },
+                match_score: { type: "number" },
+                reasoning: { type: "string" },
+                highlights: {
+                  type: "array",
+                  items: { type: "string" }
                 }
               }
             }
           }
         }
-      });
+      }
+    });
 
-      const enriched = result.recommendations.map(rec => {
-        const course = courses.find(c => c.id === rec.course_id);
-        const university = universities.find(u => u.id === course?.university_id);
-        const alreadyApplied = appliedCourses.includes(rec.course_id);
-        return {
-          ...rec,
-          course,
-          university,
-          alreadyApplied
-        };
-      }).filter(r => r.course);
+    const enriched = result.recommendations.map(rec => {
+      const course = courses.find(c => c.id === rec.course_id);
+      const university = universities.find(u => u.id === course?.university_id);
+      return {
+        ...rec,
+        course,
+        university
+      };
+    }).filter(r => r.course);
 
-      setRecommendations(enriched);
-    } catch (error) {
-      console.error('Error generating recommendations:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    setRecommendations(enriched);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -172,24 +125,17 @@ For each recommendation, provide:
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </Button>
         </div>
-        <p className="text-sm text-slate-600 mt-1">
-          Personalized matches based on your profile and preferences
-        </p>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="animate-pulse bg-white/60 rounded-xl p-4 h-32" />
+            {[1, 2, 3].map(i => (
+              <div key={i} className="animate-pulse bg-white/60 rounded-xl p-4 h-24" />
             ))}
           </div>
         ) : recommendations.length === 0 ? (
           <div className="text-center py-8">
-            <Sparkles className="w-12 h-12 text-emerald-300 mx-auto mb-3" />
-            <p className="text-slate-600 mb-3">Click refresh to get personalized recommendations</p>
-            <Button onClick={generateRecommendations} className="bg-emerald-500 hover:bg-emerald-600">
-              Generate Recommendations
-            </Button>
+            <p className="text-slate-600">Loading recommendations...</p>
           </div>
         ) : (
           <AnimatePresence>
@@ -201,9 +147,9 @@ For each recommendation, provide:
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <div className={`bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all ${rec.alreadyApplied ? 'opacity-60' : ''}`}>
+                  <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
                     <div className="flex items-start gap-4">
-                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold shrink-0 ${
+                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold ${
                         rec.match_score >= 85 ? 'bg-emerald-100 text-emerald-600' :
                         rec.match_score >= 70 ? 'bg-blue-100 text-blue-600' :
                         'bg-amber-100 text-amber-600'
@@ -211,7 +157,7 @@ For each recommendation, provide:
                         {rec.match_score}%
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <div className="flex items-center gap-2 mb-1">
                           {index === 0 && (
                             <Badge className="bg-amber-500 text-white">
                               <TrendingUp className="w-3 h-3 mr-1" />
@@ -219,50 +165,39 @@ For each recommendation, provide:
                             </Badge>
                           )}
                           <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                            {rec.course?.level}
+                            {rec.course?.degree_level}
                           </Badge>
-                          {rec.alreadyApplied && (
-                            <Badge variant="outline" className="border-slate-300 text-slate-600">
-                              Already Applied
-                            </Badge>
-                          )}
                         </div>
                         <h4 className="font-bold text-slate-900 mb-1">
-                          {rec.course?.course_title}
+                          {rec.course?.name}
                         </h4>
                         <div className="flex items-center text-sm text-slate-500 mb-2">
                           <Building2 className="w-4 h-4 mr-1" />
-                          {rec.university?.university_name} • {rec.university?.country}
+                          {rec.university?.name}
                         </div>
                         <p className="text-sm text-slate-600 mb-3">{rec.reasoning}</p>
                         
                         {rec.highlights && rec.highlights.length > 0 && (
                           <div className="flex flex-wrap gap-2 mb-3">
-                            {rec.highlights.map((highlight, i) => (
+                            {rec.highlights.slice(0, 3).map((highlight, i) => (
                               <span key={i} className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">
-                                ✓ {highlight}
+                                • {highlight}
                               </span>
                             ))}
                           </div>
                         )}
 
-                        {rec.concerns && (
-                          <div className="text-xs text-amber-700 bg-amber-50 px-3 py-2 rounded-lg mb-3">
-                            ⚠️ {rec.concerns}
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-4 text-sm flex-wrap">
-                          {(rec.course?.tuition_fee_min || rec.course?.tuition_fee_max) && (
+                        <div className="flex items-center gap-4 text-sm">
+                          {rec.course?.tuition_fee !== undefined && (
                             <span className="flex items-center gap-1 text-slate-500">
                               <DollarSign className="w-4 h-4" />
-                              {rec.course.tuition_fee_min?.toLocaleString()} - {rec.course.tuition_fee_max?.toLocaleString()} {rec.course.currency || 'USD'}
+                              {rec.course.tuition_fee === 0 ? 'Tuition Free' : `${rec.course.tuition_fee.toLocaleString()} ${rec.course.currency}`}
                             </span>
                           )}
-                          {rec.course?.duration && (
+                          {rec.course?.duration_months && (
                             <span className="flex items-center gap-1 text-slate-500">
                               <Clock className="w-4 h-4" />
-                              {rec.course.duration}
+                              {rec.course.duration_months} months
                             </span>
                           )}
                           {rec.course?.scholarship_available && (

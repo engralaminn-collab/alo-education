@@ -8,19 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Star, Users, Globe, Calendar, Building2, 
   GraduationCap, DollarSign, Award, ChevronRight, 
-  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink,
-  MessageSquare, TrendingUp, Home, Briefcase, MapPinned
+  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import UniversityReviewsSection from '@/components/universities/UniversityReviewsSection';
-import WhyChooseUniversity from '@/components/universities/WhyChooseUniversity';
-import CampusLifeSection from '@/components/universities/CampusLifeSection';
-import AccommodationSection from '@/components/universities/AccommodationSection';
-import ResearchSection from '@/components/universities/ResearchSection';
-import VirtualTourSection from '@/components/universities/VirtualTourSection';
 
 export default function UniversityDetails() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -40,20 +33,6 @@ export default function UniversityDetails() {
     queryKey: ['university-courses', universityId],
     queryFn: () => base44.entities.Course.filter({ university_id: universityId, status: 'open' }),
     enabled: !!universityId,
-  });
-
-  const { data: user } = useQuery({
-    queryKey: ['current-user'],
-    queryFn: () => base44.auth.me(),
-  });
-
-  const { data: studentProfile } = useQuery({
-    queryKey: ['student-profile', user?.email],
-    queryFn: async () => {
-      const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
-      return profiles[0];
-    },
-    enabled: !!user?.email,
   });
 
   if (uniLoading) {
@@ -167,83 +146,35 @@ export default function UniversityDetails() {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="overview" className="space-y-8">
-              <TabsList className="bg-white shadow-sm p-1 rounded-xl grid grid-cols-4 md:grid-cols-8 gap-1">
-                <TabsTrigger value="overview" className="rounded-lg text-xs md:text-sm">Overview</TabsTrigger>
-                <TabsTrigger value="why-choose" className="rounded-lg text-xs md:text-sm">Why Choose</TabsTrigger>
-                <TabsTrigger value="courses" className="rounded-lg text-xs md:text-sm">Courses</TabsTrigger>
-                <TabsTrigger value="campus" className="rounded-lg text-xs md:text-sm">Campus Life</TabsTrigger>
-                <TabsTrigger value="accommodation" className="rounded-lg text-xs md:text-sm">Housing</TabsTrigger>
-                <TabsTrigger value="research" className="rounded-lg text-xs md:text-sm">Research</TabsTrigger>
-                <TabsTrigger value="virtual-tour" className="rounded-lg text-xs md:text-sm">Virtual Tour</TabsTrigger>
-                <TabsTrigger value="reviews" className="rounded-lg text-xs md:text-sm">Reviews</TabsTrigger>
+              <TabsList className="bg-white shadow-sm p-1 rounded-xl">
+                <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
+                <TabsTrigger value="courses" className="rounded-lg">Courses ({courses.length})</TabsTrigger>
+                <TabsTrigger value="requirements" className="rounded-lg">Requirements</TabsTrigger>
+                <TabsTrigger value="campus" className="rounded-lg">Campus Life</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--alo-blue)' }}>About {university.university_name}</h2>
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap mb-8">
-                      {university.about || `${university.university_name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
+                    <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
+                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
+                      {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
                     </p>
 
-                    {/* Key Highlights */}
-                    <div className="grid md:grid-cols-3 gap-6 mb-8">
-                      <div className="text-center p-4 bg-slate-50 rounded-xl">
-                        <TrendingUp className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--alo-orange)' }} />
-                        <div className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                          #{university.ranking || 'N/A'}
+                    {university.facilities && university.facilities.length > 0 && (
+                      <div className="mt-8">
+                        <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {university.facilities.map((facility, i) => (
+                            <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
+                              {facility}
+                            </Badge>
+                          ))}
                         </div>
-                        <div className="text-sm text-slate-600">World Ranking</div>
-                      </div>
-                      <div className="text-center p-4 bg-slate-50 rounded-xl">
-                        <Users className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--alo-orange)' }} />
-                        <div className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                          {university.student_population?.toLocaleString() || 'N/A'}
-                        </div>
-                        <div className="text-sm text-slate-600">Students</div>
-                      </div>
-                      <div className="text-center p-4 bg-slate-50 rounded-xl">
-                        <Globe className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--alo-orange)' }} />
-                        <div className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                          {university.international_students_percent || 'N/A'}%
-                        </div>
-                        <div className="text-sm text-slate-600">International</div>
-                      </div>
-                    </div>
-
-                    {/* Rankings */}
-                    {(university.qs_ranking || university.times_ranking) && (
-                      <div className="mb-8">
-                        <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--alo-blue)' }}>Rankings</h3>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          {university.qs_ranking && (
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                              <span className="font-medium text-slate-700">QS World Ranking</span>
-                              <Badge className="bg-amber-100 text-amber-700">#{university.qs_ranking}</Badge>
-                            </div>
-                          )}
-                          {university.times_ranking && (
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                              <span className="font-medium text-slate-700">Times Higher Education</span>
-                              <Badge className="bg-blue-100 text-blue-700">#{university.times_ranking}</Badge>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {university.scholarships_summary && (
-                      <div>
-                        <h3 className="text-lg font-semibold mb-3" style={{ color: 'var(--alo-blue)' }}>Scholarships</h3>
-                        <p className="text-slate-600 leading-relaxed">{university.scholarships_summary}</p>
                       </div>
                     )}
                   </CardContent>
                 </Card>
-              </TabsContent>
-
-              <TabsContent value="why-choose">
-                <WhyChooseUniversity university={university} studentProfile={studentProfile} />
               </TabsContent>
 
               <TabsContent value="courses">
@@ -306,73 +237,55 @@ export default function UniversityDetails() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="campus">
-                <CampusLifeSection university={university} />
-              </TabsContent>
-
-              <TabsContent value="accommodation">
-                <AccommodationSection university={university} />
-              </TabsContent>
-
-              <TabsContent value="research">
-                <ResearchSection university={university} />
-              </TabsContent>
-
-              <TabsContent value="virtual-tour">
-                <VirtualTourSection university={university} />
-              </TabsContent>
-
-              <TabsContent value="location">
+              <TabsContent value="requirements">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--alo-blue)' }}>Location & Transportation</h2>
-                    
-                    {university.location && (
-                      <div className="mb-6">
-                        <div className="aspect-video rounded-xl overflow-hidden mb-4">
-                          <iframe
-                            src={`https://www.google.com/maps?q=${university.location.latitude},${university.location.longitude}&output=embed`}
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            loading="lazy"
-                          />
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">General Requirements</h2>
+                    <div className="space-y-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                          <GraduationCap className="w-5 h-5 text-blue-600" />
                         </div>
-                        {university.location.address && (
-                          <div className="flex items-start gap-2 text-slate-600">
-                            <MapPinned className="w-5 h-5 shrink-0 mt-1" style={{ color: 'var(--alo-orange)' }} />
-                            <p>{university.location.address}</p>
-                          </div>
-                        )}
+                        <div>
+                          <h4 className="font-semibold text-slate-900">Academic Requirements</h4>
+                          <p className="text-slate-600 mt-1">Minimum GPA varies by program. Bachelor's require high school diploma; Master's require bachelor's degree.</p>
+                        </div>
                       </div>
-                    )}
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="font-semibold text-slate-900 mb-3">Getting Around</h4>
-                        <ul className="space-y-2 text-sm text-slate-600">
-                          <li>• Well-connected public transportation</li>
-                          <li>• Campus shuttle services</li>
-                          <li>• Bike-friendly infrastructure</li>
-                          <li>• Walking distance to city center</li>
-                        </ul>
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                          <Globe className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-slate-900">English Proficiency</h4>
+                          <p className="text-slate-600 mt-1">IELTS 6.0-7.5 or TOEFL 80-100+ depending on program level.</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-900 mb-3">Nearby Facilities</h4>
-                        <ul className="space-y-2 text-sm text-slate-600">
-                          <li>• Shopping centers and supermarkets</li>
-                          <li>• Hospitals and medical facilities</li>
-                          <li>• Restaurants and entertainment</li>
-                          <li>• International airport access</li>
-                        </ul>
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
+                          <Calendar className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-slate-900">Intake Periods</h4>
+                          <p className="text-slate-600 mt-1">
+                            {university.intake_months?.join(', ') || 'September and January intakes available'}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="reviews">
-                <UniversityReviewsSection universityId={universityId} />
+              <TabsContent value="campus">
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-8">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-4">Campus Life</h2>
+                    <p className="text-slate-600 leading-relaxed">
+                      Experience vibrant campus life with state-of-the-art facilities, diverse student organizations, 
+                      and a welcoming community. From sports facilities to cultural events, there's something for everyone.
+                    </p>
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>
@@ -385,10 +298,6 @@ export default function UniversityDetails() {
                 <CardTitle className="text-lg">Quick Facts</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                  <span className="text-slate-500">Founded</span>
-                  <span className="font-medium text-slate-900">{university.founded_year || 'N/A'}</span>
-                </div>
                 <div className="flex justify-between items-center py-3 border-b border-slate-100">
                   <span className="text-slate-500">Location</span>
                   <span className="font-medium text-slate-900">{university.city}, {university.country}</span>
@@ -407,13 +316,12 @@ export default function UniversityDetails() {
                     <span className="font-medium text-slate-900">{university.acceptance_rate}%</span>
                   </div>
                 )}
-                {university.website_url && (
+                {university.website && (
                   <a 
-                    href={university.website_url} 
+                    href={university.website} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3 font-medium hover:opacity-80"
-                    style={{ color: 'var(--alo-blue)' }}
+                    className="flex items-center justify-center gap-2 w-full py-3 text-emerald-600 hover:text-emerald-700 font-medium"
                   >
                     Visit Website
                     <ExternalLink className="w-4 h-4" />

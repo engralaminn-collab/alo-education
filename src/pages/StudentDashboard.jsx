@@ -25,7 +25,6 @@ import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
 import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
-import CareerGuidance from '@/components/dashboard/CareerGuidance';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -205,7 +204,6 @@ export default function StudentDashboard() {
               applications={applications}
               universities={universities}
               courses={courses}
-              studentProfile={studentProfile}
             />
 
             {/* Eligibility Checker */}
@@ -217,14 +215,6 @@ export default function StudentDashboard() {
 
             {/* AI Recommendations */}
             <AIRecommendations 
-              studentProfile={studentProfile}
-              courses={courses}
-              universities={universities}
-              applications={applications}
-            />
-
-            {/* Career Guidance */}
-            <CareerGuidance 
               studentProfile={studentProfile}
               courses={courses}
               universities={universities}
@@ -375,26 +365,6 @@ export default function StudentDashboard() {
                 </CardContent>
               </Card>
             )}
-
-            {/* AI Counselor CTA */}
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-              <CardContent className="p-6">
-                <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center mb-3">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z" />
-                  </svg>
-                </div>
-                <h3 className="font-bold text-lg mb-2">AI College Counselor</h3>
-                <p className="text-white/90 text-sm mb-4">
-                  Get personalized recommendations, essay help, and expert guidance powered by AI
-                </p>
-                <Link to={createPageUrl('AICounselor')}>
-                  <Button className="w-full bg-white text-blue-600 hover:bg-slate-100">
-                    Start Chat
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
 
             {/* Quick Actions */}
             <Card className="border-0 shadow-sm">

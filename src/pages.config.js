@@ -49,13 +49,6 @@ import CompleteProfile from './pages/CompleteProfile';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import Scholarships from './pages/Scholarships';
 import AlumniNetwork from './pages/AlumniNetwork';
-import AICounselor from './pages/AICounselor';
-import LanguagePrep from './pages/LanguagePrep';
-import Compare from './pages/Compare';
-import ScholarshipHelper from './pages/ScholarshipHelper';
-import VisaAssistant from './pages/VisaAssistant';
-import UniversityMatcher from './pages/UniversityMatcher';
-import PartnerPortal from './pages/PartnerPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -111,13 +104,6 @@ export const PAGES = {
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
     "Scholarships": Scholarships,
     "AlumniNetwork": AlumniNetwork,
-    "AICounselor": AICounselor,
-    "LanguagePrep": LanguagePrep,
-    "Compare": Compare,
-    "ScholarshipHelper": ScholarshipHelper,
-    "VisaAssistant": VisaAssistant,
-    "UniversityMatcher": UniversityMatcher,
-    "PartnerPortal": PartnerPortal,
 }
 
 export const pagesConfig = {

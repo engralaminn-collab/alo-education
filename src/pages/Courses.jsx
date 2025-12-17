@@ -8,26 +8,23 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import { 
   Search, Clock, DollarSign, Filter, X, ArrowRight, 
-  GraduationCap, Building2, BookOpen, Award, ArrowUpDown
+  GraduationCap, Building2, BookOpen, Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
-import SaveCourseButton from '@/components/courses/SaveCourseButton';
 
 const degreeLevels = [
   { value: 'all', label: 'All Levels' },
   { value: 'foundation', label: 'Foundation' },
-  { value: 'undergraduate', label: 'Undergraduate' },
-  { value: 'postgraduate', label: 'Postgraduate' },
+  { value: 'bachelor', label: "Bachelor's" },
+  { value: 'master', label: "Master's" },
   { value: 'phd', label: 'PhD' },
   { value: 'diploma', label: 'Diploma' },
-  { value: 'certificate', label: 'Certificate' },
 ];
 
 const fieldsOfStudy = [
@@ -44,44 +41,12 @@ const fieldsOfStudy = [
   { value: 'hospitality', label: 'Hospitality' },
 ];
 
-const universityTypes = [
-  { value: 'all', label: 'All Types' },
-  { value: 'russell_group', label: 'Russell Group' },
-  { value: 'redbrick', label: 'Redbrick' },
-  { value: 'post_92', label: 'Post-92' },
-  { value: 'ivy_league', label: 'Ivy League' },
-  { value: 'research_intensive', label: 'Research Intensive' },
-];
-
-const scholarshipTypes = [
-  { value: 'all', label: 'All Scholarships' },
-  { value: 'full', label: 'Full Scholarship' },
-  { value: 'partial', label: 'Partial Scholarship' },
-  { value: 'none', label: 'No Scholarship' },
-];
-
-const durationOptions = [
-  { value: 'all', label: 'All Durations' },
-  { value: '0-12', label: 'Up to 1 year' },
-  { value: '12-24', label: '1-2 years' },
-  { value: '24-36', label: '2-3 years' },
-  { value: '36-48', label: '3-4 years' },
-  { value: '48+', label: '4+ years' },
-];
-
 export default function Courses() {
   const [searchQuery, setSearchQuery] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('all');
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
-  const [scholarshipType, setScholarshipType] = useState('all');
-  const [universityType, setUniversityType] = useState('all');
-  const [durationFilter, setDurationFilter] = useState('all');
-  const [selectedIntake, setSelectedIntake] = useState('all');
+  const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [sortBy, setSortBy] = useState('relevance');
-  const [tuitionRange, setTuitionRange] = useState([0, 100000]);
-  const [rankingFilter, setRankingFilter] = useState('all');
-  const [selectedCountries, setSelectedCountries] = useState([]);
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -118,107 +83,19 @@ export default function Courses() {
     return acc;
   }, {});
 
-  // Generate available intakes from courses
-  const availableIntakes = [...new Set(
-    courses.flatMap(c => c.intake_dates || []).filter(Boolean)
-  )].sort().map(intake => ({
-    value: intake,
-    label: new Date(intake + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-  }));
-
   const filteredCourses = courses.filter(course => {
-    const university = universityMap[course.university_id];
-    
-    const matchesSearch = course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDegree = degreeLevel === 'all' || course.level?.toLowerCase() === degreeLevel.toLowerCase();
-    const matchesField = fieldOfStudy === 'all' || 
-                        course.subject_area?.toLowerCase().includes(fieldOfStudy.toLowerCase());
-    
-    // Scholarship type filter
-    const matchesScholarship = scholarshipType === 'all' || 
-                               (scholarshipType === 'none' && !course.scholarship_available) ||
-                               (scholarshipType === 'full' && course.scholarship_type === 'full') ||
-                               (scholarshipType === 'partial' && course.scholarship_type === 'partial');
-    
-    // University type filter
-    const matchesUniversityType = universityType === 'all' || university?.university_type === universityType;
-    
-    // Duration filter
-    const matchesDuration = durationFilter === 'all' || (() => {
-      const months = course.duration_months || 0;
-      const [min, max] = durationFilter.split('-').map(v => v === '+' ? 999 : parseInt(v));
-      return months >= min && months <= (max || 999);
-    })();
-    
-    // Intake filter
-    const matchesIntake = selectedIntake === 'all' || 
-                         course.intake_dates?.includes(selectedIntake);
-    
-    // Tuition range filter
-    const courseFee = course.tuition_fee_min || course.tuition_fee_max || 0;
-    const matchesTuition = courseFee >= tuitionRange[0] && courseFee <= tuitionRange[1];
-    
-    // Ranking filter
-    const matchesRanking = rankingFilter === 'all' || 
-                          (rankingFilter === 'top100' && university?.ranking <= 100) ||
-                          (rankingFilter === 'top500' && university?.ranking <= 500);
-    
-    // Country filter
-    const matchesCountry = selectedCountries.length === 0 || 
-                          selectedCountries.includes(course.country);
-    
-    return matchesSearch && matchesDegree && matchesField && 
-           matchesScholarship && matchesTuition && matchesRanking && 
-           matchesCountry && matchesUniversityType && matchesDuration && matchesIntake;
+    const matchesSearch = course.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDegree = degreeLevel === 'all' || course.degree_level === degreeLevel;
+    const matchesField = fieldOfStudy === 'all' || course.field_of_study === fieldOfStudy;
+    const matchesScholarship = !scholarshipOnly || course.scholarship_available;
+    return matchesSearch && matchesDegree && matchesField && matchesScholarship;
   });
-
-  // Sort courses
-  const sortedCourses = [...filteredCourses].sort((a, b) => {
-    const uniA = universityMap[a.university_id];
-    const uniB = universityMap[b.university_id];
-    
-    switch(sortBy) {
-      case 'ranking':
-        return (uniA?.ranking || 999) - (uniB?.ranking || 999);
-      case 'tuition_low':
-        return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
-      case 'tuition_high':
-        return (b.tuition_fee_max || 0) - (a.tuition_fee_max || 0);
-      case 'scholarship':
-        return (b.scholarship_available ? 1 : 0) - (a.scholarship_available ? 1 : 0);
-      case 'duration':
-        return (a.duration_months || 0) - (b.duration_months || 0);
-      case 'name':
-        return (a.course_title || '').localeCompare(b.course_title || '');
-      default:
-        return 0;
-    }
-  });
-
-  // Get unique countries
-  const countries = [...new Set(courses.map(c => c.country).filter(Boolean))].sort();
 
   const clearFilters = () => {
     setSearchQuery('');
     setDegreeLevel('all');
     setFieldOfStudy('all');
-    setScholarshipType('all');
-    setUniversityType('all');
-    setDurationFilter('all');
-    setSelectedIntake('all');
-    setTuitionRange([0, 100000]);
-    setRankingFilter('all');
-    setSelectedCountries([]);
-    setSortBy('relevance');
-  };
-
-  const toggleCountry = (country) => {
-    setSelectedCountries(prev => 
-      prev.includes(country) 
-        ? prev.filter(c => c !== country)
-        : [...prev, country]
-    );
+    setScholarshipOnly(false);
   };
 
   const FiltersContent = () => (
@@ -251,120 +128,20 @@ export default function Courses() {
         </Select>
       </div>
 
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">Scholarship Type</label>
-        <Select value={scholarshipType} onValueChange={setScholarshipType}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {scholarshipTypes.map(s => (
-              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">University Type</label>
-        <Select value={universityType} onValueChange={setUniversityType}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {universityTypes.map(t => (
-              <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">Duration</label>
-        <Select value={durationFilter} onValueChange={setDurationFilter}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {durationOptions.map(d => (
-              <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {availableIntakes.length > 0 && (
-        <div>
-          <label className="text-sm font-medium text-slate-700 mb-2 block">Program Intake</label>
-          <Select value={selectedIntake} onValueChange={setSelectedIntake}>
-            <SelectTrigger>
-              <SelectValue placeholder="All Intakes" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Intakes</SelectItem>
-              {availableIntakes.map(intake => (
-                <SelectItem key={intake.value} value={intake.value}>{intake.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">University Ranking</label>
-        <Select value={rankingFilter} onValueChange={setRankingFilter}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Rankings</SelectItem>
-            <SelectItem value="top100">Top 100</SelectItem>
-            <SelectItem value="top500">Top 500</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">
-          Tuition Fee Range (USD)
+      <div className="flex items-center gap-2">
+        <Checkbox 
+          id="scholarship" 
+          checked={scholarshipOnly}
+          onCheckedChange={setScholarshipOnly}
+        />
+        <label htmlFor="scholarship" className="text-sm text-slate-700 cursor-pointer">
+          Scholarship Available
         </label>
-        <div className="px-2 py-4">
-          <Slider
-            min={0}
-            max={100000}
-            step={1000}
-            value={tuitionRange}
-            onValueChange={setTuitionRange}
-            className="mb-2"
-          />
-          <div className="flex justify-between text-xs text-slate-500">
-            <span>${tuitionRange[0].toLocaleString()}</span>
-            <span>${tuitionRange[1].toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">Country</label>
-        <div className="space-y-2 max-h-48 overflow-y-auto">
-          {countries.map(country => (
-            <div key={country} className="flex items-center gap-2">
-              <Checkbox 
-                id={`country-${country}`}
-                checked={selectedCountries.includes(country)}
-                onCheckedChange={() => toggleCountry(country)}
-              />
-              <label htmlFor={`country-${country}`} className="text-sm text-slate-700 cursor-pointer">
-                {country}
-              </label>
-            </div>
-          ))}
-        </div>
       </div>
 
       <Button variant="outline" onClick={clearFilters} className="w-full">
         <X className="w-4 h-4 mr-2" />
-        Clear All Filters
+        Clear Filters
       </Button>
     </div>
   );
@@ -372,7 +149,7 @@ export default function Courses() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, var(--alo-orange) 0%, #ff8c42 100%)' }} className="py-16">
+      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -436,48 +213,30 @@ export default function Courses() {
                   studentProfile={studentProfile}
                   courses={courses}
                   universities={universities}
-                  applications={[]}
                 />
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center justify-between mb-6">
               <p className="text-slate-600">
-                Showing <span className="font-semibold text-slate-900">{sortedCourses.length}</span> courses
+                Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses
               </p>
-              <div className="flex items-center gap-3">
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-48">
-                    <ArrowUpDown className="w-4 h-4 mr-2" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="relevance">Most Relevant</SelectItem>
-                    <SelectItem value="ranking">University Ranking</SelectItem>
-                    <SelectItem value="tuition_low">Tuition: Low to High</SelectItem>
-                    <SelectItem value="tuition_high">Tuition: High to Low</SelectItem>
-                    <SelectItem value="scholarship">Scholarship Availability</SelectItem>
-                    <SelectItem value="duration">Duration (Shortest First)</SelectItem>
-                    <SelectItem value="name">Name (A-Z)</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Sheet open={showFilters} onOpenChange={setShowFilters}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" className="lg:hidden">
-                      <Filter className="w-4 h-4 mr-2" />
-                      Filters
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                    </SheetHeader>
-                    <div className="mt-6">
-                      <FiltersContent />
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
+              <Sheet open={showFilters} onOpenChange={setShowFilters}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="lg:hidden">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle>Filters</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    <FiltersContent />
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
 
             {isLoading ? (
@@ -501,7 +260,7 @@ export default function Courses() {
             ) : (
               <AnimatePresence>
                 <div className="space-y-4">
-                  {sortedCourses.map((course, index) => {
+                  {filteredCourses.map((course, index) => {
                     const university = universityMap[course.university_id];
                     return (
                       <motion.div
@@ -512,14 +271,14 @@ export default function Courses() {
                       >
                         <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
                           <CardContent className="p-6">
-                            <div className="flex items-start gap-4">
+                            <div className="flex flex-col md:flex-row md:items-center gap-4">
                               <div className="flex-1">
                                 <div className="flex flex-wrap items-center gap-2 mb-3">
                                   <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                                    {course.level}
+                                    {course.degree_level}
                                   </Badge>
                                   <Badge variant="outline" className="capitalize">
-                                    {course.subject_area}
+                                    {course.field_of_study?.replace(/_/g, ' ')}
                                   </Badge>
                                   {course.scholarship_available && (
                                     <Badge className="bg-amber-50 text-amber-700">
@@ -527,54 +286,47 @@ export default function Courses() {
                                       Scholarship
                                     </Badge>
                                   )}
-                                  {university?.ranking && (
-                                    <Badge variant="outline" className="text-blue-600 border-blue-200">
-                                      #{university.ranking} Ranked
-                                    </Badge>
-                                  )}
                                 </div>
                                 
                                 <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                                  {course.course_title}
+                                  {course.name}
                                 </h3>
                                 
                                 {university && (
                                   <div className="flex items-center text-slate-500 mb-3">
                                     <Building2 className="w-4 h-4 mr-2" />
-                                    {university.university_name}
+                                    {university.name}
                                     <span className="mx-2">•</span>
                                     {university.city}, {university.country}
                                   </div>
                                 )}
                                 
                                 <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                  {course.duration && (
+                                  {course.duration_months && (
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
-                                      {course.duration}
+                                      {course.duration_months} months
                                     </span>
                                   )}
-                                  {(course.tuition_fee_min || course.tuition_fee_max) && (
+                                  {course.tuition_fee && (
                                     <span className="flex items-center gap-1">
                                       <DollarSign className="w-4 h-4" />
-                                      {course.tuition_fee_min && course.tuition_fee_max
-                                        ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
-                                        : (course.tuition_fee_min || course.tuition_fee_max).toLocaleString()
-                                      } {course.currency || 'USD'}
+                                      {course.tuition_fee.toLocaleString()} {course.currency || 'USD'}/year
                                     </span>
                                   )}
                                 </div>
                               </div>
                               
-                              <div className="flex flex-col gap-3">
-                                <SaveCourseButton 
-                                  courseId={course.id} 
-                                  studentId={studentProfile?.id}
-                                />
-                                <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                  <Button className="bg-slate-900 hover:bg-slate-800">
+                              <div className="flex md:flex-col gap-3">
+                                <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`} className="flex-1 md:flex-none">
+                                  <Button className="w-full bg-slate-900 hover:bg-slate-800">
                                     View Details
                                     <ArrowRight className="w-4 h-4 ml-2" />
+                                  </Button>
+                                </Link>
+                                <Link to={createPageUrl('CourseMatcher')} className="flex-1 md:flex-none">
+                                  <Button variant="outline" className="w-full">
+                                    Check Eligibility
                                   </Button>
                                 </Link>
                               </div>
