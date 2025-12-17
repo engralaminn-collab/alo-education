@@ -89,42 +89,50 @@ export default function StudyInUK() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-      <section className="py-20 bg-white">
+      {/* Hero with Background */}
+      <section 
+        className="relative py-32 bg-cover bg-center"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 40, 80, 0.85), rgba(0, 40, 80, 0.85)), url(https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1600)',
+        }}
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl"
+            className="max-w-3xl text-white"
           >
-            <div className="flex items-center gap-4 mb-6">
-              <img 
-                src="https://flagcdn.com/w80/gb.png" 
-                alt="UK Flag" 
-                className="w-16 h-12 rounded-lg shadow-lg"
-              />
-              <h1 className="text-4xl md:text-5xl font-bold" style={{ color: '#0066CC' }}>
-                Study in <span style={{ color: '#F37021' }}>the United Kingdom</span>
-              </h1>
-            </div>
-            <p className="text-xl text-slate-700 mb-8">
-              World-class universities, globally recognised degrees, and excellent career outcomes.
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              Unlock a world-class education in the UK with expert guidance
+            </h1>
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              The UK is home to world-class universities, strong career prospects, and a welcoming community. At ALO Education, we'll guide you every step of the way to studying in the UK– from choosing the right course to building a standout application. You're in good hands.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to={createPageUrl('Contact')}>
-                <Button size="lg" style={{ backgroundColor: '#F37021', color: '#000000' }} className="font-bold">
-                  <GraduationCap className="w-5 h-5 mr-2" />
-                  Book Free Consultation
-                </Button>
-              </Link>
-              <Link to={createPageUrl('Courses') + '?country=United Kingdom'}>
-                <Button size="lg" variant="outline" style={{ borderColor: '#0066CC', color: '#0066CC' }}>
-                  Find Courses
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
+            <Link to={createPageUrl('Contact')}>
+              <Button size="lg" style={{ backgroundColor: '#F37021', color: '#000000' }} className="font-bold text-lg px-8 py-6">
+                Book free counselling
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Search Section */}
+      <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            <Link to={createPageUrl('Courses') + '?country=United Kingdom'}>
+              <Button size="lg" variant="outline" className="bg-white text-slate-900 border-2 hover:bg-slate-100">
+                COURSES
+              </Button>
+            </Link>
+            <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
+              <Button size="lg" variant="outline" className="bg-transparent text-white border-2 border-white hover:bg-white/10">
+                UNIVERSITIES
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -174,57 +182,104 @@ export default function StudyInUK() {
           </div>
         </div>
 
-        {/* Featured Universities */}
-        <section className="mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold" style={{ color: '#0066CC' }}>Featured UK Universities</h2>
-            <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
-              <Button variant="outline" style={{ borderColor: '#0066CC', color: '#0066CC' }}>
-                View All Universities
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
+        {/* Why Choose UK Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                Why choose the UK<br />for your studies?
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+              <div>
+                <img 
+                  src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800" 
+                  alt="Students studying" 
+                  className="rounded-2xl shadow-2xl"
+                />
+              </div>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">Top universities</h3>
+                <p className="text-lg text-slate-700 leading-relaxed mb-4">
+                  The UK is home to some of the world's most prestigious and historic universities, with over 160 higher education institutions offering a wealth of academic opportunities.
+                </p>
+                <p className="text-lg text-slate-700 leading-relaxed">
+                  Studying in the UK means joining a tradition of academic distinction that has produced influential thinkers, leaders, and Nobel laureates. With a vast range of disciplines to explore, students benefit from rigorous academic standards and a truly international learning environment.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {universities.map(uni => (
-              <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
-                <Card className="bg-white border hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
-                  <CardHeader className="text-center pb-4">
-                    {uni.logo && (
-                      <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center bg-slate-50 rounded-full p-2">
-                        <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
+        </section>
+
+        {/* World-class Universities */}
+        <section className="py-16 bg-slate-50">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">World-class universities</h2>
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                Explore UK universities popular among international students for their course options, student experience, and career prospects after graduation.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+              {universities.slice(0, 8).map(uni => (
+                <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
+                  <Card className="bg-white border-2 hover:shadow-2xl transition-all h-full group overflow-hidden">
+                    <CardHeader className="text-center pb-4 bg-slate-50">
+                      {uni.logo && (
+                        <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center bg-white rounded-lg p-3 shadow-md">
+                          <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
+                        </div>
+                      )}
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <CardTitle className="text-xl leading-tight font-bold">
+                        {uni.university_name}
+                      </CardTitle>
+
+                      {uni.city && (
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <MapPin className="w-4 h-4" />
+                          <span>{uni.city}</span>
+                        </div>
+                      )}
+
+                      {uni.ranking && (
+                        <div className="text-sm">
+                          <span className="font-semibold">Ranking:</span> {uni.ranking}
+                        </div>
+                      )}
+
+                      {uni.intakes && (
+                        <div className="text-sm">
+                          <span className="font-semibold">Next intake:</span> {uni.intakes}
+                        </div>
+                      )}
+
+                      <div className="text-sm">
+                        <span className="font-semibold">Entry score:</span> IELTS 6.5
                       </div>
-                    )}
-                    <CardTitle className="text-lg leading-tight" style={{ color: '#F37021' }}>
-                      {uni.university_name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm">
-                    {uni.city && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.city}</span>
-                      </div>
-                    )}
-                    {uni.ranking && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Trophy className="w-4 h-4" style={{ color: '#F37021' }} />
-                        <span>Ranking: #{uni.ranking}</span>
-                      </div>
-                    )}
-                    {uni.intakes && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Calendar className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.intakes}</span>
-                      </div>
-                    )}
-                    <Button className="w-full mt-4 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
+
+                      <Button 
+                        className="w-full mt-4 font-bold" 
+                        style={{ backgroundColor: '#0000FF', color: 'white' }}
+                      >
+                        View university
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
+                <Button size="lg" style={{ backgroundColor: '#0000FF', color: 'white' }} className="font-bold px-8">
+                  View all universities
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
               </Link>
-            ))}
+            </div>
           </div>
         </section>
 
