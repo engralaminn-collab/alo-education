@@ -23,6 +23,10 @@ export default function CourseFinder() {
   const [selectedUniversity, setSelectedUniversity] = useState('all');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
   const [sortBy, setSortBy] = useState('relevance');
+  const [tuitionRange, setTuitionRange] = useState('all');
+  const [scholarshipOnly, setScholarshipOnly] = useState(false);
+  const [rankingFilter, setRankingFilter] = useState('all');
+  const [populationRange, setPopulationRange] = useState('all');
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -67,7 +71,21 @@ export default function CourseFinder() {
       const matchesIntake = selectedIntakes.length === 0 || 
         selectedIntakes.some(intake => course.intake?.includes(intake.split(' ')[1]));
       
-      return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake;
+      // Tuition range filter
+      let matchesTuition = true;
+      if (tuitionRange !== 'all' && course.tuition_fee_min) {
+        const fee = course.tuition_fee_min;
+        if (tuitionRange === '0-10k') matchesTuition = fee < 10000;
+        else if (tuitionRange === '10k-20k') matchesTuition = fee >= 10000 && fee < 20000;
+        else if (tuitionRange === '20k-30k') matchesTuition = fee >= 20000 && fee < 30000;
+        else if (tuitionRange === '30k-40k') matchesTuition = fee >= 30000 && fee < 40000;
+        else if (tuitionRange === '40k+') matchesTuition = fee >= 40000;
+      }
+      
+      // Scholarship filter
+      const matchesScholarship = !scholarshipOnly || course.scholarship_available === true;
+      
+      return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake && matchesTuition && matchesScholarship;
     } else {
       const matchesSubject = !subjectType || course.subject_area?.toLowerCase().includes(subjectType.toLowerCase());
       const matchesUniversity = selectedUniversity === 'all' || course.university_id === selectedUniversity;
@@ -93,7 +111,24 @@ export default function CourseFinder() {
       const matchesSubject = !subjectType || 
         uniCourses.some(c => c.subject_area?.toLowerCase().includes(subjectType.toLowerCase()));
       
-      return matchesSearch && matchesSubject && uni.status === 'active';
+      // Ranking filter
+      let matchesRanking = true;
+      if (rankingFilter !== 'all' && uni.ranking) {
+        if (rankingFilter === 'top100') matchesRanking = uni.ranking <= 100;
+        else if (rankingFilter === 'top200') matchesRanking = uni.ranking <= 200;
+        else if (rankingFilter === 'top500') matchesRanking = uni.ranking <= 500;
+      }
+      
+      // Population filter
+      let matchesPopulation = true;
+      if (populationRange !== 'all' && uni.student_population) {
+        const pop = uni.student_population;
+        if (populationRange === 'small') matchesPopulation = pop < 10000;
+        else if (populationRange === 'medium') matchesPopulation = pop >= 10000 && pop < 30000;
+        else if (populationRange === 'large') matchesPopulation = pop >= 30000;
+      }
+      
+      return matchesSearch && matchesSubject && matchesRanking && matchesPopulation && uni.status === 'active';
     }
     return false;
   });
@@ -218,6 +253,41 @@ export default function CourseFinder() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Additional Filters */}
+                  <div className="mt-6 grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        Tuition Fee Range:
+                      </label>
+                      <Select value={tuitionRange} onValueChange={setTuitionRange}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Ranges" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Ranges</SelectItem>
+                          <SelectItem value="0-10k">Under $10,000</SelectItem>
+                          <SelectItem value="10k-20k">$10,000 - $20,000</SelectItem>
+                          <SelectItem value="20k-30k">$20,000 - $30,000</SelectItem>
+                          <SelectItem value="30k-40k">$30,000 - $40,000</SelectItem>
+                          <SelectItem value="40k+">$40,000+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex items-end">
+                      <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer w-full">
+                        <Checkbox
+                          id="scholarship"
+                          checked={scholarshipOnly}
+                          onCheckedChange={setScholarshipOnly}
+                        />
+                        <label htmlFor="scholarship" className="text-sm cursor-pointer font-medium">
+                          Only show courses with scholarships
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
 
@@ -261,6 +331,43 @@ export default function CourseFinder() {
                         <Search className="w-5 h-5 mr-2" />
                         Search
                       </Button>
+                    </div>
+                  </div>
+
+                  {/* University Filters */}
+                  <div className="mt-6 grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        World Ranking:
+                      </label>
+                      <Select value={rankingFilter} onValueChange={setRankingFilter}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Rankings" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Rankings</SelectItem>
+                          <SelectItem value="top100">Top 100</SelectItem>
+                          <SelectItem value="top200">Top 200</SelectItem>
+                          <SelectItem value="top500">Top 500</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        Student Population:
+                      </label>
+                      <Select value={populationRange} onValueChange={setPopulationRange}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Sizes" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Sizes</SelectItem>
+                          <SelectItem value="small">Small (Under 10,000)</SelectItem>
+                          <SelectItem value="medium">Medium (10,000 - 30,000)</SelectItem>
+                          <SelectItem value="large">Large (30,000+)</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
