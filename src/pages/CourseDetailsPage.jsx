@@ -253,7 +253,6 @@ export default function CourseDetailsPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-6">
-                      {/* IELTS */}
                       {course.ielts_overall && (
                         <div className="p-4 bg-blue-50 rounded-lg">
                           <h4 className="font-semibold text-slate-900 mb-3">IELTS</h4>
@@ -274,7 +273,6 @@ export default function CourseDetailsPage() {
                         </div>
                       )}
 
-                      {/* Alternative Tests */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="p-4 bg-slate-50 rounded-lg">
                           <h4 className="font-semibold text-slate-900 mb-2">PTE Academic</h4>
@@ -366,7 +364,6 @@ export default function CourseDetailsPage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="space-y-6 sticky top-6">
-              {/* Quick Facts */}
               <Card className="alo-card">
                 <CardHeader>
                   <CardTitle className="alo-card-title">Quick Facts</CardTitle>
@@ -420,7 +417,6 @@ export default function CourseDetailsPage() {
                 </CardContent>
               </Card>
 
-              {/* CTA */}
               <Card style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white border-0">
                 <CardContent className="p-6 text-center">
                   <h3 className="text-xl font-bold mb-3">Ready to Apply?</h3>
@@ -449,124 +445,6 @@ export default function CourseDetailsPage() {
                 </CardContent>
               </Card>
 
-              <ApplyModal 
-                open={showApplyModal}
-                onClose={() => setShowApplyModal(false)}
-                course={course}
-                university={university}
-              />
-
-              {/* University Link */}
-              {university && (
-                <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
-                  <Card className="alo-card hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardContent className="p-4">
-                      <p className="text-sm text-slate-500 mb-1">Offered by</p>
-                      <p className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
-                        {university.university_name || university.name}
-                      </p>
-                      <p className="text-sm text-slate-600 mt-1">View university details →</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="space-y-6 sticky top-6">
-              {/* Quick Facts */}
-              <Card className="alo-card">
-                <CardHeader>
-                  <CardTitle className="alo-card-title">Quick Facts</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {course.duration && (
-                    <div className="flex items-start gap-3">
-                      <Clock className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
-                      <div>
-                        <p className="text-sm text-slate-500">Duration</p>
-                        <p className="font-semibold text-slate-900">{course.duration}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {course.intake && (
-                    <div className="flex items-start gap-3">
-                      <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
-                      <div>
-                        <p className="text-sm text-slate-500">Intake</p>
-                        <p className="font-semibold text-slate-900">{course.intake}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {(course.tuition_fee_min || course.tuition_fee_max) && (
-                    <div className="flex items-start gap-3">
-                      <DollarSign className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
-                      <div>
-                        <p className="text-sm text-slate-500">Tuition Fee</p>
-                        <p className="font-semibold text-slate-900">
-                          {course.tuition_fee_min && course.tuition_fee_max
-                            ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
-                            : course.tuition_fee_min
-                            ? `From ${course.tuition_fee_min.toLocaleString()}`
-                            : `Up to ${course.tuition_fee_max.toLocaleString()}`
-                          } {course.currency || 'USD'}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {course.scholarship_available && (
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <div className="flex items-center gap-2 text-green-700">
-                        <Award className="w-5 h-5" />
-                        <span className="font-semibold">Scholarships Available</span>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* CTA */}
-              <Card style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white border-0">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-3">Ready to Apply?</h3>
-                  <p className="text-white/90 mb-4">
-                    Submit your application now or talk to our counselors
-                  </p>
-                  <div className="space-y-3">
-                    <Button 
-                      className="w-full font-bold"
-                      style={{ backgroundColor: '#F37021', color: '#000000' }}
-                      onClick={() => setShowApplyModal(true)}
-                    >
-                      Apply Now
-                    </Button>
-                    <Button 
-                      className="w-full"
-                      style={{ backgroundColor: '#25D366', color: 'white' }}
-                      onClick={() => {
-                        const message = `Hi ALO Education, I'm interested in ${course.course_title}. Please guide me.`;
-                        window.open(`https://wa.me/8801805020101?text=${encodeURIComponent(message)}`, '_blank');
-                      }}
-                    >
-                      Chat on WhatsApp
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <ApplyModal 
-                open={showApplyModal}
-                onClose={() => setShowApplyModal(false)}
-                course={course}
-                university={university}
-              />
-
-              {/* University Link */}
               {university && (
                 <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
                   <Card className="alo-card hover:shadow-lg transition-shadow cursor-pointer">
@@ -584,15 +462,19 @@ export default function CourseDetailsPage() {
           </div>
         </div>
 
-        {/* Similar Courses */}
-        <div className="container mx-auto px-6 pb-16">
-          <SimilarCourses 
-            currentCourse={course}
-            allCourses={allCourses}
-            universities={universities}
-          />
-        </div>
+        <SimilarCourses 
+          currentCourse={course}
+          allCourses={allCourses}
+          universities={universities}
+        />
       </div>
+
+      <ApplyModal 
+        open={showApplyModal}
+        onClose={() => setShowApplyModal(false)}
+        course={course}
+        university={university}
+      />
 
       <Footer />
     </div>
