@@ -297,9 +297,9 @@ export default function StudyInUK() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses.map(course => (
               <Link key={course.id} to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`}>
-                <Card className="bg-white border hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
+                <Card className="bg-white border-2 hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
                   <CardHeader>
-                    <CardTitle className="text-lg leading-tight group-hover:text-[#F37021] transition-colors" style={{ color: '#F37021' }}>
+                    <CardTitle className="text-lg leading-tight" style={{ color: '#F37021' }}>
                       {course.course_title}
                     </CardTitle>
                   </CardHeader>
@@ -340,50 +340,53 @@ export default function StudyInUK() {
             </Link>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {allUKUniversitiesData.map((uni) => (
-              <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
-                <Card 
-                  className="bg-white border hover:shadow-xl transition-all h-full" 
-                  style={{ borderColor: '#0066CC' }} 
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
-                >
-                  <CardHeader className="text-center pb-3">
-                    {uni.logo && (
-                      <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-slate-50 rounded-full p-2">
-                        <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
-                      </div>
-                    )}
-                    <CardTitle className="text-base leading-tight" style={{ color: '#F37021' }}>
-                      {uni.university_name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    {uni.city && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.city}</span>
-                      </div>
-                    )}
-                    {(uni.ranking || uni.qs_ranking) && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Trophy className="w-4 h-4" style={{ color: '#F37021' }} />
-                        <span>Ranking: #{uni.ranking || uni.qs_ranking}</span>
-                      </div>
-                    )}
-                    {uni.intakes && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Calendar className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.intakes}</span>
-                      </div>
-                    )}
-                    <Button className="w-full mt-3 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+            {allUKUniversities.map((uniName, idx) => {
+              const matchedUni = allUKUniversitiesData.find(u => u.university_name === uniName);
+              return (
+                <Link key={idx} to={matchedUni ? createPageUrl('UniversityDetailsPage') + `?id=${matchedUni.id}` : '#'}>
+                  <Card 
+                    className="bg-white border-2 hover:shadow-xl transition-all h-full" 
+                    style={{ borderColor: '#0066CC' }} 
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
+                  >
+                    <CardHeader className="text-center pb-3">
+                      {matchedUni?.logo && (
+                        <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-slate-50 rounded-full p-2">
+                          <img src={matchedUni.logo} alt={uniName} className="w-full h-full object-contain" />
+                        </div>
+                      )}
+                      <CardTitle className="text-base leading-tight" style={{ color: '#F37021' }}>
+                        {uniName}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2 text-sm">
+                      {matchedUni?.city && (
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
+                          <span>{matchedUni.city}</span>
+                        </div>
+                      )}
+                      {(matchedUni?.ranking || matchedUni?.qs_ranking) && (
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <Trophy className="w-4 h-4" style={{ color: '#F37021' }} />
+                          <span>Ranking: #{matchedUni.ranking || matchedUni.qs_ranking}</span>
+                        </div>
+                      )}
+                      {matchedUni?.intakes && (
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <Calendar className="w-4 h-4" style={{ color: '#0066CC' }} />
+                          <span>{matchedUni.intakes}</span>
+                        </div>
+                      )}
+                      <Button className="w-full mt-3 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                        Learn More
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
