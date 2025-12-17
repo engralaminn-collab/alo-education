@@ -25,6 +25,7 @@ import AIFAQHelper from '@/components/dashboard/AIFAQHelper';
 import EligibilityChecker from '@/components/dashboard/EligibilityChecker';
 import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLinks';
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
+import ApplicationTracker from '@/components/dashboard/ApplicationTracker';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -198,6 +199,9 @@ export default function StudentDashboard() {
               documents={documents}
               tasks={tasks}
             />
+
+            {/* Application Tracker */}
+            <ApplicationTracker studentProfile={studentProfile} />
 
             {/* Application Progress Tracker */}
             <ApplicationProgressTracker 
