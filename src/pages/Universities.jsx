@@ -302,78 +302,52 @@ export default function Universities() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
-                        viewMode === 'list' ? 'flex flex-row' : ''
-                      } ${selectedForCompare.some(u => u.id === uni.id) ? 'ring-2 ring-emerald-500' : ''}`}>
-                        <div className="absolute top-3 right-3 z-10">
-                          <input
-                            type="checkbox"
-                            checked={selectedForCompare.some(u => u.id === uni.id)}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              if (e.target.checked) {
-                                setSelectedForCompare([...selectedForCompare, uni]);
-                              } else {
-                                setSelectedForCompare(selectedForCompare.filter(u => u.id !== uni.id));
-                              }
-                            }}
-                            className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
-                            title="Select for comparison"
-                          />
-                        </div>
-                        <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`} className="flex-1">
-                          <div className={`relative overflow-hidden ${
-                            viewMode === 'list' ? 'w-48 h-36 shrink-0' : 'h-48'
-                          }`}>
-                            <img
-                              src={uni.cover_image || `https://images.unsplash.com/photo-1562774053-701939374585?w=800`}
-                              alt={uni.name}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
-                            {uni.ranking && (
-                              <div className="absolute top-3 left-3 flex flex-col gap-1">
-                                <Badge className="bg-emerald-500 text-white border-0">
-                                  <Star className="w-3 h-3 mr-1" />
-                                  World #{uni.ranking}
-                                </Badge>
-                                {uni.qs_ranking && (
-                                  <Badge className="bg-blue-500 text-white border-0 text-xs">
-                                    QS #{uni.qs_ranking}
-                                  </Badge>
-                                )}
+                      <Link to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
+                        <Card 
+                          className="bg-white border-2 hover:shadow-xl transition-all h-full"
+                          style={{ borderColor: '#0066CC' }}
+                          onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'}
+                          onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
+                        >
+                          <CardContent className="p-6 text-center">
+                            {uni.logo && (
+                              <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center bg-white rounded-lg p-2">
+                                <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
                               </div>
                             )}
-                          </div>
-                          <CardContent className={`${viewMode === 'list' ? 'flex-1 p-4' : 'p-5'}`}>
-                            <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                              {uni.name}
+                            <h3 className="font-bold text-lg mb-3" style={{ color: '#F37021' }}>
+                              {uni.university_name}
                             </h3>
-                            <div className="flex items-center text-slate-500 text-sm mb-3">
-                              <MapPin className="w-4 h-4 mr-1" />
-                              {uni.city}, {uni.country}
-                            </div>
-                            <div className="flex items-center justify-between text-sm">
-                              {uni.student_population && (
-                                <div className="flex items-center text-slate-500">
-                                  <Users className="w-4 h-4 mr-1" />
-                                  {uni.student_population.toLocaleString()}
-                                </div>
-                              )}
-                              {uni.tuition_range_min && (
-                                <div className="flex items-center text-emerald-600 font-medium">
-                                  <DollarSign className="w-4 h-4" />
-                                  {uni.tuition_range_min.toLocaleString()}+
-                                </div>
-                              )}
-                            </div>
-                            <Button className="w-full mt-4 bg-slate-900 hover:bg-slate-800 group/btn">
-                              View Details
-                              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                            
+                            {uni.city && (
+                              <div className="flex items-center justify-center gap-2 text-slate-600 text-sm mb-2">
+                                <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
+                                <span>{uni.city}, {uni.country}</span>
+                              </div>
+                            )}
+                            
+                            {(uni.ranking || uni.qs_ranking) && (
+                              <div className="text-sm text-slate-600 mb-2">
+                                <span className="font-semibold">Ranking:</span> #{uni.ranking || uni.qs_ranking}
+                              </div>
+                            )}
+                            
+                            {uni.intakes && (
+                              <div className="text-sm text-slate-600 mb-4">
+                                <span className="font-semibold">Next Intake:</span> {uni.intakes}
+                              </div>
+                            )}
+                            
+                            <Button 
+                              className="w-full font-semibold" 
+                              style={{ backgroundColor: '#F37021', color: '#000000' }}
+                            >
+                              APPLY NOW
+                              <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
-                            </CardContent>
-                            </Link>
-                            </Card>
+                          </CardContent>
+                        </Card>
+                      </Link>
                             </motion.div>
                   ))}
                 </motion.div>
