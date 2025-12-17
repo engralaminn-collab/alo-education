@@ -61,11 +61,6 @@ import KaplanTest from './pages/KaplanTest';
 import OETTest from './pages/OETTest';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
-import PartnerPortal from './pages/PartnerPortal';
-import CRMLeadNurturingWorkflows from './pages/CRMLeadNurturingWorkflows';
-import CRMReportsAnalytics from './pages/CRMReportsAnalytics';
-import CRMEmailCampaigns from './pages/CRMEmailCampaigns';
-import CRMLeads from './pages/CRMLeads';
 import __Layout from './Layout.jsx';
 
 
@@ -133,11 +128,6 @@ export const PAGES = {
     "OETTest": OETTest,
     "ApplicationForm": ApplicationForm,
     "CRMLeadGeneration": CRMLeadGeneration,
-    "PartnerPortal": PartnerPortal,
-    "CRMLeadNurturingWorkflows": CRMLeadNurturingWorkflows,
-    "CRMReportsAnalytics": CRMReportsAnalytics,
-    "CRMEmailCampaigns": CRMEmailCampaigns,
-    "CRMLeads": CRMLeads,
 }
 
 export const pagesConfig = {
