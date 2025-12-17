@@ -16,6 +16,9 @@ import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import MilestoneTracker from '@/components/applications/MilestoneTracker';
+import AIDocumentFeedback from '@/components/applications/AIDocumentFeedback';
+import DeadlineReminders from '@/components/applications/DeadlineReminders';
+import GranularStatusTracker from '@/components/applications/GranularStatusTracker';
 
 const statusConfig = {
   draft: { color: 'bg-slate-100 text-slate-700', icon: FileText },
@@ -72,6 +75,12 @@ export default function MyApplications() {
   const { data: courses = [] } = useQuery({
     queryKey: ['courses'],
     queryFn: () => base44.entities.Course.list(),
+  });
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ['my-documents', studentProfile?.id],
+    queryFn: () => base44.entities.Document.filter({ student_id: studentProfile?.id }),
+    enabled: !!studentProfile?.id,
   });
 
   const universityMap = universities.reduce((acc, u) => { acc[u.id] = u; return acc; }, {});
@@ -278,50 +287,65 @@ export default function MyApplications() {
             </div>
 
             {/* Application Details */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-6">
+              {/* Deadline Reminders */}
+              <DeadlineReminders applications={applications} />
+
               {selectedApp ? (
-                <Card className="border-0 shadow-sm sticky top-24">
-                  <CardHeader>
-                    <CardTitle className="text-lg">Application Milestones</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <MilestoneTracker application={selectedApp} variant="vertical" />
+                <>
+                  {/* Granular Status Tracker */}
+                  <GranularStatusTracker application={selectedApp} />
 
-                    {/* Details */}
-                    <div className="space-y-4 pt-4 border-t">
-                      {selectedApp.offer_deadline && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Offer Deadline</span>
-                          <span className="font-medium text-red-600">
-                            {format(new Date(selectedApp.offer_deadline), 'MMM d, yyyy')}
-                          </span>
-                        </div>
-                      )}
-                      {selectedApp.scholarship_amount > 0 && (
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Scholarship</span>
-                          <span className="font-medium text-emerald-600">
-                            ${selectedApp.scholarship_amount.toLocaleString()}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                  {/* AI Document Feedback */}
+                  <AIDocumentFeedback 
+                    application={selectedApp}
+                    documents={documents.filter(d => d.application_id === selectedApp.id)}
+                  />
 
-                    <div className="mt-6 space-y-2">
-                      <Link to={createPageUrl('MyDocuments') + `?application=${selectedApp.id}`}>
-                        <Button className="w-full">
-                          Manage Documents
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                      </Link>
-                      <Link to={createPageUrl('Messages')}>
-                        <Button variant="outline" className="w-full">
-                          Contact Counselor
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+                  {/* Traditional Milestones */}
+                  <Card className="border-0 shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Application Milestones</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <MilestoneTracker application={selectedApp} variant="vertical" />
+
+                      {/* Details */}
+                      <div className="space-y-4 pt-4 border-t">
+                        {selectedApp.offer_deadline && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Offer Deadline</span>
+                            <span className="font-medium text-red-600">
+                              {format(new Date(selectedApp.offer_deadline), 'MMM d, yyyy')}
+                            </span>
+                          </div>
+                        )}
+                        {selectedApp.scholarship_amount > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-slate-500">Scholarship</span>
+                            <span className="font-medium text-emerald-600">
+                              ${selectedApp.scholarship_amount.toLocaleString()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-6 space-y-2">
+                        <Link to={createPageUrl('MyDocuments') + `?application=${selectedApp.id}`}>
+                          <Button className="w-full" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                            Manage Documents
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </Link>
+                        <Link to={createPageUrl('Messages')}>
+                          <Button variant="outline" className="w-full">
+                            Contact Counselor
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
               ) : (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-6 text-center">
