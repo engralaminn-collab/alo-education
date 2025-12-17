@@ -257,7 +257,7 @@ export default function StudyInUK() {
                       </div>
                     )}
                     <Button className="w-full mt-4 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      Apply Now
+                      Learn More
                     </Button>
                   </CardContent>
                 </Card>
