@@ -13,6 +13,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 import UniversityFavoriteButton from '@/components/universities/UniversityFavoriteButton';
+import AIUniversitySummary from '@/components/universities/AIUniversitySummary';
+import PopularCourses from '@/components/universities/PopularCourses';
+import StudentReviews from '@/components/universities/StudentReviews';
 
 export default function UniversityDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -117,25 +120,31 @@ export default function UniversityDetailsPage() {
               </TabsList>
 
               <TabsContent value="about">
-                <Card className="alo-card">
-                  <CardHeader>
-                    <CardTitle className="alo-card-title flex items-center gap-2">
-                      <GraduationCap className="w-5 h-5" />
-                      About University
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {university.about ? (
-                      <div className="prose prose-slate max-w-none">
-                        <p className="text-slate-700 leading-relaxed whitespace-pre-line">
-                          {university.about}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-slate-500 italic">No detailed information available</p>
-                    )}
-                  </CardContent>
-                </Card>
+                <div className="space-y-6">
+                  <AIUniversitySummary university={university} />
+                  
+                  <Card className="alo-card">
+                    <CardHeader>
+                      <CardTitle className="alo-card-title flex items-center gap-2">
+                        <GraduationCap className="w-5 h-5" />
+                        About University
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {university.about ? (
+                        <div className="prose prose-slate max-w-none">
+                          <p className="text-slate-700 leading-relaxed whitespace-pre-line">
+                            {university.about}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-slate-500 italic">No detailed information available</p>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <StudentReviews university={university} />
+                </div>
               </TabsContent>
 
               <TabsContent value="requirements">
@@ -187,7 +196,9 @@ export default function UniversityDetailsPage() {
               </TabsContent>
 
               <TabsContent value="courses">
-                <div className="space-y-4">
+                <div className="space-y-6">
+                  <PopularCourses universityId={universityId} />
+                  
                   {courses.length === 0 ? (
                     <Card className="alo-card">
                       <CardContent className="p-12 text-center">
@@ -196,7 +207,8 @@ export default function UniversityDetailsPage() {
                       </CardContent>
                     </Card>
                   ) : (
-                    courses.map(course => (
+                    <div className="space-y-4">
+                    {courses.map(course => (
                       <Card key={course.id} className="alo-card hover:shadow-lg transition-shadow">
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between gap-4">
@@ -233,7 +245,8 @@ export default function UniversityDetailsPage() {
                           </div>
                         </CardContent>
                       </Card>
-                    ))
+                    ))}
+                    </div>
                   )}
                 </div>
               </TabsContent>

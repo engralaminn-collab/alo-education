@@ -14,6 +14,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIUniversitySummary from '@/components/universities/AIUniversitySummary';
+import PopularCourses from '@/components/universities/PopularCourses';
+import StudentReviews from '@/components/universities/StudentReviews';
 
 export default function UniversityDetails() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -154,31 +157,39 @@ export default function UniversityDetails() {
               </TabsList>
 
               <TabsContent value="overview">
-                <Card className="border-0 shadow-sm">
-                  <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
-                      {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
-                    </p>
+                <div className="space-y-6">
+                  <AIUniversitySummary university={university} />
+                  
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-8">
+                      <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
+                      <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
+                        {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
+                      </p>
 
-                    {university.facilities && university.facilities.length > 0 && (
-                      <div className="mt-8">
-                        <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {university.facilities.map((facility, i) => (
-                            <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
-                              {facility}
-                            </Badge>
-                          ))}
+                      {university.facilities && university.facilities.length > 0 && (
+                        <div className="mt-8">
+                          <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {university.facilities.map((facility, i) => (
+                              <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
+                                {facility}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <StudentReviews university={university} />
+                </div>
               </TabsContent>
 
               <TabsContent value="courses">
-                <div className="space-y-4">
+                <div className="space-y-6">
+                  <PopularCourses universityId={universityId} />
+                  
                   {courses.length === 0 ? (
                     <Card className="border-0 shadow-sm">
                       <CardContent className="p-8 text-center">
