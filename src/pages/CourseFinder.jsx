@@ -16,11 +16,13 @@ import Footer from '@/components/landing/Footer';
 
 export default function CourseFinder() {
   const [activeTab, setActiveTab] = useState('courses');
+  const [searchQuery, setSearchQuery] = useState('');
   const [subjectType, setSubjectType] = useState('all');
   const [courseType, setCourseType] = useState('all');
   const [destination, setDestination] = useState('all');
   const [selectedUniversity, setSelectedUniversity] = useState('all');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
+  const [sortBy, setSortBy] = useState('relevance');
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -52,6 +54,12 @@ export default function CourseFinder() {
   };
 
   const filteredCourses = courses.filter(course => {
+    const matchesSearch = !searchQuery || 
+      course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      universityMap[course.university_id]?.university_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      universityMap[course.university_id]?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+    
     if (activeTab === 'courses') {
       const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
       const matchesType = courseType === 'all' || course.level === courseType;
@@ -59,22 +67,33 @@ export default function CourseFinder() {
       const matchesIntake = selectedIntakes.length === 0 || 
         selectedIntakes.some(intake => course.intake?.includes(intake.split(' ')[1]));
       
-      return matchesSubject && matchesType && matchesDestination && matchesIntake;
+      return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake;
     } else {
       const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
       const matchesUniversity = selectedUniversity === 'all' || course.university_id === selectedUniversity;
       
-      return matchesSubject && matchesUniversity;
+      return matchesSearch && matchesSubject && matchesUniversity;
     }
+  }).sort((a, b) => {
+    if (sortBy === 'name') return (a.course_title || '').localeCompare(b.course_title || '');
+    if (sortBy === 'fee_low') return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
+    if (sortBy === 'fee_high') return (b.tuition_fee_min || 0) - (a.tuition_fee_min || 0);
+    return 0;
   });
 
   const filteredUniversities = universities.filter(uni => {
+    const matchesSearch = !searchQuery ||
+      uni.university_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      uni.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      uni.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      uni.country?.toLowerCase().includes(searchQuery.toLowerCase());
+    
     if (activeTab === 'universities') {
       const uniCourses = courses.filter(c => c.university_id === uni.id);
       const matchesSubject = subjectType === 'all' || 
         uniCourses.some(c => c.subject_area === subjectType);
       
-      return matchesSubject && uni.status === 'active';
+      return matchesSearch && matchesSubject && uni.status === 'active';
     }
     return false;
   });
@@ -119,6 +138,17 @@ export default function CourseFinder() {
               </TabsList>
 
               <TabsContent value="courses" className="space-y-6">
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    placeholder="Search by course name, university, or subject..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-14 text-lg border-2"
+                  />
+                </div>
+
                 <div className="grid md:grid-cols-4 gap-4">
                   {/* Subject Type */}
                   <div>
@@ -207,6 +237,17 @@ export default function CourseFinder() {
               </TabsContent>
 
               <TabsContent value="universities" className="space-y-6">
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    placeholder="Search by university name, city, or country..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-14 text-lg border-2"
+                  />
+                </div>
+
                 <div className="grid md:grid-cols-3 gap-4">
                   {/* Subject Type */}
                   <div>
@@ -255,10 +296,26 @@ export default function CourseFinder() {
               </TabsContent>
             </Tabs>
 
-            <div className="mt-4">
+            <div className="mt-4 flex items-center justify-between">
               <p className="text-sm text-slate-600">
                 Showing <span className="font-semibold">{activeTab === 'courses' ? filteredCourses.length : filteredUniversities.length}</span> results
               </p>
+              {activeTab === 'courses' && filteredCourses.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-600">Sort by:</span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-40 h-9">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="relevance">Relevance</SelectItem>
+                      <SelectItem value="name">Name A-Z</SelectItem>
+                      <SelectItem value="fee_low">Fee: Low to High</SelectItem>
+                      <SelectItem value="fee_high">Fee: High to Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
           </div>
         </div>
