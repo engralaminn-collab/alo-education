@@ -137,8 +137,9 @@ export default function CourseDetailsPage() {
             <Tabs defaultValue="overview" className="w-full">
               <TabsList className="w-full justify-start mb-6">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="requirements">Entry Requirements</TabsTrigger>
-                <TabsTrigger value="ielts">IELTS Requirements</TabsTrigger>
+                <TabsTrigger value="requirements">Requirements</TabsTrigger>
+                <TabsTrigger value="english">English Tests</TabsTrigger>
+                <TabsTrigger value="fees">Fees & Intakes</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview">
@@ -162,9 +163,7 @@ export default function CourseDetailsPage() {
                   <CardContent>
                     <div className="prose prose-slate max-w-none">
                       {course.overview ? (
-                        <p className="text-slate-700 leading-relaxed whitespace-pre-line">
-                          {course.overview}
-                        </p>
+                        <div className="text-slate-700 leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: course.overview }} />
                       ) : (
                         <p className="text-slate-500 italic">No overview available</p>
                       )}
@@ -174,6 +173,13 @@ export default function CourseDetailsPage() {
                       <div className="mt-6 p-4 bg-slate-50 rounded-lg">
                         <h4 className="font-semibold text-slate-900 mb-2">Subject Area</h4>
                         <p className="text-slate-700">{course.subject_area}</p>
+                      </div>
+                    )}
+
+                    {course.modules && (
+                      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Course Modules</h4>
+                        <div className="text-slate-700 leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: course.modules }} />
                       </div>
                     )}
                   </CardContent>
@@ -189,70 +195,119 @@ export default function CourseDetailsPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {course.entry_requirements ? (
-                      <div className="prose prose-slate max-w-none">
-                        <p className="text-slate-700 leading-relaxed whitespace-pre-line">
-                          {course.entry_requirements}
-                        </p>
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="font-semibold text-slate-900 mb-3">Academic Requirements</h4>
+                        {course.entry_requirements ? (
+                          <div className="prose prose-slate max-w-none">
+                            <div className="text-slate-700 leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: course.entry_requirements }} />
+                          </div>
+                        ) : (
+                          <p className="text-slate-500 italic">Academic requirements information not available</p>
+                        )}
                       </div>
-                    ) : (
-                      <p className="text-slate-500 italic">Entry requirements information not available</p>
-                    )}
+
+                      <div className="p-4 bg-slate-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">English Language Requirements</h4>
+                        <div className="space-y-2">
+                          {course.ielts_overall && (
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-600" />
+                              <span className="text-slate-700">IELTS: {course.ielts_overall} overall{course.ielts_min_each && ` (min ${course.ielts_min_each} each)`}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span className="text-slate-700">PTE, TOEFL, Duolingo equivalents accepted</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4 text-green-600" />
+                            <span className="text-slate-700">Medium of Instruction (MOI) may be accepted</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-2">Documents Required</h4>
+                        <ul className="space-y-1 text-sm text-slate-700">
+                          <li>• Academic transcripts & certificates</li>
+                          <li>• English test scores (IELTS/PTE/TOEFL/Duolingo/MOI)</li>
+                          <li>• Passport copy</li>
+                          <li>• Statement of Purpose (SOP)</li>
+                          <li>• Letters of Recommendation (if required)</li>
+                          <li>• CV/Resume</li>
+                        </ul>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="ielts">
+              <TabsContent value="english">
                 <Card className="alo-card">
                   <CardHeader>
                     <CardTitle className="alo-card-title flex items-center gap-2">
                       <Globe className="w-5 h-5" />
-                      IELTS Requirements
+                      English Language Requirements
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {course.ielts_required ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-green-600">
-                          <CheckCircle className="w-5 h-5" />
-                          <span className="font-semibold">IELTS Required</span>
-                        </div>
-                        
-                        {course.ielts_overall && (
-                          <div className="p-4 bg-blue-50 rounded-lg">
-                            <div className="flex items-center justify-between">
-                              <span className="text-slate-700">Overall Score Required:</span>
-                              <span className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                                {course.ielts_overall}
-                              </span>
-                            </div>
+                    <div className="space-y-6">
+                      {/* IELTS */}
+                      {course.ielts_overall && (
+                        <div className="p-4 bg-blue-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-3">IELTS</h4>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-slate-700">Overall Score Required:</span>
+                            <span className="text-2xl font-bold" style={{ color: '#0066CC' }}>
+                              {course.ielts_overall}
+                            </span>
                           </div>
-                        )}
-
-                        {course.ielts_min_each && (
-                          <div className="p-4 bg-slate-50 rounded-lg">
+                          {course.ielts_min_each && (
                             <div className="flex items-center justify-between">
-                              <span className="text-slate-700">Minimum in Each Band:</span>
+                              <span className="text-slate-700">Minimum Each Band:</span>
                               <span className="text-xl font-bold text-slate-900">
                                 {course.ielts_min_each}
                               </span>
                             </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
+                      )}
 
-                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                          <p className="text-sm text-amber-800">
-                            <strong>Note:</strong> IELTS scores are typically valid for 2 years from the test date.
-                          </p>
+                      {/* Alternative Tests */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">PTE Academic</h4>
+                          <p className="text-sm text-slate-600">Equivalent scores accepted</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">TOEFL</h4>
+                          <p className="text-sm text-slate-600">Equivalent scores accepted</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">Duolingo</h4>
+                          <p className="text-sm text-slate-600">Accepted as alternative</p>
+                        </div>
+                        <div className="p-4 bg-green-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">MOI (Medium of Instruction)</h4>
+                          <p className="text-sm text-green-700 font-medium">May be accepted - contact us</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">OIETC</h4>
+                          <p className="text-sm text-slate-600">Accepted for select universities</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <h4 className="font-semibold text-slate-900 mb-2">LanguageCert</h4>
+                          <p className="text-sm text-slate-600">International ESOL accepted</p>
                         </div>
                       </div>
-                    ) : (
-                      <div className="text-center py-8">
-                        <Globe className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <p className="text-slate-500">IELTS requirements not specified for this course</p>
-                        <p className="text-sm text-slate-400 mt-2">Contact us for more information</p>
+
+                      <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <p className="text-sm text-amber-800">
+                          <strong>Note:</strong> English test scores are typically valid for 2 years from the test date. Contact ALO Education for MOI eligibility assessment.
+                        </p>
                       </div>
-                    )}
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -351,6 +406,58 @@ export default function CourseDetailsPage() {
                 course={course}
                 university={university}
               />
+            </Tabs>
+
+            {/* Fees & Intakes Tab */}
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsContent value="fees">
+                <Card className="alo-card">
+                  <CardHeader>
+                    <CardTitle className="alo-card-title flex items-center gap-2">
+                      <DollarSign className="w-5 h-5" />
+                      Fees & Intakes
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="p-4 bg-blue-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Tuition Fee</h4>
+                        <p className="text-3xl font-bold" style={{ color: '#0066CC' }}>
+                          {course.tuition_fee_min && course.tuition_fee_max
+                            ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
+                            : course.tuition_fee_min
+                            ? course.tuition_fee_min.toLocaleString()
+                            : 'Contact us'
+                          }
+                        </p>
+                        <p className="text-sm text-slate-600">{course.currency || 'USD'} per year</p>
+                      </div>
+
+                      <div className="p-4 bg-slate-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Application Fee</h4>
+                        <p className="text-3xl font-bold text-slate-900">
+                          {course.application_fee || '0'}
+                        </p>
+                        <p className="text-sm text-slate-600">{course.currency || 'USD'}</p>
+                      </div>
+
+                      <div className="p-4 bg-orange-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Duration</h4>
+                        <p className="text-2xl font-bold" style={{ color: '#F37021' }}>
+                          {course.duration || 'Contact us'}
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-green-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Intakes</h4>
+                        <p className="text-2xl font-bold text-green-700">
+                          {course.intake || 'Contact us'}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
               {/* University Link */}
               {university && (

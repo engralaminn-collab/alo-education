@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch
+  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, Workflow
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
+  { icon: Users, label: 'Leads', page: 'CRMLeads' },
   { icon: Zap, label: 'Lead Nurturing', page: 'CRMLeadNurturing' },
   { icon: Sparkles, label: 'AI Assistant', page: 'CRMAIAssistant' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
@@ -21,11 +22,9 @@ const menuItems = [
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
-  { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
-  { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
-  { icon: GitBranch, label: 'Workflows', page: 'CRMWorkflows' },
-  { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
-  { icon: TrendingUp, label: 'Counselor Analytics', page: 'CRMCounselorAnalytics' },
+  { icon: Mail, label: 'Email Campaigns', page: 'CRMEmailCampaigns' },
+  { icon: Workflow, label: 'Workflows', page: 'CRMLeadNurturingWorkflows' },
+  { icon: TrendingUp, label: 'Analytics', page: 'CRMReportsAnalytics' },
   { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];
