@@ -224,47 +224,44 @@ export default function StudyInUK() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
               {universities.slice(0, 8).map(uni => (
                 <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
-                  <Card className="bg-white border-2 hover:shadow-2xl transition-all h-full group overflow-hidden">
-                    <CardHeader className="text-center pb-4 bg-slate-50">
+                  <Card 
+                    className="bg-white border-2 hover:shadow-xl transition-all h-full group"
+                    style={{ borderColor: '#0066CC' }} 
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
+                  >
+                    <CardHeader className="text-center pb-3">
                       {uni.logo && (
-                        <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center bg-white rounded-lg p-3 shadow-md">
+                        <div className="w-20 h-20 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg p-2">
                           <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
                         </div>
                       )}
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <CardTitle className="text-xl leading-tight font-bold">
+                      <CardTitle className="text-lg leading-tight" style={{ color: '#F37021' }}>
                         {uni.university_name}
                       </CardTitle>
-
+                    </CardHeader>
+                    <CardContent className="space-y-2 text-sm">
                       {uni.city && (
                         <div className="flex items-center gap-2 text-slate-600">
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
                           <span>{uni.city}</span>
                         </div>
                       )}
-
-                      {uni.ranking && (
-                        <div className="text-sm">
-                          <span className="font-semibold">Ranking:</span> {uni.ranking}
+                      {(uni.ranking || uni.qs_ranking) && (
+                        <div className="text-sm text-slate-600">
+                          <span className="font-semibold">Ranking:</span> #{uni.ranking || uni.qs_ranking}
                         </div>
                       )}
-
                       {uni.intakes && (
-                        <div className="text-sm">
+                        <div className="text-sm text-slate-600">
                           <span className="font-semibold">Next intake:</span> {uni.intakes}
                         </div>
                       )}
-
-                      <div className="text-sm">
-                        <span className="font-semibold">Entry score:</span> IELTS 6.5
-                      </div>
-
                       <Button 
-                        className="w-full mt-4 font-bold" 
-                        style={{ backgroundColor: '#0000FF', color: 'white' }}
+                        className="w-full mt-3 font-semibold" 
+                        style={{ backgroundColor: '#F37021', color: '#000000' }}
                       >
-                        View university
+                        Learn More
                       </Button>
                     </CardContent>
                   </Card>
@@ -297,9 +294,14 @@ export default function StudyInUK() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses.map(course => (
               <Link key={course.id} to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`}>
-                <Card className="bg-white border hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
+                <Card 
+                  className="bg-white border-2 hover:shadow-xl transition-all h-full group" 
+                  style={{ borderColor: '#0066CC' }} 
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
+                >
                   <CardHeader>
-                    <CardTitle className="text-lg leading-tight group-hover:text-[#F37021] transition-colors" style={{ color: '#F37021' }}>
+                    <CardTitle className="text-lg leading-tight" style={{ color: '#F37021' }}>
                       {course.course_title}
                     </CardTitle>
                   </CardHeader>
@@ -343,14 +345,14 @@ export default function StudyInUK() {
             {allUKUniversitiesData.map((uni) => (
               <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
                 <Card 
-                  className="bg-white border hover:shadow-xl transition-all h-full" 
+                  className="bg-white border-2 hover:shadow-xl transition-all h-full" 
                   style={{ borderColor: '#0066CC' }} 
                   onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
                   onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
                 >
                   <CardHeader className="text-center pb-3">
                     {uni.logo && (
-                      <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-slate-50 rounded-full p-2">
+                      <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg p-2">
                         <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
                       </div>
                     )}
@@ -366,15 +368,13 @@ export default function StudyInUK() {
                       </div>
                     )}
                     {(uni.ranking || uni.qs_ranking) && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Trophy className="w-4 h-4" style={{ color: '#F37021' }} />
-                        <span>Ranking: #{uni.ranking || uni.qs_ranking}</span>
+                      <div className="text-slate-600">
+                        <span className="font-semibold">Ranking:</span> #{uni.ranking || uni.qs_ranking}
                       </div>
                     )}
                     {uni.intakes && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Calendar className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.intakes}</span>
+                      <div className="text-slate-600">
+                        <span className="font-semibold">Next intake:</span> {uni.intakes}
                       </div>
                     )}
                     <Button className="w-full mt-3 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
