@@ -17,7 +17,7 @@ import Footer from '@/components/landing/Footer';
 export default function CourseFinder() {
   const [activeTab, setActiveTab] = useState('courses');
   const [searchQuery, setSearchQuery] = useState('');
-  const [subjectType, setSubjectType] = useState('all');
+  const [subjectType, setSubjectType] = useState('');
   const [courseType, setCourseType] = useState('all');
   const [destination, setDestination] = useState('all');
   const [selectedUniversity, setSelectedUniversity] = useState('all');
@@ -61,7 +61,7 @@ export default function CourseFinder() {
       universityMap[course.university_id]?.name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (activeTab === 'courses') {
-      const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
+      const matchesSubject = !subjectType || course.subject_area?.toLowerCase().includes(subjectType.toLowerCase());
       const matchesType = courseType === 'all' || course.level === courseType;
       const matchesDestination = destination === 'all' || course.country === destination;
       const matchesIntake = selectedIntakes.length === 0 || 
@@ -69,7 +69,7 @@ export default function CourseFinder() {
       
       return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake;
     } else {
-      const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
+      const matchesSubject = !subjectType || course.subject_area?.toLowerCase().includes(subjectType.toLowerCase());
       const matchesUniversity = selectedUniversity === 'all' || course.university_id === selectedUniversity;
       
       return matchesSearch && matchesSubject && matchesUniversity;
@@ -90,8 +90,8 @@ export default function CourseFinder() {
     
     if (activeTab === 'universities') {
       const uniCourses = courses.filter(c => c.university_id === uni.id);
-      const matchesSubject = subjectType === 'all' || 
-        uniCourses.some(c => c.subject_area === subjectType);
+      const matchesSubject = !subjectType || 
+        uniCourses.some(c => c.subject_area?.toLowerCase().includes(subjectType.toLowerCase()));
       
       return matchesSearch && matchesSubject && uni.status === 'active';
     }
@@ -187,7 +187,6 @@ export default function CourseFinder() {
                           <SelectValue placeholder="Select country" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Countries</SelectItem>
                           {countries.filter(c => c !== 'all').map(country => (
                             <SelectItem key={country} value={country}>{country}</SelectItem>
                           ))}
@@ -235,17 +234,12 @@ export default function CourseFinder() {
                       <label className="text-sm font-medium text-slate-700 mb-2 block">
                         I'm looking for:
                       </label>
-                      <Select value={subjectType} onValueChange={setSubjectType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select subject type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Subjects</SelectItem>
-                          {subjectAreas.filter(s => s !== 'all').map(subject => (
-                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        placeholder="Type subject name (e.g., Business)"
+                        value={subjectType}
+                        onChange={(e) => setSubjectType(e.target.value)}
+                        className="h-12"
+                      />
                     </div>
 
                     {/* Universities */}
