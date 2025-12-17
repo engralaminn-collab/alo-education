@@ -138,159 +138,141 @@ export default function CourseFinder() {
               </TabsList>
 
               <TabsContent value="courses" className="space-y-6">
-                {/* Search Bar */}
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <Input
-                    placeholder="Search by course name, university, or subject..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-14 text-lg border-2"
-                  />
-                </div>
+                <div className="bg-white rounded-lg p-6 border-2 border-slate-200">
+                  <div className="grid md:grid-cols-4 gap-4">
+                    {/* Subject Type */}
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        I'm looking for:
+                      </label>
+                      <Select value={subjectType} onValueChange={setSubjectType}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select subject type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Subjects</SelectItem>
+                          {subjectAreas.filter(s => s !== 'all').map(subject => (
+                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                <div className="grid md:grid-cols-4 gap-4">
-                  {/* Subject Type */}
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-2 block">
-                      I'm looking for:
+                    {/* Course Level */}
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        I'm planning to study:
+                      </label>
+                      <Select value={courseType} onValueChange={setCourseType}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select level type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Levels</SelectItem>
+                          <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+                          <SelectItem value="Postgraduate">Postgraduate</SelectItem>
+                          <SelectItem value="Foundation">Foundation</SelectItem>
+                          <SelectItem value="PhD">PhD</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Country */}
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        I want to study in:
+                      </label>
+                      <Select value={destination} onValueChange={setDestination}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Countries</SelectItem>
+                          {countries.filter(c => c !== 'all').map(country => (
+                            <SelectItem key={country} value={country}>{country}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Search Button */}
+                    <div className="flex items-end">
+                      <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                        <Search className="w-5 h-5 mr-2" />
+                        Search
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Intake Selection */}
+                  <div className="mt-6">
+                    <label className="text-sm font-medium text-slate-700 mb-3 block">
+                      For the intake:
                     </label>
-                    <Select value={subjectType} onValueChange={setSubjectType}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select subject type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Subjects</SelectItem>
-                        {subjectAreas.filter(s => s !== 'all').map(subject => (
-                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Course Type */}
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-2 block">
-                      I'm planning to study:
-                    </label>
-                    <Select value={courseType} onValueChange={setCourseType}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select course type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        <SelectItem value="Undergraduate">Undergraduate</SelectItem>
-                        <SelectItem value="Postgraduate">Postgraduate</SelectItem>
-                        <SelectItem value="Foundation">Foundation</SelectItem>
-                        <SelectItem value="PhD">PhD</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Country */}
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-2 block">
-                      I want to study in:
-                    </label>
-                    <Select value={destination} onValueChange={setDestination}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Countries</SelectItem>
-                        {countries.filter(c => c !== 'all').map(country => (
-                          <SelectItem key={country} value={country}>{country}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Search Button */}
-                  <div className="flex items-end">
-                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      <Search className="w-5 h-5 mr-2" />
-                      Search
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Intake Selection */}
-                <div>
-                  <label className="text-sm font-medium text-slate-700 mb-3 block">
-                    For the intake:
-                  </label>
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                    {intakes.map(intake => (
-                      <div key={intake} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50">
-                        <Checkbox
-                          id={intake}
-                          checked={selectedIntakes.includes(intake)}
-                          onCheckedChange={() => handleIntakeToggle(intake)}
-                        />
-                        <label htmlFor={intake} className="text-sm cursor-pointer">
-                          {intake}
-                        </label>
-                      </div>
-                    ))}
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                      {intakes.map(intake => (
+                        <div key={intake} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                          <Checkbox
+                            id={intake}
+                            checked={selectedIntakes.includes(intake)}
+                            onCheckedChange={() => handleIntakeToggle(intake)}
+                          />
+                          <label htmlFor={intake} className="text-sm cursor-pointer">
+                            {intake}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="universities" className="space-y-6">
-                {/* Search Bar */}
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <Input
-                    placeholder="Search by university name, city, or country..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-14 text-lg border-2"
-                  />
-                </div>
+                <div className="bg-white rounded-lg p-6 border-2 border-slate-200">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {/* Subject Type */}
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        I'm looking for:
+                      </label>
+                      <Select value={subjectType} onValueChange={setSubjectType}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select subject type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Subjects</SelectItem>
+                          {subjectAreas.filter(s => s !== 'all').map(subject => (
+                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                <div className="grid md:grid-cols-3 gap-4">
-                  {/* Subject Type */}
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-2 block">
-                      I'm looking for:
-                    </label>
-                    <Select value={subjectType} onValueChange={setSubjectType}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select subject type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Subjects</SelectItem>
-                        {subjectAreas.filter(s => s !== 'all').map(subject => (
-                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    {/* Universities */}
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        I want to study in:
+                      </label>
+                      <Select value={selectedUniversity} onValueChange={setSelectedUniversity}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Select university" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Universities</SelectItem>
+                          {universities.filter(u => u.status === 'active').map(uni => (
+                            <SelectItem key={uni.id} value={uni.id}>{uni.university_name || uni.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  {/* Universities */}
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-2 block">
-                      I want to study in:
-                    </label>
-                    <Select value={selectedUniversity} onValueChange={setSelectedUniversity}>
-                      <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select university" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Universities</SelectItem>
-                        {universities.filter(u => u.status === 'active').map(uni => (
-                          <SelectItem key={uni.id} value={uni.id}>{uni.university_name || uni.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Search Button */}
-                  <div className="flex items-end">
-                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      <Search className="w-5 h-5 mr-2" />
-                      Search
-                    </Button>
+                    {/* Search Button */}
+                    <div className="flex items-end">
+                      <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                        <Search className="w-5 h-5 mr-2" />
+                        Search
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
