@@ -145,17 +145,12 @@ export default function CourseFinder() {
                       <label className="text-sm font-medium text-slate-700 mb-2 block">
                         I'm looking for:
                       </label>
-                      <Select value={subjectType} onValueChange={setSubjectType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select subject type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Subjects</SelectItem>
-                          {subjectAreas.filter(s => s !== 'all').map(subject => (
-                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        placeholder="Type subject name (e.g., Business)"
+                        value={subjectType}
+                        onChange={(e) => setSubjectType(e.target.value)}
+                        className="h-12"
+                      />
                     </div>
 
                     {/* Course Level */}
