@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, MessageCircle, Check } from 'lucide-react';
 
 export default function Footer() {
   const capIconsRef = useRef(null);
@@ -29,13 +29,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'var(--alo-blue)' }}>
-                <GraduationCap className="w-7 h-7 text-white" />
-              </div>
-              <div>
-                <span className="text-xl font-bold block" style={{ color: 'var(--alo-blue)' }}>ALO Education</span>
-                <span className="text-xs" style={{ color: 'var(--alo-orange)' }}>Your Dream - Our Commitment</span>
-              </div>
+              <img 
+                src="https://aloeducation.com/wp-content/uploads/2023/12/ALO-Logo_Final-1.png" 
+                alt="ALO Education Logo" 
+                className="h-16 w-auto object-contain"
+              />
             </div>
             <p className="text-slate-600 text-sm leading-relaxed mb-6">
               From your ambition to admission, we're with you all the way.
