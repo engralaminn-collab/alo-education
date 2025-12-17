@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 import { 
   Search, Clock, DollarSign, Filter, X, ArrowRight, 
   GraduationCap, Building2, BookOpen, Award
@@ -41,10 +42,28 @@ const fieldsOfStudy = [
   { value: 'hospitality', label: 'Hospitality' },
 ];
 
+const intakeMonths = [
+  { value: 'all', label: 'All Intakes' },
+  { value: 'january', label: 'January' },
+  { value: 'february', label: 'February' },
+  { value: 'march', label: 'March' },
+  { value: 'april', label: 'April' },
+  { value: 'may', label: 'May' },
+  { value: 'june', label: 'June' },
+  { value: 'july', label: 'July' },
+  { value: 'august', label: 'August' },
+  { value: 'september', label: 'September' },
+  { value: 'october', label: 'October' },
+  { value: 'november', label: 'November' },
+  { value: 'december', label: 'December' },
+];
+
 export default function Courses() {
   const [searchQuery, setSearchQuery] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('all');
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
+  const [intakeMonth, setIntakeMonth] = useState('all');
+  const [tuitionRange, setTuitionRange] = useState([0, 50000]);
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -84,17 +103,22 @@ export default function Courses() {
   }, {});
 
   const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDegree = degreeLevel === 'all' || course.degree_level === degreeLevel;
-    const matchesField = fieldOfStudy === 'all' || course.field_of_study === fieldOfStudy;
+    const matchesSearch = (course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesDegree = degreeLevel === 'all' || course.level?.toLowerCase() === degreeLevel;
+    const matchesField = fieldOfStudy === 'all' || course.subject_area?.toLowerCase().includes(fieldOfStudy);
+    const matchesIntake = intakeMonth === 'all' || course.intake?.toLowerCase().includes(intakeMonth);
+    const matchesTuition = !course.tuition_fee_min || (course.tuition_fee_min >= tuitionRange[0] && course.tuition_fee_min <= tuitionRange[1]);
     const matchesScholarship = !scholarshipOnly || course.scholarship_available;
-    return matchesSearch && matchesDegree && matchesField && matchesScholarship;
+    return matchesSearch && matchesDegree && matchesField && matchesIntake && matchesTuition && matchesScholarship;
   });
 
   const clearFilters = () => {
     setSearchQuery('');
     setDegreeLevel('all');
     setFieldOfStudy('all');
+    setIntakeMonth('all');
+    setTuitionRange([0, 50000]);
     setScholarshipOnly(false);
   };
 
@@ -126,6 +150,34 @@ export default function Courses() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Intake Month</label>
+        <Select value={intakeMonth} onValueChange={setIntakeMonth}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {intakeMonths.map(i => (
+              <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-3 block">
+          Tuition Fee Range: ${tuitionRange[0].toLocaleString()} - ${tuitionRange[1].toLocaleString()}
+        </label>
+        <Slider
+          min={0}
+          max={50000}
+          step={1000}
+          value={tuitionRange}
+          onValueChange={setTuitionRange}
+          className="mb-2"
+        />
       </div>
 
       <div className="flex items-center gap-2">

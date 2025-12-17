@@ -136,6 +136,7 @@ export default function UniversityDetailsPage() {
                 <TabsTrigger value="location">Location</TabsTrigger>
                 <TabsTrigger value="why">Why Choose</TabsTrigger>
                 <TabsTrigger value="courses">Popular Courses</TabsTrigger>
+                <TabsTrigger value="programs">Academic Programs</TabsTrigger>
                 <TabsTrigger value="requirements">Entry Requirements</TabsTrigger>
                 <TabsTrigger value="fees">Tuition Fees</TabsTrigger>
                 <TabsTrigger value="scholarships">Scholarships</TabsTrigger>
@@ -257,6 +258,87 @@ export default function UniversityDetailsPage() {
                         <div>
                           <h4 className="font-semibold text-slate-900 mb-1">Research Opportunities</h4>
                           <p className="text-sm text-slate-600">World-class research facilities and funding</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="programs">
+                <Card className="border-2" style={{ borderColor: '#0066CC' }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2" style={{ color: '#F37021' }}>
+                      <BookOpen className="w-5 h-5" />
+                      Academic Programs
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <h3 className="font-bold text-lg mb-4" style={{ color: '#0066CC' }}>Available Programs by Level</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-6 rounded-lg border-2" style={{ borderColor: '#0066CC' }}>
+                          <h4 className="font-bold text-lg mb-3" style={{ color: '#F37021' }}>Undergraduate Programs</h4>
+                          <ul className="space-y-2 text-slate-700">
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>Foundation Year Programs</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>Bachelor's Degrees (3-4 years)</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>Integrated Master's Programs</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="p-6 rounded-lg border-2" style={{ borderColor: '#0066CC' }}>
+                          <h4 className="font-bold text-lg mb-3" style={{ color: '#F37021' }}>Postgraduate Programs</h4>
+                          <ul className="space-y-2 text-slate-700">
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>Master's Degrees (1-2 years)</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>MBA Programs</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0066CC' }} />
+                              <span>PhD & Research Programs (3-4 years)</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold text-lg mb-4" style={{ color: '#0066CC' }}>Popular Subject Areas</h3>
+                      <div className="grid md:grid-cols-3 gap-3">
+                        {['Business & Management', 'Engineering', 'Computer Science', 'Medicine & Health', 'Law', 'Social Sciences', 'Arts & Humanities', 'Natural Sciences', 'Architecture'].map((subject) => (
+                          <div key={subject} className="p-4 bg-slate-50 rounded-lg border-2 border-transparent hover:border-[#F37021] transition-colors">
+                            <p className="text-sm font-medium text-slate-900">{subject}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                      <h3 className="font-bold mb-3" style={{ color: '#0066CC' }}>Intakes (Jan / May / Sep)</h3>
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <div className="p-4 bg-white rounded-lg">
+                          <p className="font-semibold mb-1" style={{ color: '#F37021' }}>January</p>
+                          <p className="text-sm text-slate-600">Limited programs available</p>
+                        </div>
+                        <div className="p-4 bg-white rounded-lg">
+                          <p className="font-semibold mb-1" style={{ color: '#F37021' }}>May</p>
+                          <p className="text-sm text-slate-600">Selected programs only</p>
+                        </div>
+                        <div className="p-4 bg-white rounded-lg border-2" style={{ borderColor: '#0066CC' }}>
+                          <p className="font-semibold mb-1" style={{ color: '#F37021' }}>September</p>
+                          <p className="text-sm text-slate-600">Main intake - All programs</p>
                         </div>
                       </div>
                     </div>
