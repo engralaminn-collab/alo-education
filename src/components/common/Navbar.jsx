@@ -45,8 +45,7 @@ export default function Navbar() {
   const navLinks = [
   { label: 'Course Finder', page: 'Courses' },
   { label: 'Services', page: 'About' },
-  { label: 'Language Prep', page: 'LanguagePrep' },
-  { label: 'Portal', page: 'StudentDashboard' }];
+  { label: 'Language Prep', page: 'LanguagePrep' }];
   
   const resources = [
   { label: 'Universities', page: 'Universities' },
@@ -56,7 +55,9 @@ export default function Navbar() {
   { label: 'Visa Assistant', page: 'VisaAssistant' },
   { label: 'Alumni Network', page: 'AlumniNetwork' },
   { label: 'AI Counselor', page: 'AICounselor' },
-  { label: 'Testimonials', page: 'TestimonialsPage' }];
+  { label: 'Testimonials', page: 'TestimonialsPage' },
+  { label: 'Student Portal', page: 'StudentDashboard' },
+  { label: 'Partner Portal', page: 'PartnerPortal' }];
 
 
   return (
