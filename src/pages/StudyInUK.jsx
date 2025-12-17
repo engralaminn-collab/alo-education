@@ -271,22 +271,32 @@ export default function StudyInUK() {
           <h2 className="text-3xl font-bold mb-6" style={{ color: '#0066CC' }}>
             🇬🇧 All UK Universities (Recognised Degree-Awarding Bodies)
           </h2>
-          <Card className="bg-white border-0 shadow-lg">
-            <CardContent className="p-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
-                {allUKUniversities.map((uni, index) => (
-                  <Link 
-                    key={index} 
-                    to={createPageUrl('Universities') + `?search=${encodeURIComponent(uni)}`}
-                    className="flex items-center gap-2 text-slate-700 hover:text-[#F37021] transition-colors"
-                  >
-                    <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#0066CC' }} />
-                    <span className="text-sm">{uni}</span>
-                  </Link>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {allUKUniversities.map((uni, index) => (
+              <Link 
+                key={index} 
+                to={createPageUrl('Universities') + `?search=${encodeURIComponent(uni)}`}
+              >
+                <Card 
+                  className="bg-white border hover:shadow-xl transition-all h-full" 
+                  style={{ borderColor: '#0066CC' }} 
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base leading-tight" style={{ color: '#F37021' }}>
+                      {uni}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button className="w-full font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                      Learn More
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </section>
 
         {/* Entry Requirements & Fees */}
