@@ -7,28 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
-  CheckCircle, ArrowRight, ArrowLeft, Upload, FileText,
-  User, GraduationCap, BookOpen, File, X
+  CheckCircle, Upload, FileText, X, Trash2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 
-const steps = [
-  { id: 1, title: 'Personal Information', icon: User },
-  { id: 2, title: 'Academic History', icon: GraduationCap },
-  { id: 3, title: 'Test Scores', icon: FileText },
-  { id: 4, title: 'Work Experience', icon: File },
-  { id: 5, title: 'Background', icon: File },
-  { id: 6, title: 'Course Selection', icon: BookOpen },
-  { id: 7, title: 'Documents', icon: File },
-];
-
 export default function ApplicationForm() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [activeTab, setActiveTab] = useState('personal');
   const [uploading, setUploading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [highestEducation, setHighestEducation] = useState('');
 
   const [formData, setFormData] = useState({
     // Personal
@@ -68,17 +59,21 @@ export default function ApplicationForm() {
     passport_expiry_date: '',
     passport_issue_country: '',
     passport_issue_city: '',
+    // Highest Education Level
+    highest_education: '',
     // Academic - Grade 10
     grade_10_institution: '',
     grade_10_board: '',
     grade_10_result: '',
     grade_10_year: '',
+    grade_10_documents: [],
     // Academic - Grade 12
     grade_12_institution: '',
     grade_12_board: '',
     grade_12_stream: '',
     grade_12_result: '',
     grade_12_year: '',
+    grade_12_documents: [],
     // Academic - Bachelor
     bachelor_degree: '',
     bachelor_field: '',
@@ -86,14 +81,15 @@ export default function ApplicationForm() {
     bachelor_year: '',
     bachelor_gpa: '',
     bachelor_scale: '',
-    // Academic - Master (optional)
-    has_masters: false,
+    bachelor_documents: [],
+    // Academic - Master
     master_degree: '',
     master_field: '',
     master_institution: '',
     master_year: '',
     master_gpa: '',
     master_scale: '',
+    master_documents: [],
     // English Tests
     has_ielts: false,
     ielts_overall: '',
@@ -141,8 +137,10 @@ export default function ApplicationForm() {
     budget_min: '',
     budget_max: '',
     target_intake: '',
-    // Documents
-    documents: [],
+    // Section Documents
+    personal_documents: [],
+    work_documents: [],
+    test_documents: [],
   });
 
   const { data: user } = useQuery({
@@ -305,7 +303,7 @@ export default function ApplicationForm() {
     },
   });
 
-  const handleFileUpload = async (e, docType) => {
+  const handleFileUpload = async (e, section, docType) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -315,10 +313,11 @@ export default function ApplicationForm() {
       
       setFormData(prev => ({
         ...prev,
-        documents: [...prev.documents, {
+        [section]: [...(prev[section] || []), {
           type: docType,
           name: file.name,
           url: file_url,
+          uploaded_at: new Date().toISOString(),
         }],
       }));
       toast.success(`${file.name} uploaded successfully`);
@@ -372,41 +371,65 @@ export default function ApplicationForm() {
     }));
   };
 
-  const validateStep = () => {
-    if (currentStep === 1) {
-      if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone || !formData.emergency_name || !formData.emergency_phone) {
-        toast.error('Please fill in all required fields');
-        return false;
-      }
+  const validateForm = () => {
+    if (!formData.first_name || !formData.last_name || !formData.email || !formData.phone) {
+      toast.error('Please fill in all required personal information');
+      return false;
     }
-    if (currentStep === 2) {
-      if (!formData.grade_10_institution || !formData.grade_12_institution || !formData.bachelor_degree) {
-        toast.error('Please fill in your academic information');
-        return false;
-      }
+    if (!formData.emergency_name || !formData.emergency_phone) {
+      toast.error('Please provide emergency contact details');
+      return false;
     }
-    if (currentStep === 6) {
-      if (!formData.preferred_degree_level || formData.preferred_countries.length === 0) {
-        toast.error('Please select your course preferences');
-        return false;
-      }
+    if (!formData.highest_education) {
+      toast.error('Please select your highest level of education');
+      return false;
     }
     return true;
   };
 
-  const nextStep = () => {
-    if (validateStep()) {
-      setCurrentStep(prev => Math.min(prev + 1, steps.length));
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
-
   const handleSubmit = () => {
-    if (!validateStep()) return;
+    if (!validateForm()) return;
     submitApplication.mutate(formData);
+  };
+
+  const DocumentUploadSection = ({ section, docType, label }) => {
+    const docs = formData[section] || [];
+    const sectionDocs = docs.filter(d => d.type === docType);
+    
+    return (
+      <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 hover:border-slate-300 transition-colors">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-medium text-slate-900">{label}</p>
+            {sectionDocs.length > 0 && (
+              <div className="mt-2 space-y-1">
+                {sectionDocs.map((doc, idx) => (
+                  <p key={idx} className="text-sm text-green-600 flex items-center gap-1">
+                    <CheckCircle className="w-4 h-4" />
+                    {doc.name}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+          <label>
+            <input
+              type="file"
+              className="hidden"
+              onChange={(e) => handleFileUpload(e, section, docType)}
+              accept=".pdf,.jpg,.jpeg,.png"
+              disabled={uploading}
+            />
+            <Button type="button" variant="outline" size="sm" disabled={uploading} asChild>
+              <span className="cursor-pointer">
+                <Upload className="w-4 h-4 mr-2" />
+                Upload
+              </span>
+            </Button>
+          </label>
+        </div>
+      </div>
+    );
   };
 
   if (submitted) {
@@ -469,65 +492,41 @@ export default function ApplicationForm() {
       </section>
 
       <div className="container mx-auto px-6 py-12">
-        <div className="max-w-4xl mx-auto">
-          {/* Progress Steps */}
-          <div className="mb-12">
-            <div className="flex justify-between items-center relative">
-              {steps.map((step, idx) => {
-                const Icon = step.icon;
-                const isActive = currentStep === step.id;
-                const isCompleted = currentStep > step.id;
-                
-                return (
-                  <React.Fragment key={step.id}>
-                    <div className="flex flex-col items-center z-10 flex-1">
-                      <div 
-                        className={`w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all ${
-                          isCompleted ? 'bg-green-600' : isActive ? 'bg-white border-4' : 'bg-white'
-                        }`}
-                        style={isActive ? { borderColor: '#0B5ED7' } : {}}
-                      >
-                        {isCompleted ? (
-                          <CheckCircle className="w-7 h-7 text-white" />
-                        ) : (
-                          <Icon className={`w-6 h-6 ${isActive ? 'text-slate-900' : 'text-slate-400'}`} />
-                        )}
-                      </div>
-                      <span className={`text-sm font-medium text-center ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
-                        {step.title}
-                      </span>
-                    </div>
-                    {idx < steps.length - 1 && (
-                      <div className="flex-1 h-1 bg-slate-200 -mx-4 mt-6">
-                        <div 
-                          className="h-full transition-all duration-300"
-                          style={{ 
-                            width: currentStep > step.id ? '100%' : '0%',
-                            backgroundColor: '#0B5ED7'
-                          }}
-                        />
-                      </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <Card className="border-0 shadow-lg">
+            <CardContent className="p-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <div className="border-b bg-slate-50">
+                  <TabsList className="w-full justify-start h-auto p-0 bg-transparent">
+                    <TabsTrigger 
+                      value="personal" 
+                      className="px-8 py-4 rounded-none data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                    >
+                      Personal Information
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="academic"
+                      className="px-8 py-4 rounded-none data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                    >
+                      Academic Qualifications
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="work"
+                      className="px-8 py-4 rounded-none data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                    >
+                      Work Experience
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="tests"
+                      className="px-8 py-4 rounded-none data-[state=active]:bg-white data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+                    >
+                      Tests
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
 
-          {/* Form Content */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-2xl">{steps[currentStep - 1].title}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
+                <div className="p-8">
+                  <TabsContent value="personal" className="mt-0 space-y-6">
                   {/* Step 1: Personal Information */}
                   {currentStep === 1 && (
                     <>
@@ -859,11 +858,49 @@ export default function ApplicationForm() {
                           </div>
                         )}
                       </div>
-                    </>
-                  )}
 
-                  {/* Step 2: Academic History */}
-                  {currentStep === 2 && (
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Upload Documents</h3>
+                        <div className="space-y-3">
+                          <DocumentUploadSection section="personal_documents" docType="passport" label="Passport Copy" />
+                          <DocumentUploadSection section="personal_documents" docType="photo" label="Recent Photograph" />
+                          <DocumentUploadSection section="personal_documents" docType="other" label="Other Documents" />
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                  <TabsContent value="academic" className="mt-0 space-y-6">
+                    {studentProfile && (
+                      <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                        <p className="text-sm text-emerald-800 font-medium">
+                          ✓ Form auto-filled from your profile
+                        </p>
+                      </div>
+                    )}
+
+                    <div>
+                      <Label>Highest Level of Education *</Label>
+                      <Select 
+                        value={formData.highest_education} 
+                        onValueChange={(v) => {
+                          updateField('highest_education', v);
+                          setHighestEducation(v);
+                        }}
+                      >
+                        <SelectTrigger className="mt-2">
+                          <SelectValue placeholder="Select your highest education level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="grade_10">Grade 10th / SSC</SelectItem>
+                          <SelectItem value="grade_12">Grade 12th / HSC</SelectItem>
+                          <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
+                          <SelectItem value="master">Master's Degree</SelectItem>
+                          <SelectItem value="phd">PhD</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {(formData.highest_education === 'grade_10' || formData.highest_education === 'grade_12' || formData.highest_education === 'bachelor' || formData.highest_education === 'master' || formData.highest_education === 'phd') && (
                     <>
                       <div className="pt-0 mb-6">
                         <h3 className="font-semibold mb-4">Grade 10th / SSC</h3>
@@ -957,10 +994,19 @@ export default function ApplicationForm() {
                             />
                           </div>
                         </div>
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-3">Upload Documents</h4>
+                          <div className="space-y-3">
+                            <DocumentUploadSection section="grade_10_documents" docType="certificate" label="Grade 10 Certificate" />
+                            <DocumentUploadSection section="grade_10_documents" docType="marksheet" label="Grade 10 Marksheet" />
+                          </div>
+                        </div>
                       </div>
+                    )}
 
+                    {(formData.highest_education === 'grade_12' || formData.highest_education === 'bachelor' || formData.highest_education === 'master' || formData.highest_education === 'phd') && (
                       <div className="pt-6 border-t">
-                        <h3 className="font-semibold mb-4">Bachelor's Degree</h3>
+                        <h3 className="font-semibold mb-4">Grade 12th / HSC</h3>
                         <div className="grid md:grid-cols-2 gap-6">
                           <div>
                             <Label>Degree Name *</Label>
@@ -1018,22 +1064,19 @@ export default function ApplicationForm() {
                             />
                           </div>
                         </div>
-                      </div>
-
-                      <div className="pt-6 border-t">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="font-semibold">Master's Degree (Optional)</h3>
-                          <Label className="flex items-center gap-2 cursor-pointer text-sm">
-                            <input
-                              type="checkbox"
-                              checked={formData.has_masters}
-                              onChange={(e) => updateField('has_masters', e.target.checked)}
-                              className="w-4 h-4"
-                            />
-                            I have a Master's degree
-                          </Label>
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-3">Upload Documents</h4>
+                          <div className="space-y-3">
+                            <DocumentUploadSection section="grade_12_documents" docType="certificate" label="Grade 12 Certificate" />
+                            <DocumentUploadSection section="grade_12_documents" docType="marksheet" label="Grade 12 Marksheet" />
+                          </div>
                         </div>
-                        {formData.has_masters && (
+                      </div>
+                    )}
+
+                    {(formData.highest_education === 'bachelor' || formData.highest_education === 'master' || formData.highest_education === 'phd') && (
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Bachelor's Degree</h3>
                           <div className="grid md:grid-cols-2 gap-6">
                             <div>
                               <Label>Degree Name</Label>
@@ -1090,13 +1133,20 @@ export default function ApplicationForm() {
                               />
                             </div>
                           </div>
-                        )}
+                        </div>
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-3">Upload Documents</h4>
+                          <div className="space-y-3">
+                            <DocumentUploadSection section="bachelor_documents" docType="degree" label="Bachelor's Degree Certificate" />
+                            <DocumentUploadSection section="bachelor_documents" docType="transcript" label="Bachelor's Transcripts" />
+                          </div>
+                        </div>
                       </div>
-                    </>
-                  )}
+                    )}
 
-                  {/* Step 3: Test Scores */}
-                  {currentStep === 3 && (
+                    {(formData.highest_education === 'master' || formData.highest_education === 'phd') && (
+                      <div className="pt-6 border-t">
+                        <h3 className="font-semibold mb-4">Master's Degree</h3>
                     <>
                       <p className="text-slate-600 mb-6">
                         Provide your standardized test scores (if available)
@@ -1510,11 +1560,20 @@ export default function ApplicationForm() {
                       >
                         + Add Work Experience
                       </Button>
-                    </>
-                  )}
 
-                  {/* Step 5: Background Information */}
-                  {currentStep === 5 && (
+                      {formData.work_experiences.length > 0 && (
+                        <div className="pt-6 border-t">
+                          <h3 className="font-semibold mb-4">Upload Work Documents</h3>
+                          <div className="space-y-3">
+                            <DocumentUploadSection section="work_documents" docType="experience_letter" label="Experience Letters" />
+                            <DocumentUploadSection section="work_documents" docType="payslip" label="Payslips" />
+                            <DocumentUploadSection section="work_documents" docType="cv" label="CV/Resume" />
+                          </div>
+                        </div>
+                      )}
+                  </TabsContent>
+
+                  <TabsContent value="tests" className="mt-0 space-y-6">
                     <>
                       <p className="text-slate-600 mb-6">
                         Please provide background information for visa and admission purposes
