@@ -8,12 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, MapPin, Clock, DollarSign, GraduationCap, ArrowRight, BookOpen, Trophy, Calendar } from 'lucide-react';
+import { Search, MapPin, Clock, DollarSign, GraduationCap, ArrowRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import AICourseRecommendations from '@/components/courses/AICourseRecommendations';
 
 export default function CourseFinder() {
   const [activeTab, setActiveTab] = useState('courses');
@@ -24,21 +23,6 @@ export default function CourseFinder() {
   const [selectedUniversity, setSelectedUniversity] = useState('all');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
   const [sortBy, setSortBy] = useState('relevance');
-
-  const { data: user } = useQuery({
-    queryKey: ['current-user'],
-    queryFn: () => base44.auth.me().catch(() => null),
-  });
-
-  const { data: studentProfile } = useQuery({
-    queryKey: ['student-profile', user?.email],
-    queryFn: async () => {
-      if (!user?.email) return null;
-      const profiles = await base44.entities.StudentProfile.filter({ email: user.email });
-      return profiles[0];
-    },
-    enabled: !!user?.email,
-  });
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -337,17 +321,6 @@ export default function CourseFinder() {
         </div>
       </section>
 
-      {/* AI Recommendations */}
-      {studentProfile && activeTab === 'courses' && (
-        <section className="container mx-auto px-6 py-6">
-          <AICourseRecommendations 
-            studentProfile={studentProfile}
-            courses={courses}
-            universities={universities}
-          />
-        </section>
-      )}
-
       {/* Results */}
       <section className="container mx-auto px-6 py-10">
         {isLoading ? (
@@ -406,9 +379,6 @@ export default function CourseFinder() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course, idx) => {
               const university = universityMap[course.university_id];
-              const isAdmin = user?.role === 'admin';
-              const isCounsellor = user?.role === 'counsellor';
-              
               return (
                 <motion.div
                   key={course.id}
@@ -416,113 +386,71 @@ export default function CourseFinder() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                 >
-                  <Card className="alo-card h-full flex flex-col hover:shadow-xl transition-all">
-                    <CardContent className="p-0 flex-1 flex flex-col">
-                      {/* University Header with Logo */}
-                      <div className="p-4 border-b bg-slate-50 flex items-center gap-3">
-                        {university?.logo && (
-                          <div className="w-12 h-12 rounded-lg bg-white shadow-sm flex items-center justify-center p-1 shrink-0">
-                            <img 
-                              src={university.logo} 
-                              alt={university.university_name || university.name}
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-semibold text-slate-900 line-clamp-1">
-                            {university?.university_name || university?.name || 'University'}
-                          </h4>
-                          <div className="flex items-center gap-2 text-xs text-slate-600">
-                            <MapPin className="w-3 h-3" />
-                            <span>{university?.city}, {university?.country}</span>
-                          </div>
-                        </div>
+                  <Card className="alo-card h-full flex flex-col">
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      {/* Course Type Badge */}
+                      <div className="mb-3">
+                        <Badge style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }}>
+                          {course.level}
+                        </Badge>
                       </div>
 
-                      {/* Rankings Section */}
-                      {(university?.qs_ranking || university?.ranking) && (
-                        <div className="px-4 py-2 bg-blue-50 border-b flex items-center gap-3 text-xs">
-                          <Trophy className="w-3 h-3 text-blue-600" />
-                          <span className="text-slate-700">
-                            {university.qs_ranking ? `QS #${university.qs_ranking}` : `#${university.ranking} World`}
+                      {/* Course Title */}
+                      <h3 className="alo-card-title text-lg mb-3 line-clamp-2">
+                        {course.course_title}
+                      </h3>
+
+                      {/* University */}
+                      {university && (
+                        <div className="flex items-start gap-2 text-slate-600 mb-2">
+                          <GraduationCap className="w-4 h-4 mt-0.5 shrink-0" />
+                          <span className="text-sm line-clamp-1">{university.university_name || university.name}</span>
+                        </div>
+                      )}
+
+                      {/* Country/City */}
+                      <div className="flex items-center gap-2 text-slate-600 mb-3">
+                        <MapPin className="w-4 h-4 shrink-0" />
+                        <span className="text-sm">
+                          {course.country}{university?.city ? `, ${university.city}` : ''}
+                        </span>
+                      </div>
+
+                      {/* Intake */}
+                      {course.intake && (
+                        <div className="flex items-center gap-2 text-slate-600 mb-2">
+                          <Clock className="w-4 h-4 shrink-0" />
+                          <span className="text-sm">Intake: {course.intake}</span>
+                        </div>
+                      )}
+
+                      {/* Tuition Range */}
+                      {(course.tuition_fee_min || course.tuition_fee_max) && (
+                        <div className="flex items-center gap-2 mb-4" style={{ color: 'var(--alo-orange)' }}>
+                          <DollarSign className="w-4 h-4 shrink-0" />
+                          <span className="text-sm font-semibold">
+                            {course.tuition_fee_min && course.tuition_fee_max
+                              ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
+                              : course.tuition_fee_min
+                              ? `From ${course.tuition_fee_min.toLocaleString()}`
+                              : `Up to ${course.tuition_fee_max.toLocaleString()}`
+                            } {course.currency || 'USD'}
                           </span>
                         </div>
                       )}
 
-                      {/* Course Details */}
-                      <div className="p-4 flex-1 flex flex-col">
-                        <div className="mb-3">
-                          <Badge style={{ backgroundColor: 'var(--alo-blue)', color: 'white' }} className="text-xs">
-                            {course.level}
-                          </Badge>
-                        </div>
-
-                        <h3 className="alo-card-title text-base mb-3 line-clamp-2 leading-tight">
-                          {course.course_title}
-                        </h3>
-
-                        <div className="space-y-2 text-sm">
-                          {course.duration && (
-                            <div className="flex items-center gap-2 text-slate-600">
-                              <Clock className="w-3.5 h-3.5 shrink-0" />
-                              <span>{course.duration}</span>
-                            </div>
-                          )}
-
-                          {course.intake && (
-                            <div className="flex items-center gap-2 text-slate-600">
-                              <Calendar className="w-3.5 h-3.5 shrink-0" />
-                              <span>{course.intake}</span>
-                            </div>
-                          )}
-
-                          {(course.tuition_fee_min || course.tuition_fee_max) && (
-                            <div className="flex items-center gap-2 font-semibold" style={{ color: 'var(--alo-orange)' }}>
-                              <DollarSign className="w-3.5 h-3.5 shrink-0" />
-                              <span>
-                                {course.tuition_fee_min && course.tuition_fee_max
-                                  ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
-                                  : course.tuition_fee_min
-                                  ? `From ${course.tuition_fee_min.toLocaleString()}`
-                                  : `${course.tuition_fee_max.toLocaleString()}`
-                                } {course.currency || 'USD'}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Admin/Counsellor Only: Commission & Eligibility */}
-                        {(isAdmin || isCounsellor) && (
-                          <div className="mt-3 pt-3 border-t space-y-2 text-xs">
-                            {isAdmin && (
-                              <div className="flex items-center justify-between">
-                                <span className="text-slate-600">Commission:</span>
-                                <Badge variant="outline" className="text-green-600 border-green-200">
-                                  $500
-                                </Badge>
-                              </div>
-                            )}
-                            {isCounsellor && (
-                              <div className="flex items-center justify-between">
-                                <span className="text-slate-600">Eligibility:</span>
-                                <Badge variant="outline" className="text-blue-600 border-blue-200">
-                                  85% Match
-                                </Badge>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* CTAs */}
-                        <div className="mt-auto pt-4">
-                          <Link to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`}>
-                            <Button className="alo-btn-primary w-full">
-                              View Details
-                              <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                          </Link>
-                        </div>
+                      {/* CTAs */}
+                      <div className="flex gap-2 mt-auto pt-4">
+                        <Link to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`} className="flex-1">
+                          <Button className="alo-btn-primary w-full">
+                            View Course
+                          </Button>
+                        </Link>
+                        <Link to={createPageUrl('Contact')} className="flex-1">
+                          <Button variant="outline" className="w-full" style={{ borderColor: 'var(--alo-blue)', color: 'var(--alo-blue)' }}>
+                            Book Counselling
+                          </Button>
+                        </Link>
                       </div>
                     </CardContent>
                   </Card>
