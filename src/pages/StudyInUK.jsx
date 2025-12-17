@@ -19,6 +19,11 @@ export default function StudyInUK() {
     queryFn: () => base44.entities.University.filter({ country: 'United Kingdom', status: 'active' }, '-ranking', 8),
   });
 
+  const { data: allUKUniversitiesData = [] } = useQuery({
+    queryKey: ['all-uk-universities'],
+    queryFn: () => base44.entities.University.filter({ country: 'United Kingdom', status: 'active' }, '-ranking', 200),
+  });
+
   const { data: courses = [] } = useQuery({
     queryKey: ['uk-courses'],
     queryFn: () => base44.entities.Course.filter({ country: 'United Kingdom', status: 'open' }, '-created_date', 8),
@@ -268,28 +273,56 @@ export default function StudyInUK() {
 
         {/* All UK Universities List */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6" style={{ color: '#0066CC' }}>
-            🇬🇧 All UK Universities (Recognised Degree-Awarding Bodies)
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold" style={{ color: '#0066CC' }}>
+              🇬🇧 All UK Universities
+            </h2>
+            <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
+              <Button variant="outline" style={{ borderColor: '#0066CC', color: '#0066CC' }}>
+                View All Universities
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {allUKUniversities.map((uni, index) => (
-              <Link 
-                key={index} 
-                to={createPageUrl('Universities') + `?search=${encodeURIComponent(uni)}`}
-              >
+            {allUKUniversitiesData.map((uni) => (
+              <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
                 <Card 
                   className="bg-white border hover:shadow-xl transition-all h-full" 
                   style={{ borderColor: '#0066CC' }} 
                   onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
                   onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
                 >
-                  <CardHeader className="pb-3">
+                  <CardHeader className="text-center pb-3">
+                    {uni.logo && (
+                      <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-slate-50 rounded-full p-2">
+                        <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
+                      </div>
+                    )}
                     <CardTitle className="text-base leading-tight" style={{ color: '#F37021' }}>
-                      {uni}
+                      {uni.university_name}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <Button className="w-full font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                  <CardContent className="space-y-2 text-sm">
+                    {uni.city && (
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
+                        <span>{uni.city}</span>
+                      </div>
+                    )}
+                    {(uni.ranking || uni.qs_ranking) && (
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <Trophy className="w-4 h-4" style={{ color: '#F37021' }} />
+                        <span>Ranking: #{uni.ranking || uni.qs_ranking}</span>
+                      </div>
+                    )}
+                    {uni.intakes && (
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <Calendar className="w-4 h-4" style={{ color: '#0066CC' }} />
+                        <span>{uni.intakes}</span>
+                      </div>
+                    )}
+                    <Button className="w-full mt-3 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
                       Learn More
                     </Button>
                   </CardContent>
