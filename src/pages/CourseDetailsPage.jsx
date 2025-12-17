@@ -311,6 +311,55 @@ export default function CourseDetailsPage() {
                   </CardContent>
                 </Card>
               </TabsContent>
+
+              <TabsContent value="fees">
+                <Card className="alo-card">
+                  <CardHeader>
+                    <CardTitle className="alo-card-title flex items-center gap-2">
+                      <DollarSign className="w-5 h-5" />
+                      Fees & Intakes
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="p-4 bg-blue-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Tuition Fee</h4>
+                        <p className="text-3xl font-bold" style={{ color: '#0066CC' }}>
+                          {course.tuition_fee_min && course.tuition_fee_max
+                            ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
+                            : course.tuition_fee_min
+                            ? course.tuition_fee_min.toLocaleString()
+                            : 'Contact us'
+                          }
+                        </p>
+                        <p className="text-sm text-slate-600">{course.currency || 'USD'} per year</p>
+                      </div>
+
+                      <div className="p-4 bg-slate-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Application Fee</h4>
+                        <p className="text-3xl font-bold text-slate-900">
+                          {course.application_fee || '0'}
+                        </p>
+                        <p className="text-sm text-slate-600">{course.currency || 'USD'}</p>
+                      </div>
+
+                      <div className="p-4 bg-orange-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Duration</h4>
+                        <p className="text-2xl font-bold" style={{ color: '#F37021' }}>
+                          {course.duration || 'Contact us'}
+                        </p>
+                      </div>
+
+                      <div className="p-4 bg-green-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-3">Intakes</h4>
+                        <p className="text-2xl font-bold text-green-700">
+                          {course.intake || 'Contact us'}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
             </Tabs>
           </div>
 
@@ -400,55 +449,28 @@ export default function CourseDetailsPage() {
                 </CardContent>
               </Card>
 
-              <TabsContent value="fees">
-                <Card className="alo-card">
-                  <CardHeader>
-                    <CardTitle className="alo-card-title flex items-center gap-2">
-                      <DollarSign className="w-5 h-5" />
-                      Fees & Intakes
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-slate-900 mb-3">Tuition Fee</h4>
-                        <p className="text-3xl font-bold" style={{ color: '#0066CC' }}>
-                          {course.tuition_fee_min && course.tuition_fee_max
-                            ? `${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max.toLocaleString()}`
-                            : course.tuition_fee_min
-                            ? course.tuition_fee_min.toLocaleString()
-                            : 'Contact us'
-                          }
-                        </p>
-                        <p className="text-sm text-slate-600">{course.currency || 'USD'} per year</p>
-                      </div>
+              <ApplyModal 
+                open={showApplyModal}
+                onClose={() => setShowApplyModal(false)}
+                course={course}
+                university={university}
+              />
 
-                      <div className="p-4 bg-slate-50 rounded-lg">
-                        <h4 className="font-semibold text-slate-900 mb-3">Application Fee</h4>
-                        <p className="text-3xl font-bold text-slate-900">
-                          {course.application_fee || '0'}
-                        </p>
-                        <p className="text-sm text-slate-600">{course.currency || 'USD'}</p>
-                      </div>
-
-                      <div className="p-4 bg-orange-50 rounded-lg">
-                        <h4 className="font-semibold text-slate-900 mb-3">Duration</h4>
-                        <p className="text-2xl font-bold" style={{ color: '#F37021' }}>
-                          {course.duration || 'Contact us'}
-                        </p>
-                      </div>
-
-                      <div className="p-4 bg-green-50 rounded-lg">
-                        <h4 className="font-semibold text-slate-900 mb-3">Intakes</h4>
-                        <p className="text-2xl font-bold text-green-700">
-                          {course.intake || 'Contact us'}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+              {/* University Link */}
+              {university && (
+                <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
+                  <Card className="alo-card hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardContent className="p-4">
+                      <p className="text-sm text-slate-500 mb-1">Offered by</p>
+                      <p className="font-semibold" style={{ color: 'var(--alo-blue)' }}>
+                        {university.university_name || university.name}
+                      </p>
+                      <p className="text-sm text-slate-600 mt-1">View university details →</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Sidebar */}
