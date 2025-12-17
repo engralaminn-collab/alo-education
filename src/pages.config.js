@@ -52,6 +52,14 @@ import AlumniNetwork from './pages/AlumniNetwork';
 import CareerGuidance from './pages/CareerGuidance';
 import Services from './pages/Services';
 import LanguagePrep from './pages/LanguagePrep';
+import IELTSTest from './pages/IELTSTest';
+import PTETest from './pages/PTETest';
+import OIETCTest from './pages/OIETCTest';
+import TOEFLTest from './pages/TOEFLTest';
+import DuolingoTest from './pages/DuolingoTest';
+import LanguageCertTest from './pages/LanguageCertTest';
+import KaplanTest from './pages/KaplanTest';
+import OETTest from './pages/OETTest';
 import __Layout from './Layout.jsx';
 
 
@@ -110,6 +118,14 @@ export const PAGES = {
     "CareerGuidance": CareerGuidance,
     "Services": Services,
     "LanguagePrep": LanguagePrep,
+    "IELTSTest": IELTSTest,
+    "PTETest": PTETest,
+    "OIETCTest": OIETCTest,
+    "TOEFLTest": TOEFLTest,
+    "DuolingoTest": DuolingoTest,
+    "LanguageCertTest": LanguageCertTest,
+    "KaplanTest": KaplanTest,
+    "OETTest": OETTest,
 }
 
 export const pagesConfig = {
