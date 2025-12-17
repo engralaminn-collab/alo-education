@@ -59,6 +59,7 @@ import DuolingoTest from './pages/DuolingoTest';
 import LanguageCertTest from './pages/LanguageCertTest';
 import KaplanTest from './pages/KaplanTest';
 import OETTest from './pages/OETTest';
+import ApplicationForm from './pages/ApplicationForm';
 import __Layout from './Layout.jsx';
 
 
@@ -124,6 +125,7 @@ export const PAGES = {
     "LanguageCertTest": LanguageCertTest,
     "KaplanTest": KaplanTest,
     "OETTest": OETTest,
+    "ApplicationForm": ApplicationForm,
 }
 
 export const pagesConfig = {
