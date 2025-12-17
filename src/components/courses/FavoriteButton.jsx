@@ -11,7 +11,13 @@ export default function FavoriteButton({ courseId, size = "default", className }
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
-    queryFn: () => base44.auth.me(),
+    queryFn: async () => {
+      try {
+        return await base44.auth.me();
+      } catch {
+        return null;
+      }
+    },
   });
 
   const { data: studentProfile } = useQuery({
@@ -54,6 +60,11 @@ export default function FavoriteButton({ courseId, size = "default", className }
   });
 
   const handleClick = () => {
+    if (!user) {
+      const currentUrl = window.location.pathname + window.location.search;
+      base44.auth.redirectToLogin(currentUrl);
+      return;
+    }
     if (!studentProfile) {
       toast.error('Please complete your profile first');
       return;
