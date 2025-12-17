@@ -212,9 +212,9 @@ export default function CourseFinder() {
 
                   {/* Search Button */}
                   <div className="flex items-end">
-                    <Button className="w-full h-12 font-bold text-lg" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
                       <Search className="w-5 h-5 mr-2" />
-                      SEARCH
+                      Search
                     </Button>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ export default function CourseFinder() {
                     </label>
                     <Select value={selectedUniversity} onValueChange={setSelectedUniversity}>
                       <SelectTrigger className="h-12">
-                        <SelectValue placeholder="Select University" />
+                        <SelectValue placeholder="Select university" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Universities</SelectItem>
@@ -292,9 +292,9 @@ export default function CourseFinder() {
 
                   {/* Search Button */}
                   <div className="flex items-end">
-                    <Button className="w-full h-12 font-bold text-lg" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
                       <Search className="w-5 h-5 mr-2" />
-                      SEARCH
+                      Search
                     </Button>
                   </div>
                 </div>
