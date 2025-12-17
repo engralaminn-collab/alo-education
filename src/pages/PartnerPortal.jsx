@@ -7,10 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Building2, Users, FileText, TrendingUp, MessageSquare, 
-  Settings, Award, DollarSign, Phone, Mail, Globe
+  Settings, Award, DollarSign, Phone, Mail, Globe, BarChart3
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import PartnerAnalytics from '@/components/partner/PartnerAnalytics';
 
 export default function PartnerPortal() {
   const { data: user, isLoading: userLoading } = useQuery({
@@ -61,6 +62,7 @@ export default function PartnerPortal() {
       return [];
     },
     enabled: !!partner,
+    refetchInterval: 30000, // Auto-refresh every 30 seconds for real-time updates
   });
 
   if (userLoading) {
@@ -189,12 +191,25 @@ export default function PartnerPortal() {
           ))}
         </div>
 
-        <Tabs defaultValue="inquiries" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-auto">
+        <Tabs defaultValue="analytics" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto">
+            <TabsTrigger value="analytics">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Analytics
+            </TabsTrigger>
             <TabsTrigger value="inquiries">Student Inquiries</TabsTrigger>
             <TabsTrigger value="applications">Applications</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
+
+          {/* Analytics Tab */}
+          <TabsContent value="analytics">
+            <PartnerAnalytics 
+              partner={partner}
+              applications={applications}
+              inquiries={inquiries}
+            />
+          </TabsContent>
 
           {/* Inquiries Tab */}
           <TabsContent value="inquiries" className="space-y-4">
@@ -248,17 +263,39 @@ export default function PartnerPortal() {
                   <p className="text-slate-500 text-center py-8">No applications yet</p>
                 ) : (
                   <div className="space-y-4">
-                    {applications.map((app) => (
-                      <div key={app.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50">
-                        <div>
-                          <p className="font-semibold">Application #{app.id.slice(0, 8)}</p>
-                          <p className="text-sm text-slate-600">
-                            Applied: {new Date(app.applied_date || app.created_date).toLocaleDateString()}
-                          </p>
+                    {applications.map((app) => {
+                      const statusColors = {
+                        draft: 'bg-slate-100 text-slate-700',
+                        documents_pending: 'bg-amber-100 text-amber-700',
+                        application_received: 'bg-blue-100 text-blue-700',
+                        under_review: 'bg-purple-100 text-purple-700',
+                        conditional_offer: 'bg-cyan-100 text-cyan-700',
+                        unconditional_offer: 'bg-emerald-100 text-emerald-700',
+                        offer_accepted: 'bg-green-100 text-green-700',
+                        visa_processing: 'bg-indigo-100 text-indigo-700',
+                        visa_approved: 'bg-teal-100 text-teal-700',
+                        enrolled: 'bg-green-500 text-white',
+                        rejected: 'bg-red-100 text-red-700',
+                        withdrawn: 'bg-slate-200 text-slate-600',
+                      };
+                      
+                      return (
+                        <div key={app.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50">
+                          <div className="flex-1">
+                            <p className="font-semibold">Application #{app.id.slice(0, 8)}</p>
+                            <p className="text-sm text-slate-600">
+                              Applied: {new Date(app.applied_date || app.created_date).toLocaleDateString()}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-1">
+                              Last updated: {new Date(app.updated_date).toLocaleString()}
+                            </p>
+                          </div>
+                          <Badge className={`capitalize ${statusColors[app.status] || 'bg-slate-100 text-slate-700'}`}>
+                            {app.status.replace('_', ' ')}
+                          </Badge>
                         </div>
-                        <Badge className="capitalize">{app.status.replace('_', ' ')}</Badge>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </CardContent>
