@@ -27,6 +27,9 @@ import PersonalizedQuickLinks from '@/components/dashboard/PersonalizedQuickLink
 import DeadlinesTracker from '@/components/dashboard/DeadlinesTracker';
 import ApplicationTracker from '@/components/dashboard/ApplicationTracker';
 import CareerGuidanceWidget from '@/components/dashboard/CareerGuidanceWidget';
+import SavedItems from '@/components/dashboard/SavedItems';
+import TestPrepProgress from '@/components/dashboard/TestPrepProgress';
+import CounsellorChatHistory from '@/components/dashboard/CounsellorChatHistory';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -201,8 +204,11 @@ export default function StudentDashboard() {
               tasks={tasks}
             />
 
-            {/* Application Tracker */}
+            {/* My Applications Section */}
             <ApplicationTracker studentProfile={studentProfile} />
+
+            {/* Saved Universities & Courses */}
+            <SavedItems studentProfile={studentProfile} />
 
             {/* Application Progress Tracker */}
             <ApplicationProgressTracker 
@@ -326,12 +332,18 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Deadlines Tracker */}
+            {/* Upcoming Deadlines */}
             <DeadlinesTracker 
               applications={applications}
               tasks={tasks}
               scholarships={scholarships}
             />
+
+            {/* Test Preparation Progress */}
+            <TestPrepProgress studentProfile={studentProfile} />
+
+            {/* Counsellor Chat History */}
+            <CounsellorChatHistory studentProfile={studentProfile} />
 
             {/* Career Guidance Widget */}
             <CareerGuidanceWidget />
