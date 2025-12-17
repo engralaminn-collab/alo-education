@@ -98,42 +98,59 @@ export default function LanguagePrep() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <section className="py-20" style={{ background: 'linear-gradient(135deg, var(--alo-blue) 0%, #004999 100%)' }}>
+      <section className="py-20" style={{ backgroundColor: '#C8F4D9' }}>
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: 'var(--alo-orange)' }}>
-              <BookOpen className="w-8 h-8 text-white" />
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#000000' }}>
+                Study English for university entry
+              </h1>
+              <p className="text-xl text-slate-700 mb-8 leading-relaxed">
+                Qualify for admission to your preferred university by taking an English language proficiency test with expert support from ALO Education.
+              </p>
+              <Link to={createPageUrl('Contact')}>
+                <Button 
+                  size="lg" 
+                  className="text-lg px-8 py-6 text-white hover:opacity-90"
+                  style={{ backgroundColor: 'var(--alo-orange)' }}
+                >
+                  Book Free Counselling
+                </Button>
+              </Link>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              English Tests for University Entry
-            </h1>
-            <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              Access study materials, practice tests, and expert guidance to achieve your required score
-            </p>
-            <Link to={createPageUrl('Contact')}>
-              <Button 
-                size="lg" 
-                className="text-lg px-8 py-6 text-white"
-                style={{ backgroundColor: 'var(--alo-orange)' }}
-              >
-                Book Free Counselling
-              </Button>
-            </Link>
+            <div className="hidden lg:block">
+              <img 
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop" 
+                alt="Students studying" 
+                className="rounded-2xl shadow-xl w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Introduction */}
-      <section className="py-16">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-8">
-                <p className="text-lg text-slate-700 leading-relaxed">
-                  English language proficiency is a core requirement for admission to universities in the UK, USA, Canada, Australia, Europe, and beyond. ALO Education helps students choose the right test, prepare effectively, and meet both university and visa requirements.
-                </p>
-              </CardContent>
-            </Card>
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div>
+              <img 
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop" 
+                alt="Language preparation" 
+                className="rounded-2xl shadow-lg w-full h-auto"
+              />
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--alo-blue)' }}>
+                Why take an English language proficiency test to study abroad?
+              </h2>
+              <p className="text-lg text-slate-700 leading-relaxed mb-4">
+                Universities require international students to meet specific English language proficiency standards to ensure they can understand course materials and successfully complete their studies. A variety of proficiency tests, such as IELTS and PTE, are widely accepted as proof of English language skills.
+              </p>
+              <p className="text-lg text-slate-700 leading-relaxed">
+                ALO Education helps students choose the right test, prepare effectively, and meet both university and visa requirements.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -191,11 +208,11 @@ export default function LanguagePrep() {
       </section>
 
       {/* English Tests Grid */}
-      <section className="py-16">
+      <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-4" style={{ color: 'var(--alo-blue)' }}>
-              English Language Proficiency Tests
+            <h2 className="text-3xl font-bold text-center mb-4" style={{ color: '#000000' }}>
+              English language proficiency tests for international students
             </h2>
             <p className="text-center text-slate-600 mb-12">
               Understanding the format, scoring system, and requirements for each proficiency exam can help you choose the test that best aligns with your study abroad plans.
