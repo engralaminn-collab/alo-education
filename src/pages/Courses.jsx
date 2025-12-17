@@ -148,48 +148,77 @@ export default function Courses() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
+      {/* Hero with Background */}
+      <section 
+        className="relative py-32 bg-cover bg-center"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 40, 80, 0.85), rgba(0, 40, 80, 0.85)), url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600)',
+        }}
+      >
         <div className="container mx-auto px-6">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Find Your Perfect Course
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl text-white text-center mx-auto"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              Find your perfect course
             </h1>
-            <p className="text-xl text-slate-300">
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
               Explore {courses.length}+ programs from top universities worldwide
             </p>
-          </div>
+          </motion.div>
+        </div>
+      </section>
 
-          <div className="mt-8 flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                placeholder="Search courses..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 bg-white border-0 rounded-xl text-lg"
-              />
+      {/* Search Section */}
+      <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="container mx-auto px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-wrap gap-4 justify-center items-center mb-8">
+              <Link to={createPageUrl('Courses')}>
+                <Button size="lg" variant="outline" className="bg-white text-slate-900 border-2 hover:bg-slate-100">
+                  COURSES
+                </Button>
+              </Link>
+              <Link to={createPageUrl('Universities')}>
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-2 border-white hover:bg-white/10">
+                  UNIVERSITIES
+                </Button>
+              </Link>
             </div>
-            <Select value={degreeLevel} onValueChange={setDegreeLevel}>
-              <SelectTrigger className="w-full md:w-48 h-14 bg-white border-0 rounded-xl">
-                <SelectValue placeholder="Degree Level" />
-              </SelectTrigger>
-              <SelectContent>
-                {degreeLevels.map(d => (
-                  <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
-              <SelectTrigger className="w-full md:w-48 h-14 bg-white border-0 rounded-xl">
-                <SelectValue placeholder="Field of Study" />
-              </SelectTrigger>
-              <SelectContent>
-                {fieldsOfStudy.map(f => (
-                  <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border-2 border-white/20">
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    placeholder="Enter subject or course:"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-12 bg-white border-0"
+                  />
+                </div>
+                <Select value={degreeLevel} onValueChange={setDegreeLevel}>
+                  <SelectTrigger className="h-12 bg-white border-0">
+                    <SelectValue placeholder="Select course type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {degreeLevels.map(d => (
+                      <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button 
+                size="lg" 
+                className="w-full md:w-auto px-12"
+                style={{ backgroundColor: '#FF0055', color: 'white' }}
+              >
+                <Search className="w-5 h-5 mr-2" />
+                Search
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -259,7 +288,7 @@ export default function Courses() {
               </div>
             ) : (
               <AnimatePresence>
-                <div className="space-y-4">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredCourses.map((course, index) => {
                     const university = universityMap[course.university_id];
                     return (
@@ -269,16 +298,16 @@ export default function Courses() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
-                          <CardContent className="p-6">
-                            <div className="flex flex-col md:flex-row md:items-center gap-4">
-                              <div className="flex-1">
+                        <Link to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`}>
+                          <Card className="bg-white border-2 hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
+                            <CardContent className="p-6">
+                              <div className="mb-4">
                                 <div className="flex flex-wrap items-center gap-2 mb-3">
                                   <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                                    {course.degree_level}
+                                    {course.level}
                                   </Badge>
                                   <Badge variant="outline" className="capitalize">
-                                    {course.field_of_study?.replace(/_/g, ' ')}
+                                    {course.subject_area?.replace(/_/g, ' ')}
                                   </Badge>
                                   {course.scholarship_available && (
                                     <Badge className="bg-amber-50 text-amber-700">
@@ -288,51 +317,40 @@ export default function Courses() {
                                   )}
                                 </div>
                                 
-                                <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                                  {course.name}
+                                <h3 className="text-xl font-bold mb-2 group-hover:text-[#F37021] transition-colors" style={{ color: '#0066CC' }}>
+                                  {course.course_title}
                                 </h3>
                                 
                                 {university && (
-                                  <div className="flex items-center text-slate-500 mb-3">
+                                  <div className="flex items-center text-slate-600 mb-3">
                                     <Building2 className="w-4 h-4 mr-2" />
-                                    {university.name}
-                                    <span className="mx-2">•</span>
-                                    {university.city}, {university.country}
+                                    {university.university_name}
                                   </div>
                                 )}
                                 
                                 <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                  {course.duration_months && (
+                                  {course.duration && (
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
-                                      {course.duration_months} months
+                                      {course.duration}
                                     </span>
                                   )}
-                                  {course.tuition_fee && (
+                                  {course.tuition_fee_min && (
                                     <span className="flex items-center gap-1">
                                       <DollarSign className="w-4 h-4" />
-                                      {course.tuition_fee.toLocaleString()} {course.currency || 'USD'}/year
+                                      From ${course.tuition_fee_min.toLocaleString()}/year
                                     </span>
                                   )}
                                 </div>
                               </div>
                               
-                              <div className="flex md:flex-col gap-3">
-                                <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`} className="flex-1 md:flex-none">
-                                  <Button className="w-full bg-slate-900 hover:bg-slate-800">
-                                    View Details
-                                    <ArrowRight className="w-4 h-4 ml-2" />
-                                  </Button>
-                                </Link>
-                                <Link to={createPageUrl('CourseMatcher')} className="flex-1 md:flex-none">
-                                  <Button variant="outline" className="w-full">
-                                    Check Eligibility
-                                  </Button>
-                                </Link>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
+                              <Button className="w-full font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                                View Course Details
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                              </Button>
+                            </CardContent>
+                          </Card>
+                        </Link>
                       </motion.div>
                     );
                   })}
