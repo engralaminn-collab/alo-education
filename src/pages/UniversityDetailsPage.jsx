@@ -15,6 +15,9 @@ import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 import UniversityFavoriteButton from '@/components/universities/UniversityFavoriteButton';
 import AIUniversitySummary from '@/components/universities/AIUniversitySummary';
+import AIAboutSummary from '@/components/universities/AIAboutSummary';
+import StudentLifeSection from '@/components/universities/StudentLifeSection';
+import CampusFacilitiesSection from '@/components/universities/CampusFacilitiesSection';
 import PopularCourses from '@/components/universities/PopularCourses';
 import StudentReviews from '@/components/universities/StudentReviews';
 import UniversityComparison from '@/components/universities/UniversityComparison';
@@ -114,9 +117,21 @@ export default function UniversityDetailsPage() {
                     <span>{university.city}, {university.country}</span>
                   </div>
                   {university.ranking && (
-                    <Badge className="bg-white/20 text-white border-0">
-                      <Star className="w-4 h-4 mr-1" />
+                    <Badge className="bg-white/20 text-white border-0 text-base px-4 py-2">
+                      <Star className="w-5 h-5 mr-1" />
                       World Ranking #{university.ranking}
+                    </Badge>
+                  )}
+                  {university.qs_ranking && (
+                    <Badge className="bg-white/20 text-white border-0 text-base px-4 py-2">
+                      <Award className="w-5 h-5 mr-1" />
+                      QS #{university.qs_ranking}
+                    </Badge>
+                  )}
+                  {university.times_ranking && (
+                    <Badge className="bg-white/20 text-white border-0 text-base px-4 py-2">
+                      <Award className="w-5 h-5 mr-1" />
+                      Times #{university.times_ranking}
                     </Badge>
                   )}
                 </div>
@@ -135,6 +150,8 @@ export default function UniversityDetailsPage() {
                 <TabsTrigger value="about">Overview</TabsTrigger>
                 <TabsTrigger value="location">Location</TabsTrigger>
                 <TabsTrigger value="why">Why Choose</TabsTrigger>
+                <TabsTrigger value="student-life">Student Life</TabsTrigger>
+                <TabsTrigger value="facilities">Campus Facilities</TabsTrigger>
                 <TabsTrigger value="courses">Popular Courses</TabsTrigger>
                 <TabsTrigger value="programs">Academic Programs</TabsTrigger>
                 <TabsTrigger value="requirements">Entry Requirements</TabsTrigger>
@@ -145,7 +162,7 @@ export default function UniversityDetailsPage() {
 
               <TabsContent value="about">
                 <div className="space-y-6">
-                  <AIUniversitySummary university={university} />
+                  <AIAboutSummary university={university} />
                   
                   <Card className="border-2" style={{ borderColor: '#0066CC' }}>
                     <CardHeader>
@@ -169,6 +186,8 @@ export default function UniversityDetailsPage() {
                       )}
                     </CardContent>
                   </Card>
+
+                  <AIUniversitySummary university={university} />
 
                   <StudentReviews university={university} />
 
@@ -220,6 +239,14 @@ export default function UniversityDetailsPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="student-life">
+                <StudentLifeSection university={university} />
+              </TabsContent>
+
+              <TabsContent value="facilities">
+                <CampusFacilitiesSection university={university} />
               </TabsContent>
 
               <TabsContent value="why">
@@ -660,6 +687,41 @@ export default function UniversityDetailsPage() {
                   <CardTitle className="alo-card-title">Quick Facts</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Rankings Section */}
+                  {(university.ranking || university.qs_ranking || university.times_ranking) && (
+                    <div className="p-4 rounded-lg" style={{ backgroundColor: '#0066CC15' }}>
+                      <h3 className="font-bold text-sm mb-3" style={{ color: '#0066CC' }}>
+                        University Rankings
+                      </h3>
+                      <div className="space-y-2">
+                        {university.ranking && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-slate-600">World Ranking</span>
+                            <Badge style={{ backgroundColor: '#F37021', color: 'white' }}>
+                              #{university.ranking}
+                            </Badge>
+                          </div>
+                        )}
+                        {university.qs_ranking && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-slate-600">QS Ranking</span>
+                            <Badge style={{ backgroundColor: '#0066CC', color: 'white' }}>
+                              #{university.qs_ranking}
+                            </Badge>
+                          </div>
+                        )}
+                        {university.times_ranking && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-slate-600">Times Ranking</span>
+                            <Badge style={{ backgroundColor: '#0066CC', color: 'white' }}>
+                              #{university.times_ranking}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   {university.student_population && (
                     <div className="flex items-start gap-3">
                       <Users className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
