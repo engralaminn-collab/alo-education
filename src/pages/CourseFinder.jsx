@@ -27,6 +27,11 @@ export default function CourseFinder() {
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [rankingFilter, setRankingFilter] = useState('all');
   const [populationRange, setPopulationRange] = useState('all');
+  const [regionFilter, setRegionFilter] = useState('all');
+  const [universityType, setUniversityType] = useState('all');
+  const [researchFocus, setResearchFocus] = useState('all');
+  const [accommodationType, setAccommodationType] = useState('all');
+  const [newlyEstablished, setNewlyEstablished] = useState(false);
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -128,7 +133,53 @@ export default function CourseFinder() {
         else if (populationRange === 'large') matchesPopulation = pop >= 30000;
       }
       
-      return matchesSearch && matchesSubject && matchesRanking && matchesPopulation && uni.status === 'active';
+      // Region filter
+      const countryToRegion = {
+        'United States': 'North America',
+        'Canada': 'North America',
+        'Mexico': 'North America',
+        'United Kingdom': 'Europe',
+        'Germany': 'Europe',
+        'France': 'Europe',
+        'Ireland': 'Europe',
+        'Netherlands': 'Europe',
+        'Spain': 'Europe',
+        'Italy': 'Europe',
+        'Australia': 'Oceania',
+        'New Zealand': 'Oceania',
+        'China': 'Asia',
+        'Japan': 'Asia',
+        'Singapore': 'Asia',
+        'Dubai': 'Middle East',
+        'UAE': 'Middle East'
+      };
+      
+      let matchesRegion = true;
+      if (regionFilter !== 'all') {
+        const uniRegion = countryToRegion[uni.country];
+        matchesRegion = uniRegion === regionFilter;
+      }
+      
+      // University type filter (assuming we add this to entity later)
+      const matchesType = universityType === 'all' || uni.university_type === universityType;
+      
+      // Research focus filter (assuming we add this to entity later)
+      const matchesFocus = researchFocus === 'all' || uni.research_focus === researchFocus;
+      
+      // Accommodation filter (assuming we add this to entity later)
+      const matchesAccommodation = accommodationType === 'all' || 
+        uni.accommodation_types?.includes(accommodationType);
+      
+      // Newly established filter (universities established in last 20 years)
+      let matchesNewlyEstablished = true;
+      if (newlyEstablished && uni.established_year) {
+        const currentYear = new Date().getFullYear();
+        matchesNewlyEstablished = (currentYear - uni.established_year) <= 20;
+      }
+      
+      return matchesSearch && matchesSubject && matchesRanking && matchesPopulation && 
+             matchesRegion && matchesType && matchesFocus && matchesAccommodation && 
+             matchesNewlyEstablished && uni.status === 'active';
     }
     return false;
   });
@@ -368,6 +419,89 @@ export default function CourseFinder() {
                           <SelectItem value="large">Large (30,000+)</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        Region:
+                      </label>
+                      <Select value={regionFilter} onValueChange={setRegionFilter}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Regions" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Regions</SelectItem>
+                          <SelectItem value="North America">North America</SelectItem>
+                          <SelectItem value="Europe">Europe</SelectItem>
+                          <SelectItem value="Asia">Asia</SelectItem>
+                          <SelectItem value="Oceania">Oceania</SelectItem>
+                          <SelectItem value="Middle East">Middle East</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        University Type:
+                      </label>
+                      <Select value={universityType} onValueChange={setUniversityType}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="public">Public</SelectItem>
+                          <SelectItem value="private">Private</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        Research Focus:
+                      </label>
+                      <Select value={researchFocus} onValueChange={setResearchFocus}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Research Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Research Types</SelectItem>
+                          <SelectItem value="research-intensive">Research Intensive</SelectItem>
+                          <SelectItem value="teaching-focused">Teaching Focused</SelectItem>
+                          <SelectItem value="balanced">Balanced</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium text-slate-700 mb-2 block">
+                        Accommodation:
+                      </label>
+                      <Select value={accommodationType} onValueChange={setAccommodationType}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="on-campus">On-Campus Housing</SelectItem>
+                          <SelectItem value="off-campus">Off-Campus Assistance</SelectItem>
+                          <SelectItem value="homestay">Homestay Programs</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Additional Checkboxes */}
+                  <div className="mt-4">
+                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer w-fit">
+                      <Checkbox
+                        id="newly-established"
+                        checked={newlyEstablished}
+                        onCheckedChange={setNewlyEstablished}
+                      />
+                      <label htmlFor="newly-established" className="text-sm cursor-pointer font-medium">
+                        Show only newly established universities (Last 20 years)
+                      </label>
                     </div>
                   </div>
                 </div>
