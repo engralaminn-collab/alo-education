@@ -62,6 +62,7 @@ import OETTest from './pages/OETTest';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import PartnerPortal from './pages/PartnerPortal';
+import N8nAutomation from './pages/N8nAutomation';
 import __Layout from './Layout.jsx';
 
 
@@ -130,6 +131,7 @@ export const PAGES = {
     "ApplicationForm": ApplicationForm,
     "CRMLeadGeneration": CRMLeadGeneration,
     "PartnerPortal": PartnerPortal,
+    "N8nAutomation": N8nAutomation,
 }
 
 export const pagesConfig = {
