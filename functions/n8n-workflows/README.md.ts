@@ -3,6 +3,32 @@
 ## 📋 Overview
 Complete n8n automation workflows for ALO Education CRM system.
 
+## 📥 How to Download These Workflow Files
+
+### Method 1: From Base44 Dashboard (Recommended)
+1. Go to your Base44 Dashboard
+2. Click **Code** → **Functions** in the sidebar
+3. Look for folder: `n8n-workflows`
+4. Download these 3 JSON files:
+   - `1-lead-capture-workflow.json`
+   - `2-daily-report-workflow.json`
+   - `3-document-reminder-workflow.json`
+
+### Method 2: Direct File Access
+The workflow JSON files are located at:
+```
+functions/n8n-workflows/1-lead-capture-workflow.json
+functions/n8n-workflows/2-daily-report-workflow.json
+functions/n8n-workflows/3-document-reminder-workflow.json
+```
+
+### Method 3: Copy from Code View
+1. Open each file in the Base44 code editor
+2. Select all content (Ctrl+A / Cmd+A)
+3. Copy (Ctrl+C / Cmd+C)
+4. Create new `.json` file on your computer
+5. Paste and save
+
 ## 🚀 Quick Start
 
 ### Step 1: Install n8n
