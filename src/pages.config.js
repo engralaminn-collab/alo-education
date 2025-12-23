@@ -1,137 +1,137 @@
-import About from './pages/About';
-import AlumniNetwork from './pages/AlumniNetwork';
-import ApplicationForm from './pages/ApplicationForm';
-import CRMAIAssistant from './pages/CRMAIAssistant';
-import CRMApplications from './pages/CRMApplications';
-import CRMAutomation from './pages/CRMAutomation';
-import CRMBulkEmail from './pages/CRMBulkEmail';
-import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
-import CRMCounselors from './pages/CRMCounselors';
-import CRMCourses from './pages/CRMCourses';
-import CRMDashboard from './pages/CRMDashboard';
-import CRMInquiries from './pages/CRMInquiries';
-import CRMLeadGeneration from './pages/CRMLeadGeneration';
-import CRMLeadNurturing from './pages/CRMLeadNurturing';
-import CRMMessages from './pages/CRMMessages';
-import CRMPerformance from './pages/CRMPerformance';
-import CRMReports from './pages/CRMReports';
-import CRMSettings from './pages/CRMSettings';
-import CRMStudents from './pages/CRMStudents';
-import CRMTaskTemplates from './pages/CRMTaskTemplates';
-import CRMTasks from './pages/CRMTasks';
-import CRMTestimonials from './pages/CRMTestimonials';
-import CRMUniversities from './pages/CRMUniversities';
-import CRMWorkflows from './pages/CRMWorkflows';
-import CareerGuidance from './pages/CareerGuidance';
-import CompleteProfile from './pages/CompleteProfile';
-import Contact from './pages/Contact';
-import CourseDetails from './pages/CourseDetails';
-import CourseDetailsPage from './pages/CourseDetailsPage';
-import CourseFinder from './pages/CourseFinder';
-import CourseMatcher from './pages/CourseMatcher';
-import Courses from './pages/Courses';
-import DuolingoTest from './pages/DuolingoTest';
 import Home from './pages/Home';
-import IELTSTest from './pages/IELTSTest';
-import KaplanTest from './pages/KaplanTest';
-import LanguageCertTest from './pages/LanguageCertTest';
-import LanguagePrep from './pages/LanguagePrep';
-import Messages from './pages/Messages';
-import MyApplications from './pages/MyApplications';
-import MyDocuments from './pages/MyDocuments';
-import MyFavorites from './pages/MyFavorites';
-import MyProfile from './pages/MyProfile';
-import N8nAutomation from './pages/N8nAutomation';
-import OETTest from './pages/OETTest';
-import OIETCTest from './pages/OIETCTest';
-import PTETest from './pages/PTETest';
-import PartnerPortal from './pages/PartnerPortal';
-import Scholarships from './pages/Scholarships';
-import Services from './pages/Services';
-import StudentAnalytics from './pages/StudentAnalytics';
-import StudentDashboard from './pages/StudentDashboard';
-import StudyInAustralia from './pages/StudyInAustralia';
-import StudyInCanada from './pages/StudyInCanada';
-import StudyInDubai from './pages/StudyInDubai';
-import StudyInIreland from './pages/StudyInIreland';
-import StudyInNewZealand from './pages/StudyInNewZealand';
-import StudyInUK from './pages/StudyInUK';
-import StudyInUSA from './pages/StudyInUSA';
-import SubmitTestimonial from './pages/SubmitTestimonial';
-import TOEFLTest from './pages/TOEFLTest';
-import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
+import Courses from './pages/Courses';
+import CourseMatcher from './pages/CourseMatcher';
+import Contact from './pages/Contact';
+import About from './pages/About';
+import StudentDashboard from './pages/StudentDashboard';
+import MyApplications from './pages/MyApplications';
+import MyDocuments from './pages/MyDocuments';
+import CRMDashboard from './pages/CRMDashboard';
+import CRMStudents from './pages/CRMStudents';
+import CRMInquiries from './pages/CRMInquiries';
+import CRMApplications from './pages/CRMApplications';
+import CRMUniversities from './pages/CRMUniversities';
+import CRMCourses from './pages/CRMCourses';
+import CRMCounselors from './pages/CRMCounselors';
+import CRMReports from './pages/CRMReports';
+import Messages from './pages/Messages';
+import MyProfile from './pages/MyProfile';
+import CRMSettings from './pages/CRMSettings';
+import CRMMessages from './pages/CRMMessages';
+import CourseDetails from './pages/CourseDetails';
+import StudyInUK from './pages/StudyInUK';
+import StudyInAustralia from './pages/StudyInAustralia';
+import StudyInCanada from './pages/StudyInCanada';
+import StudyInIreland from './pages/StudyInIreland';
+import StudyInNewZealand from './pages/StudyInNewZealand';
+import StudyInUSA from './pages/StudyInUSA';
+import StudyInDubai from './pages/StudyInDubai';
+import CRMTasks from './pages/CRMTasks';
+import SubmitTestimonial from './pages/SubmitTestimonial';
+import CRMTestimonials from './pages/CRMTestimonials';
+import TestimonialsPage from './pages/TestimonialsPage';
+import CRMAutomation from './pages/CRMAutomation';
+import CRMLeadNurturing from './pages/CRMLeadNurturing';
+import CRMAIAssistant from './pages/CRMAIAssistant';
+import CourseFinder from './pages/CourseFinder';
+import CourseDetailsPage from './pages/CourseDetailsPage';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
+import CRMBulkEmail from './pages/CRMBulkEmail';
+import MyFavorites from './pages/MyFavorites';
+import CRMTaskTemplates from './pages/CRMTaskTemplates';
+import CRMWorkflows from './pages/CRMWorkflows';
+import StudentAnalytics from './pages/StudentAnalytics';
+import CRMPerformance from './pages/CRMPerformance';
+import CompleteProfile from './pages/CompleteProfile';
+import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
+import Scholarships from './pages/Scholarships';
+import AlumniNetwork from './pages/AlumniNetwork';
+import CareerGuidance from './pages/CareerGuidance';
+import Services from './pages/Services';
+import LanguagePrep from './pages/LanguagePrep';
+import IELTSTest from './pages/IELTSTest';
+import PTETest from './pages/PTETest';
+import OIETCTest from './pages/OIETCTest';
+import TOEFLTest from './pages/TOEFLTest';
+import DuolingoTest from './pages/DuolingoTest';
+import LanguageCertTest from './pages/LanguageCertTest';
+import KaplanTest from './pages/KaplanTest';
+import OETTest from './pages/OETTest';
+import ApplicationForm from './pages/ApplicationForm';
+import CRMLeadGeneration from './pages/CRMLeadGeneration';
+import PartnerPortal from './pages/PartnerPortal';
+import N8nAutomation from './pages/N8nAutomation';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "About": About,
-    "AlumniNetwork": AlumniNetwork,
-    "ApplicationForm": ApplicationForm,
-    "CRMAIAssistant": CRMAIAssistant,
-    "CRMApplications": CRMApplications,
-    "CRMAutomation": CRMAutomation,
-    "CRMBulkEmail": CRMBulkEmail,
-    "CRMCounselorAnalytics": CRMCounselorAnalytics,
-    "CRMCounselors": CRMCounselors,
-    "CRMCourses": CRMCourses,
-    "CRMDashboard": CRMDashboard,
-    "CRMInquiries": CRMInquiries,
-    "CRMLeadGeneration": CRMLeadGeneration,
-    "CRMLeadNurturing": CRMLeadNurturing,
-    "CRMMessages": CRMMessages,
-    "CRMPerformance": CRMPerformance,
-    "CRMReports": CRMReports,
-    "CRMSettings": CRMSettings,
-    "CRMStudents": CRMStudents,
-    "CRMTaskTemplates": CRMTaskTemplates,
-    "CRMTasks": CRMTasks,
-    "CRMTestimonials": CRMTestimonials,
-    "CRMUniversities": CRMUniversities,
-    "CRMWorkflows": CRMWorkflows,
-    "CareerGuidance": CareerGuidance,
-    "CompleteProfile": CompleteProfile,
-    "Contact": Contact,
-    "CourseDetails": CourseDetails,
-    "CourseDetailsPage": CourseDetailsPage,
-    "CourseFinder": CourseFinder,
-    "CourseMatcher": CourseMatcher,
-    "Courses": Courses,
-    "DuolingoTest": DuolingoTest,
     "Home": Home,
-    "IELTSTest": IELTSTest,
-    "KaplanTest": KaplanTest,
-    "LanguageCertTest": LanguageCertTest,
-    "LanguagePrep": LanguagePrep,
-    "Messages": Messages,
-    "MyApplications": MyApplications,
-    "MyDocuments": MyDocuments,
-    "MyFavorites": MyFavorites,
-    "MyProfile": MyProfile,
-    "N8nAutomation": N8nAutomation,
-    "OETTest": OETTest,
-    "OIETCTest": OIETCTest,
-    "PTETest": PTETest,
-    "PartnerPortal": PartnerPortal,
-    "Scholarships": Scholarships,
-    "Services": Services,
-    "StudentAnalytics": StudentAnalytics,
-    "StudentDashboard": StudentDashboard,
-    "StudyInAustralia": StudyInAustralia,
-    "StudyInCanada": StudyInCanada,
-    "StudyInDubai": StudyInDubai,
-    "StudyInIreland": StudyInIreland,
-    "StudyInNewZealand": StudyInNewZealand,
-    "StudyInUK": StudyInUK,
-    "StudyInUSA": StudyInUSA,
-    "SubmitTestimonial": SubmitTestimonial,
-    "TOEFLTest": TOEFLTest,
-    "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
+    "Courses": Courses,
+    "CourseMatcher": CourseMatcher,
+    "Contact": Contact,
+    "About": About,
+    "StudentDashboard": StudentDashboard,
+    "MyApplications": MyApplications,
+    "MyDocuments": MyDocuments,
+    "CRMDashboard": CRMDashboard,
+    "CRMStudents": CRMStudents,
+    "CRMInquiries": CRMInquiries,
+    "CRMApplications": CRMApplications,
+    "CRMUniversities": CRMUniversities,
+    "CRMCourses": CRMCourses,
+    "CRMCounselors": CRMCounselors,
+    "CRMReports": CRMReports,
+    "Messages": Messages,
+    "MyProfile": MyProfile,
+    "CRMSettings": CRMSettings,
+    "CRMMessages": CRMMessages,
+    "CourseDetails": CourseDetails,
+    "StudyInUK": StudyInUK,
+    "StudyInAustralia": StudyInAustralia,
+    "StudyInCanada": StudyInCanada,
+    "StudyInIreland": StudyInIreland,
+    "StudyInNewZealand": StudyInNewZealand,
+    "StudyInUSA": StudyInUSA,
+    "StudyInDubai": StudyInDubai,
+    "CRMTasks": CRMTasks,
+    "SubmitTestimonial": SubmitTestimonial,
+    "CRMTestimonials": CRMTestimonials,
+    "TestimonialsPage": TestimonialsPage,
+    "CRMAutomation": CRMAutomation,
+    "CRMLeadNurturing": CRMLeadNurturing,
+    "CRMAIAssistant": CRMAIAssistant,
+    "CourseFinder": CourseFinder,
+    "CourseDetailsPage": CourseDetailsPage,
     "UniversityDetailsPage": UniversityDetailsPage,
+    "CRMBulkEmail": CRMBulkEmail,
+    "MyFavorites": MyFavorites,
+    "CRMTaskTemplates": CRMTaskTemplates,
+    "CRMWorkflows": CRMWorkflows,
+    "StudentAnalytics": StudentAnalytics,
+    "CRMPerformance": CRMPerformance,
+    "CompleteProfile": CompleteProfile,
+    "CRMCounselorAnalytics": CRMCounselorAnalytics,
+    "Scholarships": Scholarships,
+    "AlumniNetwork": AlumniNetwork,
+    "CareerGuidance": CareerGuidance,
+    "Services": Services,
+    "LanguagePrep": LanguagePrep,
+    "IELTSTest": IELTSTest,
+    "PTETest": PTETest,
+    "OIETCTest": OIETCTest,
+    "TOEFLTest": TOEFLTest,
+    "DuolingoTest": DuolingoTest,
+    "LanguageCertTest": LanguageCertTest,
+    "KaplanTest": KaplanTest,
+    "OETTest": OETTest,
+    "ApplicationForm": ApplicationForm,
+    "CRMLeadGeneration": CRMLeadGeneration,
+    "PartnerPortal": PartnerPortal,
+    "N8nAutomation": N8nAutomation,
 }
 
 export const pagesConfig = {
