@@ -62,6 +62,8 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
+import CRMWorkloadBalancer from './pages/CRMWorkloadBalancer';
+import SOPGeneratorPage from './pages/SOPGeneratorPage';
 import __Layout from './Layout.jsx';
 
 
@@ -130,6 +132,8 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
+    "CRMWorkloadBalancer": CRMWorkloadBalancer,
+    "SOPGeneratorPage": SOPGeneratorPage,
 }
 
 export const pagesConfig = {
