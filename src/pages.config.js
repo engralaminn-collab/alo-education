@@ -2,6 +2,7 @@ import About from './pages/About';
 import AlumniNetwork from './pages/AlumniNetwork';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMAIAssistant from './pages/CRMAIAssistant';
+import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkEmail from './pages/CRMBulkEmail';
@@ -10,7 +11,9 @@ import CRMContentManager from './pages/CRMContentManager';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
+import CRMCustomReports from './pages/CRMCustomReports';
 import CRMDashboard from './pages/CRMDashboard';
+import CRMDataUpdates from './pages/CRMDataUpdates';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
@@ -25,6 +28,7 @@ import CRMTaskTemplates from './pages/CRMTaskTemplates';
 import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
+import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import CRMUniversityPartnerships from './pages/CRMUniversityPartnerships';
 import CRMWorkflows from './pages/CRMWorkflows';
 import CRMWorkloadBalancer from './pages/CRMWorkloadBalancer';
@@ -56,6 +60,7 @@ import Scholarships from './pages/Scholarships';
 import Services from './pages/Services';
 import StudentAnalytics from './pages/StudentAnalytics';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
 import StudyInDubai from './pages/StudyInDubai';
@@ -69,11 +74,6 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import CRMDataUpdates from './pages/CRMDataUpdates';
-import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
-import CRMCustomReports from './pages/CRMCustomReports';
-import StudentPortal from './pages/StudentPortal';
-import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import __Layout from './Layout.jsx';
 
 
@@ -82,6 +82,7 @@ export const PAGES = {
     "AlumniNetwork": AlumniNetwork,
     "ApplicationForm": ApplicationForm,
     "CRMAIAssistant": CRMAIAssistant,
+    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMBulkEmail": CRMBulkEmail,
@@ -90,7 +91,9 @@ export const PAGES = {
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
     "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
+    "CRMCustomReports": CRMCustomReports,
     "CRMDashboard": CRMDashboard,
+    "CRMDataUpdates": CRMDataUpdates,
     "CRMInquiries": CRMInquiries,
     "CRMLeadGeneration": CRMLeadGeneration,
     "CRMLeadNurturing": CRMLeadNurturing,
@@ -105,6 +108,7 @@ export const PAGES = {
     "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
     "CRMUniversities": CRMUniversities,
+    "CRMUniversityOutreach": CRMUniversityOutreach,
     "CRMUniversityPartnerships": CRMUniversityPartnerships,
     "CRMWorkflows": CRMWorkflows,
     "CRMWorkloadBalancer": CRMWorkloadBalancer,
@@ -136,6 +140,7 @@ export const PAGES = {
     "Services": Services,
     "StudentAnalytics": StudentAnalytics,
     "StudentDashboard": StudentDashboard,
+    "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
     "StudyInDubai": StudyInDubai,
@@ -149,11 +154,6 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "CRMDataUpdates": CRMDataUpdates,
-    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
-    "CRMCustomReports": CRMCustomReports,
-    "StudentPortal": StudentPortal,
-    "CRMUniversityOutreach": CRMUniversityOutreach,
 }
 
 export const pagesConfig = {

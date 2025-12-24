@@ -652,6 +652,32 @@ export default function UniversityDetailsPage() {
                 </CardContent>
               </Card>
 
+              {/* Compare & Deadline */}
+              <Button
+                variant="outline"
+                className="w-full font-semibold py-6"
+                style={{ borderColor: '#F37021', color: '#F37021' }}
+                onClick={() => {
+                  setSelectedForCompare([university]);
+                  setShowCompareModal(true);
+                }}
+              >
+                <GitCompare className="w-4 h-4 mr-2" />
+                Add to Compare
+              </Button>
+
+              {university.application_deadline && (
+                <Card className="bg-red-50 border-2 border-red-200">
+                  <CardContent className="p-4 text-center">
+                    <Bell className="w-5 h-5 text-red-600 mx-auto mb-2" />
+                    <p className="text-sm font-semibold text-red-900">Application Deadline</p>
+                    <p className="text-lg font-bold text-red-600 mt-1">
+                      {university.application_deadline}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* CTA */}
               <Card style={{ backgroundColor: '#0066CC' }} className="text-white border-0 shadow-xl">
                 <CardContent className="p-8 text-center">
@@ -683,6 +709,14 @@ export default function UniversityDetailsPage() {
           onClose={() => setShowComparison(false)}
         />
       )}
+
+      <CompareModal
+        items={selectedForCompare}
+        type="university"
+        isOpen={showCompareModal}
+        onClose={() => setShowCompareModal(false)}
+        universities={[]}
+      />
 
       <Footer />
     </div>
