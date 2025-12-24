@@ -61,13 +61,16 @@ export default function CourseFinder() {
 
   const handleCourseSearch = () => {
     let results = courses.filter(course => {
-      const matchesSubject = !subjectCourse || course.subject_area?.toLowerCase().includes(subjectCourse.toLowerCase()) || course.course_title?.toLowerCase().includes(subjectCourse.toLowerCase());
-      const matchesLevel = !studyLevel || course.level === studyLevel;
-      const matchesCountry = !destinationCountry || course.country === destinationCountry;
-      const matchesIntake = selectedIntakes.length === 0 || selectedIntakes.some(intake => course.intake?.includes(intake.split(' ')[1]));
+      const matchesSubject = !subjectCourse || 
+        course.subject_area?.toLowerCase().includes(subjectCourse.toLowerCase()) || 
+        course.course_title?.toLowerCase().includes(subjectCourse.toLowerCase());
+      const matchesLevel = !studyLevel || course.level?.toLowerCase() === studyLevel.toLowerCase();
+      const matchesCountry = !destinationCountry || course.country?.toLowerCase() === destinationCountry.toLowerCase();
+      const matchesIntake = selectedIntakes.length === 0 || 
+        selectedIntakes.some(intake => course.intake?.toLowerCase().includes(intake.split(' ')[1].toLowerCase()));
       return matchesSubject && matchesLevel && matchesCountry && matchesIntake;
     });
-    setSearchResults(results);
+    setSearchResults(results.map(course => ({ ...course, isCourse: true })));
     setShowResults(true);
   };
 
@@ -100,10 +103,18 @@ export default function CourseFinder() {
             <CardContent className="p-0">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="w-full rounded-t-xl h-16 bg-slate-100">
-                  <TabsTrigger value="courses" className="flex-1 text-lg font-semibold data-[state=active]:bg-white">
+                  <TabsTrigger 
+                    value="courses" 
+                    className="flex-1 text-lg font-semibold data-[state=active]:text-white"
+                    style={{ backgroundColor: activeTab === 'courses' ? '#F37021' : 'transparent' }}
+                  >
                     COURSES
                   </TabsTrigger>
-                  <TabsTrigger value="universities" className="flex-1 text-lg font-semibold data-[state=active]:bg-white">
+                  <TabsTrigger 
+                    value="universities" 
+                    className="flex-1 text-lg font-semibold data-[state=active]:text-white"
+                    style={{ backgroundColor: activeTab === 'universities' ? '#F37021' : 'transparent' }}
+                  >
                     UNIVERSITIES
                   </TabsTrigger>
                 </TabsList>
@@ -264,70 +275,100 @@ export default function CourseFinder() {
                 <p className="text-slate-600">No results found. Try different filters.</p>
               </Card>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {searchResults.map((result, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      {result.isUniversity ? (
-                        <Link to={createPageUrl('UniversityDetailsPage') + `?id=${result.id}`}>
-                          <div className="text-center">
-                            {result.logo && (
-                              <div className="w-20 h-20 mx-auto mb-4">
-                                <img src={result.logo} alt={result.university_name} className="w-full h-full object-contain" />
-                              </div>
-                            )}
-                            <h3 className="font-bold text-lg mb-2" style={{ color: '#0066CC' }}>
-                              {result.university_name}
-                            </h3>
-                            <div className="flex items-center justify-center gap-2 text-slate-600 mb-2">
-                              <MapPin className="w-4 h-4" />
-                              <span>{result.city}, {result.country}</span>
+              <div className="space-y-4">
+                {searchResults.map((result, index) => {
+                  const university = universities.find(u => u.id === result.university_id);
+                  return (
+                    <Card key={index} className="hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        {result.isUniversity ? (
+                          <div className="grid md:grid-cols-4 gap-6 items-center">
+                            <div className="md:col-span-2">
+                              <Link to={createPageUrl('UniversityDetailsPage') + `?id=${result.id}`}>
+                                <div className="flex items-center gap-4">
+                                  {result.logo && (
+                                    <div className="w-16 h-16 shrink-0">
+                                      <img src={result.logo} alt={result.university_name} className="w-full h-full object-contain" />
+                                    </div>
+                                  )}
+                                  <div>
+                                    <h3 className="font-bold text-lg hover:text-[#F37021]" style={{ color: '#0066CC' }}>
+                                      {result.university_name}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-slate-600 text-sm mt-1">
+                                      <MapPin className="w-4 h-4" />
+                                      <span>{result.city}, {result.country}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Link>
                             </div>
-                            {result.ranking && (
-                              <div className="text-sm text-slate-600">
-                                <Award className="w-4 h-4 inline mr-1" />
-                                World Ranking: #{result.ranking}
-                              </div>
-                            )}
-                          </div>
-                        </Link>
-                      ) : (
-                        <>
-                          <Link to={createPageUrl('CourseDetailsPage') + `?id=${result.id}`}>
-                            <h3 className="font-bold text-lg mb-2 hover:text-blue-600" style={{ color: '#0066CC' }}>
-                              {result.course_title}
-                            </h3>
-                          </Link>
-                          
-                          <div className="space-y-2 text-sm text-slate-600 mb-4">
-                            <div className="flex items-center gap-2">
-                              <Building2 className="w-4 h-4" />
-                              <span>{universities.find(u => u.id === result.university_id)?.university_name || 'University'}</span>
+                            <div className="text-center">
+                              {result.ranking && (
+                                <div>
+                                  <p className="text-xs text-slate-500 mb-1">World Ranking</p>
+                                  <p className="font-bold text-lg" style={{ color: '#F37021' }}>#{result.ranking}</p>
+                                </div>
+                              )}
                             </div>
-                            {result.tuition_fee_min && (
-                              <div className="flex items-center gap-2">
-                                <DollarSign className="w-4 h-4" />
-                                <span>£{result.tuition_fee_min.toLocaleString()}/year</span>
-                              </div>
-                            )}
-                            {result.intake && (
-                              <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                <span>{result.intake}</span>
-                              </div>
-                            )}
+                            <div className="text-right">
+                              <Link to={createPageUrl('UniversityDetailsPage') + `?id=${result.id}`}>
+                                <Button style={{ backgroundColor: '#F37021' }}>View University</Button>
+                              </Link>
+                            </div>
                           </div>
-
-                          <Link to={createPageUrl('ApplicationForm')}>
-                            <Button className="w-full" style={{ backgroundColor: '#F37021' }}>
-                              Apply Now
-                            </Button>
-                          </Link>
-                        </>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
+                        ) : (
+                          <div className="grid md:grid-cols-5 gap-4 items-center">
+                            <div className="md:col-span-2">
+                              <Link to={createPageUrl('CourseDetailsPage') + `?id=${result.id}`}>
+                                <h3 className="font-bold text-lg hover:text-[#F37021] mb-1" style={{ color: '#0066CC' }}>
+                                  {result.course_title}
+                                </h3>
+                              </Link>
+                              {university && (
+                                <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
+                                  <p className="text-sm text-slate-600 hover:text-blue-600 flex items-center gap-1">
+                                    <Building2 className="w-4 h-4" />
+                                    {university.university_name}
+                                  </p>
+                                </Link>
+                              )}
+                            </div>
+                            <div className="text-center">
+                              {result.tuition_fee_min && (
+                                <div>
+                                  <p className="text-xs text-slate-500">Tuition Fee</p>
+                                  <p className="font-semibold text-slate-900">£{result.tuition_fee_min.toLocaleString()}</p>
+                                </div>
+                              )}
+                            </div>
+                            <div className="text-center">
+                              <div>
+                                <p className="text-xs text-slate-500">Intake</p>
+                                <p className="font-semibold text-slate-900">{result.intake || 'N/A'}</p>
+                              </div>
+                              <div className="mt-2">
+                                <p className="text-xs text-slate-500">Interview</p>
+                                <p className="font-semibold text-slate-900">{result.interview_required ? 'Yes' : 'No'}</p>
+                              </div>
+                            </div>
+                            <div className="text-center">
+                              {university?.ranking && (
+                                <div className="mb-3">
+                                  <p className="text-xs text-slate-500">Ranking</p>
+                                  <p className="font-bold" style={{ color: '#F37021' }}>#{university.ranking}</p>
+                                </div>
+                              )}
+                              <Link to={createPageUrl('ApplicationForm')}>
+                                <Button className="w-full" style={{ backgroundColor: '#F37021' }}>Apply Now</Button>
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </div>

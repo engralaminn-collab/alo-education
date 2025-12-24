@@ -26,11 +26,16 @@ import CareerGuidance from './pages/CareerGuidance';
 import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
 import CourseDetails from './pages/CourseDetails';
+import CourseDetailsPage from './pages/CourseDetailsPage';
+import CourseFinder from './pages/CourseFinder';
+import CourseMatcher from './pages/CourseMatcher';
+import Courses from './pages/Courses';
 import DuolingoTest from './pages/DuolingoTest';
 import Home from './pages/Home';
 import IELTSTest from './pages/IELTSTest';
 import KaplanTest from './pages/KaplanTest';
 import LanguageCertTest from './pages/LanguageCertTest';
+import LanguagePrep from './pages/LanguagePrep';
 import Messages from './pages/Messages';
 import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
@@ -56,11 +61,6 @@ import TOEFLTest from './pages/TOEFLTest';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CourseMatcher from './pages/CourseMatcher';
-import LanguagePrep from './pages/LanguagePrep';
-import CourseDetailsPage from './pages/CourseDetailsPage';
-import CourseFinder from './pages/CourseFinder';
-import Courses from './pages/Courses';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import __Layout from './Layout.jsx';
 
@@ -94,11 +94,16 @@ export const PAGES = {
     "CompleteProfile": CompleteProfile,
     "Contact": Contact,
     "CourseDetails": CourseDetails,
+    "CourseDetailsPage": CourseDetailsPage,
+    "CourseFinder": CourseFinder,
+    "CourseMatcher": CourseMatcher,
+    "Courses": Courses,
     "DuolingoTest": DuolingoTest,
     "Home": Home,
     "IELTSTest": IELTSTest,
     "KaplanTest": KaplanTest,
     "LanguageCertTest": LanguageCertTest,
+    "LanguagePrep": LanguagePrep,
     "Messages": Messages,
     "MyApplications": MyApplications,
     "MyDocuments": MyDocuments,
@@ -124,11 +129,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CourseMatcher": CourseMatcher,
-    "LanguagePrep": LanguagePrep,
-    "CourseDetailsPage": CourseDetailsPage,
-    "CourseFinder": CourseFinder,
-    "Courses": Courses,
     "UniversityDetailsPage": UniversityDetailsPage,
 }
 
