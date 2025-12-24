@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import CRMLayout from '@/components/crm/CRMLayout';
+import AIInquiryResponseSuggester from '@/components/crm/AIInquiryResponseSuggester';
 import EnhancedLeadScoring from '@/components/crm/EnhancedLeadScoring';
 import { motion, AnimatePresence } from 'framer-motion';
 

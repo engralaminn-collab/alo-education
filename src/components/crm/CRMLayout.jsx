@@ -22,6 +22,7 @@ export default function CRMLayout({ children, title, actions }) {
     <div className="min-h-screen bg-slate-100">
       <AutomatedTaskTrigger />
       <WorkflowExecutionEngine />
+      <AutomatedFollowUpSystem />
       <CRMSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       
       <div className={cn(
