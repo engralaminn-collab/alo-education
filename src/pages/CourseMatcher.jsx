@@ -76,7 +76,6 @@ export default function CourseMatcher() {
 
   const matchCourses = () => {
     setIsMatching(true);
-    setShowAIRecommendations(true);
     
     setTimeout(() => {
       const gpaPercent = (parseFloat(formData.gpa) / parseFloat(formData.gpa_scale)) * 100;

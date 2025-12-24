@@ -65,7 +65,7 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link to={createPageUrl('CourseFinder')} className="font-medium text-slate-900 hover:text-[#F37021] transition-colors">
+            <Link to={createPageUrl('CourseFinder')} className="font-medium text-slate-900 hover:text-[#F37021] transition-colors">Course Finder
               Course Finder
             </Link>
             <Link to={createPageUrl('Services')} className="font-medium text-slate-900 hover:text-[#F37021] transition-colors">

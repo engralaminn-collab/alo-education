@@ -51,13 +51,7 @@ export default function CourseDetailsPage() {
 
   const { data: user } = useQuery({
     queryKey: ['current-user-course-details'],
-    queryFn: async () => {
-      try {
-        return await base44.auth.me();
-      } catch {
-        return null;
-      }
-    },
+    queryFn: () => base44.auth.me(),
   });
 
   const { data: studentProfile } = useQuery({
@@ -327,19 +321,11 @@ export default function CourseDetailsPage() {
                   <p className="text-white/90 mb-4">
                     Book a free consultation with our expert counselors
                   </p>
-                  <Button 
-                    className="alo-btn-primary w-full"
-                    onClick={() => {
-                      if (!user) {
-                        const currentUrl = window.location.pathname + window.location.search;
-                        base44.auth.redirectToLogin(currentUrl);
-                      } else {
-                        window.location.href = createPageUrl('Contact');
-                      }
-                    }}
-                  >
-                    Book Counselling
-                  </Button>
+                  <Link to={createPageUrl('Contact')}>
+                    <Button className="alo-btn-primary w-full">
+                      Book Counselling
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 

@@ -17,21 +17,12 @@ import Footer from '@/components/landing/Footer';
 export default function CourseFinder() {
   const [activeTab, setActiveTab] = useState('courses');
   const [searchQuery, setSearchQuery] = useState('');
-  const [subjectType, setSubjectType] = useState('');
+  const [subjectType, setSubjectType] = useState('all');
   const [courseType, setCourseType] = useState('all');
   const [destination, setDestination] = useState('all');
   const [selectedUniversity, setSelectedUniversity] = useState('all');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
   const [sortBy, setSortBy] = useState('relevance');
-  const [tuitionRange, setTuitionRange] = useState('all');
-  const [scholarshipOnly, setScholarshipOnly] = useState(false);
-  const [rankingFilter, setRankingFilter] = useState('all');
-  const [populationRange, setPopulationRange] = useState('all');
-  const [regionFilter, setRegionFilter] = useState('all');
-  const [universityType, setUniversityType] = useState('all');
-  const [researchFocus, setResearchFocus] = useState('all');
-  const [accommodationType, setAccommodationType] = useState('all');
-  const [newlyEstablished, setNewlyEstablished] = useState(false);
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -70,29 +61,15 @@ export default function CourseFinder() {
       universityMap[course.university_id]?.name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (activeTab === 'courses') {
-      const matchesSubject = !subjectType || course.subject_area?.toLowerCase().includes(subjectType.toLowerCase());
+      const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
       const matchesType = courseType === 'all' || course.level === courseType;
       const matchesDestination = destination === 'all' || course.country === destination;
       const matchesIntake = selectedIntakes.length === 0 || 
         selectedIntakes.some(intake => course.intake?.includes(intake.split(' ')[1]));
       
-      // Tuition range filter
-      let matchesTuition = true;
-      if (tuitionRange !== 'all' && course.tuition_fee_min) {
-        const fee = course.tuition_fee_min;
-        if (tuitionRange === '0-10k') matchesTuition = fee < 10000;
-        else if (tuitionRange === '10k-20k') matchesTuition = fee >= 10000 && fee < 20000;
-        else if (tuitionRange === '20k-30k') matchesTuition = fee >= 20000 && fee < 30000;
-        else if (tuitionRange === '30k-40k') matchesTuition = fee >= 30000 && fee < 40000;
-        else if (tuitionRange === '40k+') matchesTuition = fee >= 40000;
-      }
-      
-      // Scholarship filter
-      const matchesScholarship = !scholarshipOnly || course.scholarship_available === true;
-      
-      return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake && matchesTuition && matchesScholarship;
+      return matchesSearch && matchesSubject && matchesType && matchesDestination && matchesIntake;
     } else {
-      const matchesSubject = !subjectType || course.subject_area?.toLowerCase().includes(subjectType.toLowerCase());
+      const matchesSubject = subjectType === 'all' || course.subject_area === subjectType;
       const matchesUniversity = selectedUniversity === 'all' || course.university_id === selectedUniversity;
       
       return matchesSearch && matchesSubject && matchesUniversity;
@@ -113,73 +90,10 @@ export default function CourseFinder() {
     
     if (activeTab === 'universities') {
       const uniCourses = courses.filter(c => c.university_id === uni.id);
-      const matchesSubject = !subjectType || 
-        uniCourses.some(c => c.subject_area?.toLowerCase().includes(subjectType.toLowerCase()));
+      const matchesSubject = subjectType === 'all' || 
+        uniCourses.some(c => c.subject_area === subjectType);
       
-      // Ranking filter
-      let matchesRanking = true;
-      if (rankingFilter !== 'all' && uni.ranking) {
-        if (rankingFilter === 'top100') matchesRanking = uni.ranking <= 100;
-        else if (rankingFilter === 'top200') matchesRanking = uni.ranking <= 200;
-        else if (rankingFilter === 'top500') matchesRanking = uni.ranking <= 500;
-      }
-      
-      // Population filter
-      let matchesPopulation = true;
-      if (populationRange !== 'all' && uni.student_population) {
-        const pop = uni.student_population;
-        if (populationRange === 'small') matchesPopulation = pop < 10000;
-        else if (populationRange === 'medium') matchesPopulation = pop >= 10000 && pop < 30000;
-        else if (populationRange === 'large') matchesPopulation = pop >= 30000;
-      }
-      
-      // Region filter
-      const countryToRegion = {
-        'United States': 'North America',
-        'Canada': 'North America',
-        'Mexico': 'North America',
-        'United Kingdom': 'Europe',
-        'Germany': 'Europe',
-        'France': 'Europe',
-        'Ireland': 'Europe',
-        'Netherlands': 'Europe',
-        'Spain': 'Europe',
-        'Italy': 'Europe',
-        'Australia': 'Oceania',
-        'New Zealand': 'Oceania',
-        'China': 'Asia',
-        'Japan': 'Asia',
-        'Singapore': 'Asia',
-        'Dubai': 'Middle East',
-        'UAE': 'Middle East'
-      };
-      
-      let matchesRegion = true;
-      if (regionFilter !== 'all') {
-        const uniRegion = countryToRegion[uni.country];
-        matchesRegion = uniRegion === regionFilter;
-      }
-      
-      // University type filter (assuming we add this to entity later)
-      const matchesType = universityType === 'all' || uni.university_type === universityType;
-      
-      // Research focus filter (assuming we add this to entity later)
-      const matchesFocus = researchFocus === 'all' || uni.research_focus === researchFocus;
-      
-      // Accommodation filter (assuming we add this to entity later)
-      const matchesAccommodation = accommodationType === 'all' || 
-        uni.accommodation_types?.includes(accommodationType);
-      
-      // Newly established filter (universities established in last 20 years)
-      let matchesNewlyEstablished = true;
-      if (newlyEstablished && uni.established_year) {
-        const currentYear = new Date().getFullYear();
-        matchesNewlyEstablished = (currentYear - uni.established_year) <= 20;
-      }
-      
-      return matchesSearch && matchesSubject && matchesRanking && matchesPopulation && 
-             matchesRegion && matchesType && matchesFocus && matchesAccommodation && 
-             matchesNewlyEstablished && uni.status === 'active';
+      return matchesSearch && matchesSubject && uni.status === 'active';
     }
     return false;
   });
@@ -224,285 +138,159 @@ export default function CourseFinder() {
               </TabsList>
 
               <TabsContent value="courses" className="space-y-6">
-                <div className="bg-white rounded-lg p-6 border-2 border-slate-200">
-                  <div className="grid md:grid-cols-4 gap-4">
-                    {/* Subject Type */}
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        I'm looking for:
-                      </label>
-                      <Input
-                        placeholder="Type subject name (e.g., Business)"
-                        value={subjectType}
-                        onChange={(e) => setSubjectType(e.target.value)}
-                        className="h-12"
-                      />
-                    </div>
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    placeholder="Search by course name, university, or subject..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-14 text-lg border-2"
+                  />
+                </div>
 
-                    {/* Course Level */}
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        I'm planning to study:
-                      </label>
-                      <Select value={courseType} onValueChange={setCourseType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select level type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Levels</SelectItem>
-                          <SelectItem value="Undergraduate">Undergraduate</SelectItem>
-                          <SelectItem value="Postgraduate">Postgraduate</SelectItem>
-                          <SelectItem value="Foundation">Foundation</SelectItem>
-                          <SelectItem value="PhD">PhD</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Country */}
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        I want to study in:
-                      </label>
-                      <Select value={destination} onValueChange={setDestination}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select country" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {countries.filter(c => c !== 'all').map(country => (
-                            <SelectItem key={country} value={country}>{country}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Search Button */}
-                    <div className="flex items-end">
-                      <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                        <Search className="w-5 h-5 mr-2" />
-                        Search
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Intake Selection */}
-                  <div className="mt-6">
-                    <label className="text-sm font-medium text-slate-700 mb-3 block">
-                      For the intake:
+                <div className="grid md:grid-cols-4 gap-4">
+                  {/* Subject Type */}
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                      I'm looking for:
                     </label>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                      {intakes.map(intake => (
-                        <div key={intake} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer">
-                          <Checkbox
-                            id={intake}
-                            checked={selectedIntakes.includes(intake)}
-                            onCheckedChange={() => handleIntakeToggle(intake)}
-                          />
-                          <label htmlFor={intake} className="text-sm cursor-pointer">
-                            {intake}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
+                    <Select value={subjectType} onValueChange={setSubjectType}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select subject type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Subjects</SelectItem>
+                        {subjectAreas.filter(s => s !== 'all').map(subject => (
+                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Additional Filters */}
-                  <div className="mt-6 grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        Tuition Fee Range:
-                      </label>
-                      <Select value={tuitionRange} onValueChange={setTuitionRange}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Ranges" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Ranges</SelectItem>
-                          <SelectItem value="0-10k">Under $10,000</SelectItem>
-                          <SelectItem value="10k-20k">$10,000 - $20,000</SelectItem>
-                          <SelectItem value="20k-30k">$20,000 - $30,000</SelectItem>
-                          <SelectItem value="30k-40k">$30,000 - $40,000</SelectItem>
-                          <SelectItem value="40k+">$40,000+</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  {/* Course Type */}
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                      I'm planning to study:
+                    </label>
+                    <Select value={courseType} onValueChange={setCourseType}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select course type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Types</SelectItem>
+                        <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+                        <SelectItem value="Postgraduate">Postgraduate</SelectItem>
+                        <SelectItem value="Foundation">Foundation</SelectItem>
+                        <SelectItem value="PhD">PhD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                    <div className="flex items-end">
-                      <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer w-full">
+                  {/* Country */}
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                      I want to study in:
+                    </label>
+                    <Select value={destination} onValueChange={setDestination}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Countries</SelectItem>
+                        {countries.filter(c => c !== 'all').map(country => (
+                          <SelectItem key={country} value={country}>{country}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Search Button */}
+                  <div className="flex items-end">
+                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                      <Search className="w-5 h-5 mr-2" />
+                      Search
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Intake Selection */}
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-3 block">
+                    For the intake:
+                  </label>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                    {intakes.map(intake => (
+                      <div key={intake} className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50">
                         <Checkbox
-                          id="scholarship"
-                          checked={scholarshipOnly}
-                          onCheckedChange={setScholarshipOnly}
+                          id={intake}
+                          checked={selectedIntakes.includes(intake)}
+                          onCheckedChange={() => handleIntakeToggle(intake)}
                         />
-                        <label htmlFor="scholarship" className="text-sm cursor-pointer font-medium">
-                          Only show courses with scholarships
+                        <label htmlFor={intake} className="text-sm cursor-pointer">
+                          {intake}
                         </label>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="universities" className="space-y-6">
-                <div className="bg-white rounded-lg p-6 border-2 border-slate-200">
-                  <div className="grid md:grid-cols-3 gap-4">
-                    {/* Subject Type */}
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        I'm looking for:
-                      </label>
-                      <Input
-                        placeholder="Type subject name (e.g., Business)"
-                        value={subjectType}
-                        onChange={(e) => setSubjectType(e.target.value)}
-                        className="h-12"
-                      />
-                    </div>
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Input
+                    placeholder="Search by university name, city, or country..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-14 text-lg border-2"
+                  />
+                </div>
 
-                    {/* Universities */}
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        I want to study in:
-                      </label>
-                      <Select value={selectedUniversity} onValueChange={setSelectedUniversity}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="Select university" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Universities</SelectItem>
-                          {universities.filter(u => u.status === 'active').map(uni => (
-                            <SelectItem key={uni.id} value={uni.id}>{uni.university_name || uni.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Search Button */}
-                    <div className="flex items-end">
-                      <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                        <Search className="w-5 h-5 mr-2" />
-                        Search
-                      </Button>
-                    </div>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {/* Subject Type */}
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                      I'm looking for:
+                    </label>
+                    <Select value={subjectType} onValueChange={setSubjectType}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select subject type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Subjects</SelectItem>
+                        {subjectAreas.filter(s => s !== 'all').map(subject => (
+                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* University Filters */}
-                  <div className="mt-6 grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        World Ranking:
-                      </label>
-                      <Select value={rankingFilter} onValueChange={setRankingFilter}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Rankings" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Rankings</SelectItem>
-                          <SelectItem value="top100">Top 100</SelectItem>
-                          <SelectItem value="top200">Top 200</SelectItem>
-                          <SelectItem value="top500">Top 500</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        Student Population:
-                      </label>
-                      <Select value={populationRange} onValueChange={setPopulationRange}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Sizes" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Sizes</SelectItem>
-                          <SelectItem value="small">Small (Under 10,000)</SelectItem>
-                          <SelectItem value="medium">Medium (10,000 - 30,000)</SelectItem>
-                          <SelectItem value="large">Large (30,000+)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        Region:
-                      </label>
-                      <Select value={regionFilter} onValueChange={setRegionFilter}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Regions" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Regions</SelectItem>
-                          <SelectItem value="North America">North America</SelectItem>
-                          <SelectItem value="Europe">Europe</SelectItem>
-                          <SelectItem value="Asia">Asia</SelectItem>
-                          <SelectItem value="Oceania">Oceania</SelectItem>
-                          <SelectItem value="Middle East">Middle East</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        University Type:
-                      </label>
-                      <Select value={universityType} onValueChange={setUniversityType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Types</SelectItem>
-                          <SelectItem value="public">Public</SelectItem>
-                          <SelectItem value="private">Private</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        Research Focus:
-                      </label>
-                      <Select value={researchFocus} onValueChange={setResearchFocus}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Research Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Research Types</SelectItem>
-                          <SelectItem value="research-intensive">Research Intensive</SelectItem>
-                          <SelectItem value="teaching-focused">Teaching Focused</SelectItem>
-                          <SelectItem value="balanced">Balanced</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-700 mb-2 block">
-                        Accommodation:
-                      </label>
-                      <Select value={accommodationType} onValueChange={setAccommodationType}>
-                        <SelectTrigger className="h-12">
-                          <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Types</SelectItem>
-                          <SelectItem value="on-campus">On-Campus Housing</SelectItem>
-                          <SelectItem value="off-campus">Off-Campus Assistance</SelectItem>
-                          <SelectItem value="homestay">Homestay Programs</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  {/* Universities */}
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-2 block">
+                      I want to study in:
+                    </label>
+                    <Select value={selectedUniversity} onValueChange={setSelectedUniversity}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select university" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Universities</SelectItem>
+                        {universities.filter(u => u.status === 'active').map(uni => (
+                          <SelectItem key={uni.id} value={uni.id}>{uni.university_name || uni.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Additional Checkboxes */}
-                  <div className="mt-4">
-                    <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer w-fit">
-                      <Checkbox
-                        id="newly-established"
-                        checked={newlyEstablished}
-                        onCheckedChange={setNewlyEstablished}
-                      />
-                      <label htmlFor="newly-established" className="text-sm cursor-pointer font-medium">
-                        Show only newly established universities (Last 20 years)
-                      </label>
-                    </div>
+                  {/* Search Button */}
+                  <div className="flex items-end">
+                    <Button className="w-full h-12 font-bold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
+                      <Search className="w-5 h-5 mr-2" />
+                      Search
+                    </Button>
                   </div>
                 </div>
               </TabsContent>
