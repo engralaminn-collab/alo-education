@@ -108,6 +108,7 @@ export default function CRMWorkloadBalancer() {
     mutationFn: async () => {
       const unassignedStudents = students.filter(s => !s.counselor_id && s.status === 'new_lead');
       
+      let assignedCount = 0;
       for (const student of unassignedStudents) {
         const bestCounselor = findBestCounselor(
           student.admission_preferences?.study_destination,
@@ -115,17 +116,20 @@ export default function CRMWorkloadBalancer() {
         );
         
         if (bestCounselor) {
-          await assignNewLeadMutation.mutateAsync({
-            studentId: student.id,
-            counselorId: bestCounselor.user_id,
+          await base44.entities.StudentProfile.update(student.id, {
+            counselor_id: bestCounselor.user_id,
+            status: 'contacted'
           });
+          assignedCount++;
         }
       }
       
-      return unassignedStudents.length;
+      return assignedCount;
     },
     onSuccess: (count) => {
-      toast.success(`Assigned ${count} unassigned leads!`);
+      queryClient.invalidateQueries({ queryKey: ['students-for-workload'] });
+      queryClient.invalidateQueries({ queryKey: ['counselors'] });
+      toast.success(`Auto-assigned ${count} leads successfully!`);
     },
   });
 
