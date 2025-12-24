@@ -16,6 +16,7 @@ export default function SOPGenerator({ studentProfile }) {
   const [whyThisCourse, setWhyThisCourse] = useState('');
   const [generatedSOP, setGeneratedSOP] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState('');
 
   const { data: educationRecords = [] } = useQuery({
     queryKey: ['education-records', studentProfile?.id],
@@ -74,7 +75,33 @@ Format it with clear paragraphs.`,
     onSuccess: (sop) => {
       setGeneratedSOP(sop);
       setIsEditing(true);
+      setAiFeedback('');
       toast.success('SOP generated successfully!');
+    },
+  });
+
+  const getFeedbackMutation = useMutation({
+    mutationFn: async () => {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Analyze this Statement of Purpose and provide constructive feedback and suggestions for improvement:
+
+${generatedSOP}
+
+Provide feedback on:
+1. Structure and flow
+2. Clarity and coherence
+3. Strength of arguments
+4. Grammar and language
+5. Specific suggestions for improvement
+6. What's working well
+
+Be constructive and specific.`,
+      });
+      return response;
+    },
+    onSuccess: (feedback) => {
+      setAiFeedback(feedback);
+      toast.success('AI feedback generated!');
     },
   });
 
@@ -178,6 +205,21 @@ Format it with clear paragraphs.`,
                   >
                     {isEditing ? 'Preview' : 'Edit'}
                   </Button>
+                  {isEditing && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => getFeedbackMutation.mutate()}
+                      disabled={getFeedbackMutation.isPending}
+                    >
+                      {getFeedbackMutation.isPending ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Wand2 className="w-4 h-4 mr-2" />
+                      )}
+                      Get AI Feedback
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
@@ -198,6 +240,15 @@ Format it with clear paragraphs.`,
               ) : (
                 <div className="bg-slate-50 p-6 rounded-lg border whitespace-pre-wrap font-serif">
                   {generatedSOP}
+                </div>
+              )}
+              {aiFeedback && (
+                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                    <Wand2 className="w-4 h-4" />
+                    AI Feedback & Suggestions
+                  </h4>
+                  <div className="text-sm text-blue-800 whitespace-pre-wrap">{aiFeedback}</div>
                 </div>
               )}
             </div>
