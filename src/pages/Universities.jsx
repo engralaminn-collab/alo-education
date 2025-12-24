@@ -54,16 +54,17 @@ export default function Universities() {
   });
 
   const filteredUniversities = universities.filter(uni => {
-    const matchesSearch = uni.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = uni.university_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          uni.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           uni.city?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCountry = selectedCountry === 'all' || 
                            uni.country?.toLowerCase().includes(selectedCountry.toLowerCase());
     const matchesTuition = (!uni.tuition_range_min || uni.tuition_range_min >= tuitionRange[0]) &&
                            (!uni.tuition_range_max || uni.tuition_range_max <= tuitionRange[1]);
     const matchesRanking = rankingFilter === 'all' ||
-                           (rankingFilter === 'top50' && uni.ranking <= 50) ||
-                           (rankingFilter === 'top100' && uni.ranking <= 100) ||
-                           (rankingFilter === 'top200' && uni.ranking <= 200);
+                           (rankingFilter === 'top50' && (uni.ranking <= 50 || uni.qs_ranking <= 50)) ||
+                           (rankingFilter === 'top100' && (uni.ranking <= 100 || uni.qs_ranking <= 100)) ||
+                           (rankingFilter === 'top200' && (uni.ranking <= 200 || uni.qs_ranking <= 200));
     return matchesSearch && matchesCountry && matchesTuition && matchesRanking;
   });
 

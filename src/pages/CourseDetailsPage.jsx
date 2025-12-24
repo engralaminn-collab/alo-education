@@ -39,6 +39,13 @@ export default function CourseDetailsPage() {
     enabled: !!course?.university_id,
   });
 
+  // Set page title for SEO
+  React.useEffect(() => {
+    if (course && university) {
+      document.title = `${course.course_title} - ${university.university_name || university.name} | ALO Education`;
+    }
+  }, [course, university]);
+
   const { data: universities = [] } = useQuery({
     queryKey: ['universities-for-similar'],
     queryFn: () => base44.entities.University.list(),
@@ -90,31 +97,73 @@ export default function CourseDetailsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
+      {/* Header Section - SEO Enabled */}
       <section style={{ background: 'var(--alo-blue)' }} className="py-12">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl">
-            <div className="flex items-center justify-between mb-4">
-              <Badge style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }}>
+          <div className="max-w-6xl mx-auto">
+            {/* University Logo */}
+            {university?.logo && (
+              <div className="mb-6">
+                <img src={university.logo} alt={university.university_name} className="h-16 w-auto bg-white rounded-lg p-2" />
+              </div>
+            )}
+
+            {/* Course Name (H1) */}
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {course.course_title}
+            </h1>
+
+            {/* Campus City & Location */}
+            {university && (
+              <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`} className="hover:underline">
+                <p className="text-xl text-white/90 mb-2">
+                  {university.university_name || university.name}
+                  {university.city && ` - ${university.city}`}
+                </p>
+              </Link>
+            )}
+
+            <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>
+                  {university?.city && `${university.city} | `}
+                  {course.country}
+                </span>
+              </div>
+
+              {/* National/World Ranking */}
+              {(university?.ranking || university?.qs_ranking) && (
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4" />
+                  <span>World Rank: #{university.ranking || university.qs_ranking}</span>
+                </div>
+              )}
+
+              {/* University Website */}
+              {university?.website_url && (
+                <a href={university.website_url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                  <Globe className="w-4 h-4" />
+                  University Website
+                </a>
+              )}
+            </div>
+
+            {/* Feedback Link & Last Updated */}
+            <div className="flex items-center gap-6 text-xs text-white/60">
+              <Link to={createPageUrl('Contact')} className="hover:underline">
+                Report an Issue / Feedback
+              </Link>
+              <span>Last Updated: {new Date(course.updated_date || course.created_date).toLocaleDateString()}</span>
+            </div>
+
+            {/* Level Badge & Favorite */}
+            <div className="flex items-center gap-3 mt-4">
+              <Badge style={{ backgroundColor: 'var(--alo-orange)', color: 'white' }} className="text-sm px-4 py-1">
                 {course.level}
               </Badge>
               <FavoriteButton courseId={course.id} size="sm" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              {course.course_title}
-            </h1>
-            {university && (
-              <div className="flex flex-wrap items-center gap-4 text-white/90">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-5 h-5" />
-                  <span>{university.university_name || university.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  <span>{course.country}{university.city ? `, ${university.city}` : ''}</span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -189,12 +238,26 @@ export default function CourseDetailsPage() {
                   <CardContent>
                     {course.entry_requirements ? (
                       <div className="prose prose-slate max-w-none">
-                        <p className="text-slate-700 leading-relaxed whitespace-pre-line">
-                          {course.entry_requirements}
-                        </p>
+                        <div 
+                          className="text-slate-700 leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: course.entry_requirements.replace(/\n/g, '<br/>') }}
+                        />
                       </div>
                     ) : (
                       <p className="text-slate-500 italic">Entry requirements information not available</p>
+                    )}
+
+                    {/* Pathway Section */}
+                    {course.pathway_info && (
+                      <div className="mt-6 pt-6 border-t">
+                        <h4 className="font-semibold text-slate-900 mb-3">Pathway Programs Available</h4>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <div 
+                            className="text-slate-700 text-sm"
+                            dangerouslySetInnerHTML={{ __html: course.pathway_info.replace(/\n/g, '<br/>') }}
+                          />
+                        </div>
+                      </div>
                     )}
                   </CardContent>
                 </Card>
@@ -205,52 +268,72 @@ export default function CourseDetailsPage() {
                   <CardHeader>
                     <CardTitle className="alo-card-title flex items-center gap-2">
                       <Globe className="w-5 h-5" />
-                      IELTS Requirements
+                      Test Requirements
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    {course.ielts_required ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-green-600">
-                          <CheckCircle className="w-5 h-5" />
-                          <span className="font-semibold">IELTS Required</span>
-                        </div>
-                        
-                        {course.ielts_overall && (
-                          <div className="p-4 bg-blue-50 rounded-lg">
-                            <div className="flex items-center justify-between">
-                              <span className="text-slate-700">Overall Score Required:</span>
-                              <span className="text-2xl font-bold" style={{ color: 'var(--alo-blue)' }}>
-                                {course.ielts_overall}
-                              </span>
+                  <CardContent className="space-y-6">
+                    {/* English Tests */}
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-4">English Language Tests</h4>
+
+                      {course.ielts_required ? (
+                        <div className="space-y-4">
+                          <div className="border rounded-lg p-4">
+                            <div className="flex items-center gap-2 text-green-600 mb-3">
+                              <CheckCircle className="w-5 h-5" />
+                              <span className="font-semibold">IELTS</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              {course.ielts_overall && (
+                                <div>
+                                  <p className="text-sm text-slate-500">Overall Score</p>
+                                  <p className="text-xl font-bold" style={{ color: 'var(--alo-blue)' }}>
+                                    {course.ielts_overall}
+                                  </p>
+                                </div>
+                              )}
+
+                              {course.ielts_min_each && (
+                                <div>
+                                  <p className="text-sm text-slate-500">Minimum Each Band</p>
+                                  <p className="text-xl font-bold text-slate-900">
+                                    {course.ielts_min_each}
+                                  </p>
+                                </div>
+                              )}
                             </div>
                           </div>
-                        )}
 
-                        {course.ielts_min_each && (
-                          <div className="p-4 bg-slate-50 rounded-lg">
-                            <div className="flex items-center justify-between">
-                              <span className="text-slate-700">Minimum in Each Band:</span>
-                              <span className="text-xl font-bold text-slate-900">
-                                {course.ielts_min_each}
-                              </span>
-                            </div>
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p className="text-xs text-blue-800">
+                              Other accepted tests: TOEFL, PTE, Duolingo English Test. Contact us for specific score requirements.
+                            </p>
                           </div>
-                        )}
-
-                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                          <p className="text-sm text-amber-800">
-                            <strong>Note:</strong> IELTS scores are typically valid for 2 years from the test date.
-                          </p>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="text-center py-8">
-                        <Globe className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <p className="text-slate-500">IELTS requirements not specified for this course</p>
-                        <p className="text-sm text-slate-400 mt-2">Contact us for more information</p>
+                      ) : (
+                        <div className="text-center py-6 bg-slate-50 rounded-lg">
+                          <Globe className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                          <p className="text-slate-500 text-sm">English test requirements not specified</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Standardized Tests (if any) */}
+                    {course.standardized_tests && (
+                      <div>
+                        <h4 className="font-semibold text-slate-900 mb-4">Standardized Tests</h4>
+                        <div className="bg-slate-50 rounded-lg p-4">
+                          <p className="text-slate-700 whitespace-pre-line">{course.standardized_tests}</p>
+                        </div>
                       </div>
                     )}
+
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      <p className="text-xs text-amber-800">
+                        <strong>Note:</strong> Test scores are typically valid for 2 years from the test date. Requirements may vary - verify with the university.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -312,20 +395,38 @@ export default function CourseDetailsPage() {
                 </CardContent>
               </Card>
 
-              {/* CTA */}
-              <Card style={{ backgroundColor: 'var(--alo-blue)' }} className="text-white border-0">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold mb-3">Ready to Apply?</h3>
-                  <p className="text-white/90 mb-4">
-                    Book a free consultation with our expert counselors
+              {/* Fixed CTA Buttons */}
+              <div className="space-y-3 sticky top-6">
+                <Link to={createPageUrl('ApplicationForm')}>
+                  <Button 
+                    className="w-full font-bold text-lg py-6"
+                    style={{ backgroundColor: 'var(--alo-orange)', color: '#000000' }}
+                  >
+                    APPLY NOW
+                  </Button>
+                </Link>
+
+                <Link to={createPageUrl('Contact')}>
+                  <Button 
+                    variant="outline" 
+                    className="w-full font-semibold py-6"
+                    style={{ borderColor: 'var(--alo-blue)', color: 'var(--alo-blue)' }}
+                  >
+                    Request Counselling
+                  </Button>
+                </Link>
+
+                <FavoriteButton courseId={course.id} />
+
+                <div className="bg-slate-100 rounded-lg p-4 text-center text-xs text-slate-600">
+                  <p className="mb-2">
+                    <strong>Note:</strong> "Apply Now" requires portal registration and complete Form B submission.
                   </p>
-                  <Link to={createPageUrl('Contact')}>
-                    <Button className="alo-btn-primary w-full">
-                      Book Counselling
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                  <p>
+                    Counselling booking and enquiry forms use the same public entry (Form A).
+                  </p>
+                </div>
+              </div>
 
               {/* University Link */}
               {university && (

@@ -5,6 +5,8 @@ import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkEmail from './pages/CRMBulkEmail';
+import CRMBulkUniversityImport from './pages/CRMBulkUniversityImport';
+import CRMContentManager from './pages/CRMContentManager';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
@@ -14,6 +16,7 @@ import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
 import CRMMessages from './pages/CRMMessages';
 import CRMPerformance from './pages/CRMPerformance';
+import CRMReferralManagement from './pages/CRMReferralManagement';
 import CRMReports from './pages/CRMReports';
 import CRMSettings from './pages/CRMSettings';
 import CRMStudents from './pages/CRMStudents';
@@ -21,7 +24,9 @@ import CRMTaskTemplates from './pages/CRMTaskTemplates';
 import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
+import CRMUniversityPartnerships from './pages/CRMUniversityPartnerships';
 import CRMWorkflows from './pages/CRMWorkflows';
+import CRMWorkloadBalancer from './pages/CRMWorkloadBalancer';
 import CareerGuidance from './pages/CareerGuidance';
 import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
@@ -45,6 +50,7 @@ import OETTest from './pages/OETTest';
 import OIETCTest from './pages/OIETCTest';
 import PTETest from './pages/PTETest';
 import PartnerPortal from './pages/PartnerPortal';
+import SOPGeneratorPage from './pages/SOPGeneratorPage';
 import Scholarships from './pages/Scholarships';
 import Services from './pages/Services';
 import StudentAnalytics from './pages/StudentAnalytics';
@@ -62,12 +68,6 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import CRMWorkloadBalancer from './pages/CRMWorkloadBalancer';
-import SOPGeneratorPage from './pages/SOPGeneratorPage';
-import CRMContentManager from './pages/CRMContentManager';
-import CRMUniversityPartnerships from './pages/CRMUniversityPartnerships';
-import CRMBulkUniversityImport from './pages/CRMBulkUniversityImport';
-import CRMReferralManagement from './pages/CRMReferralManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +79,8 @@ export const PAGES = {
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMBulkEmail": CRMBulkEmail,
+    "CRMBulkUniversityImport": CRMBulkUniversityImport,
+    "CRMContentManager": CRMContentManager,
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
     "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
@@ -88,6 +90,7 @@ export const PAGES = {
     "CRMLeadNurturing": CRMLeadNurturing,
     "CRMMessages": CRMMessages,
     "CRMPerformance": CRMPerformance,
+    "CRMReferralManagement": CRMReferralManagement,
     "CRMReports": CRMReports,
     "CRMSettings": CRMSettings,
     "CRMStudents": CRMStudents,
@@ -95,7 +98,9 @@ export const PAGES = {
     "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
     "CRMUniversities": CRMUniversities,
+    "CRMUniversityPartnerships": CRMUniversityPartnerships,
     "CRMWorkflows": CRMWorkflows,
+    "CRMWorkloadBalancer": CRMWorkloadBalancer,
     "CareerGuidance": CareerGuidance,
     "CompleteProfile": CompleteProfile,
     "Contact": Contact,
@@ -119,6 +124,7 @@ export const PAGES = {
     "OIETCTest": OIETCTest,
     "PTETest": PTETest,
     "PartnerPortal": PartnerPortal,
+    "SOPGeneratorPage": SOPGeneratorPage,
     "Scholarships": Scholarships,
     "Services": Services,
     "StudentAnalytics": StudentAnalytics,
@@ -136,12 +142,6 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "CRMWorkloadBalancer": CRMWorkloadBalancer,
-    "SOPGeneratorPage": SOPGeneratorPage,
-    "CRMContentManager": CRMContentManager,
-    "CRMUniversityPartnerships": CRMUniversityPartnerships,
-    "CRMBulkUniversityImport": CRMBulkUniversityImport,
-    "CRMReferralManagement": CRMReferralManagement,
 }
 
 export const pagesConfig = {
