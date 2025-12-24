@@ -8,10 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search, MapPin, DollarSign, Award, Building2, Calendar } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { Search, MapPin, DollarSign, Award, Building2, Calendar, GitCompare, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
+import CompareModal from '@/components/comparison/CompareModal';
 
 const SUBJECT_AREAS = [
   'Business & Management', 'Computer Science & IT', 'Engineering', 'Medicine & Health',
@@ -38,10 +40,16 @@ export default function CourseFinder() {
   const [studyLevel, setStudyLevel] = useState('');
   const [destinationCountry, setDestinationCountry] = useState('');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
+  const [deadlineFilter, setDeadlineFilter] = useState('');
 
   // Universities tab filters
   const [lookingFor, setLookingFor] = useState('');
   const [universityName, setUniversityName] = useState('');
+
+  // Comparison state
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [selectedUniversities, setSelectedUniversities] = useState([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   const { data: courses = [] } = useQuery({
     queryKey: ['courses'],
@@ -68,10 +76,40 @@ export default function CourseFinder() {
       const matchesCountry = !destinationCountry || course.country?.toLowerCase() === destinationCountry.toLowerCase();
       const matchesIntake = selectedIntakes.length === 0 || 
         selectedIntakes.some(intake => course.intake?.toLowerCase().includes(intake.split(' ')[1].toLowerCase()));
-      return matchesSubject && matchesLevel && matchesCountry && matchesIntake;
+      
+      // Deadline filter
+      const matchesDeadline = !deadlineFilter || (
+        deadlineFilter === 'upcoming' ? course.application_deadline && course.application_deadline !== 'Rolling admissions' :
+        deadlineFilter === 'rolling' ? course.application_deadline === 'Rolling admissions' :
+        true
+      );
+
+      return matchesSubject && matchesLevel && matchesCountry && matchesIntake && matchesDeadline;
     });
     setSearchResults(results.map(course => ({ ...course, isCourse: true })));
     setShowResults(true);
+  };
+
+  const handleCourseCompareToggle = (course) => {
+    setSelectedCourses(prev => {
+      if (prev.find(c => c.id === course.id)) {
+        return prev.filter(c => c.id !== course.id);
+      } else if (prev.length < 4) {
+        return [...prev, course];
+      }
+      return prev;
+    });
+  };
+
+  const handleUniversityCompareToggle = (uni) => {
+    setSelectedUniversities(prev => {
+      if (prev.find(u => u.id === uni.id)) {
+        return prev.filter(u => u.id !== uni.id);
+      } else if (prev.length < 4) {
+        return [...prev, uni];
+      }
+      return prev;
+    });
   };
 
   const handleUniversitySearch = () => {
@@ -191,6 +229,20 @@ export default function CourseFinder() {
                       </div>
                     </div>
 
+                    <div>
+                      <Label className="text-base mb-2 block">Application Deadline</Label>
+                      <Select value={deadlineFilter} onValueChange={setDeadlineFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="All deadlines" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All deadlines</SelectItem>
+                          <SelectItem value="upcoming">Upcoming deadlines</SelectItem>
+                          <SelectItem value="rolling">Rolling admissions</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     <Button
                       onClick={handleCourseSearch}
                       className="w-full h-14 text-lg font-semibold"
@@ -262,9 +314,58 @@ export default function CourseFinder() {
         </div>
       </section>
 
+      {/* Compare Bar */}
+      {(selectedCourses.length > 0 || selectedUniversities.length > 0) && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t-4 shadow-xl z-50 py-4" style={{ borderColor: '#0066CC' }}>
+          <div className="container mx-auto px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <GitCompare className="w-6 h-6" style={{ color: '#F37021' }} />
+              <span className="font-semibold">
+                {activeTab === 'courses' 
+                  ? `${selectedCourses.length} course${selectedCourses.length !== 1 ? 's' : ''} selected`
+                  : `${selectedUniversities.length} universit${selectedUniversities.length !== 1 ? 'ies' : 'y'} selected`
+                }
+              </span>
+              <span className="text-sm text-slate-500">(Max 4)</span>
+            </div>
+            <div className="flex gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSelectedCourses([]);
+                  setSelectedUniversities([]);
+                }}
+              >
+                Clear All
+              </Button>
+              <Button 
+                style={{ backgroundColor: '#F37021' }}
+                onClick={() => setShowCompareModal(true)}
+                disabled={
+                  (activeTab === 'courses' && selectedCourses.length < 2) ||
+                  (activeTab === 'universities' && selectedUniversities.length < 2)
+                }
+              >
+                <GitCompare className="w-4 h-4 mr-2" />
+                Compare Now
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Compare Modal */}
+      <CompareModal
+        items={activeTab === 'courses' ? selectedCourses : selectedUniversities}
+        type={activeTab === 'courses' ? 'course' : 'university'}
+        isOpen={showCompareModal}
+        onClose={() => setShowCompareModal(false)}
+        universities={universities}
+      />
+
       {/* Results - Always Show After Search */}
       {(showResults || searchResults.length > 0) && (
-        <section className="py-12">
+        <section className="py-12 pb-24">
           <div className="container mx-auto px-6">
             <h2 className="text-2xl font-bold mb-6">
               {searchResults.length} Results Found
@@ -284,24 +385,36 @@ export default function CourseFinder() {
                         {result.isUniversity ? (
                           <div className="grid md:grid-cols-4 gap-6 items-center">
                             <div className="md:col-span-2">
-                              <Link to={createPageUrl('UniversityDetailsPage') + `?id=${result.id}`}>
-                                <div className="flex items-center gap-4">
-                                  {result.logo && (
-                                    <div className="w-16 h-16 shrink-0">
-                                      <img src={result.logo} alt={result.university_name} className="w-full h-full object-contain" />
-                                    </div>
-                                  )}
-                                  <div>
-                                    <h3 className="font-bold text-lg hover:text-[#F37021]" style={{ color: '#0066CC' }}>
-                                      {result.university_name}
-                                    </h3>
-                                    <div className="flex items-center gap-2 text-slate-600 text-sm mt-1">
-                                      <MapPin className="w-4 h-4" />
-                                      <span>{result.city}, {result.country}</span>
+                              <div className="flex items-center gap-4">
+                                <Checkbox
+                                  checked={selectedUniversities.some(u => u.id === result.id)}
+                                  onCheckedChange={() => handleUniversityCompareToggle(result)}
+                                />
+                                <Link to={createPageUrl('UniversityDetailsPage') + `?id=${result.id}`}>
+                                  <div className="flex items-center gap-4">
+                                    {result.logo && (
+                                      <div className="w-16 h-16 shrink-0">
+                                        <img src={result.logo} alt={result.university_name} className="w-full h-full object-contain" />
+                                      </div>
+                                    )}
+                                    <div>
+                                      <h3 className="font-bold text-lg hover:text-[#F37021]" style={{ color: '#0066CC' }}>
+                                        {result.university_name}
+                                      </h3>
+                                      <div className="flex items-center gap-2 text-slate-600 text-sm mt-1">
+                                        <MapPin className="w-4 h-4" />
+                                        <span>{result.city}, {result.country}</span>
+                                      </div>
+                                      {result.application_deadline && (
+                                        <Badge variant="outline" className="mt-1 text-xs">
+                                          <Bell className="w-3 h-3 mr-1" />
+                                          Deadline: {result.application_deadline}
+                                        </Badge>
+                                      )}
                                     </div>
                                   </div>
-                                </div>
-                              </Link>
+                                </Link>
+                              </div>
                             </div>
                             <div className="text-center">
                               {result.ranking && (
@@ -318,21 +431,35 @@ export default function CourseFinder() {
                             </div>
                           </div>
                         ) : (
-                          <div className="grid md:grid-cols-5 gap-4 items-center">
+                          <div className="grid md:grid-cols-6 gap-4 items-center">
                             <div className="md:col-span-2">
-                              <Link to={createPageUrl('CourseDetailsPage') + `?id=${result.id}`}>
-                                <h3 className="font-bold text-lg hover:text-[#F37021] mb-1" style={{ color: '#0066CC' }}>
-                                  {result.course_title}
-                                </h3>
-                              </Link>
-                              {university && (
-                                <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
-                                  <p className="text-sm text-slate-600 hover:text-blue-600 flex items-center gap-1">
-                                    <Building2 className="w-4 h-4" />
-                                    {university.university_name}
-                                  </p>
-                                </Link>
-                              )}
+                              <div className="flex items-start gap-3">
+                                <Checkbox
+                                  checked={selectedCourses.some(c => c.id === result.id)}
+                                  onCheckedChange={() => handleCourseCompareToggle(result)}
+                                />
+                                <div>
+                                  <Link to={createPageUrl('CourseDetailsPage') + `?id=${result.id}`}>
+                                    <h3 className="font-bold text-lg hover:text-[#F37021] mb-1" style={{ color: '#0066CC' }}>
+                                      {result.course_title}
+                                    </h3>
+                                  </Link>
+                                  {university && (
+                                    <Link to={createPageUrl('UniversityDetailsPage') + `?id=${university.id}`}>
+                                      <p className="text-sm text-slate-600 hover:text-blue-600 flex items-center gap-1">
+                                        <Building2 className="w-4 h-4" />
+                                        {university.university_name}
+                                      </p>
+                                    </Link>
+                                  )}
+                                  {result.application_deadline && (
+                                    <Badge variant="outline" className="mt-1 text-xs">
+                                      <Bell className="w-3 h-3 mr-1" />
+                                      Deadline: {result.application_deadline}
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                             <div className="text-center">
                               {result.tuition_fee_min && (

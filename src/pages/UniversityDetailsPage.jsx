@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 import UniversityFavoriteButton from '@/components/universities/UniversityFavoriteButton';
+import { GitCompare, Bell } from 'lucide-react';
+import CompareModal from '@/components/comparison/CompareModal';
 import AIUniversitySummary from '@/components/universities/AIUniversitySummary';
 import PopularCourses from '@/components/universities/PopularCourses';
 import StudentReviews from '@/components/universities/StudentReviews';
@@ -23,6 +25,8 @@ import AIApplicationAssistant from '@/components/applications/AIApplicationAssis
 export default function UniversityDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const universityId = urlParams.get('id');
+  const [showCompareModal, setShowCompareModal] = React.useState(false);
+  const [selectedForCompare, setSelectedForCompare] = React.useState([]);
   const [showComparison, setShowComparison] = React.useState(false);
   const [compareIds, setCompareIds] = React.useState([]);
 

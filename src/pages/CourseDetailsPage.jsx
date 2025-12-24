@@ -16,10 +16,14 @@ import AIApplicationAssistant from '@/components/applications/AIApplicationAssis
 import SimilarCourses from '@/components/courses/SimilarCourses';
 import WhyThisCourse from '@/components/courses/WhyThisCourse';
 import FavoriteButton from '@/components/courses/FavoriteButton';
+import { GitCompare, Bell } from 'lucide-react';
+import CompareModal from '@/components/comparison/CompareModal';
 
 export default function CourseDetailsPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const courseId = urlParams.get('id');
+  const [showCompareModal, setShowCompareModal] = React.useState(false);
+  const [selectedForCompare, setSelectedForCompare] = React.useState([]);
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course', courseId],
@@ -418,6 +422,29 @@ export default function CourseDetailsPage() {
 
                 <FavoriteButton courseId={course.id} />
 
+                <Button
+                  variant="outline"
+                  className="w-full font-semibold py-6"
+                  style={{ borderColor: '#F37021', color: '#F37021' }}
+                  onClick={() => {
+                    setSelectedForCompare([course]);
+                    setShowCompareModal(true);
+                  }}
+                >
+                  <GitCompare className="w-4 h-4 mr-2" />
+                  Add to Compare
+                </Button>
+
+                {course.application_deadline && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                    <Bell className="w-5 h-5 text-red-600 mx-auto mb-2" />
+                    <p className="text-sm font-semibold text-red-900">Application Deadline</p>
+                    <p className="text-lg font-bold text-red-600 mt-1">
+                      {course.application_deadline}
+                    </p>
+                  </div>
+                )}
+
                 <div className="bg-slate-100 rounded-lg p-4 text-center text-xs text-slate-600">
                   <p className="mb-2">
                     <strong>Note:</strong> "Apply Now" requires portal registration and complete Form B submission.
@@ -426,7 +453,15 @@ export default function CourseDetailsPage() {
                     Counselling booking and enquiry forms use the same public entry (Form A).
                   </p>
                 </div>
-              </div>
+                </div>
+
+                <CompareModal
+                items={selectedForCompare}
+                type="course"
+                isOpen={showCompareModal}
+                onClose={() => setShowCompareModal(false)}
+                universities={[university]}
+                />
 
               {/* University Link */}
               {university && (
