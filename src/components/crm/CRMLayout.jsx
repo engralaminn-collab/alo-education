@@ -6,6 +6,7 @@ import NotificationCenter from './NotificationCenter';
 import AutomatedTaskTrigger from './AutomatedTaskTrigger';
 import WorkflowExecutionEngine from './WorkflowExecutionEngine';
 import AutomatedFollowUpSystem from './AutomatedFollowUpSystem';
+import AutoDataUpdateScheduler from './AutoDataUpdateScheduler';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,7 @@ export default function CRMLayout({ children, title, actions }) {
       <AutomatedTaskTrigger />
       <WorkflowExecutionEngine />
       <AutomatedFollowUpSystem />
+      <AutoDataUpdateScheduler />
       <CRMSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       
       <div className={cn(
