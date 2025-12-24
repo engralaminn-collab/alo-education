@@ -73,6 +73,7 @@ import CRMDataUpdates from './pages/CRMDataUpdates';
 import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import CRMCustomReports from './pages/CRMCustomReports';
 import StudentPortal from './pages/StudentPortal';
+import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import __Layout from './Layout.jsx';
 
 
@@ -152,6 +153,7 @@ export const PAGES = {
     "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
     "CRMCustomReports": CRMCustomReports,
     "StudentPortal": StudentPortal,
+    "CRMUniversityOutreach": CRMUniversityOutreach,
 }
 
 export const pagesConfig = {

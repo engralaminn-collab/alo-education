@@ -27,6 +27,7 @@ const menuItems = [
   { icon: GitBranch, label: 'Workflows', page: 'CRMWorkflows' },
   { icon: BarChart3, label: 'Analytics Dashboard', page: 'CRMAnalyticsDashboard' },
   { icon: TrendingUp, label: 'Custom Reports', page: 'CRMCustomReports' },
+  { icon: Mail, label: 'University Outreach', page: 'CRMUniversityOutreach' },
   { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];

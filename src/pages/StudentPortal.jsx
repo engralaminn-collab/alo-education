@@ -15,6 +15,7 @@ import QuickActions from '@/components/portal/QuickActions';
 import UpcomingDeadlines from '@/components/portal/UpcomingDeadlines';
 import RecentActivity from '@/components/portal/RecentActivity';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
+import EnhancedAICourseMatcher from '@/components/recommendations/EnhancedAICourseMatcher';
 
 export default function StudentPortal() {
   const { data: user } = useQuery({
@@ -156,8 +157,12 @@ export default function StudentPortal() {
               hasApplications={activeApplications.length > 0}
             />
 
-            {/* AI Course Recommendations */}
-            <AIRecommendations studentProfile={studentProfile} />
+            {/* Enhanced AI Course Matcher */}
+            <EnhancedAICourseMatcher 
+              studentProfile={studentProfile}
+              courses={courses}
+              universities={universities}
+            />
 
             {/* Recent Applications */}
             <Card>
