@@ -33,6 +33,9 @@ import CounsellorChatHistory from '@/components/dashboard/CounsellorChatHistory'
 import InterviewSchedule from '@/components/dashboard/InterviewSchedule';
 import RequirementsComparison from '@/components/dashboard/RequirementsComparison';
 import DocumentCard from '@/components/documents/DocumentCard';
+import NotificationCenter from '@/components/dashboard/NotificationCenter';
+import PersonalizedChecklist from '@/components/dashboard/PersonalizedChecklist';
+import SimilarCoursesUniversities from '@/components/recommendations/SimilarCoursesUniversities';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -199,6 +202,12 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Notification Center */}
+            <NotificationCenter studentProfile={studentProfile} />
+
+            {/* Personalized Checklist */}
+            <PersonalizedChecklist studentProfile={studentProfile} />
+
             {/* My Journey */}
             <MyJourney 
               studentProfile={studentProfile}
@@ -356,6 +365,9 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Similar Courses & Universities */}
+            <SimilarCoursesUniversities studentProfile={studentProfile} />
+
             {/* Interview Schedule */}
             <InterviewSchedule studentId={studentProfile?.id} />
 

@@ -33,15 +33,26 @@ export default function AIChatbot() {
 
 Context about ALO Education:
 - We help students study in UK, Australia, Canada, USA, Ireland, New Zealand, Dubai
-- We offer IELTS/PTE preparation
+- We offer IELTS/PTE/TOEFL/Duolingo preparation
 - We provide end-to-end admission support
-- Popular courses: Business, Engineering, Computer Science, Medicine
-- We have counsellors available for personalized guidance
+- Popular courses: Business, Engineering, Computer Science, Medicine, Law
+- We have expert counsellors available for personalized guidance
+
+Common FAQs:
+• Application Process: Profile creation → Document upload → University application → Offer letter → CAS → Visa application
+• IELTS Requirements: Typically 6.0-7.0 overall, minimum 5.5 in each band (varies by course)
+• Intakes: UK/Australia (Jan/Sep), USA/Canada (Fall/Spring), Dubai (Jan/May/Sep)
+• Visa Timeline: 15-30 working days after biometrics
+• Documents Needed: Passport, transcripts, English test, SOP, LORs, financial proof
+• Scholarship: Merit-based available, 10-50% tuition fee reduction
+• Work Rights: 20 hrs/week during study, full-time during holidays (UK/AUS/CA)
+• Cost: UK £20k-35k/year, AUS $25k-45k/year, USA $25k-55k/year
 
 Student question: ${userMessage}
 
-Provide helpful, friendly responses. If it's a complex query, suggest booking a free counselling session.
-Keep responses concise (2-3 sentences).`,
+Provide helpful, friendly, accurate responses. Include specific details from the FAQ knowledge base when relevant.
+If it's a complex personalized query, suggest booking a free counselling session.
+Keep responses informative but concise (3-4 sentences max).`,
         response_json_schema: {
           type: "object",
           properties: {
