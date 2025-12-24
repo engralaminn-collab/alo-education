@@ -9,11 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, DollarSign, Award, Building2, Calendar, GitCompare, Bell } from 'lucide-react';
+import { Slider } from "@/components/ui/slider";
+import { Search, MapPin, DollarSign, Award, Building2, Calendar, GitCompare, Bell, Map, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Footer from '@/components/landing/Footer';
 import CompareModal from '@/components/comparison/CompareModal';
+import UniversitiesMap from '@/components/universities/UniversitiesMap';
 
 const SUBJECT_AREAS = [
   'Business & Management', 'Computer Science & IT', 'Engineering', 'Medicine & Health',
@@ -41,10 +43,15 @@ export default function CourseFinder() {
   const [destinationCountry, setDestinationCountry] = useState('');
   const [selectedIntakes, setSelectedIntakes] = useState([]);
   const [deadlineFilter, setDeadlineFilter] = useState('');
+  const [tuitionRange, setTuitionRange] = useState([0, 50000]);
+  const [scholarshipOnly, setScholarshipOnly] = useState(false);
+  const [durationFilter, setDurationFilter] = useState('');
 
   // Universities tab filters
   const [lookingFor, setLookingFor] = useState('');
   const [universityName, setUniversityName] = useState('');
+  const [rankingTier, setRankingTier] = useState('');
+  const [showMap, setShowMap] = useState(false);
 
   // Comparison state
   const [selectedCourses, setSelectedCourses] = useState([]);
@@ -84,7 +91,19 @@ export default function CourseFinder() {
         true
       );
 
-      return matchesSubject && matchesLevel && matchesCountry && matchesIntake && matchesDeadline;
+      // Tuition fee filter
+      const tuitionFee = course.tuition_fee_min || 0;
+      const matchesTuition = tuitionFee >= tuitionRange[0] && tuitionFee <= tuitionRange[1];
+
+      // Scholarship filter
+      const matchesScholarship = !scholarshipOnly || course.scholarship_available === true;
+
+      // Duration filter
+      const matchesDuration = !durationFilter || 
+        course.duration?.toLowerCase().includes(durationFilter.toLowerCase());
+
+      return matchesSubject && matchesLevel && matchesCountry && matchesIntake && 
+             matchesDeadline && matchesTuition && matchesScholarship && matchesDuration;
     });
     setSearchResults(results.map(course => ({ ...course, isCourse: true })));
     setShowResults(true);
@@ -116,7 +135,17 @@ export default function CourseFinder() {
     let results = universities.filter(uni => {
       const matchesLookingFor = !lookingFor || uni.university_name?.toLowerCase().includes(lookingFor.toLowerCase());
       const matchesName = !universityName || uni.university_name?.toLowerCase().includes(universityName.toLowerCase());
-      return matchesLookingFor && matchesName;
+      
+      // Ranking tier filter
+      const ranking = uni.ranking || uni.qs_ranking || 999;
+      const matchesRanking = !rankingTier || (
+        rankingTier === 'top100' ? ranking <= 100 :
+        rankingTier === 'top200' ? ranking <= 200 :
+        rankingTier === 'top500' ? ranking <= 500 :
+        true
+      );
+
+      return matchesLookingFor && matchesName && matchesRanking;
     });
     setSearchResults(results.map(uni => ({ ...uni, isUniversity: true })));
     setShowResults(true);
@@ -243,6 +272,53 @@ export default function CourseFinder() {
                       </Select>
                     </div>
 
+                    <div>
+                      <Label className="text-base mb-3 flex items-center justify-between">
+                        <span>Tuition Fee Range (£)</span>
+                        <span className="font-semibold text-[#F37021]">
+                          £{tuitionRange[0].toLocaleString()} - £{tuitionRange[1].toLocaleString()}
+                        </span>
+                      </Label>
+                      <Slider
+                        min={0}
+                        max={50000}
+                        step={1000}
+                        value={tuitionRange}
+                        onValueChange={setTuitionRange}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <Label className="text-base mb-2 block">Course Duration</Label>
+                        <Select value={durationFilter} onValueChange={setDurationFilter}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Any duration" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={null}>Any duration</SelectItem>
+                            <SelectItem value="1 year">1 Year</SelectItem>
+                            <SelectItem value="2 year">2 Years</SelectItem>
+                            <SelectItem value="3 year">3 Years</SelectItem>
+                            <SelectItem value="4 year">4 Years</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-6">
+                        <Checkbox
+                          id="scholarship"
+                          checked={scholarshipOnly}
+                          onCheckedChange={setScholarshipOnly}
+                        />
+                        <label htmlFor="scholarship" className="text-base cursor-pointer flex items-center gap-2">
+                          <Award className="w-5 h-5 text-[#F37021]" />
+                          Scholarships Available Only
+                        </label>
+                      </div>
+                    </div>
+
                     <Button
                       onClick={handleCourseSearch}
                       className="w-full h-14 text-lg font-semibold"
@@ -298,14 +374,43 @@ export default function CourseFinder() {
                       </div>
                     </div>
 
-                    <Button
-                      onClick={handleUniversitySearch}
-                      className="w-full h-14 text-lg font-semibold"
-                      style={{ backgroundColor: '#F37021' }}
-                    >
-                      <Search className="w-6 h-6 mr-2" />
-                      Search Universities
-                    </Button>
+                    <div>
+                      <Label className="text-base mb-2 block">University Ranking Tier</Label>
+                      <Select value={rankingTier} onValueChange={setRankingTier}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="All rankings" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={null}>All rankings</SelectItem>
+                          <SelectItem value="top100">Top 100 Universities</SelectItem>
+                          <SelectItem value="top200">Top 200 Universities</SelectItem>
+                          <SelectItem value="top500">Top 500 Universities</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={handleUniversitySearch}
+                        className="flex-1 h-14 text-lg font-semibold"
+                        style={{ backgroundColor: '#F37021' }}
+                      >
+                        <Search className="w-6 h-6 mr-2" />
+                        Search Universities
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleUniversitySearch();
+                          setShowMap(true);
+                        }}
+                        variant="outline"
+                        className="h-14 px-6 text-lg font-semibold"
+                        style={{ borderColor: '#0066CC', color: '#0066CC' }}
+                      >
+                        <Map className="w-6 h-6 mr-2" />
+                        Map View
+                      </Button>
+                    </div>
                   </TabsContent>
                 </div>
               </Tabs>
@@ -367,9 +472,28 @@ export default function CourseFinder() {
       {(showResults || searchResults.length > 0) && (
         <section className="py-12 pb-24">
           <div className="container mx-auto px-6">
-            <h2 className="text-2xl font-bold mb-6">
-              {searchResults.length} Results Found
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">
+                {searchResults.length} Results Found
+              </h2>
+              {activeTab === 'universities' && searchResults.length > 0 && (
+                <Button
+                  variant={showMap ? 'default' : 'outline'}
+                  onClick={() => setShowMap(!showMap)}
+                  style={showMap ? { backgroundColor: '#0066CC' } : { borderColor: '#0066CC', color: '#0066CC' }}
+                >
+                  <Map className="w-4 h-4 mr-2" />
+                  {showMap ? 'Hide Map' : 'Show Map'}
+                </Button>
+              )}
+            </div>
+
+            {/* Map View for Universities */}
+            {showMap && activeTab === 'universities' && searchResults.length > 0 && (
+              <div className="mb-8">
+                <UniversitiesMap universities={searchResults.filter(r => r.isUniversity)} />
+              </div>
+            )}
 
             {searchResults.length === 0 ? (
               <Card className="p-12 text-center">
@@ -464,20 +588,37 @@ export default function CourseFinder() {
                             <div className="text-center">
                               {result.tuition_fee_min && (
                                 <div>
-                                  <p className="text-xs text-slate-500">Tuition Fee</p>
+                                  <p className="text-xs text-slate-500 flex items-center justify-center gap-1">
+                                    <DollarSign className="w-3 h-3" />
+                                    Tuition Fee
+                                  </p>
                                   <p className="font-semibold text-slate-900">£{result.tuition_fee_min.toLocaleString()}</p>
                                 </div>
+                              )}
+                              {result.scholarship_available && (
+                                <Badge className="mt-2" style={{ backgroundColor: '#F37021', color: 'white' }}>
+                                  <Award className="w-3 h-3 mr-1" />
+                                  Scholarship
+                                </Badge>
                               )}
                             </div>
                             <div className="text-center">
                               <div>
-                                <p className="text-xs text-slate-500">Intake</p>
+                                <p className="text-xs text-slate-500 flex items-center justify-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  Intake
+                                </p>
                                 <p className="font-semibold text-slate-900">{result.intake || 'N/A'}</p>
                               </div>
-                              <div className="mt-2">
-                                <p className="text-xs text-slate-500">Interview</p>
-                                <p className="font-semibold text-slate-900">{result.interview_required ? 'Yes' : 'No'}</p>
-                              </div>
+                              {result.duration && (
+                                <div className="mt-2">
+                                  <p className="text-xs text-slate-500 flex items-center justify-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    Duration
+                                  </p>
+                                  <p className="font-semibold text-slate-900">{result.duration}</p>
+                                </div>
+                              )}
                             </div>
                             <div className="text-center">
                               {university?.ranking && (
