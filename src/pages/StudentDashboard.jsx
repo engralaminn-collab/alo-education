@@ -36,6 +36,7 @@ import DocumentCard from '@/components/documents/DocumentCard';
 import NotificationCenter from '@/components/dashboard/NotificationCenter';
 import PersonalizedChecklist from '@/components/dashboard/PersonalizedChecklist';
 import SimilarCoursesUniversities from '@/components/recommendations/SimilarCoursesUniversities';
+import ReferralProgram from '@/components/dashboard/ReferralProgram';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -365,6 +366,9 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Referral Program */}
+            <ReferralProgram studentProfile={studentProfile} />
+
             {/* Similar Courses & Universities */}
             <SimilarCoursesUniversities studentProfile={studentProfile} />
 

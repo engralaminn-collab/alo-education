@@ -67,6 +67,7 @@ import SOPGeneratorPage from './pages/SOPGeneratorPage';
 import CRMContentManager from './pages/CRMContentManager';
 import CRMUniversityPartnerships from './pages/CRMUniversityPartnerships';
 import CRMBulkUniversityImport from './pages/CRMBulkUniversityImport';
+import CRMReferralManagement from './pages/CRMReferralManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -140,6 +141,7 @@ export const PAGES = {
     "CRMContentManager": CRMContentManager,
     "CRMUniversityPartnerships": CRMUniversityPartnerships,
     "CRMBulkUniversityImport": CRMBulkUniversityImport,
+    "CRMReferralManagement": CRMReferralManagement,
 }
 
 export const pagesConfig = {
