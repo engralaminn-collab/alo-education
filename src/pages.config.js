@@ -70,6 +70,8 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import CRMDataUpdates from './pages/CRMDataUpdates';
+import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
+import CRMCustomReports from './pages/CRMCustomReports';
 import __Layout from './Layout.jsx';
 
 
@@ -146,6 +148,8 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
     "CRMDataUpdates": CRMDataUpdates,
+    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
+    "CRMCustomReports": CRMCustomReports,
 }
 
 export const pagesConfig = {

@@ -25,9 +25,9 @@ const menuItems = [
   { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
   { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
   { icon: GitBranch, label: 'Workflows', page: 'CRMWorkflows' },
+  { icon: BarChart3, label: 'Analytics Dashboard', page: 'CRMAnalyticsDashboard' },
+  { icon: TrendingUp, label: 'Custom Reports', page: 'CRMCustomReports' },
   { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
-  { icon: TrendingUp, label: 'Counselor Analytics', page: 'CRMCounselorAnalytics' },
-  { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];
 

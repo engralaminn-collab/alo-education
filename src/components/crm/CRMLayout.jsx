@@ -5,6 +5,7 @@ import CRMSidebar from './CRMSidebar';
 import NotificationCenter from './NotificationCenter';
 import AutomatedTaskTrigger from './AutomatedTaskTrigger';
 import WorkflowExecutionEngine from './WorkflowExecutionEngine';
+import AutomatedFollowUpSystem from './AutomatedFollowUpSystem';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
