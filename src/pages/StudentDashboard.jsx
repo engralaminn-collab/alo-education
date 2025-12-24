@@ -15,8 +15,6 @@ import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
 import MyJourney from '@/components/dashboard/MyJourney';
 import ResourcesHub from '@/components/dashboard/ResourcesHub';
@@ -147,6 +145,20 @@ export default function StudentDashboard() {
       </div>
 
       <div className="container mx-auto px-6 py-8">
+        <div className="mb-6">
+          <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg flex items-center justify-between">
+            <div>
+              <p className="font-semibold text-blue-900">🎉 New: Enhanced Student Portal Available!</p>
+              <p className="text-sm text-blue-700">Experience our new AI-powered dashboard with personalized insights</p>
+            </div>
+            <Link to={createPageUrl('StudentPortal')}>
+              <Button style={{ backgroundColor: '#F37021' }}>
+                Try New Portal <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+
         {/* Quick Stats */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           {[
