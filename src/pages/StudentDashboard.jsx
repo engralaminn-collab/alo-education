@@ -37,6 +37,8 @@ import NotificationCenter from '@/components/dashboard/NotificationCenter';
 import PersonalizedChecklist from '@/components/dashboard/PersonalizedChecklist';
 import SimilarCoursesUniversities from '@/components/recommendations/SimilarCoursesUniversities';
 import ReferralProgram from '@/components/dashboard/ReferralProgram';
+import AIRecommendedCourses from '@/components/recommendations/AIRecommendedCourses';
+import DocumentManager from '@/components/documents/DocumentManager';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -366,6 +368,9 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* AI Recommended Courses */}
+            <AIRecommendedCourses studentProfile={studentProfile} />
+
             {/* Referral Program */}
             <ReferralProgram studentProfile={studentProfile} />
 

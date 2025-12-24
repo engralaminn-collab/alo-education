@@ -262,8 +262,8 @@ export default function CourseFinder() {
         </div>
       </section>
 
-      {/* Results */}
-      {showResults && (
+      {/* Results - Always Show After Search */}
+      {(showResults || searchResults.length > 0) && (
         <section className="py-12">
           <div className="container mx-auto px-6">
             <h2 className="text-2xl font-bold mb-6">
