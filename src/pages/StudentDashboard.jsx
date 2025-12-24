@@ -15,6 +15,8 @@ import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
 import MyJourney from '@/components/dashboard/MyJourney';
 import ResourcesHub from '@/components/dashboard/ResourcesHub';
