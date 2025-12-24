@@ -41,10 +41,29 @@ const fieldsOfStudy = [
   { value: 'hospitality', label: 'Hospitality' },
 ];
 
+const intakeMonths = [
+  { value: 'all', label: 'All Intakes' },
+  { value: 'January', label: 'January' },
+  { value: 'February', label: 'February' },
+  { value: 'March', label: 'March' },
+  { value: 'April', label: 'April' },
+  { value: 'May', label: 'May' },
+  { value: 'June', label: 'June' },
+  { value: 'July', label: 'July' },
+  { value: 'August', label: 'August' },
+  { value: 'September', label: 'September' },
+  { value: 'October', label: 'October' },
+  { value: 'November', label: 'November' },
+  { value: 'December', label: 'December' },
+];
+
 export default function Courses() {
   const [searchQuery, setSearchQuery] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('all');
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
+  const [intakeMonth, setIntakeMonth] = useState('all');
+  const [tuitionMin, setTuitionMin] = useState('');
+  const [tuitionMax, setTuitionMax] = useState('');
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -84,17 +103,24 @@ export default function Courses() {
   }, {});
 
   const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDegree = degreeLevel === 'all' || course.degree_level === degreeLevel;
-    const matchesField = fieldOfStudy === 'all' || course.field_of_study === fieldOfStudy;
+    const matchesSearch = course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDegree = degreeLevel === 'all' || course.level === degreeLevel;
+    const matchesField = fieldOfStudy === 'all' || course.subject_area?.toLowerCase().includes(fieldOfStudy.toLowerCase());
+    const matchesIntake = intakeMonth === 'all' || course.intake?.includes(intakeMonth);
+    const matchesTuition = (!tuitionMin || course.tuition_fee_min >= parseInt(tuitionMin)) && 
+                           (!tuitionMax || course.tuition_fee_min <= parseInt(tuitionMax));
     const matchesScholarship = !scholarshipOnly || course.scholarship_available;
-    return matchesSearch && matchesDegree && matchesField && matchesScholarship;
+    return matchesSearch && matchesDegree && matchesField && matchesIntake && matchesTuition && matchesScholarship;
   });
 
   const clearFilters = () => {
     setSearchQuery('');
     setDegreeLevel('all');
     setFieldOfStudy('all');
+    setIntakeMonth('all');
+    setTuitionMin('');
+    setTuitionMax('');
     setScholarshipOnly(false);
   };
 
@@ -115,7 +141,7 @@ export default function Courses() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-slate-700 mb-2 block">Field of Study</label>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Subject Area</label>
         <Select value={fieldOfStudy} onValueChange={setFieldOfStudy}>
           <SelectTrigger>
             <SelectValue />
@@ -126,6 +152,40 @@ export default function Courses() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Intake Month</label>
+        <Select value={intakeMonth} onValueChange={setIntakeMonth}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {intakeMonths.map(i => (
+              <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Tuition Fee Range (GBP)</label>
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            type="number"
+            placeholder="Min"
+            value={tuitionMin}
+            onChange={(e) => setTuitionMin(e.target.value)}
+            className="h-10"
+          />
+          <Input
+            type="number"
+            placeholder="Max"
+            value={tuitionMax}
+            onChange={(e) => setTuitionMax(e.target.value)}
+            className="h-10"
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-2">

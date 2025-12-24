@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Star, Users, Globe, Calendar, Building2, 
   GraduationCap, DollarSign, Award, ChevronRight, 
-  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink
+  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink,
+  Briefcase, CheckCircle2, Sparkles, Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -22,6 +23,7 @@ export default function UniversityDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const universityId = urlParams.get('id');
   const [saved, setSaved] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState(null);
 
   const { data: university, isLoading: uniLoading } = useQuery({
     queryKey: ['university', universityId],
@@ -36,6 +38,56 @@ export default function UniversityDetails() {
     queryKey: ['university-courses', universityId],
     queryFn: () => base44.entities.Course.filter({ university_id: universityId, status: 'open' }),
     enabled: !!universityId,
+  });
+
+  const generateContentMutation = useMutation({
+    mutationFn: async () => {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Generate comprehensive and compelling content for ${university.university_name} located in ${university.city}, ${university.country}. World ranking: ${university.ranking || 'N/A'}. Generate the following sections:
+
+1. Location & City Advantage (2-3 sentences about the city and its benefits)
+2. Why Choose This University (3-4 key reasons in bullet points)
+3. Popular Courses for International Students (5-6 course names)
+4. Entry Requirements (academic and language requirements)
+5. English Tests Accepted (list tests like IELTS, TOEFL, PTE, etc. with typical scores)
+6. Tuition Fees Indicative (ranges for undergrad and postgrad in GBP)
+7. Scholarships for Bangladeshi Students (2-3 scholarship opportunities)
+8. Intakes (typical intake months)
+9. Career & Graduate Route Opportunity (2-3 sentences about job prospects and post-study visa)
+
+Make it professional, engaging, and specific to this university. Use real facts where possible.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            location_advantage: { type: "string" },
+            why_choose: { type: "array", items: { type: "string" } },
+            popular_courses: { type: "array", items: { type: "string" } },
+            entry_requirements: { 
+              type: "object",
+              properties: {
+                academic: { type: "string" },
+                english: { type: "string" }
+              }
+            },
+            english_tests: { type: "array", items: { type: "object", properties: { test: { type: "string" }, score: { type: "string" } } } },
+            tuition_fees: {
+              type: "object",
+              properties: {
+                undergraduate: { type: "string" },
+                postgraduate: { type: "string" }
+              }
+            },
+            scholarships: { type: "array", items: { type: "string" } },
+            intakes: { type: "array", items: { type: "string" } },
+            career_opportunity: { type: "string" }
+          }
+        }
+      });
+      return response;
+    },
+    onSuccess: (data) => {
+      setGeneratedContent(data);
+    },
   });
 
   if (uniLoading) {
@@ -160,27 +212,207 @@ export default function UniversityDetails() {
                 <div className="space-y-6">
                   <AIUniversitySummary university={university} />
                   
-                  <Card className="border-0 shadow-sm">
-                    <CardContent className="p-8">
-                      <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
-                      <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
-                        {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
-                      </p>
+                  {/* Generate AI Content Button */}
+                  {!generatedContent && (
+                    <Card className="border-2 border-dashed border-blue-200 bg-blue-50">
+                      <CardContent className="p-6 text-center">
+                        <Sparkles className="w-12 h-12 text-blue-500 mx-auto mb-3" />
+                        <h3 className="font-semibold text-blue-900 mb-2">Generate Comprehensive University Details</h3>
+                        <p className="text-blue-700 text-sm mb-4">Get AI-generated insights about location, courses, scholarships, and more</p>
+                        <Button 
+                          onClick={() => generateContentMutation.mutate()}
+                          disabled={generateContentMutation.isPending}
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          {generateContentMutation.isPending ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 mr-2" />
+                              Generate Details
+                            </>
+                          )}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
 
-                      {university.facilities && university.facilities.length > 0 && (
-                        <div className="mt-8">
-                          <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
-                          <div className="flex flex-wrap gap-2">
-                            {university.facilities.map((facility, i) => (
-                              <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
-                                {facility}
-                              </Badge>
-                            ))}
+                  {/* Location & City Advantage */}
+                  {generatedContent?.location_advantage && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <MapPin className="w-6 h-6 text-blue-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Location & City Advantage</h2>
+                        </div>
+                        <p className="text-slate-600 leading-relaxed">
+                          {generatedContent.location_advantage}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Why Choose This University */}
+                  {generatedContent?.why_choose && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Star className="w-6 h-6 text-amber-500" />
+                          <h2 className="text-2xl font-bold text-slate-900">Why Choose This University</h2>
+                        </div>
+                        <ul className="space-y-3">
+                          {generatedContent.why_choose.map((reason, i) => (
+                            <li key={i} className="flex items-start gap-3">
+                              <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                              <span className="text-slate-600">{reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Popular Courses */}
+                  {generatedContent?.popular_courses && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <BookOpen className="w-6 h-6 text-purple-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Popular Courses for International Students</h2>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-3">
+                          {generatedContent.popular_courses.map((course, i) => (
+                            <Badge key={i} variant="secondary" className="bg-purple-50 text-purple-700 py-2 justify-start">
+                              <GraduationCap className="w-4 h-4 mr-2" />
+                              {course}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Entry Requirements */}
+                  {generatedContent?.entry_requirements && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Award className="w-6 h-6 text-emerald-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Entry Requirements</h2>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <h4 className="font-semibold text-slate-900 mb-2">Academic Requirements</h4>
+                            <p className="text-slate-600">{generatedContent.entry_requirements.academic}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-slate-900 mb-2">English Language Requirements</h4>
+                            <p className="text-slate-600">{generatedContent.entry_requirements.english}</p>
                           </div>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* English Tests Accepted */}
+                  {generatedContent?.english_tests && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Globe className="w-6 h-6 text-blue-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">English Tests Accepted</h2>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          {generatedContent.english_tests.map((test, i) => (
+                            <div key={i} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                              <span className="font-medium text-slate-900">{test.test}</span>
+                              <Badge variant="outline">{test.score}</Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Tuition Fees */}
+                  {generatedContent?.tuition_fees && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <DollarSign className="w-6 h-6 text-emerald-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Tuition Fees (Indicative)</h2>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="p-4 bg-emerald-50 rounded-lg">
+                            <h4 className="font-semibold text-emerald-900 mb-2">Undergraduate</h4>
+                            <p className="text-2xl font-bold text-emerald-700">{generatedContent.tuition_fees.undergraduate}</p>
+                          </div>
+                          <div className="p-4 bg-blue-50 rounded-lg">
+                            <h4 className="font-semibold text-blue-900 mb-2">Postgraduate</h4>
+                            <p className="text-2xl font-bold text-blue-700">{generatedContent.tuition_fees.postgraduate}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Scholarships */}
+                  {generatedContent?.scholarships && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Award className="w-6 h-6 text-amber-500" />
+                          <h2 className="text-2xl font-bold text-slate-900">Scholarships for Bangladeshi Students</h2>
+                        </div>
+                        <ul className="space-y-3">
+                          {generatedContent.scholarships.map((scholarship, i) => (
+                            <li key={i} className="flex items-start gap-3 p-4 bg-amber-50 rounded-lg">
+                              <Award className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                              <span className="text-slate-700">{scholarship}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Intakes */}
+                  {generatedContent?.intakes && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Calendar className="w-6 h-6 text-purple-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Intakes</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {generatedContent.intakes.map((intake, i) => (
+                            <Badge key={i} className="bg-purple-100 text-purple-700 px-4 py-2 text-base">
+                              <Calendar className="w-4 h-4 mr-2" />
+                              {intake}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Career Opportunities */}
+                  {generatedContent?.career_opportunity && (
+                    <Card className="border-0 shadow-sm">
+                      <CardContent className="p-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Briefcase className="w-6 h-6 text-emerald-600" />
+                          <h2 className="text-2xl font-bold text-slate-900">Career & Graduate Route Opportunity</h2>
+                        </div>
+                        <p className="text-slate-600 leading-relaxed">
+                          {generatedContent.career_opportunity}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
 
                   <StudentReviews university={university} />
                 </div>
