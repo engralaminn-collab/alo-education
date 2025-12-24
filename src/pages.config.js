@@ -19,6 +19,7 @@ import CRMPerformance from './pages/CRMPerformance';
 import CRMReferralManagement from './pages/CRMReferralManagement';
 import CRMReports from './pages/CRMReports';
 import CRMSettings from './pages/CRMSettings';
+import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
 import CRMStudents from './pages/CRMStudents';
 import CRMTaskTemplates from './pages/CRMTaskTemplates';
 import CRMTasks from './pages/CRMTasks';
@@ -68,7 +69,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
+import CRMDataUpdates from './pages/CRMDataUpdates';
 import __Layout from './Layout.jsx';
 
 
@@ -94,6 +95,7 @@ export const PAGES = {
     "CRMReferralManagement": CRMReferralManagement,
     "CRMReports": CRMReports,
     "CRMSettings": CRMSettings,
+    "CRMStudentProfileForm": CRMStudentProfileForm,
     "CRMStudents": CRMStudents,
     "CRMTaskTemplates": CRMTaskTemplates,
     "CRMTasks": CRMTasks,
@@ -143,7 +145,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "CRMStudentProfileForm": CRMStudentProfileForm,
+    "CRMDataUpdates": CRMDataUpdates,
 }
 
 export const pagesConfig = {
