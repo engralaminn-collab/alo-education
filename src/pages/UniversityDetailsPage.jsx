@@ -49,6 +49,9 @@ export default function UniversityDetailsPage() {
     enabled: !!universityId,
   });
 
+  // Generate default next intake if not specified
+  const nextIntake = university?.intakes || 'January, September';
+
   const { data: courses = [] } = useQuery({
     queryKey: ['university-courses', universityId],
     queryFn: () => base44.entities.Course.filter({ university_id: universityId, status: 'open' }),
@@ -590,15 +593,13 @@ export default function UniversityDetailsPage() {
                     </div>
                   )}
 
-                  {university.intakes && (
-                    <div className="flex items-start gap-3">
-                      <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
-                      <div>
-                        <p className="text-sm text-slate-500">Intakes</p>
-                        <p className="font-semibold text-slate-900">{university.intakes}</p>
-                      </div>
+                  <div className="flex items-start gap-3">
+                    <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
+                    <div>
+                      <p className="text-sm text-slate-500">Next Intakes</p>
+                      <p className="font-semibold text-slate-900">{nextIntake}</p>
                     </div>
-                  )}
+                  </div>
 
                   {university.international_students_percent && (
                     <div className="flex items-start gap-3">

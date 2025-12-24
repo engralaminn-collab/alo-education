@@ -276,15 +276,13 @@ export default function CourseDetailsPage() {
                     </div>
                   )}
 
-                  {course.intake && (
-                    <div className="flex items-start gap-3">
-                      <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
-                      <div>
-                        <p className="text-sm text-slate-500">Intake</p>
-                        <p className="font-semibold text-slate-900">{course.intake}</p>
-                      </div>
+                  <div className="flex items-start gap-3">
+                    <Calendar className="w-5 h-5 mt-0.5" style={{ color: 'var(--alo-orange)' }} />
+                    <div>
+                      <p className="text-sm text-slate-500">Intake</p>
+                      <p className="font-semibold text-slate-900">{course.intake || 'January, September'}</p>
                     </div>
-                  )}
+                  </div>
 
                   {(course.tuition_fee_min || course.tuition_fee_max) && (
                     <div className="flex items-start gap-3">
