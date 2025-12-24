@@ -20,6 +20,7 @@ import MilestoneTracker from '@/components/applications/MilestoneTracker';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
+import AIEmailDrafter from '@/components/crm/AIEmailDrafter';
 
 const statusConfig = {
   draft: { color: 'bg-slate-100 text-slate-700', label: 'Draft' },
