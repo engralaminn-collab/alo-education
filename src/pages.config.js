@@ -66,6 +66,7 @@ import CRMWorkloadBalancer from './pages/CRMWorkloadBalancer';
 import SOPGeneratorPage from './pages/SOPGeneratorPage';
 import CRMContentManager from './pages/CRMContentManager';
 import CRMUniversityPartnerships from './pages/CRMUniversityPartnerships';
+import CRMBulkUniversityImport from './pages/CRMBulkUniversityImport';
 import __Layout from './Layout.jsx';
 
 
@@ -138,6 +139,7 @@ export const PAGES = {
     "SOPGeneratorPage": SOPGeneratorPage,
     "CRMContentManager": CRMContentManager,
     "CRMUniversityPartnerships": CRMUniversityPartnerships,
+    "CRMBulkUniversityImport": CRMBulkUniversityImport,
 }
 
 export const pagesConfig = {
