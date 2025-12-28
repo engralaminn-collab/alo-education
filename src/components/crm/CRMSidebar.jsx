@@ -16,6 +16,7 @@ const menuItems = [
   { icon: Zap, label: 'Lead Nurturing', page: 'CRMLeadNurturing' },
   { icon: Sparkles, label: 'AI Assistant', page: 'CRMAIAssistant' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
+  { icon: MessageSquare, label: 'Collaboration', page: 'CRMCollaboration' },
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
