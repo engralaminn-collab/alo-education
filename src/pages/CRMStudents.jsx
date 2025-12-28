@@ -21,6 +21,11 @@ import {
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
 import AIStudentInsights from '@/components/crm/AIStudentInsights';
+import SharedNotesPanel from '@/components/crm/SharedNotesPanel';
+import StudentHandoverDialog from '@/components/crm/StudentHandoverDialog';
+import CaseConferenceRoom from '@/components/crm/CaseConferenceRoom';
+import TaskAssignment from '@/components/crm/TaskAssignment';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const statusConfig = {
   new_lead: { color: 'bg-blue-100 text-blue-700', label: 'New Lead' },
@@ -36,6 +41,7 @@ export default function CRMStudents() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showHandover, setShowHandover] = useState(false);
   const [page, setPage] = useState(1);
   const perPage = 10;
 
@@ -59,6 +65,20 @@ export default function CRMStudents() {
   const { data: documents = [] } = useQuery({
     queryKey: ['all-documents'],
     queryFn: () => base44.entities.Document.list(),
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user-students'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: counselorProfile } = useQuery({
+    queryKey: ['counselor-profile-students', user?.email],
+    queryFn: async () => {
+      const counselors = await base44.entities.Counselor.filter({ email: user.email });
+      return counselors[0];
+    },
+    enabled: !!user?.email,
   });
 
   const updateStudent = useMutation({
@@ -362,15 +382,69 @@ export default function CRMStudents() {
                 </div>
               )}
 
-              <AIStudentInsights 
-                student={selectedStudent}
-                applications={applications}
-                documents={documents}
-              />
+              <Tabs defaultValue="insights" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="insights">Insights</TabsTrigger>
+                  <TabsTrigger value="notes">Notes</TabsTrigger>
+                  <TabsTrigger value="conference">Conference</TabsTrigger>
+                  <TabsTrigger value="tasks">Tasks</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="insights">
+                  <AIStudentInsights 
+                    student={selectedStudent}
+                    applications={applications}
+                    documents={documents}
+                  />
+                </TabsContent>
+
+                <TabsContent value="notes">
+                  <SharedNotesPanel
+                    studentId={selectedStudent.id}
+                    currentCounselorId={counselorProfile?.id}
+                    currentCounselorName={counselorProfile?.name || user?.full_name}
+                  />
+                </TabsContent>
+
+                <TabsContent value="conference">
+                  <CaseConferenceRoom
+                    studentId={selectedStudent.id}
+                    currentCounselorId={counselorProfile?.id}
+                    currentCounselorName={counselorProfile?.name || user?.full_name}
+                  />
+                </TabsContent>
+
+                <TabsContent value="tasks">
+                  <TaskAssignment
+                    studentId={selectedStudent.id}
+                    currentCounselorId={counselorProfile?.id}
+                    currentCounselorName={counselorProfile?.name || user?.full_name}
+                  />
+                </TabsContent>
+              </Tabs>
+
+              <div className="mt-4">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    setShowHandover(true);
+                  }}
+                >
+                  Handover Student
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>
       </Dialog>
+
+      <StudentHandoverDialog
+        student={selectedStudent}
+        isOpen={showHandover}
+        onClose={() => setShowHandover(false)}
+        currentCounselorId={counselorProfile?.id}
+      />
     </CRMLayout>
   );
 }
