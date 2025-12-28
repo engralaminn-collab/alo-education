@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
+import AIStudentInsights from '@/components/crm/AIStudentInsights';
 
 const statusConfig = {
   new_lead: { color: 'bg-blue-100 text-blue-700', label: 'New Lead' },
@@ -48,6 +49,16 @@ export default function CRMStudents() {
   const { data: counselors = [] } = useQuery({
     queryKey: ['counselors'],
     queryFn: () => base44.entities.Counselor.filter({ status: 'active' }),
+  });
+
+  const { data: applications = [] } = useQuery({
+    queryKey: ['all-applications'],
+    queryFn: () => base44.entities.Application.list(),
+  });
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ['all-documents'],
+    queryFn: () => base44.entities.Document.list(),
   });
 
   const updateStudent = useMutation({
@@ -350,6 +361,12 @@ export default function CRMStudents() {
                   <p className="text-slate-600 bg-slate-50 p-3 rounded-lg">{selectedStudent.notes}</p>
                 </div>
               )}
+
+              <AIStudentInsights 
+                student={selectedStudent}
+                applications={applications}
+                documents={documents}
+              />
             </div>
           )}
         </DialogContent>

@@ -76,6 +76,7 @@ import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import MyReferrals from './pages/MyReferrals';
 import VisaGuidance from './pages/VisaGuidance';
+import CRMGroupSessions from './pages/CRMGroupSessions';
 import __Layout from './Layout.jsx';
 
 
@@ -158,6 +159,7 @@ export const PAGES = {
     "UniversityDetailsPage": UniversityDetailsPage,
     "MyReferrals": MyReferrals,
     "VisaGuidance": VisaGuidance,
+    "CRMGroupSessions": CRMGroupSessions,
 }
 
 export const pagesConfig = {

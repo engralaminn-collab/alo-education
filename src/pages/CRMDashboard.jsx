@@ -16,6 +16,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import CRMLayout from '@/components/crm/CRMLayout';
 import CounselorPerformance from '@/components/crm/CounselorPerformance';
 import { motion } from 'framer-motion';
+import AtRiskAlerts from '@/components/crm/AtRiskAlerts';
+import CounselorMetrics from '@/components/crm/CounselorMetrics';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -214,6 +216,19 @@ export default function CRMDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* At-Risk Alerts */}
+      <div className="mb-8">
+        <AtRiskAlerts />
+      </div>
+
+      {/* Counselor Metrics */}
+      <div className="mb-8">
+        <CounselorMetrics
+          students={students}
+          applications={applications}
+        />
       </div>
 
       {/* Counselor Performance */}
