@@ -10,6 +10,7 @@ import {
   Target, Lightbulb, Activity
 } from 'lucide-react';
 import { toast } from 'sonner';
+import AISupportStrategyAdvisor from './AISupportStrategyAdvisor';
 
 export default function AIStudentInsights({ student, applications = [], documents = [] }) {
   const [insights, setInsights] = useState(null);
@@ -176,6 +177,12 @@ Return JSON.`;
           </div>
         )}
       </CardContent>
+
+      {insights && (
+        <div className="mt-4">
+          <AISupportStrategyAdvisor studentInsights={insights} />
+        </div>
+      )}
     </Card>
   );
 }

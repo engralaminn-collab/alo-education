@@ -14,6 +14,7 @@ import CRMCourses from './pages/CRMCourses';
 import CRMCustomReports from './pages/CRMCustomReports';
 import CRMDashboard from './pages/CRMDashboard';
 import CRMDataUpdates from './pages/CRMDataUpdates';
+import CRMGroupSessions from './pages/CRMGroupSessions';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
@@ -51,6 +52,7 @@ import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
 import MyFavorites from './pages/MyFavorites';
 import MyProfile from './pages/MyProfile';
+import MyReferrals from './pages/MyReferrals';
 import OETTest from './pages/OETTest';
 import OIETCTest from './pages/OIETCTest';
 import PTETest from './pages/PTETest';
@@ -74,9 +76,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import MyReferrals from './pages/MyReferrals';
 import VisaGuidance from './pages/VisaGuidance';
-import CRMGroupSessions from './pages/CRMGroupSessions';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +97,7 @@ export const PAGES = {
     "CRMCustomReports": CRMCustomReports,
     "CRMDashboard": CRMDashboard,
     "CRMDataUpdates": CRMDataUpdates,
+    "CRMGroupSessions": CRMGroupSessions,
     "CRMInquiries": CRMInquiries,
     "CRMLeadGeneration": CRMLeadGeneration,
     "CRMLeadNurturing": CRMLeadNurturing,
@@ -134,6 +135,7 @@ export const PAGES = {
     "MyDocuments": MyDocuments,
     "MyFavorites": MyFavorites,
     "MyProfile": MyProfile,
+    "MyReferrals": MyReferrals,
     "OETTest": OETTest,
     "OIETCTest": OIETCTest,
     "PTETest": PTETest,
@@ -157,9 +159,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "MyReferrals": MyReferrals,
     "VisaGuidance": VisaGuidance,
-    "CRMGroupSessions": CRMGroupSessions,
 }
 
 export const pagesConfig = {

@@ -18,6 +18,8 @@ import CounselorPerformance from '@/components/crm/CounselorPerformance';
 import { motion } from 'framer-motion';
 import AtRiskAlerts from '@/components/crm/AtRiskAlerts';
 import CounselorMetrics from '@/components/crm/CounselorMetrics';
+import AIFollowUpGenerator from '@/components/crm/AIFollowUpGenerator';
+import AIDeadlineReminders from '@/components/crm/AIDeadlineReminders';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -50,6 +52,20 @@ export default function CRMDashboard() {
   const { data: counselors = [] } = useQuery({
     queryKey: ['crm-counselors'],
     queryFn: () => base44.entities.Counselor.list(),
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user-crm'],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: counselorProfile } = useQuery({
+    queryKey: ['counselor-profile', user?.email],
+    queryFn: async () => {
+      const counselors = await base44.entities.Counselor.filter({ email: user.email });
+      return counselors[0];
+    },
+    enabled: !!user?.email,
   });
 
   // Calculate stats
@@ -218,9 +234,15 @@ export default function CRMDashboard() {
         </Card>
       </div>
 
+      {/* AI Automation Tools */}
+      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <AIFollowUpGenerator counselorId={counselorProfile?.id} />
+        <AIDeadlineReminders counselorId={counselorProfile?.id} />
+      </div>
+
       {/* At-Risk Alerts */}
       <div className="mb-8">
-        <AtRiskAlerts />
+        <AtRiskAlerts counselorId={counselorProfile?.id} />
       </div>
 
       {/* Counselor Metrics */}
