@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Sparkles, TrendingUp, DollarSign, Clock, Award, 
-  ArrowRight, Building2, RefreshCw
+  ArrowRight, Building2, RefreshCw, Target, BookOpen, 
+  TrendingDown, AlertCircle, Info
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -20,25 +21,70 @@ export default function AIRecommendations({ studentProfile, courses = [], univer
 
     setIsLoading(true);
 
-    const prompt = `Analyze this student profile and recommend the top 3 most suitable courses from the provided list.
+    // Get education records for academic performance analysis
+    const educationRecords = studentProfile.education_records || [];
+    const latestEducation = educationRecords.length > 0 ? educationRecords[educationRecords.length - 1] : null;
+    
+    const prompt = `You are an AI education counselor. Analyze this student comprehensively and recommend the top 3 courses that best match their profile.
 
-Student Profile:
-- Education: ${studentProfile.education?.highest_degree || 'Not specified'} in ${studentProfile.education?.field_of_study || 'general'}
-- GPA: ${studentProfile.education?.gpa || 'N/A'} out of ${studentProfile.education?.gpa_scale || 4}
-- English: ${studentProfile.english_proficiency?.test_type || 'Not taken'} ${studentProfile.english_proficiency?.score || ''}
-- Preferred Countries: ${studentProfile.preferred_countries?.join(', ') || 'Any'}
-- Preferred Degree: ${studentProfile.preferred_degree_level || 'Any'}
-- Preferred Fields: ${studentProfile.preferred_fields?.join(', ') || 'Any'}
-- Budget: Up to $${studentProfile.budget_max || 'Flexible'}/year
-- Work Experience: ${studentProfile.work_experience_years || 0} years
+STUDENT PROFILE ANALYSIS:
 
-Available Courses (ID, Name, University, Degree, Field, Tuition, Requirements):
-${courses.slice(0, 20).map(c => {
+1. ACADEMIC PERFORMANCE:
+${educationRecords.map(e => `   - ${e.level}: ${e.institution} | Result: ${e.result || 'N/A'} | Year: ${e.completion_year || 'N/A'}`).join('\n') || '   - No academic records'}
+   Latest GPA/Result: ${latestEducation?.result || 'Not specified'}
+   Grades Trend: ${educationRecords.length >= 2 ? 'Progressive' : 'Limited history'}
+
+2. CAREER GOALS & ASPIRATIONS:
+   Career Goal: ${studentProfile.career_goals || 'Not specified'}
+   Preferred Study Area: ${studentProfile.admission_preferences?.study_area || 'Not specified'}
+   Work Experience: ${studentProfile.work_experience_years || 0} years
+   Current Role: ${studentProfile.current_job_role || 'Not specified'}
+
+3. LEARNING PREFERENCES:
+   Learning Style: ${studentProfile.learning_style || 'Not specified - assume balanced'}
+   Study Level Interest: ${studentProfile.admission_preferences?.study_level || 'Not specified'}
+   Course Alignment: ${studentProfile.admission_preferences?.course_alignment || 'Not specified'}
+
+4. CONSTRAINTS & REQUIREMENTS:
+   Language Skills: ${studentProfile.language_proficiency?.ielts?.overall ? `IELTS ${studentProfile.language_proficiency.ielts.overall}` : 'Not tested'}
+   Budget: ${studentProfile.funding_information?.funding_status || 'Not specified'}
+   Preferred Countries: ${studentProfile.preferred_study_destinations?.join(', ') || 'Any'}
+   Financial Constraints: ${studentProfile.funding_information?.source_of_fund || 'Not specified'}
+
+5. PERSONALITY & INTERESTS:
+   Study Motivations: Career advancement, skill development
+   Preferred Intake: ${studentProfile.admission_preferences?.intake || 'Flexible'}
+
+AVAILABLE COURSES:
+${courses.slice(0, 25).map(c => {
   const uni = universities.find(u => u.id === c.university_id);
-  return `${c.id}|${c.name}|${uni?.name}|${c.degree_level}|${c.field_of_study}|${c.tuition_fee} ${c.currency}|GPA:${c.requirements?.min_gpa || 'N/A'},IELTS:${c.requirements?.ielts_score || 'N/A'}`;
-}).join('\n')}
+  return `ID: ${c.id}
+   Title: ${c.course_title}
+   University: ${uni?.university_name || uni?.name}
+   Level: ${c.level}
+   Country: ${c.country}
+   Tuition: ${c.tuition_fee_min ? '$' + c.tuition_fee_min : 'Varies'}
+   Duration: ${c.duration || 'Not specified'}
+   Requirements: IELTS ${c.ielts_overall || 'N/A'}`;
+}).join('\n\n')}
 
-Provide the top 3 recommendations with match score (0-100) and reasoning.`;
+MATCHING CRITERIA (Weight):
+1. Career Goals Alignment (30%): How well does this course advance their stated career goals?
+2. Academic Performance Match (25%): Does their academic history qualify them? Is it challenging but achievable?
+3. Learning Style Compatibility (20%): Does the course format suit their learning preferences?
+4. Financial Feasibility (15%): Can they afford it? Are scholarships available?
+5. Requirements Match (10%): Do they meet all entry criteria?
+
+For each recommendation, provide:
+- course_id: exact ID from the list
+- match_score: overall 0-100
+- career_alignment_score: 0-100 with explanation
+- academic_fit_score: 0-100 with explanation
+- learning_style_score: 0-100 with explanation
+- financial_fit_score: 0-100 with explanation
+- explanation: WHY this course was recommended (2-3 sentences explaining the logic)
+- key_benefits: array of 3-4 specific benefits for THIS student
+- considerations: any concerns or things to consider`;
 
     const result = await base44.integrations.Core.InvokeLLM({
       prompt,
@@ -52,11 +98,16 @@ Provide the top 3 recommendations with match score (0-100) and reasoning.`;
               properties: {
                 course_id: { type: "string" },
                 match_score: { type: "number" },
-                reasoning: { type: "string" },
-                highlights: {
+                career_alignment_score: { type: "number" },
+                academic_fit_score: { type: "number" },
+                learning_style_score: { type: "number" },
+                financial_fit_score: { type: "number" },
+                explanation: { type: "string" },
+                key_benefits: {
                   type: "array",
                   items: { type: "string" }
-                }
+                },
+                considerations: { type: "string" }
               }
             }
           }
@@ -165,39 +216,88 @@ Provide the top 3 recommendations with match score (0-100) and reasoning.`;
                             </Badge>
                           )}
                           <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                            {rec.course?.degree_level}
+                            {rec.course?.level}
                           </Badge>
                         </div>
                         <h4 className="font-bold text-slate-900 mb-1">
-                          {rec.course?.name}
+                          {rec.course?.course_title || rec.course?.name}
                         </h4>
                         <div className="flex items-center text-sm text-slate-500 mb-2">
                           <Building2 className="w-4 h-4 mr-1" />
-                          {rec.university?.name}
+                          {rec.university?.university_name || rec.university?.name}
                         </div>
-                        <p className="text-sm text-slate-600 mb-3">{rec.reasoning}</p>
+
+                        {/* AI Explanation */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+                          <div className="flex items-start gap-2 mb-2">
+                            <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-xs font-semibold text-blue-900 mb-1">Why This Course?</p>
+                              <p className="text-xs text-blue-800">{rec.explanation}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Score Breakdown */}
+                        <div className="grid grid-cols-2 gap-2 mb-3">
+                          <div className="flex items-center gap-2 text-xs">
+                            <Target className="w-3 h-3 text-green-600" />
+                            <span className="text-slate-600">Career:</span>
+                            <span className="font-semibold text-slate-900">{rec.career_alignment_score}%</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs">
+                            <BookOpen className="w-3 h-3 text-blue-600" />
+                            <span className="text-slate-600">Academic:</span>
+                            <span className="font-semibold text-slate-900">{rec.academic_fit_score}%</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs">
+                            <Sparkles className="w-3 h-3 text-purple-600" />
+                            <span className="text-slate-600">Learning:</span>
+                            <span className="font-semibold text-slate-900">{rec.learning_style_score}%</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs">
+                            <DollarSign className="w-3 h-3 text-amber-600" />
+                            <span className="text-slate-600">Financial:</span>
+                            <span className="font-semibold text-slate-900">{rec.financial_fit_score}%</span>
+                          </div>
+                        </div>
                         
-                        {rec.highlights && rec.highlights.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {rec.highlights.slice(0, 3).map((highlight, i) => (
-                              <span key={i} className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full">
-                                • {highlight}
-                              </span>
-                            ))}
+                        {/* Key Benefits */}
+                        {rec.key_benefits && rec.key_benefits.length > 0 && (
+                          <div className="mb-3">
+                            <p className="text-xs font-semibold text-slate-700 mb-1">Key Benefits for You:</p>
+                            <div className="space-y-1">
+                              {rec.key_benefits.map((benefit, i) => (
+                                <div key={i} className="flex items-start gap-1 text-xs text-slate-600">
+                                  <span className="text-emerald-600 mt-0.5">✓</span>
+                                  {benefit}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Considerations */}
+                        {rec.considerations && (
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 mb-3">
+                            <div className="flex items-start gap-2">
+                              <AlertCircle className="w-3 h-3 text-amber-600 mt-0.5 flex-shrink-0" />
+                              <p className="text-xs text-amber-800">{rec.considerations}</p>
+                            </div>
                           </div>
                         )}
 
                         <div className="flex items-center gap-4 text-sm">
-                          {rec.course?.tuition_fee !== undefined && (
+                          {rec.course?.tuition_fee_min !== undefined && (
                             <span className="flex items-center gap-1 text-slate-500">
                               <DollarSign className="w-4 h-4" />
-                              {rec.course.tuition_fee === 0 ? 'Tuition Free' : `${rec.course.tuition_fee.toLocaleString()} ${rec.course.currency}`}
+                              From ${rec.course.tuition_fee_min.toLocaleString()}
                             </span>
                           )}
-                          {rec.course?.duration_months && (
+                          {rec.course?.duration && (
                             <span className="flex items-center gap-1 text-slate-500">
                               <Clock className="w-4 h-4" />
-                              {rec.course.duration_months} months
+                              {rec.course.duration}
                             </span>
                           )}
                           {rec.course?.scholarship_available && (
@@ -208,7 +308,7 @@ Provide the top 3 recommendations with match score (0-100) and reasoning.`;
                           )}
                         </div>
                       </div>
-                      <Link to={createPageUrl('CourseDetails') + `?id=${rec.course_id}`}>
+                      <Link to={createPageUrl('CourseDetailsPage') + `?id=${rec.course_id}`}>
                         <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 shrink-0">
                           View
                           <ArrowRight className="w-4 h-4 ml-1" />
