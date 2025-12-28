@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch, RefreshCw
+  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch, RefreshCw, Video
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -22,6 +22,7 @@ const menuItems = [
   { icon: RefreshCw, label: 'Data Updates', page: 'CRMDataUpdates' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
+  { icon: Video, label: 'Group Sessions', page: 'CRMGroupSessions' },
   { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
   { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
   { icon: GitBranch, label: 'Workflows', page: 'CRMWorkflows' },
