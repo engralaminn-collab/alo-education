@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Gift, Copy, Users, CheckCircle2, Clock, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function ReferralProgram({ studentProfile }) {
   const [email, setEmail] = useState('');
@@ -26,7 +28,16 @@ export default function ReferralProgram({ studentProfile }) {
     enabled: !!studentProfile?.id,
   });
 
-  const referralCode = studentProfile?.referral_code || studentProfile?.id?.slice(0, 8).toUpperCase();
+  // Generate unique referral code from student name and ID
+  const generateReferralCode = () => {
+    if (studentProfile?.referral_code) return studentProfile.referral_code;
+    const firstName = (studentProfile?.first_name || '').slice(0, 3).toUpperCase();
+    const lastName = (studentProfile?.last_name || '').slice(0, 2).toUpperCase();
+    const idPart = studentProfile?.id?.slice(-4) || '0000';
+    return `${firstName}${lastName}${idPart}`;
+  };
+  
+  const referralCode = generateReferralCode();
   const referralLink = `${window.location.origin}?ref=${referralCode}`;
 
   const createReferralMutation = useMutation({
@@ -143,7 +154,14 @@ export default function ReferralProgram({ studentProfile }) {
         {/* Referral List */}
         {myReferrals.length > 0 && (
           <div>
-            <h4 className="font-semibold text-slate-900 mb-3">Your Referrals</h4>
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-semibold text-slate-900">Your Referrals</h4>
+              <Link to={createPageUrl('MyReferrals')}>
+                <Button variant="ghost" size="sm" className="text-xs">
+                  View All
+                </Button>
+              </Link>
+            </div>
             <div className="space-y-2">
               {myReferrals.slice(0, 5).map((ref) => (
                 <div key={ref.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
