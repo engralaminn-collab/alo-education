@@ -77,6 +77,7 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import VisaGuidance from './pages/VisaGuidance';
+import CRMCollaboration from './pages/CRMCollaboration';
 import __Layout from './Layout.jsx';
 
 
@@ -160,6 +161,7 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
     "VisaGuidance": VisaGuidance,
+    "CRMCollaboration": CRMCollaboration,
 }
 
 export const pagesConfig = {
