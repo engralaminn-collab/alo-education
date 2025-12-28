@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '@/components/common/Navbar';
-import AIChatbot from '@/components/chat/AIChatbot';
+import InquiryChatbot from '@/components/chat/InquiryChatbot';
 
 export default function Layout({ children, currentPageName }) {
   // Pages that should have transparent navbar on top
@@ -21,7 +21,7 @@ export default function Layout({ children, currentPageName }) {
       <main className={hasTransparentNav ? '' : 'pt-20'}>
         {children}
       </main>
-      <AIChatbot />
+      <InquiryChatbot />
     </div>
   );
 }

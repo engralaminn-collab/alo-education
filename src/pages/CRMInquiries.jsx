@@ -19,6 +19,7 @@ import { createPageUrl } from '@/utils';
 import CRMLayout from '@/components/crm/CRMLayout';
 import AIInquiryResponseSuggester from '@/components/crm/AIInquiryResponseSuggester';
 import EnhancedLeadScoring from '@/components/crm/EnhancedLeadScoring';
+import AILeadScoring from '@/components/crm/AILeadScoring';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const statusConfig = {
@@ -95,6 +96,12 @@ export default function CRMInquiries() {
       i.email?.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || i.status === statusFilter;
     return matchesSearch && matchesStatus;
+  }).sort((a, b) => {
+    // Sort by lead score (highest first), then by date
+    if (b.lead_score !== undefined && a.lead_score !== undefined) {
+      return b.lead_score - a.lead_score;
+    }
+    return new Date(b.created_date) - new Date(a.created_date);
   });
 
   const newCount = inquiries.filter(i => i.status === 'new').length;
@@ -239,6 +246,17 @@ export default function CRMInquiries() {
                               <StatusIcon className="w-3 h-3 mr-1" />
                               {inquiry.status}
                             </Badge>
+                            {inquiry.lead_score !== undefined && (
+                              <Badge className={
+                                inquiry.lead_quality === 'qualified' ? 'bg-green-500 text-white' :
+                                inquiry.lead_quality === 'hot' ? 'bg-amber-500 text-white' :
+                                inquiry.lead_quality === 'warm' ? 'bg-blue-500 text-white' :
+                                'bg-slate-400 text-white'
+                              }>
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                {inquiry.lead_score}
+                              </Badge>
+                            )}
                           </div>
                           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
                             <span className="flex items-center gap-1">
@@ -332,8 +350,13 @@ export default function CRMInquiries() {
                 </div>
               )}
 
-              {/* Lead Scoring */}
-              <EnhancedLeadScoring inquiry={selectedInquiry} studentProfile={null} />
+              {/* AI Lead Scoring */}
+              <AILeadScoring 
+                inquiry={selectedInquiry} 
+                onScoreUpdate={(score) => {
+                  setSelectedInquiry({ ...selectedInquiry, ...score });
+                }}
+              />
 
               <div>
                 <label className="text-sm font-medium">Assign To</label>

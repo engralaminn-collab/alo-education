@@ -49,6 +49,13 @@ Analyze and provide:
 3. Risk factors (array of concerns)
 4. Strengths (array of positive points)
 5. Recommendations for counselor (array of actionable suggestions)
+6. Action items with priority, timeline, and expected outcomes
+
+For action items, be SPECIFIC and ACTIONABLE. Each should include:
+- Exact action to take (e.g., "Schedule 30-min call to discuss IELTS prep")
+- Priority level (low/medium/high/urgent)
+- Timeline (e.g., "Within 24 hours", "This week")
+- Expected outcome (what should result from this action)
 
 Return JSON.`;
 
@@ -61,7 +68,19 @@ Return JSON.`;
             engagement_level: { type: 'string' },
             risk_factors: { type: 'array', items: { type: 'string' } },
             strengths: { type: 'array', items: { type: 'string' } },
-            recommendations: { type: 'array', items: { type: 'string' } }
+            recommendations: { type: 'array', items: { type: 'string' } },
+            action_items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  action: { type: 'string' },
+                  priority: { type: 'string' },
+                  timeline: { type: 'string' },
+                  expected_outcome: { type: 'string' }
+                }
+              }
+            }
           }
         }
       });
@@ -171,6 +190,47 @@ Return JSON.`;
                       {rec}
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Items */}
+            {insights.action_items?.length > 0 && (
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4" style={{ color: '#0066CC' }} />
+                  Specific Action Items
+                </h4>
+                <div className="space-y-3">
+                  {insights.action_items.map((item, i) => {
+                    const priorityColors = {
+                      low: 'bg-slate-100 text-slate-700',
+                      medium: 'bg-blue-100 text-blue-700',
+                      high: 'bg-amber-100 text-amber-700',
+                      urgent: 'bg-red-100 text-red-700',
+                    };
+
+                    return (
+                      <div key={i} className="p-3 border-2 rounded-lg" style={{ borderColor: '#0066CC' }}>
+                        <div className="flex items-start justify-between mb-2">
+                          <p className="font-semibold text-slate-900 text-sm flex-1">{item.action}</p>
+                          <Badge className={priorityColors[item.priority?.toLowerCase()] || priorityColors.medium}>
+                            {item.priority}
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-slate-600">Timeline:</span>
+                            <span className="ml-1 font-semibold text-slate-900">{item.timeline}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600">Outcome:</span>
+                            <span className="ml-1 text-slate-700">{item.expected_outcome}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
