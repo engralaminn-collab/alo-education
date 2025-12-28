@@ -75,6 +75,7 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import MyReferrals from './pages/MyReferrals';
+import VisaGuidance from './pages/VisaGuidance';
 import __Layout from './Layout.jsx';
 
 
@@ -156,6 +157,7 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
     "MyReferrals": MyReferrals,
+    "VisaGuidance": VisaGuidance,
 }
 
 export const pagesConfig = {

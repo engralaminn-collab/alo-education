@@ -39,6 +39,7 @@ import SimilarCoursesUniversities from '@/components/recommendations/SimilarCour
 import ReferralProgram from '@/components/dashboard/ReferralProgram';
 import AIRecommendedCourses from '@/components/recommendations/AIRecommendedCourses';
 import DocumentManager from '@/components/documents/DocumentManager';
+import AIVisaGuidance from '@/components/visa/AIVisaGuidance';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -259,6 +260,14 @@ export default function StudentDashboard() {
               courses={courses}
               universities={universities}
             />
+
+            {/* AI Visa Guidance */}
+            {studentProfile && (
+              <AIVisaGuidance 
+                studentProfile={studentProfile}
+                selectedCountry={studentProfile.preferred_study_destinations?.[0]}
+              />
+            )}
 
             {/* Resources Hub */}
             <ResourcesHub studentProfile={studentProfile} />
