@@ -10,10 +10,14 @@ import { toast } from 'sonner';
 import CRMLayout from '@/components/crm/CRMLayout';
 import UniversityOutreachGenerator from '@/components/crm/UniversityOutreachGenerator';
 import OutreachResponseTracker from '@/components/crm/OutreachResponseTracker';
+import AIUniversitySuggester from '@/components/crm/AIUniversitySuggester';
+import AutoFollowUpScheduler from '@/components/crm/AutoFollowUpScheduler';
 
 export default function CRMUniversityOutreach() {
   const queryClient = useQueryClient();
   const [selectedOutreach, setSelectedOutreach] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showSuggester, setShowSuggester] = useState(false);
 
   const { data: outreaches = [] } = useQuery({
     queryKey: ['university-outreaches'],
@@ -65,6 +69,53 @@ export default function CRMUniversityOutreach() {
     },
     onError: (error) => {
       toast.error('Failed to send email: ' + error.message);
+    }
+  });
+
+  const createOutreachFromSuggestion = useMutation({
+    mutationFn: async ({ student, university, suggestion }) => {
+      const prompt = `Draft a professional inquiry email to ${university.university_name} for student ${student.first_name} ${student.last_name}.
+
+Based on AI analysis, this university is a ${suggestion.match_score}/100 match because:
+${suggestion.reasons.join(', ')}
+
+Recommended courses to inquire about:
+${suggestion.recommended_courses.join(', ')}
+
+Create a personalized email that:
+1. Expresses interest in the recommended courses
+2. Highlights student's qualifications
+3. Asks about application requirements and deadlines
+4. Inquires about scholarships
+5. References why this university is a good fit
+
+Return JSON with subject and body.`;
+
+      const emailContent = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            subject: { type: 'string' },
+            body: { type: 'string' }
+          }
+        }
+      });
+
+      await base44.entities.UniversityOutreach.create({
+        student_id: student.id,
+        university_id: university.id,
+        outreach_type: 'course_inquiry',
+        email_subject: emailContent.subject,
+        email_body: emailContent.body,
+        status: 'draft',
+        automated: true
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['university-outreaches']);
+      setShowSuggester(false);
+      toast.success('Outreach created from AI suggestion!');
     }
   });
 
@@ -145,6 +196,34 @@ export default function CRMUniversityOutreach() {
             </CardContent>
           </Card>
         </div>
+
+        {/* AI University Suggester Dialog */}
+        {showSuggester && selectedStudent && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b flex items-center justify-between">
+                <h2 className="text-xl font-bold">
+                  AI University Suggestions for {selectedStudent.first_name} {selectedStudent.last_name}
+                </h2>
+                <Button variant="ghost" onClick={() => setShowSuggester(false)}>×</Button>
+              </div>
+              <div className="p-6">
+                <AIUniversitySuggester
+                  student={selectedStudent}
+                  universities={universities}
+                  courses={courses}
+                  onSelect={(university, suggestion) => {
+                    createOutreachFromSuggestion.mutate({
+                      student: selectedStudent,
+                      university,
+                      suggestion
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -288,12 +367,45 @@ export default function CRMUniversityOutreach() {
             </Tabs>
           </div>
 
-          <div>
+          <div className="space-y-6">
             <UniversityOutreachGenerator 
               students={students}
               universities={universities}
               courses={courses}
             />
+
+            <Card>
+              <CardHeader>
+                <CardTitle>AI-Powered Suggestions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-3">
+                  Select a student to get AI-powered university suggestions
+                </p>
+                <select
+                  onChange={(e) => {
+                    const student = students.find(s => s.id === e.target.value);
+                    if (student) {
+                      setSelectedStudent(student);
+                      setShowSuggester(true);
+                    }
+                  }}
+                  className="w-full p-2 border rounded mb-3"
+                  defaultValue=""
+                >
+                  <option value="">Choose student...</option>
+                  {students
+                    .filter(s => (s.profile_completeness || 0) >= 50)
+                    .map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.first_name} {s.last_name}
+                      </option>
+                    ))}
+                </select>
+              </CardContent>
+            </Card>
+
+            <AutoFollowUpScheduler />
           </div>
         </div>
       </div>

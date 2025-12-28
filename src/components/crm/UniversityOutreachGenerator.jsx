@@ -38,22 +38,45 @@ export default function UniversityOutreachGenerator({ students, universities, co
           const university = universities.find(u => u.id === course.university_id);
           if (!university) continue;
 
-          // Generate AI email
-          const prompt = `Draft a professional inquiry email to ${university.university_name} about ${course.course_title} for student ${student.first_name} ${student.last_name}.
+          // Generate AI email with more personalization
+          const prompt = `Draft a highly personalized, professional inquiry email to ${university.university_name} about ${course.course_title} for student ${student.first_name} ${student.last_name}.
 
-Student Profile:
+STUDENT PROFILE:
+- Name: ${student.first_name} ${student.last_name}
 - Study Level: ${student.admission_preferences?.study_level || course.level}
-- Preferred Destination: ${course.country}
+- Field of Interest: ${student.admission_preferences?.study_area || course.subject_area}
 - Academic Background: ${student.education_records?.[0]?.level || 'Bachelor degree'}
+- IELTS Score: ${student.language_proficiency?.ielts?.overall || 'To be taken'}
+- Work Experience: ${student.work_experience?.length > 0 ? 'Yes' : 'None'}
+- Preferred Destination: ${course.country}
+- Funding Status: ${student.funding_information?.funding_status || 'Self-funded'}
 
-Email should:
-1. Express interest in the course
-2. Briefly mention student's qualifications
-3. Ask about application deadlines and requirements
-4. Request any scholarship opportunities
-5. Be professional and concise
+UNIVERSITY INFO:
+- Name: ${university.university_name}
+- Country: ${university.country}
+- Ranking: ${university.qs_ranking ? `QS #${university.qs_ranking}` : 'Leading institution'}
 
-Return JSON with subject and body.`;
+COURSE DETAILS:
+- Title: ${course.course_title}
+- Level: ${course.level}
+- Duration: ${course.duration || 'Standard duration'}
+- Subject: ${course.subject_area}
+
+EMAIL REQUIREMENTS:
+1. Professional greeting addressing admissions team
+2. Clear subject line mentioning course and inquiry type
+3. Brief introduction of student with relevant qualifications
+4. Express specific interest in the course (mention why it matches student's goals)
+5. Ask about:
+   - Application deadlines for upcoming intake
+   - Entry requirements and English language requirements
+   - Scholarship opportunities for international students
+   - Application process timeline
+6. Professional closing with student's contact details
+7. Keep total length to 200-250 words
+8. Warm, professional tone
+
+Return JSON with subject and body fields.`;
 
           const emailContent = await base44.integrations.Core.InvokeLLM({
             prompt,
