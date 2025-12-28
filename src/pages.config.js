@@ -7,6 +7,7 @@ import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkEmail from './pages/CRMBulkEmail';
 import CRMBulkUniversityImport from './pages/CRMBulkUniversityImport';
+import CRMCollaboration from './pages/CRMCollaboration';
 import CRMContentManager from './pages/CRMContentManager';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import CRMCounselors from './pages/CRMCounselors';
@@ -77,7 +78,7 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import VisaGuidance from './pages/VisaGuidance';
-import CRMCollaboration from './pages/CRMCollaboration';
+import StudentOnboarding from './pages/StudentOnboarding';
 import __Layout from './Layout.jsx';
 
 
@@ -91,6 +92,7 @@ export const PAGES = {
     "CRMAutomation": CRMAutomation,
     "CRMBulkEmail": CRMBulkEmail,
     "CRMBulkUniversityImport": CRMBulkUniversityImport,
+    "CRMCollaboration": CRMCollaboration,
     "CRMContentManager": CRMContentManager,
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
     "CRMCounselors": CRMCounselors,
@@ -161,7 +163,7 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "UniversityDetailsPage": UniversityDetailsPage,
     "VisaGuidance": VisaGuidance,
-    "CRMCollaboration": CRMCollaboration,
+    "StudentOnboarding": StudentOnboarding,
 }
 
 export const pagesConfig = {
