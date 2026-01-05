@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '@/components/common/Navbar';
-import WhatsAppChat from '@/components/common/WhatsAppChat';
+import LiveChatWidget from '@/components/common/LiveChatWidget';
 
 export default function Layout({ children, currentPageName }) {
   // Pages that should have transparent navbar on top
@@ -21,7 +21,7 @@ export default function Layout({ children, currentPageName }) {
       <main className={hasTransparentNav ? '' : 'pt-20'}>
         {children}
       </main>
-      <WhatsAppChat />
+      <LiveChatWidget />
     </div>
   );
 }
