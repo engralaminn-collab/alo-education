@@ -46,3 +46,20 @@ No secrets, API keys, or credentials are stored in this repository. All sensitiv
 ---
 
 ## 🏗 Infrastructure Overview
+
+### 🔧 Server Bootstrap (API + Automation Proxy)
+Use the provisioning script below on a fresh Ubuntu host to set up the ALO API (PM2 + Node), Nginx reverse proxies for the API and automation domains, and a basic firewall.
+
+```bash
+sudo bash scripts/provision-alo-services.sh
+```
+
+You can override defaults with environment variables:
+
+```bash
+API_DOMAIN=api.aloeducation.co.uk \
+AUTOMATION_DOMAIN=automation.aloeducation.co.uk \
+API_PORT=4000 \
+N8N_UPSTREAM_HOST=n8n.srv915514.hstgr.cloud \
+sudo bash scripts/provision-alo-services.sh
+```
