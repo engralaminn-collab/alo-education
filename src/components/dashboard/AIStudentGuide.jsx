@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Sparkles, Loader2, AlertTriangle, BookOpen, 
-  MessageSquare, Send, Bot, TrendingUp, FileText
+  MessageSquare, Send, Bot, TrendingUp, FileText, Zap, Building2
 } from 'lucide-react';
 import { toast } from 'sonner';
 

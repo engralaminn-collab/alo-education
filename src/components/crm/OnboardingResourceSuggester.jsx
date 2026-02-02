@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Loader2, FileText, Video, BookOpen, Calendar } from 'lucide-react';
+import { Sparkles, Loader2, FileText, Video, BookOpen, Calendar, CheckCircle, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function OnboardingResourceSuggester({ student }) {

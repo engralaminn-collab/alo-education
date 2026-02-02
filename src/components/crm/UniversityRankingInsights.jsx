@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Loader2, TrendingUp, TrendingDown, Trophy, BarChart3 } from 'lucide-react';
+import { Sparkles, Loader2, TrendingUp, TrendingDown, Trophy, BarChart3, AlertTriangle, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function UniversityRankingInsights({ university }) {
