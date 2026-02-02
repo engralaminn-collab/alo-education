@@ -88,6 +88,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
+import CRMMarketing from './pages/CRMMarketing';
 import __Layout from './Layout.jsx';
 
 
@@ -133,6 +134,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "CRMUniversityOutreach": CRMUniversityOutreach,
+    "CRMMarketing": CRMMarketing,
 }
 
 export const pagesConfig = {
