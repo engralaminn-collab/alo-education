@@ -19,6 +19,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import CRMLayout from '@/components/crm/CRMLayout';
 import { motion } from 'framer-motion';
 import UniversityAnalytics from '@/components/crm/UniversityAnalytics';
+import UniversityRankingInsights from '@/components/crm/UniversityRankingInsights';
 
 export default function CRMUniversities() {
   const [search, setSearch] = useState('');
@@ -171,8 +172,9 @@ export default function CRMUniversities() {
 
       {/* Analytics Sidebar */}
       {selectedUniversity && (
-        <div className="mb-6">
+        <div className="mb-6 space-y-6">
           <UniversityAnalytics university={selectedUniversity} />
+          <UniversityRankingInsights university={selectedUniversity} />
         </div>
       )}
 

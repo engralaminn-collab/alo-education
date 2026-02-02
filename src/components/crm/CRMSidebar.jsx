@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Target, Mail, MessageCircle, Bot, UserPlus
+  Inbox, UserCog, LogOut, ChevronLeft, Target, Mail, MessageCircle, Bot, UserPlus, BookOpen
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -24,6 +24,7 @@ const menuItems = [
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
   { icon: MessageCircle, label: 'Live Chat', page: 'CRMLiveChat' },
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
+  { icon: BookOpen, label: 'Training', page: 'CRMTraining' },
   { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];

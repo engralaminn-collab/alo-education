@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import AIStudentMatcher from '@/components/crm/AIStudentMatcher';
 import OnboardingResourceSuggester from '@/components/crm/OnboardingResourceSuggester';
+import CommunicationParser from '@/components/crm/CommunicationParser';
 import { 
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
   DropdownMenuTrigger, DropdownMenuSeparator 
@@ -269,6 +270,7 @@ export default function CRMStudents() {
           </DialogHeader>
           {selectedStudent && (
             <div className="space-y-6">
+              <CommunicationParser student={selectedStudent} />
               <OnboardingResourceSuggester student={selectedStudent} />
               <AIStudentMatcher student={selectedStudent} />
               <div className="flex items-center gap-4">

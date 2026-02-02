@@ -93,6 +93,7 @@ import UniversityDetails from './pages/UniversityDetails';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
 import CRMOnboarding from './pages/CRMOnboarding';
+import CRMTraining from './pages/CRMTraining';
 import __Layout from './Layout.jsx';
 
 
@@ -143,6 +144,7 @@ export const PAGES = {
     "CRMAIAssistant": CRMAIAssistant,
     "CRMStudentProfileForm": CRMStudentProfileForm,
     "CRMOnboarding": CRMOnboarding,
+    "CRMTraining": CRMTraining,
 }
 
 export const pagesConfig = {
