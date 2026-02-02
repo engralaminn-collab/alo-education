@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { format, isPast, isToday, isTomorrow } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
+import AutomatedTaskManager from '@/components/crm/AutomatedTaskManager';
 
 const priorityConfig = {
   low: { color: 'bg-slate-100 text-slate-700', icon: Clock },
@@ -157,6 +158,11 @@ export default function CRMTasks() {
         </Button>
       }
     >
+      {/* AI Task Automation */}
+      <div className="mb-8">
+        <AutomatedTaskManager />
+      </div>
+
       {/* Overview Stats */}
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <Card className="border-0 shadow-sm">
