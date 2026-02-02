@@ -294,8 +294,12 @@ export default function CRMUniversityOutreach() {
             courses={courses}
           />
 
-          {students.length > 0 && (
-            <AIStudentMatcher student={students[0]} />
+          {students.length > 0 && universities.length > 0 && (
+            <AIOutreachEmailDrafter 
+              student={students[0]}
+              university={universities[0]}
+              course={courses[0]}
+            />
           )}
         </div>
       </div>
