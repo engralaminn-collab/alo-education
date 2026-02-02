@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Send, AlertTriangle, Mail, Clock, CheckCircle, Building2, User } from 'lucide-react';
+import { Sparkles, Send, AlertTriangle, Mail, Clock, CheckCircle, Building2, User, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
 import UniversityOutreachGenerator from '@/components/crm/UniversityOutreachGenerator';
 import OutreachResponseTracker from '@/components/crm/OutreachResponseTracker';
+import AIOutreachEmailDrafter from '@/components/crm/AIOutreachEmailDrafter';
 
 export default function CRMUniversityOutreach() {
   const queryClient = useQueryClient();
