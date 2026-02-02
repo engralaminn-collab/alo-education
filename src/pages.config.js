@@ -1,87 +1,138 @@
-import Home from './pages/Home';
-import Universities from './pages/Universities';
-import UniversityDetails from './pages/UniversityDetails';
-import Courses from './pages/Courses';
-import CourseMatcher from './pages/CourseMatcher';
-import Contact from './pages/Contact';
+/**
+ * pages.config.js - Page routing configuration
+ * 
+ * This file is AUTO-GENERATED. Do not add imports or modify PAGES manually.
+ * Pages are auto-registered when you create files in the ./pages/ folder.
+ * 
+ * THE ONLY EDITABLE VALUE: mainPage
+ * This controls which page is the landing page (shown when users visit the app).
+ * 
+ * Example file structure:
+ * 
+ *   import HomePage from './pages/HomePage';
+ *   import Dashboard from './pages/Dashboard';
+ *   import Settings from './pages/Settings';
+ *   
+ *   export const PAGES = {
+ *       "HomePage": HomePage,
+ *       "Dashboard": Dashboard,
+ *       "Settings": Settings,
+ *   }
+ *   
+ *   export const pagesConfig = {
+ *       mainPage: "HomePage",
+ *       Pages: PAGES,
+ *   };
+ * 
+ * Example with Layout (wraps all pages):
+ *
+ *   import Home from './pages/Home';
+ *   import Settings from './pages/Settings';
+ *   import __Layout from './Layout.jsx';
+ *
+ *   export const PAGES = {
+ *       "Home": Home,
+ *       "Settings": Settings,
+ *   }
+ *
+ *   export const pagesConfig = {
+ *       mainPage: "Home",
+ *       Pages: PAGES,
+ *       Layout: __Layout,
+ *   };
+ *
+ * To change the main page from HomePage to Dashboard, use find_replace:
+ *   Old: mainPage: "HomePage",
+ *   New: mainPage: "Dashboard",
+ *
+ * The mainPage value must match a key in the PAGES object exactly.
+ */
 import About from './pages/About';
-import StudentDashboard from './pages/StudentDashboard';
-import MyApplications from './pages/MyApplications';
-import MyDocuments from './pages/MyDocuments';
-import CRMDashboard from './pages/CRMDashboard';
-import CRMStudents from './pages/CRMStudents';
-import CRMInquiries from './pages/CRMInquiries';
-import CRMApplications from './pages/CRMApplications';
-import CRMUniversities from './pages/CRMUniversities';
-import CRMCourses from './pages/CRMCourses';
-import CRMCounselors from './pages/CRMCounselors';
-import CRMReports from './pages/CRMReports';
-import Messages from './pages/Messages';
-import MyProfile from './pages/MyProfile';
-import CRMSettings from './pages/CRMSettings';
-import CRMMessages from './pages/CRMMessages';
-import CourseDetails from './pages/CourseDetails';
-import StudyInUK from './pages/StudyInUK';
-import StudyInAustralia from './pages/StudyInAustralia';
-import StudyInCanada from './pages/StudyInCanada';
-import StudyInIreland from './pages/StudyInIreland';
-import StudyInNewZealand from './pages/StudyInNewZealand';
-import StudyInUSA from './pages/StudyInUSA';
-import StudyInDubai from './pages/StudyInDubai';
-import CRMTasks from './pages/CRMTasks';
-import SubmitTestimonial from './pages/SubmitTestimonial';
-import CRMTestimonials from './pages/CRMTestimonials';
-import TestimonialsPage from './pages/TestimonialsPage';
-import CRMAutomation from './pages/CRMAutomation';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
-import LanguagePrep from './pages/LanguagePrep';
-import Services from './pages/Services';
 import BookConsultation from './pages/BookConsultation';
+import CRMApplications from './pages/CRMApplications';
+import CRMAutomation from './pages/CRMAutomation';
+import CRMCounselors from './pages/CRMCounselors';
+import CRMCourses from './pages/CRMCourses';
+import CRMDashboard from './pages/CRMDashboard';
+import CRMInquiries from './pages/CRMInquiries';
+import CRMMessages from './pages/CRMMessages';
+import CRMReports from './pages/CRMReports';
+import CRMSettings from './pages/CRMSettings';
+import CRMStudents from './pages/CRMStudents';
+import CRMTasks from './pages/CRMTasks';
+import CRMTestimonials from './pages/CRMTestimonials';
+import CRMUniversities from './pages/CRMUniversities';
+import Contact from './pages/Contact';
+import CourseDetails from './pages/CourseDetails';
+import CourseMatcher from './pages/CourseMatcher';
+import Courses from './pages/Courses';
+import Home from './pages/Home';
+import LanguagePrep from './pages/LanguagePrep';
+import Messages from './pages/Messages';
+import MyApplications from './pages/MyApplications';
+import MyDocuments from './pages/MyDocuments';
+import MyProfile from './pages/MyProfile';
+import Services from './pages/Services';
+import StudentDashboard from './pages/StudentDashboard';
+import StudyInAustralia from './pages/StudyInAustralia';
+import StudyInCanada from './pages/StudyInCanada';
+import StudyInDubai from './pages/StudyInDubai';
+import StudyInIreland from './pages/StudyInIreland';
+import StudyInNewZealand from './pages/StudyInNewZealand';
+import StudyInUK from './pages/StudyInUK';
+import StudyInUSA from './pages/StudyInUSA';
+import SubmitTestimonial from './pages/SubmitTestimonial';
+import TestimonialsPage from './pages/TestimonialsPage';
+import Universities from './pages/Universities';
+import UniversityDetails from './pages/UniversityDetails';
+import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Home": Home,
-    "Universities": Universities,
-    "UniversityDetails": UniversityDetails,
-    "Courses": Courses,
-    "CourseMatcher": CourseMatcher,
-    "Contact": Contact,
     "About": About,
-    "StudentDashboard": StudentDashboard,
-    "MyApplications": MyApplications,
-    "MyDocuments": MyDocuments,
-    "CRMDashboard": CRMDashboard,
-    "CRMStudents": CRMStudents,
-    "CRMInquiries": CRMInquiries,
-    "CRMApplications": CRMApplications,
-    "CRMUniversities": CRMUniversities,
-    "CRMCourses": CRMCourses,
-    "CRMCounselors": CRMCounselors,
-    "CRMReports": CRMReports,
-    "Messages": Messages,
-    "MyProfile": MyProfile,
-    "CRMSettings": CRMSettings,
-    "CRMMessages": CRMMessages,
-    "CourseDetails": CourseDetails,
-    "StudyInUK": StudyInUK,
-    "StudyInAustralia": StudyInAustralia,
-    "StudyInCanada": StudyInCanada,
-    "StudyInIreland": StudyInIreland,
-    "StudyInNewZealand": StudyInNewZealand,
-    "StudyInUSA": StudyInUSA,
-    "StudyInDubai": StudyInDubai,
-    "CRMTasks": CRMTasks,
-    "SubmitTestimonial": SubmitTestimonial,
-    "CRMTestimonials": CRMTestimonials,
-    "TestimonialsPage": TestimonialsPage,
-    "CRMAutomation": CRMAutomation,
     "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
-    "LanguagePrep": LanguagePrep,
-    "Services": Services,
     "BookConsultation": BookConsultation,
+    "CRMApplications": CRMApplications,
+    "CRMAutomation": CRMAutomation,
+    "CRMCounselors": CRMCounselors,
+    "CRMCourses": CRMCourses,
+    "CRMDashboard": CRMDashboard,
+    "CRMInquiries": CRMInquiries,
+    "CRMMessages": CRMMessages,
+    "CRMReports": CRMReports,
+    "CRMSettings": CRMSettings,
+    "CRMStudents": CRMStudents,
+    "CRMTasks": CRMTasks,
+    "CRMTestimonials": CRMTestimonials,
+    "CRMUniversities": CRMUniversities,
+    "Contact": Contact,
+    "CourseDetails": CourseDetails,
+    "CourseMatcher": CourseMatcher,
+    "Courses": Courses,
+    "Home": Home,
+    "LanguagePrep": LanguagePrep,
+    "Messages": Messages,
+    "MyApplications": MyApplications,
+    "MyDocuments": MyDocuments,
+    "MyProfile": MyProfile,
+    "Services": Services,
+    "StudentDashboard": StudentDashboard,
+    "StudyInAustralia": StudyInAustralia,
+    "StudyInCanada": StudyInCanada,
+    "StudyInDubai": StudyInDubai,
+    "StudyInIreland": StudyInIreland,
+    "StudyInNewZealand": StudyInNewZealand,
+    "StudyInUK": StudyInUK,
+    "StudyInUSA": StudyInUSA,
+    "SubmitTestimonial": SubmitTestimonial,
+    "TestimonialsPage": TestimonialsPage,
+    "Universities": Universities,
+    "UniversityDetails": UniversityDetails,
+    "CRMUniversityOutreach": CRMUniversityOutreach,
 }
 
 export const pagesConfig = {
