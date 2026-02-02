@@ -287,12 +287,16 @@ export default function CRMUniversityOutreach() {
           </Tabs>
         </div>
 
-        <div>
+        <div className="space-y-6">
           <UniversityOutreachGenerator 
             students={students}
             universities={universities}
             courses={courses}
           />
+
+          {students.length > 0 && (
+            <AIStudentMatcher student={students[0]} />
+          )}
         </div>
       </div>
     </CRMLayout>

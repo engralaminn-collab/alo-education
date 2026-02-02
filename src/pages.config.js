@@ -91,6 +91,7 @@ import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import CRMMarketing from './pages/CRMMarketing';
 import CRMLiveChat from './pages/CRMLiveChat';
 import CRMAIAssistant from './pages/CRMAIAssistant';
+import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
 import __Layout from './Layout.jsx';
 
 
@@ -139,6 +140,7 @@ export const PAGES = {
     "CRMMarketing": CRMMarketing,
     "CRMLiveChat": CRMLiveChat,
     "CRMAIAssistant": CRMAIAssistant,
+    "CRMStudentProfileForm": CRMStudentProfileForm,
 }
 
 export const pagesConfig = {
