@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 213 94% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 18 89% 56%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 213 94% 40%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 213 94% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 18 89% 56%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 213 94% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ALO Education Brand Colors */
+:root {
+  --alo-blue: #0066CC;
+  --alo-orange: #F37021;
+  --alo-blue-light: #E6F2FF;
+  --alo-orange-light: #FFF4ED;
+  --alo-emerald: #10b981;
+  --alo-emerald-light: #d1fae5;
+}
+
+/* Custom utility classes for ALO branding */
+.bg-alo-blue {
+  background-color: var(--alo-blue);
+}
+
+.bg-alo-orange {
+  background-color: var(--alo-orange);
+}
+
+.text-alo-blue {
+  color: var(--alo-blue);
+}
+
+.text-alo-orange {
+  color: var(--alo-orange);
+}
+
+.border-alo-blue {
+  border-color: var(--alo-blue);
+}
+
+.border-alo-orange {
+  border-color: var(--alo-orange);
+}
+
+.hover\:bg-alo-blue:hover {
+  background-color: var(--alo-blue);
+}
+
+.hover\:bg-alo-orange:hover {
+  background-color: var(--alo-orange);
+}
+
+/* Gradient backgrounds */
+.bg-alo-gradient {
+  background: linear-gradient(135deg, var(--alo-blue) 0%, var(--alo-emerald) 100%);
+}
+
+.bg-alo-gradient-orange {
+  background: linear-gradient(135deg, var(--alo-orange) 0%, #FF6B35 100%);
+}
