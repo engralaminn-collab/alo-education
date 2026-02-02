@@ -57,6 +57,8 @@ import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
 import CRMDashboard from './pages/CRMDashboard';
 import CRMInquiries from './pages/CRMInquiries';
+import CRMLiveChat from './pages/CRMLiveChat';
+import CRMMarketing from './pages/CRMMarketing';
 import CRMMessages from './pages/CRMMessages';
 import CRMReports from './pages/CRMReports';
 import CRMSettings from './pages/CRMSettings';
@@ -64,6 +66,7 @@ import CRMStudents from './pages/CRMStudents';
 import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
+import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import Contact from './pages/Contact';
 import CourseDetails from './pages/CourseDetails';
 import CourseMatcher from './pages/CourseMatcher';
@@ -87,11 +90,9 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
-import CRMMarketing from './pages/CRMMarketing';
-import CRMLiveChat from './pages/CRMLiveChat';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
+import CRMOnboarding from './pages/CRMOnboarding';
 import __Layout from './Layout.jsx';
 
 
@@ -106,6 +107,8 @@ export const PAGES = {
     "CRMCourses": CRMCourses,
     "CRMDashboard": CRMDashboard,
     "CRMInquiries": CRMInquiries,
+    "CRMLiveChat": CRMLiveChat,
+    "CRMMarketing": CRMMarketing,
     "CRMMessages": CRMMessages,
     "CRMReports": CRMReports,
     "CRMSettings": CRMSettings,
@@ -113,6 +116,7 @@ export const PAGES = {
     "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
     "CRMUniversities": CRMUniversities,
+    "CRMUniversityOutreach": CRMUniversityOutreach,
     "Contact": Contact,
     "CourseDetails": CourseDetails,
     "CourseMatcher": CourseMatcher,
@@ -136,11 +140,9 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CRMUniversityOutreach": CRMUniversityOutreach,
-    "CRMMarketing": CRMMarketing,
-    "CRMLiveChat": CRMLiveChat,
     "CRMAIAssistant": CRMAIAssistant,
     "CRMStudentProfileForm": CRMStudentProfileForm,
+    "CRMOnboarding": CRMOnboarding,
 }
 
 export const pagesConfig = {
