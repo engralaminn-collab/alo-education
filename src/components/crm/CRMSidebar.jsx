@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
+  { icon: Users, label: 'My Dashboard', page: 'CounselorDashboard' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
