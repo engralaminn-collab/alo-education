@@ -15,6 +15,7 @@ import { format, subDays } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import CRMLayout from '@/components/crm/CRMLayout';
 import { motion } from 'framer-motion';
+import AutoCommunicationMonitor from '@/components/crm/AutoCommunicationMonitor';
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -285,6 +286,11 @@ export default function CRMDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Auto Communication Monitor */}
+      <div className="mb-8">
+        <AutoCommunicationMonitor />
       </div>
 
       {/* Quick Stats Row */}
