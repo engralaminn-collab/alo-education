@@ -145,13 +145,27 @@ Expected Actions: ${scenario.expectedActions.join(', ')}
 
 Counselor's Response: ${counselorResponse}
 
-Evaluate on a scale of 1-100 and provide:
+Best Practices for Counselor-Student Engagement:
+- Active Listening: Acknowledge student concerns explicitly
+- Empathy: Show understanding of their emotional state and challenges
+- Clear Communication: Use simple language, break down complex steps
+- Proactive Support: Anticipate needs and offer specific next steps
+- Empowerment: Give students ownership and confidence
+
+Provide comprehensive evaluation with:
 1. "score": Overall score (1-100)
-2. "strengths": Array of 2-3 things they did well
-3. "improvements": Array of 2-3 areas for improvement
-4. "tone_assessment": Was the tone appropriate? (professional/empathetic/too_formal/too_casual)
-5. "completeness": Did they address all key points? (complete/partial/missing_key_points)
-6. "suggested_response": A better version of the response incorporating best practices`;
+2. "communication_score": Communication clarity and effectiveness (1-100)
+3. "empathy_score": Empathy and emotional intelligence (1-100)
+4. "best_practices_score": Adherence to counseling best practices (1-100)
+5. "strengths": Array of 3-4 things they did well
+6. "improvements": Array of 3-4 areas for improvement
+7. "tone_assessment": Was the tone appropriate? (professional/empathetic/too_formal/too_casual)
+8. "completeness": Did they address all key points? (complete/partial/missing_key_points)
+9. "coaching_tips": Array of 3-5 personalized, actionable coaching tips based on their specific response
+10. "empathy_analysis": Detailed analysis of empathy shown (what worked, what could be better)
+11. "communication_analysis": Analysis of communication effectiveness
+12. "best_practices_adherence": Which best practices were followed and which were missed
+13. "suggested_response": A better version of the response incorporating best practices`;
 
       const evaluation = await base44.integrations.Core.InvokeLLM({
         prompt,
@@ -159,6 +173,9 @@ Evaluate on a scale of 1-100 and provide:
           type: "object",
           properties: {
             score: { type: "number" },
+            communication_score: { type: "number" },
+            empathy_score: { type: "number" },
+            best_practices_score: { type: "number" },
             strengths: {
               type: "array",
               items: { type: "string" }
@@ -169,6 +186,13 @@ Evaluate on a scale of 1-100 and provide:
             },
             tone_assessment: { type: "string" },
             completeness: { type: "string" },
+            coaching_tips: {
+              type: "array",
+              items: { type: "string" }
+            },
+            empathy_analysis: { type: "string" },
+            communication_analysis: { type: "string" },
+            best_practices_adherence: { type: "string" },
             suggested_response: { type: "string" }
           }
         }
@@ -357,7 +381,7 @@ Evaluate on a scale of 1-100 and provide:
                   {/* AI Feedback */}
                   {feedback && (
                     <div className="space-y-4">
-                      {/* Score */}
+                      {/* Score Dashboard */}
                       <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
                         <CardContent className="p-6">
                           <div className="flex items-center justify-between mb-4">
@@ -372,7 +396,30 @@ Evaluate on a scale of 1-100 and provide:
                               <p className="text-sm text-slate-600">out of 100</p>
                             </div>
                           </div>
-                          <Progress value={feedback.score} className="h-3" />
+                          <Progress value={feedback.score} className="h-3 mb-4" />
+
+                          {/* Detailed Scores */}
+                          <div className="grid grid-cols-3 gap-4 mt-4">
+                            <div className="text-center bg-white rounded-lg p-3 border">
+                              <p className="text-xs text-slate-600 mb-1">Communication</p>
+                              <p className={`text-2xl font-bold ${getScoreColor(feedback.communication_score)}`}>
+                                {feedback.communication_score}
+                              </p>
+                            </div>
+                            <div className="text-center bg-white rounded-lg p-3 border">
+                              <p className="text-xs text-slate-600 mb-1">Empathy</p>
+                              <p className={`text-2xl font-bold ${getScoreColor(feedback.empathy_score)}`}>
+                                {feedback.empathy_score}
+                              </p>
+                            </div>
+                            <div className="text-center bg-white rounded-lg p-3 border">
+                              <p className="text-xs text-slate-600 mb-1">Best Practices</p>
+                              <p className={`text-2xl font-bold ${getScoreColor(feedback.best_practices_score)}`}>
+                                {feedback.best_practices_score}
+                              </p>
+                            </div>
+                          </div>
+
                           <div className="grid md:grid-cols-2 gap-4 mt-4">
                             <div>
                               <p className="text-xs text-slate-600 mb-1">Tone</p>
@@ -389,6 +436,50 @@ Evaluate on a scale of 1-100 and provide:
                               </Badge>
                             </div>
                           </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Personalized Coaching Tips */}
+                      <Card className="border-2 border-blue-200 bg-blue-50">
+                        <CardContent className="p-4">
+                          <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-blue-600" />
+                            Personalized Coaching Tips
+                          </h4>
+                          <div className="space-y-2">
+                            {feedback.coaching_tips?.map((tip, idx) => (
+                              <div key={idx} className="bg-white rounded-lg p-3 border border-blue-200">
+                                <div className="flex items-start gap-2">
+                                  <span className="text-blue-600 font-bold text-sm">{idx + 1}.</span>
+                                  <p className="text-sm text-slate-700">{tip}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Empathy Analysis */}
+                      <Card className="border-2 border-rose-200 bg-rose-50">
+                        <CardContent className="p-4">
+                          <h4 className="font-semibold text-rose-900 mb-2">Empathy & Emotional Intelligence</h4>
+                          <p className="text-sm text-rose-800">{feedback.empathy_analysis}</p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Communication Analysis */}
+                      <Card className="border-2 border-cyan-200 bg-cyan-50">
+                        <CardContent className="p-4">
+                          <h4 className="font-semibold text-cyan-900 mb-2">Communication Effectiveness</h4>
+                          <p className="text-sm text-cyan-800">{feedback.communication_analysis}</p>
+                        </CardContent>
+                      </Card>
+
+                      {/* Best Practices Adherence */}
+                      <Card className="border-2 border-emerald-200 bg-emerald-50">
+                        <CardContent className="p-4">
+                          <h4 className="font-semibold text-emerald-900 mb-2">Best Practices Adherence</h4>
+                          <p className="text-sm text-emerald-800">{feedback.best_practices_adherence}</p>
                         </CardContent>
                       </Card>
 
