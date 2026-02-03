@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,16 +7,19 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Clock, DollarSign, Award, Calendar, Building2, 
   GraduationCap, Globe, BookOpen, ArrowRight, CheckCircle,
-  MapPin, Users, Star
+  MapPin, Users, Star, GitCompare
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import CompareUniversities from '@/components/universities/CompareUniversities';
+import { toast } from 'sonner';
 
 export default function CourseDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const courseId = urlParams.get('id');
+  const [selectedForComparison, setSelectedForComparison] = useState([]);
 
   const { data: course, isLoading: courseLoading } = useQuery({
     queryKey: ['course', courseId],
@@ -75,10 +78,10 @@ export default function CourseDetails() {
           >
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <Badge className="bg-emerald-500 text-white capitalize">
-                {course.degree_level}
+                {course.level}
               </Badge>
               <Badge variant="outline" className="bg-white/10 text-white border-white/20 capitalize">
-                {course.field_of_study?.replace(/_/g, ' ')}
+                {course.subject_area?.replace(/_/g, ' ')}
               </Badge>
               {course.scholarship_available && (
                 <Badge className="bg-amber-500 text-white">
@@ -89,13 +92,13 @@ export default function CourseDetails() {
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {course.name}
+              {course.course_title}
             </h1>
             
             {university && (
               <div className="flex items-center gap-3 text-white/80 mb-6">
                 <Building2 className="w-5 h-5" />
-                <span className="text-lg">{university.name}</span>
+                <span className="text-lg">{university.university_name}</span>
                 <span className="mx-2">•</span>
                 <MapPin className="w-5 h-5" />
                 <span>{university.city}, {university.country}</span>
@@ -103,16 +106,21 @@ export default function CourseDetails() {
             )}
 
             <div className="flex flex-wrap items-center gap-6 text-white/80">
-              {course.duration_months && (
+              {course.duration && (
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5" />
-                  <span>{course.duration_months} months</span>
+                  <span>{course.duration}</span>
                 </div>
               )}
-              {course.tuition_fee && (
+              {(course.tuition_fee_min || course.tuition_fee_max) && (
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5" />
-                  <span>{course.tuition_fee.toLocaleString()} {course.currency || 'USD'}/year</span>
+                  <span>
+                    {course.tuition_fee_min && course.tuition_fee_max 
+                      ? `${course.tuition_fee_min.toLocaleString()}-${course.tuition_fee_max.toLocaleString()}`
+                      : (course.tuition_fee_min || course.tuition_fee_max).toLocaleString()
+                    } {course.currency || 'USD'}/year
+                  </span>
                 </div>
               )}
               {university?.ranking && (
@@ -122,6 +130,27 @@ export default function CourseDetails() {
                 </div>
               )}
             </div>
+
+            {university && (
+              <Button
+                onClick={() => {
+                  if (selectedForComparison.find(u => u.id === university.id)) {
+                    setSelectedForComparison(selectedForComparison.filter(u => u.id !== university.id));
+                  } else {
+                    if (selectedForComparison.length >= 4) {
+                      toast.error('Maximum 4 universities for comparison');
+                      return;
+                    }
+                    setSelectedForComparison([...selectedForComparison, university]);
+                  }
+                }}
+                variant="outline"
+                className="mt-6 border-white/30 text-white hover:bg-white/10"
+              >
+                <GitCompare className="w-4 h-4 mr-2" />
+                {selectedForComparison.find(u => u.id === university.id) ? 'Remove from Compare' : 'Add to Compare'}
+              </Button>
+            )}
           </motion.div>
         </div>
       </section>
@@ -137,7 +166,7 @@ export default function CourseDetails() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 leading-relaxed">
-                  {course.description || `This ${course.degree_level}'s program in ${course.field_of_study?.replace(/_/g, ' ')} at ${university?.name || 'the university'} offers a comprehensive curriculum designed to prepare students for successful careers in their chosen field.`}
+                  {course.overview || `This ${course.level}'s program in ${course.subject_area?.replace(/_/g, ' ')} at ${university?.university_name || 'the university'} offers a comprehensive curriculum designed to prepare students for successful careers in their chosen field.`}
                 </p>
               </CardContent>
             </Card>
@@ -148,58 +177,25 @@ export default function CourseDetails() {
                 <CardTitle>Entry Requirements</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {course.requirements?.min_gpa && (
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                        <GraduationCap className="w-5 h-5 text-blue-600" />
+                {course.entry_requirements ? (
+                  <div className="text-slate-600 leading-relaxed">
+                    <p>{course.entry_requirements}</p>
+                    {course.ielts_required && (
+                      <div className="mt-4 p-4 bg-emerald-50 rounded-lg">
+                        <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-emerald-600" />
+                          English Language Requirements
+                        </h4>
+                        <p className="text-sm text-slate-600">
+                          IELTS Overall: {course.ielts_overall || 'N/A'}
+                          {course.ielts_min_each && ` (min ${course.ielts_min_each} in each band)`}
+                        </p>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-900">Academic</h4>
-                        <p className="text-slate-600 text-sm">Minimum GPA: {course.requirements.min_gpa}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {(course.requirements?.ielts_score || course.requirements?.toefl_score) && (
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-                        <Globe className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-900">English Proficiency</h4>
-                        <div className="text-slate-600 text-sm">
-                          {course.requirements.ielts_score && <p>IELTS: {course.requirements.ielts_score}+</p>}
-                          {course.requirements.toefl_score && <p>TOEFL: {course.requirements.toefl_score}+</p>}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {course.requirements?.work_experience_years && (
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-                        <Users className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-900">Work Experience</h4>
-                        <p className="text-slate-600 text-sm">{course.requirements.work_experience_years}+ years required</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {course.requirements?.previous_degree && (
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                        <Award className="w-5 h-5 text-amber-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-900">Previous Degree</h4>
-                        <p className="text-slate-600 text-sm capitalize">{course.requirements.previous_degree}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-slate-600">Contact the university for detailed entry requirements</p>
+                )}
               </CardContent>
             </Card>
 
@@ -207,11 +203,11 @@ export default function CourseDetails() {
             {university && (
               <Card className="border-0 shadow-sm">
                 <CardHeader>
-                  <CardTitle>About {university.name}</CardTitle>
+                  <CardTitle>About {university.university_name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-600 leading-relaxed mb-6">
-                    {university.description}
+                    {university.about || `${university.university_name} is located in ${university.city}, ${university.country}.`}
                   </p>
                   <Link to={createPageUrl('UniversityDetails') + `?id=${university.id}`}>
                     <Button variant="outline">
@@ -234,29 +230,29 @@ export default function CourseDetails() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-500">Duration</span>
-                  <span className="font-medium">{course.duration_months} months</span>
+                  <span className="font-medium">{course.duration || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-500">Tuition Fee</span>
                   <span className="font-medium">
-                    {course.tuition_fee === 0 
-                      ? 'Tuition Free' 
-                      : `${course.currency || 'USD'} ${course.tuition_fee?.toLocaleString()}/year`
+                    {course.tuition_fee_min && course.tuition_fee_max
+                      ? `${course.currency || 'USD'} ${course.tuition_fee_min.toLocaleString()}-${course.tuition_fee_max.toLocaleString()}/year`
+                      : 'Contact for fees'
                     }
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-500">Degree Level</span>
-                  <span className="font-medium capitalize">{course.degree_level}</span>
+                  <span className="font-medium capitalize">{course.level}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-slate-100">
                   <span className="text-slate-500">Field</span>
-                  <span className="font-medium capitalize">{course.field_of_study?.replace(/_/g, ' ')}</span>
+                  <span className="font-medium capitalize">{course.subject_area?.replace(/_/g, ' ')}</span>
                 </div>
-                {course.intake_dates && (
+                {course.intake && (
                   <div className="flex justify-between items-center py-2">
                     <span className="text-slate-500">Next Intake</span>
-                    <span className="font-medium">{course.intake_dates[0]}</span>
+                    <span className="font-medium">{course.intake}</span>
                   </div>
                 )}
               </CardContent>
@@ -306,6 +302,12 @@ export default function CourseDetails() {
       </div>
 
       <Footer />
+
+      <CompareUniversities
+        selectedUniversities={selectedForComparison}
+        onRemove={(id) => setSelectedForComparison(selectedForComparison.filter(u => u.id !== id))}
+        onClear={() => setSelectedForComparison([])}
+      />
     </div>
   );
 }
