@@ -11,11 +11,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from "sonner";
 import { 
   Upload, FileText, CheckCircle, XCircle, Clock, 
-  Trash2, Eye, Download, Plus, AlertCircle, File
+  Trash2, Eye, Download, Plus, AlertCircle, File, Shield
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import DocumentVerifier from '@/components/crm/DocumentVerifier';
 
 const documentTypes = [
   { value: 'passport', label: 'Passport' },
@@ -222,8 +223,10 @@ export default function MyDocuments() {
       </div>
 
       <div className="container mx-auto px-6 py-8">
-        {/* Missing Documents Alert */}
-        {missingDocs.length > 0 && (
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            {/* Missing Documents Alert */}
+            {missingDocs.length > 0 && (
           <Card className="border-0 shadow-sm border-l-4 border-l-amber-500 mb-8">
             <CardContent className="p-6">
               <div className="flex items-start gap-3">
@@ -244,10 +247,10 @@ export default function MyDocuments() {
               </div>
             </CardContent>
           </Card>
-        )}
+            )}
 
-        {/* Documents Grid */}
-        {isLoading ? (
+            {/* Documents Grid */}
+            {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <Card key={i} className="animate-pulse">
@@ -349,7 +352,16 @@ export default function MyDocuments() {
               })}
             </div>
           </AnimatePresence>
-        )}
+            )}
+          </div>
+
+          {/* AI Verification Sidebar */}
+          {studentProfile && (
+            <div className="lg:col-span-1">
+              <DocumentVerifier studentId={studentProfile.id} />
+            </div>
+          )}
+        </div>
       </div>
 
       <Footer />
