@@ -61,7 +61,7 @@ export default function StudyInUK() {
         subtitle="with expert guidance from ALO Education Bangladesh. The UK is home to top-ranked universities, globally recognised degrees, and excellent career opportunities for international students."
         highlights={[
           '160+ world-class universities',
-          '3-year undergraduate & 1-year master's',
+          '3-year undergraduate & 1-year masters',
           '2-year post-study work visa',
           'Scholarships for Bangladeshi students',
           'High academic reputation',
