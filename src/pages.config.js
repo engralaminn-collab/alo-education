@@ -81,6 +81,7 @@ import ScholarshipFinder from './pages/ScholarshipFinder';
 import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
 import StudyInDubai from './pages/StudyInDubai';
@@ -92,7 +93,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import StudentPortal from './pages/StudentPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -131,6 +131,7 @@ export const PAGES = {
     "Services": Services,
     "SharedComparison": SharedComparison,
     "StudentDashboard": StudentDashboard,
+    "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
     "StudyInDubai": StudyInDubai,
@@ -142,7 +143,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "StudentPortal": StudentPortal,
 }
 
 export const pagesConfig = {
