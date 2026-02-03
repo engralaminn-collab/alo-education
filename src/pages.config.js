@@ -88,8 +88,10 @@ import StudentDashboard from './pages/StudentDashboard';
 import CRMStudents from './pages/CRMStudents';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import AlumniNetwork from './pages/AlumniNetwork';
+import CRMCommunications from './pages/CRMCommunications';
 import SharedComparison from './pages/SharedComparison';
 import MyComparisons from './pages/MyComparisons';
+import ScholarshipFinder from './pages/ScholarshipFinder';
 import __Layout from './Layout.jsx';
 
 
@@ -135,8 +137,10 @@ export const PAGES = {
     "CRMStudents": CRMStudents,
     "CRMUniversityOutreach": CRMUniversityOutreach,
     "AlumniNetwork": AlumniNetwork,
+    "CRMCommunications": CRMCommunications,
     "SharedComparison": SharedComparison,
     "MyComparisons": MyComparisons,
+    "ScholarshipFinder": ScholarshipFinder,
 }
 
 export const pagesConfig = {
