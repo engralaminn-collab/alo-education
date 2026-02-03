@@ -8,7 +8,7 @@ export default function Layout({ children, currentPageName }) {
   const hasTransparentNav = transparentNavPages.includes(currentPageName);
   
   // CRM pages that don't need public navbar
-  const crmPages = ['CRMDashboard', 'CRMStudents', 'CRMApplications', 'CRMUniversities', 'CRMCourses', 'CRMInquiries', 'CRMCounselors', 'CRMReports', 'CRMSettings', 'CRMTasks', 'CRMTestimonials', 'CRMAutomation', 'CRMMessages', 'CRMUniversityOutreach', 'CRMCommunications'];
+  const crmPages = ['CRMDashboard', 'CRMStudents', 'CRMApplications', 'CRMUniversities', 'CRMCourses', 'CRMInquiries', 'CRMCounselors', 'CRMReports', 'CRMSettings', 'CRMTasks', 'CRMTestimonials', 'CRMAutomation', 'CRMMessages', 'CRMUniversityOutreach', 'CRMCommunications', 'CRMStudentSuccess', 'CRMBulkCampaigns'];
   const isCRMPage = crmPages.includes(currentPageName);
 
   if (isCRMPage) {

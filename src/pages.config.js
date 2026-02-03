@@ -60,6 +60,7 @@ import CRMDashboard from './pages/CRMDashboard';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMMessages from './pages/CRMMessages';
 import CRMReports from './pages/CRMReports';
+import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import CRMSettings from './pages/CRMSettings';
 import CRMStudents from './pages/CRMStudents';
 import CRMTasks from './pages/CRMTasks';
@@ -67,6 +68,7 @@ import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import Contact from './pages/Contact';
+import CounselorDashboard from './pages/CounselorDashboard';
 import CourseDetails from './pages/CourseDetails';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
@@ -93,8 +95,8 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CounselorDashboard from './pages/CounselorDashboard';
-import CRMSecureDocuments from './pages/CRMSecureDocuments';
+import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
+import CRMStudentSuccess from './pages/CRMStudentSuccess';
 import __Layout from './Layout.jsx';
 
 
@@ -112,6 +114,7 @@ export const PAGES = {
     "CRMInquiries": CRMInquiries,
     "CRMMessages": CRMMessages,
     "CRMReports": CRMReports,
+    "CRMSecureDocuments": CRMSecureDocuments,
     "CRMSettings": CRMSettings,
     "CRMStudents": CRMStudents,
     "CRMTasks": CRMTasks,
@@ -119,6 +122,7 @@ export const PAGES = {
     "CRMUniversities": CRMUniversities,
     "CRMUniversityOutreach": CRMUniversityOutreach,
     "Contact": Contact,
+    "CounselorDashboard": CounselorDashboard,
     "CourseDetails": CourseDetails,
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
@@ -145,8 +149,8 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CounselorDashboard": CounselorDashboard,
-    "CRMSecureDocuments": CRMSecureDocuments,
+    "CRMBulkCampaigns": CRMBulkCampaigns,
+    "CRMStudentSuccess": CRMStudentSuccess,
 }
 
 export const pagesConfig = {
