@@ -19,6 +19,7 @@ import CRMLayout from '@/components/crm/CRMLayout';
 import WorkflowAutomation from '@/components/crm/WorkflowAutomation';
 import CommunicationParser from '@/components/crm/CommunicationParser';
 import AdvancedWorkflowBuilder from '@/components/crm/AdvancedWorkflowBuilder';
+import LeadScoringDashboard from '@/components/crm/LeadScoringDashboard';
 
 export default function CRMAutomation() {
   const queryClient = useQueryClient();
@@ -403,6 +404,11 @@ export default function CRMAutomation() {
             </Button>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Lead Scoring Dashboard */}
+      <div className="mb-8">
+        <LeadScoringDashboard />
       </div>
 
       {/* AI-Powered Features */}
