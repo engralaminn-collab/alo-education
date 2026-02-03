@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GraduationCap, Menu, User, LogOut, LayoutDashboard, FileText, MessageSquare, ChevronDown } from 'lucide-react';
+import { GraduationCap, Menu, User, LogOut, LayoutDashboard, FileText, MessageSquare, ChevronDown, Award } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -48,8 +48,9 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Course Finder', page: 'CourseMatcher' },
+    { label: 'Universities', page: 'Universities' },
+    { label: 'Scholarships', page: 'ScholarshipFinder' },
     { label: 'Services', page: 'Home', hash: '#services' },
-    { label: 'Language Prep', page: 'Contact' },
     { label: 'Resources', page: 'AlumniNetwork' },
   ];
 
@@ -132,6 +133,12 @@ export default function Navbar() {
                     <Link to={createPageUrl('Messages')} className="flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" />
                       Messages
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to={createPageUrl('MyComparisons')} className="flex items-center gap-2">
+                      <FileText className="w-4 h-4" />
+                      My Comparisons
                     </Link>
                   </DropdownMenuItem>
                   {user.role === 'admin' && (
