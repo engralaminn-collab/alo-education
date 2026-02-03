@@ -22,6 +22,7 @@ import DocumentStatus from '@/components/dashboard/DocumentStatus';
 import UpcomingDeadlines from '@/components/dashboard/UpcomingDeadlines';
 import ScholarshipRecommendations from '@/components/dashboard/ScholarshipRecommendations';
 import CommunicationHistory from '@/components/dashboard/CommunicationHistory';
+import StudentTasks from '@/components/dashboard/StudentTasks';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -177,6 +178,11 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Student Tasks - Action Items */}
+            {studentProfile && (
+              <StudentTasks studentId={studentProfile.id} />
+            )}
+
             {/* My Journey */}
             <MyJourney 
               studentProfile={studentProfile}
