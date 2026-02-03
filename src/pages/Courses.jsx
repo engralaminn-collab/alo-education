@@ -17,6 +17,9 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
+import CompareCourses from '@/components/courses/CompareCourses';
+import TrendingAnalysis from '@/components/discovery/TrendingAnalysis';
+import { Slider } from "@/components/ui/slider";
 
 const degreeLevels = [
   { value: 'all', label: 'All Levels' },
@@ -47,6 +50,10 @@ export default function Courses() {
   const [fieldOfStudy, setFieldOfStudy] = useState('all');
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [tuitionRange, setTuitionRange] = useState([0, 50000]);
+  const [sortBy, setSortBy] = useState('relevance');
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -84,11 +91,23 @@ export default function Courses() {
   }, {});
 
   const filteredCourses = courses.filter(course => {
-    const matchesSearch = course.name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDegree = degreeLevel === 'all' || course.degree_level === degreeLevel;
-    const matchesField = fieldOfStudy === 'all' || course.field_of_study === fieldOfStudy;
+    const matchesSearch = 
+      course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDegree = degreeLevel === 'all' || course.level === degreeLevel;
+    const matchesField = fieldOfStudy === 'all' || course.subject_area === fieldOfStudy;
     const matchesScholarship = !scholarshipOnly || course.scholarship_available;
-    return matchesSearch && matchesDegree && matchesField && matchesScholarship;
+    const matchesCountry = countryFilter === 'all' || course.country === countryFilter;
+    const matchesTuition = !course.tuition_fee_min || 
+      (course.tuition_fee_min >= tuitionRange[0] && course.tuition_fee_min <= tuitionRange[1]);
+    
+    return matchesSearch && matchesDegree && matchesField && matchesScholarship && 
+           matchesCountry && matchesTuition;
+  }).sort((a, b) => {
+    if (sortBy === 'fees-low') return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
+    if (sortBy === 'fees-high') return (b.tuition_fee_min || 0) - (a.tuition_fee_min || 0);
+    if (sortBy === 'duration') return (a.duration || '').localeCompare(b.duration || '');
+    return 0;
   });
 
   const clearFilters = () => {
@@ -96,10 +115,28 @@ export default function Courses() {
     setDegreeLevel('all');
     setFieldOfStudy('all');
     setScholarshipOnly(false);
+    setCountryFilter('all');
+    setTuitionRange([0, 50000]);
   };
 
   const FiltersContent = () => (
     <div className="space-y-6">
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Country</label>
+        <Select value={countryFilter} onValueChange={setCountryFilter}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Countries</SelectItem>
+            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+            <SelectItem value="United States">United States</SelectItem>
+            <SelectItem value="Canada">Canada</SelectItem>
+            <SelectItem value="Australia">Australia</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div>
         <label className="text-sm font-medium text-slate-700 mb-2 block">Degree Level</label>
         <Select value={degreeLevel} onValueChange={setDegreeLevel}>
@@ -126,6 +163,19 @@ export default function Courses() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-4 block">
+          Tuition Range: ${tuitionRange[0].toLocaleString()} - ${tuitionRange[1].toLocaleString()}
+        </label>
+        <Slider
+          value={tuitionRange}
+          onValueChange={setTuitionRange}
+          max={50000}
+          step={1000}
+          className="mt-2"
+        />
       </div>
 
       <div className="flex items-center gap-2">
@@ -206,6 +256,11 @@ export default function Courses() {
 
           {/* Main */}
           <div className="flex-1">
+            {/* Trending Analysis */}
+            <div className="mb-8">
+              <TrendingAnalysis type="courses" />
+            </div>
+
             {/* AI Recommendations */}
             {user && studentProfile && (
               <div className="mb-8">
@@ -218,9 +273,22 @@ export default function Courses() {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <p className="text-slate-600">
-                Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-slate-600">
+                  Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses
+                </p>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="relevance">Most Relevant</SelectItem>
+                    <SelectItem value="fees-low">Fees (Low to High)</SelectItem>
+                    <SelectItem value="fees-high">Fees (High to Low)</SelectItem>
+                    <SelectItem value="duration">Duration</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
                   <Button variant="outline" className="lg:hidden">
@@ -269,8 +337,26 @@ export default function Courses() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
-                        <Card className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
+                        <Card className={`border-0 shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                          selectedForCompare.some(c => c.id === course.id) ? 'ring-2 ring-blue-500' : ''
+                        }`}>
                           <CardContent className="p-6">
+                            <div className="absolute top-3 right-3 z-10">
+                              <input
+                                type="checkbox"
+                                checked={selectedForCompare.some(c => c.id === course.id)}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  if (e.target.checked) {
+                                    setSelectedForCompare([...selectedForCompare, course]);
+                                  } else {
+                                    setSelectedForCompare(selectedForCompare.filter(c => c.id !== course.id));
+                                  }
+                                }}
+                                className="w-5 h-5 rounded border-slate-300 text-blue-500 cursor-pointer"
+                                title="Select for comparison"
+                              />
+                            </div>
                             <div className="flex flex-col md:flex-row md:items-center gap-4">
                               <div className="flex-1">
                                 <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -342,6 +428,13 @@ export default function Courses() {
           </div>
         </div>
       </div>
+
+      <CompareCourses
+        selectedCourses={selectedForCompare}
+        universities={universities}
+        onRemove={(id) => setSelectedForCompare(selectedForCompare.filter(c => c.id !== id))}
+        onClear={() => setSelectedForCompare([])}
+      />
 
       <Footer />
     </div>

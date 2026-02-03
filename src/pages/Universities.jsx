@@ -15,6 +15,7 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import CompareUniversities from '@/components/universities/CompareUniversities';
+import TrendingAnalysis from '@/components/discovery/TrendingAnalysis';
 
 const countries = [
   { value: 'all', label: 'All Countries' },
@@ -266,6 +267,11 @@ export default function Universities() {
 
           {/* Main Content */}
           <div className="flex-1">
+            {/* Trending Analysis */}
+            <div className="mb-8">
+              <TrendingAnalysis type="universities" />
+            </div>
+
             {/* Toolbar */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
               <p className="text-slate-600">
