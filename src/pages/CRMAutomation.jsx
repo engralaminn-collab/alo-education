@@ -18,6 +18,7 @@ import {
 import CRMLayout from '@/components/crm/CRMLayout';
 import WorkflowAutomation from '@/components/crm/WorkflowAutomation';
 import CommunicationParser from '@/components/crm/CommunicationParser';
+import AdvancedWorkflowBuilder from '@/components/crm/AdvancedWorkflowBuilder';
 
 export default function CRMAutomation() {
   const queryClient = useQueryClient();
@@ -405,9 +406,10 @@ export default function CRMAutomation() {
       </div>
 
       {/* AI-Powered Features */}
-      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid lg:grid-cols-3 gap-6 mb-8">
         <WorkflowAutomation />
         <CommunicationParser />
+        <AdvancedWorkflowBuilder />
       </div>
 
       {/* Automation Benefits */}

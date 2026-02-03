@@ -118,9 +118,9 @@ export default function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem asChild>
-                    <Link to={createPageUrl('StudentDashboard')} className="flex items-center gap-2">
+                    <Link to={createPageUrl('StudentPortal')} className="flex items-center gap-2">
                       <LayoutDashboard className="w-4 h-4" />
-                      Dashboard
+                      Student Portal
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
