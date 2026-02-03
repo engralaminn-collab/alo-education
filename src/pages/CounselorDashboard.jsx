@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from 'sonner';
 import CRMLayout from '@/components/crm/CRMLayout';
 import AIAssistant from '@/components/counselor/AIAssistant';
+import EnhancedAIEmailAssistant from '@/components/crm/EnhancedAIEmailAssistant';
 
 export default function CounselorDashboard() {
   const queryClient = useQueryClient();
@@ -95,6 +96,16 @@ export default function CounselorDashboard() {
       return allComms.filter(comm => comm.counselor_id === user?.id);
     },
     enabled: !!user?.id
+  });
+
+  const { data: universities = [] } = useQuery({
+    queryKey: ['universities-counselor'],
+    queryFn: () => base44.entities.University.list()
+  });
+
+  const { data: courses = [] } = useQuery({
+    queryKey: ['courses-counselor'],
+    queryFn: () => base44.entities.Course.list()
   });
 
   const updateLeadScore = useMutation({
@@ -566,11 +577,17 @@ export default function CounselorDashboard() {
                   </div>
 
                   {/* AI Assistant */}
-                  <div>
+                  <div className="space-y-6">
                     <AIAssistant 
                       student={student} 
                       communications={studentComms}
                       applications={studentApps}
+                    />
+
+                    <EnhancedAIEmailAssistant
+                      students={myStudents}
+                      universities={universities}
+                      courses={courses}
                     />
                   </div>
                 </div>
