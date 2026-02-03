@@ -18,7 +18,6 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import CRMLayout from '@/components/crm/CRMLayout';
 import { motion } from 'framer-motion';
-import CounselorPerformanceAnalytics from '@/components/crm/CounselorPerformanceAnalytics';
 
 export default function CRMCounselors() {
   const [search, setSearch] = useState('');
@@ -139,11 +138,6 @@ export default function CRMCounselors() {
         </Button>
       }
     >
-      {/* Performance Analytics */}
-      <div className="mb-6">
-        <CounselorPerformanceAnalytics />
-      </div>
-
       {/* Search */}
       <Card className="border-0 shadow-sm mb-6">
         <CardContent className="p-4">

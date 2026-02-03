@@ -17,7 +17,6 @@ import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
 import MyJourney from '@/components/dashboard/MyJourney';
-import AIStudentGuide from '@/components/dashboard/AIStudentGuide';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -286,10 +285,6 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* AI Assistant */}
-            {studentProfile && (
-              <AIStudentGuide student={studentProfile} />
-            )}
             {/* Counselor Card */}
             {studentProfile?.counselor_id && (
               <Card className="border-0 shadow-sm">

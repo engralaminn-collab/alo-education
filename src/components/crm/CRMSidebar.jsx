@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Target, Mail, MessageCircle, Bot, UserPlus, BookOpen
+  Inbox, UserCog, LogOut, ChevronLeft
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -13,18 +13,12 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
-  { icon: Bot, label: 'AI Assistant', page: 'CRMAIAssistant' },
-  { icon: UserPlus, label: 'Onboarding', page: 'CRMOnboarding' },
-  { icon: Target, label: 'Marketing Leads', page: 'CRMMarketing' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
-  { icon: Mail, label: 'University Outreach', page: 'CRMUniversityOutreach' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
-  { icon: MessageCircle, label: 'Live Chat', page: 'CRMLiveChat' },
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
-  { icon: BookOpen, label: 'Training', page: 'CRMTraining' },
   { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];

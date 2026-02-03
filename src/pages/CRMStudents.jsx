@@ -12,13 +12,8 @@ import { toast } from "sonner";
 import { 
   Search, Filter, MoreVertical, Mail, Phone, 
   MapPin, Calendar, User, FileText, MessageSquare,
-  ChevronLeft, ChevronRight, Sparkles
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
-import AIStudentMatcher from '@/components/crm/AIStudentMatcher';
-import OnboardingResourceSuggester from '@/components/crm/OnboardingResourceSuggester';
-import CommunicationParser from '@/components/crm/CommunicationParser';
-import StudentCommunicationHistory from '@/components/crm/StudentCommunicationHistory';
-import VisaSuccessPredictor from '@/components/crm/VisaSuccessPredictor';
 import { 
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
   DropdownMenuTrigger, DropdownMenuSeparator 
@@ -266,17 +261,12 @@ export default function CRMStudents() {
 
       {/* Student Detail Dialog */}
       <Dialog open={!!selectedStudent} onOpenChange={(open) => !open && setSelectedStudent(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Student Profile</DialogTitle>
           </DialogHeader>
           {selectedStudent && (
             <div className="space-y-6">
-              <VisaSuccessPredictor student={selectedStudent} />
-              <StudentCommunicationHistory student={selectedStudent} />
-              <CommunicationParser student={selectedStudent} />
-              <OnboardingResourceSuggester student={selectedStudent} />
-              <AIStudentMatcher student={selectedStudent} />
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-bold">
                   {selectedStudent.first_name?.charAt(0) || selectedStudent.email?.charAt(0)?.toUpperCase()}

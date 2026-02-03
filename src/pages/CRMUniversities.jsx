@@ -18,14 +18,11 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import CRMLayout from '@/components/crm/CRMLayout';
 import { motion } from 'framer-motion';
-import UniversityAnalytics from '@/components/crm/UniversityAnalytics';
-import UniversityRankingInsights from '@/components/crm/UniversityRankingInsights';
 
 export default function CRMUniversities() {
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingUniversity, setEditingUniversity] = useState(null);
-  const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     country: '',
@@ -170,14 +167,6 @@ export default function CRMUniversities() {
         </CardContent>
       </Card>
 
-      {/* Analytics Sidebar */}
-      {selectedUniversity && (
-        <div className="mb-6 space-y-6">
-          <UniversityAnalytics university={selectedUniversity} />
-          <UniversityRankingInsights university={selectedUniversity} />
-        </div>
-      )}
-
       {/* Grid */}
       {isLoading ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,10 +189,7 @@ export default function CRMUniversities() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <Card 
-                className="border-0 shadow-sm hover:shadow-lg transition-all overflow-hidden group cursor-pointer"
-                onClick={() => setSelectedUniversity(selectedUniversity?.id === uni.id ? null : uni)}
-              >
+              <Card className="border-0 shadow-sm hover:shadow-lg transition-all overflow-hidden group">
                 <div className="relative h-40">
                   <img
                     src={uni.cover_image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=600'}

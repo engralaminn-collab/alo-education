@@ -51,26 +51,19 @@ import About from './pages/About';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import BookConsultation from './pages/BookConsultation';
-import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
 import CRMDashboard from './pages/CRMDashboard';
 import CRMInquiries from './pages/CRMInquiries';
-import CRMLiveChat from './pages/CRMLiveChat';
-import CRMMarketing from './pages/CRMMarketing';
 import CRMMessages from './pages/CRMMessages';
-import CRMOnboarding from './pages/CRMOnboarding';
 import CRMReports from './pages/CRMReports';
 import CRMSettings from './pages/CRMSettings';
-import CRMStudentProfileForm from './pages/CRMStudentProfileForm';
 import CRMStudents from './pages/CRMStudents';
 import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
-import CRMTraining from './pages/CRMTraining';
 import CRMUniversities from './pages/CRMUniversities';
-import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import Contact from './pages/Contact';
 import CourseDetails from './pages/CourseDetails';
 import CourseMatcher from './pages/CourseMatcher';
@@ -94,6 +87,7 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
+import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import __Layout from './Layout.jsx';
 
 
@@ -102,26 +96,19 @@ export const PAGES = {
     "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
     "BookConsultation": BookConsultation,
-    "CRMAIAssistant": CRMAIAssistant,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
     "CRMDashboard": CRMDashboard,
     "CRMInquiries": CRMInquiries,
-    "CRMLiveChat": CRMLiveChat,
-    "CRMMarketing": CRMMarketing,
     "CRMMessages": CRMMessages,
-    "CRMOnboarding": CRMOnboarding,
     "CRMReports": CRMReports,
     "CRMSettings": CRMSettings,
-    "CRMStudentProfileForm": CRMStudentProfileForm,
     "CRMStudents": CRMStudents,
     "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
-    "CRMTraining": CRMTraining,
     "CRMUniversities": CRMUniversities,
-    "CRMUniversityOutreach": CRMUniversityOutreach,
     "Contact": Contact,
     "CourseDetails": CourseDetails,
     "CourseMatcher": CourseMatcher,
@@ -145,6 +132,7 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
+    "CRMUniversityOutreach": CRMUniversityOutreach,
 }
 
 export const pagesConfig = {
