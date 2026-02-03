@@ -11,6 +11,9 @@ import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
 import UniversityOutreachGenerator from '@/components/crm/UniversityOutreachGenerator';
 import OutreachResponseTracker from '@/components/crm/OutreachResponseTracker';
+import UniversitySuggester from '@/components/crm/UniversitySuggester';
+import AIEmailDrafter from '@/components/crm/AIEmailDrafter';
+import AutoFollowUpManager from '@/components/crm/AutoFollowUpManager';
 
 export default function CRMUniversityOutreach() {
   const queryClient = useQueryClient();
@@ -138,6 +141,25 @@ export default function CRMUniversityOutreach() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* AI Tools Section */}
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <UniversitySuggester 
+          students={students}
+          universities={universities}
+          courses={courses}
+        />
+        <AIEmailDrafter 
+          students={students}
+          universities={universities}
+          courses={courses}
+        />
+        <AutoFollowUpManager 
+          outreaches={outreaches}
+          students={students}
+          universities={universities}
+        />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
