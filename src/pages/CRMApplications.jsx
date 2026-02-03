@@ -17,6 +17,9 @@ import {
   GraduationCap, User, Send, Mail, Plane
 } from 'lucide-react';
 import MilestoneTracker from '@/components/applications/MilestoneTracker';
+import ApplicationDeadlineManager from '@/components/applications/ApplicationDeadlineManager';
+import ApplicationNotesPanel from '@/components/applications/ApplicationNotesPanel';
+import AIEnrollmentPredictor from '@/components/applications/AIEnrollmentPredictor';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -97,14 +100,16 @@ export default function CRMApplications() {
   const enrolledCount = applications.filter(a => a.status === 'enrolled').length;
 
   return (
-    <CRMLayout 
-      title="Applications"
-      actions={
-        <Button className="bg-emerald-500 hover:bg-emerald-600">
-          Create Application
-        </Button>
-      }
-    >
+    <CRMLayout title="Applications">
+      {/* Deadline Manager */}
+      <div className="mb-6">
+        <ApplicationDeadlineManager 
+          applications={applications}
+          students={students}
+          universities={universities}
+        />
+      </div>
+
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <Card className="border-0 shadow-sm">
@@ -283,10 +288,20 @@ export default function CRMApplications() {
               </TabsList>
               
               <TabsContent value="overview" className="space-y-6 mt-4">
-                {/* Milestone Tracker */}
-                <div>
-                  <h4 className="text-sm font-medium text-slate-500 mb-4">Application Milestones</h4>
-                  <MilestoneTracker application={selectedApp} variant="vertical" />
+                <div className="grid lg:grid-cols-2 gap-6">
+                  {/* Milestone Tracker */}
+                  <div>
+                    <h4 className="text-sm font-medium text-slate-500 mb-4">Application Milestones</h4>
+                    <MilestoneTracker application={selectedApp} variant="vertical" />
+                  </div>
+
+                  {/* AI Prediction */}
+                  <AIEnrollmentPredictor
+                    application={selectedApp}
+                    student={studentMap[selectedApp.student_id]}
+                    university={universityMap[selectedApp.university_id]}
+                    allApplications={applications}
+                  />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -346,13 +361,21 @@ export default function CRMApplications() {
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-4 gap-6">
                   <div>
                     <h4 className="text-sm font-medium text-slate-500 mb-2">Intake</h4>
                     <Input 
                       value={selectedApp.intake || ''}
                       onChange={(e) => setSelectedApp({ ...selectedApp, intake: e.target.value })}
                       placeholder="e.g. September 2025"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-slate-500 mb-2">Offer Deadline</h4>
+                    <Input 
+                      type="date"
+                      value={selectedApp.offer_deadline || ''}
+                      onChange={(e) => setSelectedApp({ ...selectedApp, offer_deadline: e.target.value })}
                     />
                   </div>
                   <div>
@@ -375,7 +398,9 @@ export default function CRMApplications() {
               </TabsContent>
               
               <TabsContent value="notes" className="mt-4">
-                <div className="space-y-4">
+                <ApplicationNotesPanel applicationId={selectedApp.id} />
+                
+                <div className="space-y-4 mt-6">
                   <div>
                     <h4 className="text-sm font-medium text-slate-500 mb-2">Update Milestones</h4>
                     <div className="space-y-3 bg-slate-50 p-4 rounded-xl">
@@ -446,6 +471,7 @@ export default function CRMApplications() {
                   data: {
                     status: selectedApp.status,
                     intake: selectedApp.intake,
+                    offer_deadline: selectedApp.offer_deadline,
                     tuition_fee: selectedApp.tuition_fee,
                     scholarship_amount: selectedApp.scholarship_amount,
                     counselor_notes: selectedApp.counselor_notes,
