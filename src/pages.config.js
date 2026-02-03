@@ -95,6 +95,7 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
+import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
 import __Layout from './Layout.jsx';
 
 
@@ -147,6 +148,7 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
+    "CRMBulkCampaigns": CRMBulkCampaigns,
 }
 
 export const pagesConfig = {
