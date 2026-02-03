@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { 
   Zap, Send, UserPlus, RefreshCw, Clock, 
-  CheckCircle, Settings
+  CheckCircle, Settings, Brain, Shield
 } from 'lucide-react';
 import CRMLayout from '@/components/crm/CRMLayout';
+import WorkflowAutomation from '@/components/crm/WorkflowAutomation';
+import CommunicationParser from '@/components/crm/CommunicationParser';
 
 export default function CRMAutomation() {
   const queryClient = useQueryClient();
@@ -326,7 +328,13 @@ export default function CRMAutomation() {
         </Card>
       </div>
 
-      {/* Automation Log */}
+      {/* AI-Powered Features */}
+      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <WorkflowAutomation />
+        <CommunicationParser />
+      </div>
+
+      {/* Automation Benefits */}
       <Card className="border-0 shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -335,7 +343,7 @@ export default function CRMAutomation() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
               <UserPlus className="w-10 h-10 text-blue-600 mx-auto mb-3" />
               <h4 className="font-semibold text-slate-900 mb-2">Faster Lead Response</h4>
@@ -355,6 +363,13 @@ export default function CRMAutomation() {
               <h4 className="font-semibold text-slate-900 mb-2">Real-time Tracking</h4>
               <p className="text-sm text-slate-600">
                 Application statuses update as milestones are completed
+              </p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+              <Brain className="w-10 h-10 text-purple-600 mx-auto mb-3" />
+              <h4 className="font-semibold text-slate-900 mb-2">AI Intelligence</h4>
+              <p className="text-sm text-slate-600">
+                Smart parsing and document verification save hours
               </p>
             </div>
           </div>
