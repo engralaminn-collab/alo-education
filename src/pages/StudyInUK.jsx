@@ -56,31 +56,34 @@ export default function StudyInUK() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-5xl mx-auto text-center"
+            className="max-w-4xl"
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Unlock a world-class education in the United Kingdom
-            </h1>
-            <p className="text-xl text-blue-100 mb-4 leading-relaxed">
-              with expert guidance from ALO Education Bangladesh
+            <div className="flex items-center gap-4 mb-6">
+              <img 
+                src="https://flagcdn.com/w80/gb.png" 
+                alt="UK Flag" 
+                className="w-16 h-12 rounded-lg shadow-lg"
+              />
+              <h1 className="text-4xl md:text-5xl font-bold text-white">
+                Study in the United Kingdom
+              </h1>
+            </div>
+            <p className="text-xl text-blue-100 mb-4">
+              The UK is home to world-class universities, strong career prospects, and a welcoming community. 
+              We'll guide you every step of the way – from choosing the right course to building a standout application.
             </p>
-            <p className="text-lg text-blue-200 mb-8 max-w-4xl mx-auto">
-              The UK is home to top-ranked universities, globally recognised degrees, and excellent career opportunities for international students. From choosing the right course to securing your visa, our smart student portal and CRM-powered counselling system support you at every stage.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <p className="text-lg text-blue-200 mb-8">You're in good hands.</p>
+            <div className="flex flex-wrap gap-4">
               <Link to={createPageUrl('Contact')}>
-                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">
+                <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50">
+                  <GraduationCap className="w-5 h-5 mr-2" />
                   Book Free Counselling
                 </Button>
               </Link>
-              <Link to={createPageUrl('Contact')}>
-                <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50">
-                  Apply Online
-                </Button>
-              </Link>
-              <Link to={createPageUrl('StudentPortal')}>
+              <Link to={createPageUrl('Courses') + '?country=uk'}>
                 <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Student Login
+                  Find Courses
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
             </div>
@@ -131,172 +134,98 @@ export default function StudyInUK() {
         </div>
       </section>
 
-      {/* Why Bangladeshi Students Choose UK */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">
-            Why Bangladeshi Students Choose the UK
-          </h2>
-          <p className="text-lg text-slate-600 mb-8 max-w-4xl">
-            Studying in the UK from Bangladesh gives you access to over 160 world-class universities, innovative teaching, and strong graduate employability. UK degrees are shorter and more cost-effective compared to many other countries, allowing students to enter the workforce faster.
-          </p>
-          
-          <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mb-8">
-            <h3 className="font-bold text-blue-900 mb-4">Key Benefits:</h3>
-            <ul className="grid md:grid-cols-2 gap-3">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-700">3-year undergraduate and 1-year master's programs</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-700">2-year post-study work visa (Graduate Route)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-700">Scholarships for Bangladeshi students</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-700">High academic reputation</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-700">Multicultural student environment</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Smart Student Portal */}
+      {/* Why Choose UK */}
       <section className="bg-slate-50 py-16">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
-            Our Smart Student Portal for UK Applicants
+            Why choose the UK for your studies?
           </h2>
-          <p className="text-lg text-slate-600 mb-8">
-            ALO Education provides Bangladeshi students with a digital application experience that most consultancies don't offer.
+          <div className="grid lg:grid-cols-3 gap-8 mt-8">
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <Building2 className="w-12 h-12 text-blue-600 mb-4" />
+                <h3 className="text-xl font-bold mb-3">Top universities</h3>
+                <p className="text-slate-600 mb-4">
+                  The UK is home to some of the world's most prestigious and historic universities, 
+                  with over 160 higher education institutions offering a wealth of academic opportunities.
+                </p>
+                <p className="text-sm text-slate-500">
+                  Studying in the UK means joining a tradition of academic distinction that has produced 
+                  influential thinkers, leaders, and Nobel laureates.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <GraduationCap className="w-12 h-12 text-emerald-600 mb-4" />
+                <h3 className="text-xl font-bold mb-3">World-class education</h3>
+                <p className="text-slate-600">
+                  With a vast range of disciplines to explore, students benefit from rigorous academic 
+                  standards and a truly international learning environment.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-lg">
+              <CardContent className="p-6">
+                <TrendingUp className="w-12 h-12 text-purple-600 mb-4" />
+                <h3 className="text-xl font-bold mb-3">Strong career prospects</h3>
+                <p className="text-slate-600">
+                  UK qualifications are recognized and respected worldwide, opening doors to excellent 
+                  career opportunities globally.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Universities */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-slate-900 mb-3">World-class universities</h2>
+          <p className="text-slate-600 mb-8">
+            Explore UK universities popular among international students for their course options, 
+            student experience, and career prospects after graduation.
           </p>
-          
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              'Online application dashboard',
-              'Live application status tracking',
-              'Document upload & verification',
-              'IELTS waiver checker',
-              'Offer letter timeline',
-              'CAS progress tracker',
-              'Visa checklist & reminders',
-              'WhatsApp, SMS & email alerts',
-              'Pre-departure training module'
-            ].map((feature, i) => (
-              <div key={i} className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                <span className="text-slate-700">{feature}</span>
-              </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {universities.slice(0, 8).map(uni => (
+              <Link key={uni.id} to={createPageUrl('UniversityDetails') + `?id=${uni.id}`}>
+                <Card className="border-0 shadow hover:shadow-lg transition-shadow h-full">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3 mb-3">
+                      {uni.logo ? (
+                        <img src={uni.logo} alt="" className="w-12 h-12 object-contain rounded" />
+                      ) : (
+                        <Building2 className="w-12 h-12 text-slate-300" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-slate-900 text-sm mb-1 line-clamp-2">
+                          {uni.university_name}
+                        </h3>
+                        <p className="text-xs text-slate-500 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {uni.city}
+                        </p>
+                      </div>
+                    </div>
+                    {uni.ranking && (
+                      <Badge variant="outline" className="text-xs mb-2">
+                        Ranking: #{uni.ranking}
+                      </Badge>
+                    )}
+                    <p className="text-xs text-slate-600">Next intake: {uni.intakes || 'September'}</p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Cost, Visa & Work */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">
-            Cost, Visa & Work in the UK
-          </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-6 text-center">
-                <DollarSign className="w-10 h-10 text-blue-600 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 mb-2">Tuition Fees</h3>
-                <p className="text-lg font-semibold text-blue-600">£11,000 – £38,000</p>
-                <p className="text-sm text-slate-500">per year</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-6 text-center">
-                <DollarSign className="w-10 h-10 text-emerald-600 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 mb-2">Living Cost</h3>
-                <p className="text-lg font-semibold text-emerald-600">£9,000 – £12,000</p>
-                <p className="text-sm text-slate-500">per year</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-6 text-center">
-                <Clock className="w-10 h-10 text-purple-600 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 mb-2">Work Rights</h3>
-                <p className="text-lg font-semibold text-purple-600">20 hours/week</p>
-                <p className="text-sm text-slate-500">during term</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border-0 shadow-lg">
-              <CardContent className="p-6 text-center">
-                <GraduationCap className="w-10 h-10 text-amber-600 mx-auto mb-3" />
-                <h3 className="font-bold text-slate-900 mb-2">Post Study Work</h3>
-                <p className="text-lg font-semibold text-amber-600">2 years</p>
-                <p className="text-sm text-slate-500">after graduation</p>
-              </CardContent>
-            </Card>
-          </div>
-          
-          <p className="text-center text-slate-600 mt-6">
-            Our CRM system automatically guides students through each visa stage with alerts and counselor follow-ups.
-          </p>
-        </div>
-      </section>
-
-      {/* All UK Universities */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-blue-600 flex items-center gap-3">
-              <span className="text-2xl">🇬🇧</span> All UK Universities
-            </h2>
+          <div className="text-center">
             <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
-              <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
-                View All Universities
+              <Button variant="outline" size="lg">
+                View all universities
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {universities.slice(0, 8).map(uni => (
-              <Card key={uni.id} className="border-2 border-blue-200 hover:border-blue-400 transition-all overflow-hidden">
-                <div className="h-40 overflow-hidden">
-                  <img 
-                    src={uni.cover_image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'} 
-                    alt={uni.university_name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-5">
-                  <h3 className="font-bold text-orange-600 mb-3 text-lg min-h-[3.5rem]">
-                    {uni.university_name}
-                  </h3>
-                  <div className="space-y-2 text-sm text-slate-600 mb-4">
-                    <p className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-blue-600" />
-                      {uni.city}
-                    </p>
-                    {uni.ranking && (
-                      <p><span className="font-medium">Ranking:</span> #{uni.ranking}</p>
-                    )}
-                    <p><span className="font-medium">Next intake:</span> {uni.intakes || 'September, January'}</p>
-                  </div>
-                  <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`}>
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
-                      Learn More
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
@@ -305,40 +234,32 @@ export default function StudyInUK() {
       <section className="bg-slate-50 py-16">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-blue-600">Popular Courses in UK</h2>
+            <h2 className="text-3xl font-bold text-slate-900">Popular Courses in UK</h2>
             <Link to={createPageUrl('Courses') + '?country=United Kingdom'}>
-              <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
-                View All Courses
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+              <Button variant="outline">View All Courses</Button>
             </Link>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses.map(course => (
-              <Card key={course.id} className="border-2 border-blue-200 hover:border-blue-400 transition-all h-full">
-                <CardContent className="p-5">
-                  <h3 className="font-bold text-orange-600 mb-3 text-lg">
-                    {course.course_title}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Badge className="bg-blue-600 text-white capitalize">{course.level}</Badge>
-                    <Badge variant="outline" className="capitalize">{course.subject_area}</Badge>
-                  </div>
-                  <div className="space-y-2 text-sm text-slate-600 mb-4">
-                    <p><span className="font-medium">Duration:</span> {course.duration || '1-3 years'}</p>
-                    {course.tuition_fee_min && (
-                      <p className="font-semibold text-blue-600">
-                        From £{course.tuition_fee_min.toLocaleString()}/year
-                      </p>
-                    )}
-                  </div>
-                  <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
-                      Learn More
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+              <Link key={course.id} to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
+                <Card className="border-0 shadow hover:shadow-lg transition-shadow h-full">
+                  <CardContent className="p-5">
+                    <Badge className="mb-3">{course.level}</Badge>
+                    <h3 className="font-semibold text-slate-900 mb-2 line-clamp-2">
+                      {course.course_title}
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-3">{course.subject_area}</p>
+                    <div className="space-y-1 text-xs text-slate-500">
+                      <p>Duration: {course.duration}</p>
+                      {course.tuition_fee_min && (
+                        <p className="font-semibold text-blue-600">
+                          From £{course.tuition_fee_min.toLocaleString()}/year
+                        </p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
@@ -467,14 +388,14 @@ export default function StudyInUK() {
 
         {/* CTA */}
         <Card className="border-0 shadow-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-          <CardContent className="p-12 text-center">
-            <h3 className="text-3xl font-bold mb-4">Ready to Start Your UK Journey?</h3>
-            <p className="text-xl text-blue-100 mb-8">
-              Get personalised guidance from certified counsellors in Bangladesh
+          <CardContent className="p-8 text-center">
+            <h3 className="text-2xl font-bold mb-4">Ready to Start Your UK Journey?</h3>
+            <p className="text-blue-100 mb-6">
+              Get personalized guidance from our expert counselors
             </p>
             <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-6">
-                Book Free Consultation
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
+                Book Free Counselling
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>

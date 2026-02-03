@@ -23,9 +23,6 @@ import UpcomingDeadlines from '@/components/dashboard/UpcomingDeadlines';
 import ScholarshipRecommendations from '@/components/dashboard/ScholarshipRecommendations';
 import CommunicationHistory from '@/components/dashboard/CommunicationHistory';
 import StudentTasks from '@/components/dashboard/StudentTasks';
-import AINextSteps from '@/components/dashboard/AINextSteps';
-import StageResources from '@/components/dashboard/StageResources';
-import ApplicationProgressTimeline from '@/components/dashboard/ApplicationProgressTimeline';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -181,34 +178,10 @@ export default function StudentDashboard() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* AI Next Steps */}
-            {studentProfile && (
-              <AINextSteps
-                studentProfile={studentProfile}
-                applications={applications}
-                documents={documents}
-                currentStage={studentProfile.status === 'new_lead' ? 0 : 
-                             studentProfile.status === 'contacted' ? 1 :
-                             studentProfile.status === 'qualified' ? 2 :
-                             studentProfile.status === 'in_progress' ? 3 :
-                             studentProfile.status === 'applied' ? 4 : 5}
-              />
-            )}
-
-            {/* Progress Timeline */}
-            <ApplicationProgressTimeline applications={applications} />
-
             {/* Student Tasks - Action Items */}
             {studentProfile && (
               <StudentTasks studentId={studentProfile.id} />
             )}
-
-            {/* AI Recommendations */}
-            <AIRecommendations 
-              studentProfile={studentProfile}
-              courses={courses}
-              universities={universities}
-            />
 
             {/* My Journey */}
             <MyJourney 
@@ -216,6 +189,13 @@ export default function StudentDashboard() {
               applications={applications}
               documents={documents}
               tasks={[]}
+              universities={universities}
+            />
+
+            {/* AI Recommendations */}
+            <AIRecommendations 
+              studentProfile={studentProfile}
+              courses={courses}
               universities={universities}
             />
             {/* Profile Completeness */}
@@ -316,18 +296,6 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Stage-Specific Resources */}
-            {studentProfile && (
-              <StageResources 
-                currentStage={studentProfile.status === 'new_lead' ? 0 : 
-                             studentProfile.status === 'contacted' ? 1 :
-                             studentProfile.status === 'qualified' ? 2 :
-                             studentProfile.status === 'in_progress' ? 3 :
-                             studentProfile.status === 'applied' ? 4 : 5}
-                country={studentProfile.preferred_countries?.[0]}
-              />
-            )}
-
             {/* AI Insights */}
             {studentProfile && (
               <AIInsights studentId={studentProfile.id} />
