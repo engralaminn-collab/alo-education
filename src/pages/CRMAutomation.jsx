@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { 
   Zap, Send, UserPlus, RefreshCw, Clock, 
-  CheckCircle, Settings, Brain, Shield
+  CheckCircle, Settings, Brain, Shield, Plus, Trash2, Edit, Play
 } from 'lucide-react';
 import CRMLayout from '@/components/crm/CRMLayout';
 import WorkflowAutomation from '@/components/crm/WorkflowAutomation';
@@ -18,16 +22,64 @@ import CommunicationParser from '@/components/crm/CommunicationParser';
 export default function CRMAutomation() {
   const queryClient = useQueryClient();
   const [automating, setAutomating] = useState(false);
+  const [createRuleOpen, setCreateRuleOpen] = useState(false);
+  const [editingRule, setEditingRule] = useState(null);
 
-  const [settings, setSettings] = useState({
-    auto_follow_up: true,
-    follow_up_days_before: 3,
-    auto_assign_leads: true,
-    auto_status_update: true,
-    send_reminder_emails: true,
+  const [newRule, setNewRule] = useState({
+    rule_name: '',
+    description: '',
+    trigger_type: 'communication_gap',
+    action_type: 'create_task',
+    trigger_conditions: { days_threshold: 5 },
+    task_priority: 'medium',
+    email_subject_template: '',
+    email_template: '',
+    is_active: true
   });
 
-  // Automation: Auto-assign leads to counselors
+  const { data: workflows = [] } = useQuery({
+    queryKey: ['automation-workflows'],
+    queryFn: () => base44.entities.AutomatedWorkflow.list('-created_date'),
+  });
+
+  const createWorkflow = useMutation({
+    mutationFn: (data) => base44.entities.AutomatedWorkflow.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['automation-workflows'] });
+      setCreateRuleOpen(false);
+      setNewRule({
+        rule_name: '',
+        description: '',
+        trigger_type: 'communication_gap',
+        action_type: 'create_task',
+        trigger_conditions: { days_threshold: 5 },
+        task_priority: 'medium',
+        email_subject_template: '',
+        email_template: '',
+        is_active: true
+      });
+      toast.success('Workflow rule created');
+    }
+  });
+
+  const deleteWorkflow = useMutation({
+    mutationFn: (id) => base44.entities.AutomatedWorkflow.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['automation-workflows'] });
+      toast.success('Workflow deleted');
+    }
+  });
+
+  const toggleWorkflow = useMutation({
+    mutationFn: ({ id, is_active }) => 
+      base44.entities.AutomatedWorkflow.update(id, { is_active }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['automation-workflows'] });
+      toast.success('Workflow updated');
+    }
+  });
+
+  // Auto-assign leads to counselors
   const autoAssignLeads = useMutation({
     mutationFn: async () => {
       const inquiries = await base44.entities.Inquiry.filter({ status: 'new' });
@@ -38,14 +90,12 @@ export default function CRMAutomation() {
 
       if (counselors.length === 0) return { assigned: 0 };
 
-      // Sort counselors by current workload
       const sorted = counselors.sort((a, b) => 
         (a.current_students || 0) - (b.current_students || 0)
       );
 
       let assigned = 0;
       for (const inquiry of inquiries) {
-        // Find counselor with matching specialization or lowest workload
         const counselor = sorted.find(c => 
           c.specializations?.some(s => 
             inquiry.country_of_interest?.toLowerCase().includes(s.toLowerCase())
@@ -69,134 +119,231 @@ export default function CRMAutomation() {
     }
   });
 
-  // Automation: Create follow-up tasks for upcoming deadlines
-  const createFollowUpTasks = useMutation({
-    mutationFn: async () => {
-      const { data: user } = await base44.auth.me();
-      const applications = await base44.entities.Application.filter({
-        status: { $in: ['documents_pending', 'under_review', 'submitted_to_university'] }
-      });
-
-      const deadlineThreshold = new Date();
-      deadlineThreshold.setDate(deadlineThreshold.getDate() + settings.follow_up_days_before);
-
-      let created = 0;
-      for (const app of applications) {
-        if (app.offer_deadline) {
-          const deadline = new Date(app.offer_deadline);
-          if (deadline <= deadlineThreshold && deadline >= new Date()) {
-            // Check if task already exists
-            const existingTasks = await base44.entities.Task.filter({
-              application_id: app.id,
-              type: 'follow_up',
-              status: { $ne: 'completed' }
-            });
-
-            if (existingTasks.length === 0) {
-              await base44.entities.Task.create({
-                title: `Follow up on application deadline`,
-                description: `Application deadline approaching on ${app.offer_deadline}`,
-                type: 'follow_up',
-                student_id: app.student_id,
-                application_id: app.id,
-                assigned_to: app.counselor_id || user.id,
-                priority: 'high',
-                due_date: app.offer_deadline,
-                status: 'pending'
-              });
-              created++;
-            }
-          }
-        }
-      }
-
-      return { created };
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['crm-tasks'] });
-      toast.success(`Created ${data.created} follow-up tasks for upcoming deadlines`);
-    }
-  });
-
-  // Automation: Auto-update application status based on milestones
-  const autoUpdateStatuses = useMutation({
-    mutationFn: async () => {
-      const applications = await base44.entities.Application.list();
-      
-      let updated = 0;
-      for (const app of applications) {
-        let newStatus = app.status;
-        
-        // If all documents submitted and status is draft
-        if (app.status === 'draft' && app.milestones?.documents_submitted?.completed) {
-          newStatus = 'documents_pending';
-        }
-        
-        // If application submitted
-        if (app.status === 'documents_pending' && app.milestones?.application_submitted?.completed) {
-          newStatus = 'under_review';
-        }
-        
-        // If offer received
-        if (['under_review', 'submitted_to_university'].includes(app.status) && 
-            app.milestones?.offer_received?.completed) {
-          newStatus = 'conditional_offer';
-        }
-        
-        // If visa approved
-        if (app.milestones?.visa_approved?.completed && app.status !== 'enrolled') {
-          newStatus = 'visa_processing';
-        }
-        
-        // If enrolled
-        if (app.milestones?.enrolled?.completed && app.status !== 'enrolled') {
-          newStatus = 'enrolled';
-        }
-
-        if (newStatus !== app.status) {
-          await base44.entities.Application.update(app.id, { status: newStatus });
-          updated++;
-        }
-      }
-
-      return { updated };
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['crm-applications'] });
-      toast.success(`Auto-updated ${data.updated} application statuses`);
-    }
-  });
-
-  const runAllAutomations = async () => {
-    setAutomating(true);
-    try {
-      if (settings.auto_assign_leads) await autoAssignLeads.mutateAsync();
-      if (settings.auto_follow_up) await createFollowUpTasks.mutateAsync();
-      if (settings.auto_status_update) await autoUpdateStatuses.mutateAsync();
-      toast.success('All automations completed successfully');
-    } catch (error) {
-      toast.error('Some automations failed');
-    } finally {
-      setAutomating(false);
-    }
-  };
-
   return (
     <CRMLayout 
-      title="Automation & Workflows"
+      title="Automation & AI Workflows"
       actions={
-        <Button 
-          onClick={runAllAutomations}
-          disabled={automating}
-          className="bg-purple-600 hover:bg-purple-700"
-        >
-          <Zap className="w-4 h-4 mr-2" />
-          {automating ? 'Running...' : 'Run All Automations'}
-        </Button>
+        <Dialog open={createRuleOpen} onOpenChange={setCreateRuleOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-purple-600 hover:bg-purple-700">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Rule
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Create Automation Rule</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-4">
+              <div>
+                <Label>Rule Name</Label>
+                <Input
+                  value={newRule.rule_name}
+                  onChange={(e) => setNewRule({ ...newRule, rule_name: e.target.value })}
+                  placeholder="e.g. 5-Day Follow-up for Silent Students"
+                  className="mt-2"
+                />
+              </div>
+
+              <div>
+                <Label>Description</Label>
+                <Input
+                  value={newRule.description}
+                  onChange={(e) => setNewRule({ ...newRule, description: e.target.value })}
+                  placeholder="Describe what this rule does"
+                  className="mt-2"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Trigger Type</Label>
+                  <Select 
+                    value={newRule.trigger_type}
+                    onValueChange={(v) => setNewRule({ ...newRule, trigger_type: v })}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="communication_gap">Communication Gap</SelectItem>
+                      <SelectItem value="deadline_approaching">Deadline Approaching</SelectItem>
+                      <SelectItem value="document_pending">Document Pending</SelectItem>
+                      <SelectItem value="status_change">Status Change</SelectItem>
+                      <SelectItem value="sentiment_negative">Negative Sentiment</SelectItem>
+                      <SelectItem value="scheduled">Scheduled Check</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Action Type</Label>
+                  <Select 
+                    value={newRule.action_type}
+                    onValueChange={(v) => setNewRule({ ...newRule, action_type: v })}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="create_task">Create Task</SelectItem>
+                      <SelectItem value="send_email">Send Email</SelectItem>
+                      <SelectItem value="send_personalized_email">Send Personalized Email</SelectItem>
+                      <SelectItem value="notify_counselor">Notify Counselor</SelectItem>
+                      <SelectItem value="flag_urgent">Flag Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {['communication_gap', 'deadline_approaching', 'document_pending'].includes(newRule.trigger_type) && (
+                <div>
+                  <Label>Days Threshold</Label>
+                  <Input
+                    type="number"
+                    value={newRule.trigger_conditions.days_threshold || 5}
+                    onChange={(e) => setNewRule({
+                      ...newRule,
+                      trigger_conditions: {
+                        ...newRule.trigger_conditions,
+                        days_threshold: parseInt(e.target.value)
+                      }
+                    })}
+                    className="mt-2"
+                  />
+                </div>
+              )}
+
+              {['create_task', 'notify_counselor'].includes(newRule.action_type) && (
+                <div>
+                  <Label>Task Priority</Label>
+                  <Select 
+                    value={newRule.task_priority}
+                    onValueChange={(v) => setNewRule({ ...newRule, task_priority: v })}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="urgent">Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              {['send_email', 'send_personalized_email'].includes(newRule.action_type) && (
+                <>
+                  <div>
+                    <Label>Email Subject Template</Label>
+                    <Input
+                      value={newRule.email_subject_template}
+                      onChange={(e) => setNewRule({ ...newRule, email_subject_template: e.target.value })}
+                      placeholder="e.g. {{student_name}}, let's get you back on track!"
+                      className="mt-2"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">
+                      Use placeholders: {`{{student_name}}, {{course_name}}, {{deadline_date}}, {{status}}`}
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label>Email Body Template</Label>
+                    <Textarea
+                      value={newRule.email_template}
+                      onChange={(e) => setNewRule({ ...newRule, email_template: e.target.value })}
+                      placeholder="Hi {{student_name}}, we noticed you haven't responded in {{days}} days..."
+                      className="mt-2 min-h-32"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">
+                      {newRule.action_type === 'send_personalized_email' 
+                        ? 'AI will personalize this template based on student data and context'
+                        : 'Placeholders will be replaced with actual student data'}
+                    </p>
+                  </div>
+                </>
+              )}
+
+              <Button
+                onClick={() => createWorkflow.mutate(newRule)}
+                disabled={!newRule.rule_name || createWorkflow.isPending}
+                className="w-full"
+              >
+                Create Rule
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       }
     >
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Auto-Assign Leads */}
+      {/* Active Rules */}
+      <div className="mb-8">
+        <h2 className="text-lg font-semibold text-slate-900 mb-4">Active Automation Rules</h2>
+        <div className="space-y-3">
+          {workflows.map(workflow => (
+            <Card key={workflow.id} className="border-0 shadow-sm">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Switch
+                        checked={workflow.is_active}
+                        onCheckedChange={(v) => toggleWorkflow.mutate({ id: workflow.id, is_active: v })}
+                      />
+                      <h4 className="font-semibold text-slate-900">{workflow.rule_name}</h4>
+                    </div>
+                    {workflow.description && (
+                      <p className="text-sm text-slate-600 mb-2 ml-14">{workflow.description}</p>
+                    )}
+                    <div className="flex items-center gap-2 ml-14 flex-wrap">
+                      <Badge variant="outline" className="text-xs">
+                        Trigger: {workflow.trigger_type.replace(/_/g, ' ')}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Action: {workflow.action_type.replace(/_/g, ' ')}
+                      </Badge>
+                      <Badge className="bg-slate-100 text-slate-700 text-xs">
+                        {workflow.executions_count || 0} runs
+                      </Badge>
+                      {workflow.success_count > 0 && (
+                        <Badge className="bg-green-100 text-green-700 text-xs">
+                          {workflow.success_count} actions
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => deleteWorkflow.mutate(workflow.id)}
+                    >
+                      <Trash2 className="w-4 h-4 text-red-500" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          
+          {workflows.length === 0 && (
+            <Card className="border-2 border-dashed">
+              <CardContent className="p-12 text-center">
+                <Zap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <h3 className="font-semibold text-slate-900 mb-2">No Automation Rules Yet</h3>
+                <p className="text-slate-500 text-sm mb-4">
+                  Create your first automation rule to streamline workflows
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -204,20 +351,13 @@ export default function CRMAutomation() {
               Auto-Assign Leads
             </CardTitle>
             <CardDescription>
-              Automatically assign new inquiries to available counselors based on specialization and workload
+              Assign new inquiries to counselors by specialization and workload
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label>Enable Auto-Assignment</Label>
-              <Switch
-                checked={settings.auto_assign_leads}
-                onCheckedChange={(v) => setSettings({ ...settings, auto_assign_leads: v })}
-              />
-            </div>
+          <CardContent>
             <Button 
               onClick={() => autoAssignLeads.mutate()}
-              disabled={!settings.auto_assign_leads || autoAssignLeads.isPending}
+              disabled={autoAssignLeads.isPending}
               variant="outline"
               className="w-full"
             >
@@ -227,103 +367,39 @@ export default function CRMAutomation() {
           </CardContent>
         </Card>
 
-        {/* Follow-up Reminders */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Clock className="w-5 h-5 text-amber-600" />
-              Follow-up Reminders
+              <Brain className="w-5 h-5 text-purple-600" />
+              Communication Analysis
             </CardTitle>
             <CardDescription>
-              Create tasks for counselors when application deadlines are approaching
+              Parse student communications for sentiment and concerns
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label>Enable Reminders</Label>
-              <Switch
-                checked={settings.auto_follow_up}
-                onCheckedChange={(v) => setSettings({ ...settings, auto_follow_up: v })}
-              />
-            </div>
-            <div>
-              <Label>Days before deadline</Label>
-              <Input
-                type="number"
-                value={settings.follow_up_days_before}
-                onChange={(e) => setSettings({ ...settings, follow_up_days_before: parseInt(e.target.value) })}
-                className="mt-2"
-                min="1"
-                max="30"
-              />
-            </div>
-            <Button 
-              onClick={() => createFollowUpTasks.mutate()}
-              disabled={!settings.auto_follow_up || createFollowUpTasks.isPending}
-              variant="outline"
-              className="w-full"
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${createFollowUpTasks.isPending ? 'animate-spin' : ''}`} />
-              Run Now
+          <CardContent>
+            <Button variant="outline" className="w-full" disabled>
+              <Play className="w-4 h-4 mr-2" />
+              Auto-Running
             </Button>
           </CardContent>
         </Card>
 
-        {/* Auto Status Updates */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
-              Auto Status Updates
+              <Shield className="w-5 h-5 text-emerald-600" />
+              Document Verification
             </CardTitle>
             <CardDescription>
-              Update application statuses automatically when milestones are completed
+              AI verifies uploaded documents for authenticity
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label>Enable Auto-Updates</Label>
-              <Switch
-                checked={settings.auto_status_update}
-                onCheckedChange={(v) => setSettings({ ...settings, auto_status_update: v })}
-              />
-            </div>
-            <Button 
-              onClick={() => autoUpdateStatuses.mutate()}
-              disabled={!settings.auto_status_update || autoUpdateStatuses.isPending}
-              variant="outline"
-              className="w-full"
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${autoUpdateStatuses.isPending ? 'animate-spin' : ''}`} />
-              Run Now
+          <CardContent>
+            <Button variant="outline" className="w-full" disabled>
+              <Play className="w-4 h-4 mr-2" />
+              Auto-Running
             </Button>
-          </CardContent>
-        </Card>
-
-        {/* Email Notifications */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Send className="w-5 h-5 text-purple-600" />
-              Email Notifications
-            </CardTitle>
-            <CardDescription>
-              Send automated reminder emails to students about pending actions
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label>Enable Email Reminders</Label>
-              <Switch
-                checked={settings.send_reminder_emails}
-                onCheckedChange={(v) => setSettings({ ...settings, send_reminder_emails: v })}
-              />
-            </div>
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
-              <p className="text-sm text-purple-800">
-                <strong>Note:</strong> Email notifications will be sent automatically when tasks are created or deadlines are approaching.
-              </p>
-            </div>
           </CardContent>
         </Card>
       </div>

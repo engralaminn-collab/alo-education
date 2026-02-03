@@ -17,6 +17,11 @@ import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
 import MyJourney from '@/components/dashboard/MyJourney';
+import AIInsights from '@/components/dashboard/AIInsights';
+import DocumentStatus from '@/components/dashboard/DocumentStatus';
+import UpcomingDeadlines from '@/components/dashboard/UpcomingDeadlines';
+import ScholarshipRecommendations from '@/components/dashboard/ScholarshipRecommendations';
+import CommunicationHistory from '@/components/dashboard/CommunicationHistory';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -285,6 +290,29 @@ export default function StudentDashboard() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* AI Insights */}
+            {studentProfile && (
+              <AIInsights studentId={studentProfile.id} />
+            )}
+
+            {/* Upcoming Deadlines */}
+            {studentProfile && (
+              <UpcomingDeadlines studentId={studentProfile.id} />
+            )}
+
+            {/* Document Status */}
+            {studentProfile && (
+              <DocumentStatus studentId={studentProfile.id} />
+            )}
+
+            {/* Scholarship Recommendations */}
+            <ScholarshipRecommendations />
+
+            {/* Communication History */}
+            {studentProfile && (
+              <CommunicationHistory studentId={studentProfile.id} />
+            )}
+
             {/* Counselor Card */}
             {studentProfile?.counselor_id && (
               <Card className="border-0 shadow-sm">
