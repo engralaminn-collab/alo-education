@@ -17,6 +17,7 @@ import {
 import AIStudentMatcher from '@/components/crm/AIStudentMatcher';
 import OnboardingResourceSuggester from '@/components/crm/OnboardingResourceSuggester';
 import CommunicationParser from '@/components/crm/CommunicationParser';
+import StudentCommunicationHistory from '@/components/crm/StudentCommunicationHistory';
 import { 
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
   DropdownMenuTrigger, DropdownMenuSeparator 
@@ -270,6 +271,7 @@ export default function CRMStudents() {
           </DialogHeader>
           {selectedStudent && (
             <div className="space-y-6">
+              <StudentCommunicationHistory student={selectedStudent} />
               <CommunicationParser student={selectedStudent} />
               <OnboardingResourceSuggester student={selectedStudent} />
               <AIStudentMatcher student={selectedStudent} />
