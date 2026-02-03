@@ -94,6 +94,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import CounselorDashboard from './pages/CounselorDashboard';
+import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import __Layout from './Layout.jsx';
 
 
@@ -145,6 +146,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "CounselorDashboard": CounselorDashboard,
+    "CRMSecureDocuments": CRMSecureDocuments,
 }
 
 export const pagesConfig = {
