@@ -25,7 +25,6 @@ import StudentTasks from '@/components/dashboard/StudentTasks';
 import CommentSystem from '@/components/portal/CommentSystem';
 import WhatsAppEscalation from '@/components/portal/WhatsAppEscalation';
 import QuickDocumentUpload from '@/components/dashboard/QuickDocumentUpload';
-import AIChatbot from '@/components/portal/AIChatbot';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -473,9 +472,6 @@ export default function StudentPortal() {
       </div>
 
       <Footer />
-
-      {/* AI Chatbot */}
-      {studentProfile && <AIChatbot studentProfile={studentProfile} />}
     </div>
   );
 }
