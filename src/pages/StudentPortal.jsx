@@ -25,6 +25,7 @@ import StudentTasks from '@/components/dashboard/StudentTasks';
 import CommentSystem from '@/components/portal/CommentSystem';
 import WhatsAppEscalation from '@/components/portal/WhatsAppEscalation';
 import QuickDocumentUpload from '@/components/dashboard/QuickDocumentUpload';
+import RealTimeChat from '@/components/portal/RealTimeChat';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -133,10 +134,14 @@ export default function StudentPortal() {
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 h-auto">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 h-auto">
             <TabsTrigger value="overview" className="gap-2">
               <LayoutDashboard className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="gap-2">
+              <MessageCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">Chat</span>
             </TabsTrigger>
             <TabsTrigger value="applications" className="gap-2">
               <FileText className="w-4 h-4" />
@@ -159,6 +164,16 @@ export default function StudentPortal() {
               <span className="hidden sm:inline">Scholarships</span>
             </TabsTrigger>
           </TabsList>
+
+          {/* Chat Tab */}
+          <TabsContent value="chat" className="space-y-6">
+            <div className="max-w-4xl mx-auto">
+              <RealTimeChat 
+                studentId={studentProfile.id}
+                counselorId={studentProfile.counselor_id}
+              />
+            </div>
+          </TabsContent>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
