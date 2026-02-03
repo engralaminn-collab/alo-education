@@ -95,6 +95,7 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import StudentDashboard from './pages/StudentDashboard';
 import StudyInUK from './pages/StudyInUK';
+import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
 import __Layout from './Layout.jsx';
 
 
@@ -147,6 +148,7 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "StudentDashboard": StudentDashboard,
     "StudyInUK": StudyInUK,
+    "CRMBulkCampaigns": CRMBulkCampaigns,
 }
 
 export const pagesConfig = {
