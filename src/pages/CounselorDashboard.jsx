@@ -11,10 +11,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { 
   Users, CheckCircle, Clock, TrendingUp, Calendar, 
-  MessageSquare, Star, Edit, Plus, Save, X
+  MessageSquare, Star, Edit, Plus, Save, X, Phone, Mail, Video
 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from 'sonner';
 import CRMLayout from '@/components/crm/CRMLayout';
+import AIAssistant from '@/components/counselor/AIAssistant';
 
 export default function CounselorDashboard() {
   const queryClient = useQueryClient();
@@ -22,12 +24,20 @@ export default function CounselorDashboard() {
   const [editingScore, setEditingScore] = useState(null);
   const [noteDialog, setNoteDialog] = useState(false);
   const [followUpDialog, setFollowUpDialog] = useState(false);
+  const [commLogDialog, setCommLogDialog] = useState(false);
   const [newNote, setNewNote] = useState('');
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
     due_date: '',
     priority: 'medium'
+  });
+  const [newComm, setNewComm] = useState({
+    communication_type: 'phone',
+    direction: 'outbound',
+    subject: '',
+    summary: '',
+    sentiment: 'neutral'
   });
 
   const { data: user } = useQuery({
@@ -136,6 +146,30 @@ export default function CounselorDashboard() {
     }
   });
 
+  const logCommunication = useMutation({
+    mutationFn: () => base44.entities.CommunicationHistory.create({
+      student_id: selectedStudent.id,
+      counselor_id: user.id,
+      communication_type: newComm.communication_type,
+      direction: newComm.direction,
+      subject: newComm.subject,
+      summary: newComm.summary,
+      sentiment: newComm.sentiment
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-communications'] });
+      setCommLogDialog(false);
+      setNewComm({
+        communication_type: 'phone',
+        direction: 'outbound',
+        subject: '',
+        summary: '',
+        sentiment: 'neutral'
+      });
+      toast.success('Communication logged');
+    }
+  });
+
   // Calculate metrics
   const totalLeads = myStudents.length;
   const activeLeads = myStudents.filter(s => 
@@ -239,6 +273,7 @@ export default function CounselorDashboard() {
         <TabsList>
           <TabsTrigger value="leads">My Leads ({totalLeads})</TabsTrigger>
           <TabsTrigger value="tasks">Tasks ({myTasks.length})</TabsTrigger>
+          <TabsTrigger value="communications">Communications</TabsTrigger>
           <TabsTrigger value="progress">Student Progress</TabsTrigger>
         </TabsList>
 
@@ -354,7 +389,18 @@ export default function CounselorDashboard() {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2 pt-4 border-t">
+                  <div className="flex items-center gap-2 pt-4 border-t flex-wrap">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setCommLogDialog(true);
+                      }}
+                    >
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Log Communication
+                    </Button>
                     <Button
                       size="sm"
                       variant="outline"
@@ -434,6 +480,105 @@ export default function CounselorDashboard() {
           </Card>
         </TabsContent>
 
+        {/* Communications Tab */}
+        <TabsContent value="communications" className="space-y-6">
+          {myStudents.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <p className="text-slate-500">No students assigned yet</p>
+              </CardContent>
+            </Card>
+          ) : (
+            myStudents.map(student => {
+              const studentComms = communications.filter(c => c.student_id === student.id);
+              const studentApps = applications.filter(a => a.student_id === student.id);
+              
+              return (
+                <div key={student.id} className="grid lg:grid-cols-3 gap-6">
+                  {/* Communication History */}
+                  <div className="lg:col-span-2 space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-lg">
+                            {student.first_name} {student.last_name}
+                          </CardTitle>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setSelectedStudent(student);
+                              setCommLogDialog(true);
+                            }}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Log Communication
+                          </Button>
+                        </div>
+                        <CardDescription>Recent communication history</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        {studentComms.length === 0 ? (
+                          <p className="text-center py-8 text-slate-500">No communications logged yet</p>
+                        ) : (
+                          <div className="space-y-3">
+                            {studentComms.slice(0, 10).map(comm => (
+                              <div key={comm.id} className="border-l-4 border-blue-500 bg-slate-50 rounded-r-lg p-3">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    {comm.communication_type === 'phone' && <Phone className="w-4 h-4 text-blue-600" />}
+                                    {comm.communication_type === 'email' && <Mail className="w-4 h-4 text-blue-600" />}
+                                    {comm.communication_type === 'video_call' && <Video className="w-4 h-4 text-blue-600" />}
+                                    <span className="text-sm font-medium text-slate-900">
+                                      {comm.communication_type}
+                                    </span>
+                                    <Badge variant="outline" className="text-xs">
+                                      {comm.direction}
+                                    </Badge>
+                                    {comm.sentiment && (
+                                      <Badge 
+                                        className={
+                                          comm.sentiment === 'positive' ? 'bg-emerald-100 text-emerald-700' :
+                                          comm.sentiment === 'negative' ? 'bg-red-100 text-red-700' :
+                                          'bg-slate-100 text-slate-700'
+                                        }
+                                      >
+                                        {comm.sentiment}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <span className="text-xs text-slate-500">
+                                    {new Date(comm.created_date).toLocaleDateString()}
+                                  </span>
+                                </div>
+                                {comm.subject && (
+                                  <p className="text-sm font-medium text-slate-700 mb-1">{comm.subject}</p>
+                                )}
+                                {comm.summary && (
+                                  <p className="text-sm text-slate-600">{comm.summary}</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* AI Assistant */}
+                  <div>
+                    <AIAssistant 
+                      student={student} 
+                      communications={studentComms}
+                      applications={studentApps}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </TabsContent>
+
         {/* Progress Tab */}
         <TabsContent value="progress" className="space-y-4">
           {myStudents.map(student => {
@@ -504,6 +649,93 @@ export default function CounselorDashboard() {
               className="w-full"
             >
               Save Note
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Log Communication Dialog */}
+      <Dialog open={commLogDialog} onOpenChange={setCommLogDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Log Communication with {selectedStudent?.first_name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium text-slate-700">Type</label>
+                <Select 
+                  value={newComm.communication_type}
+                  onValueChange={(v) => setNewComm({ ...newComm, communication_type: v })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="phone">Phone Call</SelectItem>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="video_call">Video Call</SelectItem>
+                    <SelectItem value="chat">Chat</SelectItem>
+                    <SelectItem value="in_person">In-Person</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-slate-700">Direction</label>
+                <Select 
+                  value={newComm.direction}
+                  onValueChange={(v) => setNewComm({ ...newComm, direction: v })}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="inbound">Inbound</SelectItem>
+                    <SelectItem value="outbound">Outbound</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-slate-700">Subject</label>
+              <Input
+                value={newComm.subject}
+                onChange={(e) => setNewComm({ ...newComm, subject: e.target.value })}
+                placeholder="e.g., Follow-up on application status"
+                className="mt-2"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-slate-700">Summary</label>
+              <Textarea
+                value={newComm.summary}
+                onChange={(e) => setNewComm({ ...newComm, summary: e.target.value })}
+                placeholder="Brief summary of the conversation..."
+                className="mt-2 min-h-24"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-slate-700">Sentiment</label>
+              <Select 
+                value={newComm.sentiment}
+                onValueChange={(v) => setNewComm({ ...newComm, sentiment: v })}
+              >
+                <SelectTrigger className="mt-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="positive">Positive</SelectItem>
+                  <SelectItem value="neutral">Neutral</SelectItem>
+                  <SelectItem value="negative">Negative</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              onClick={() => logCommunication.mutate()}
+              disabled={!newComm.summary || logCommunication.isPending}
+              className="w-full"
+            >
+              Log Communication
             </Button>
           </div>
         </DialogContent>
