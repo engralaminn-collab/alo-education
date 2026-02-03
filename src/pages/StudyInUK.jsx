@@ -48,26 +48,32 @@ export default function StudyInUK() {
   const regions = ['England', 'Scotland', 'Wales', 'Northern Ireland'];
   const popularCities = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Edinburgh', 'Glasgow', 'Cardiff', 'Belfast'];
 
+  const benefits = [
+    "3-year undergraduate and 1-year master's programs",
+    "2-year post-study work visa (Graduate Route)",
+    "Scholarships for Bangladeshi students",
+    "High academic reputation worldwide",
+    "Multicultural student environment"
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50">
       {/* Premium Hero */}
-      <PremiumHero
+      <CountryHero
         country="United Kingdom"
         flagUrl="https://flagcdn.com/w80/gb.png"
-        title="Study in the UK"
-        subtitle="with expert guidance from ALO Education Bangladesh. The UK is home to top-ranked universities, globally recognised degrees, and excellent career opportunities for international students."
-        highlights={[
-          '160+ world-class universities',
-          '3-year undergraduate & 1-year master's',
-          '2-year post-study work visa',
-          'Scholarships for Bangladeshi students',
-          'High academic reputation',
-          'Multicultural environment'
-        ]}
-        backgroundImage="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200"
+        title="Unlock a world-class education in the United Kingdom"
+        subtitle="Expert guidance from ALO Education Bangladesh. Top-ranked universities, globally recognised degrees, and excellent career opportunities for international students."
+        benefits={benefits}
       />
 
-      {/* Old Hero Content - Kept for backward compatibility */}
+      {/* Study Journey Timeline */}
+      <StudyJourneyTimeline />
+
+      {/* AI Eligibility Widget */}
+      <AIEligibilityWidget />
+
+      {/* Old Hero - Removed */}
       <section className="hidden bg-gradient-to-br from-blue-900 to-blue-700 py-20">
         <div className="container mx-auto px-6">
           <motion.div
@@ -268,25 +274,13 @@ export default function StudyInUK() {
         </div>
       </section>
 
-      {/* University Grid */}
-      <UniversityGrid 
-        universities={universities}
-        country="United Kingdom"
-      />
+      {/* Premium University Grid */}
+      <PremiumUniversityGrid universities={universities} title="All UK Universities" />
 
-      {/* AI Eligibility Checker */}
-      <AIEligibilityChecker country="United Kingdom" />
+      {/* Testimonials */}
+      <TestimonialGrid />
 
-      {/* Study Journey Timeline */}
-      <StudyJourneyTimeline country="United Kingdom" />
-
-      {/* Student Testimonials */}
-      <StudentTestimonials country="United Kingdom" />
-
-      {/* Sticky Consultation CTA */}
-      <StickyConsultationCTA />
-
-      {/* Old All UK Universities - Kept for backward compatibility */}
+      {/* Old University Section - Removed */}
       <section className="hidden bg-white py-16">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
@@ -336,13 +330,10 @@ export default function StudyInUK() {
         </div>
       </section>
 
-      {/* Course Filter Grid */}
-      <CourseFilterGrid 
-        courses={courses}
-        country="United Kingdom"
-      />
+      {/* Premium Course Grid */}
+      <PremiumCourseGrid courses={courses} title="Popular Courses in UK" />
 
-      {/* Old Popular Courses - Kept for backward compatibility */}
+      {/* Old Course Section - Removed */}
       <section className="hidden bg-slate-50 py-16">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
