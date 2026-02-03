@@ -49,9 +49,26 @@ export default function StudyInUK() {
   const popularCities = ['London', 'Manchester', 'Birmingham', 'Leeds', 'Edinburgh', 'Glasgow', 'Cardiff', 'Belfast'];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-900 to-blue-700 py-20">
+    <div className="min-h-screen bg-white">
+      {/* Premium Hero */}
+      <PremiumHero
+        country="United Kingdom"
+        flagUrl="https://flagcdn.com/w80/gb.png"
+        title="Study in the UK"
+        subtitle="with expert guidance from ALO Education Bangladesh. The UK is home to top-ranked universities, globally recognised degrees, and excellent career opportunities for international students."
+        highlights={[
+          '160+ world-class universities',
+          '3-year undergraduate & 1-year master's',
+          '2-year post-study work visa',
+          'Scholarships for Bangladeshi students',
+          'High academic reputation',
+          'Multicultural environment'
+        ]}
+        backgroundImage="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200"
+      />
+
+      {/* Old Hero Content - Kept for backward compatibility */}
+      <section className="hidden bg-gradient-to-br from-blue-900 to-blue-700 py-20">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -251,8 +268,26 @@ export default function StudyInUK() {
         </div>
       </section>
 
-      {/* All UK Universities */}
-      <section className="bg-white py-16">
+      {/* University Grid */}
+      <UniversityGrid 
+        universities={universities}
+        country="United Kingdom"
+      />
+
+      {/* AI Eligibility Checker */}
+      <AIEligibilityChecker country="United Kingdom" />
+
+      {/* Study Journey Timeline */}
+      <StudyJourneyTimeline country="United Kingdom" />
+
+      {/* Student Testimonials */}
+      <StudentTestimonials country="United Kingdom" />
+
+      {/* Sticky Consultation CTA */}
+      <StickyConsultationCTA />
+
+      {/* Old All UK Universities - Kept for backward compatibility */}
+      <section className="hidden bg-white py-16">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-blue-600 flex items-center gap-3">
@@ -301,8 +336,14 @@ export default function StudyInUK() {
         </div>
       </section>
 
-      {/* Popular Courses */}
-      <section className="bg-slate-50 py-16">
+      {/* Course Filter Grid */}
+      <CourseFilterGrid 
+        courses={courses}
+        country="United Kingdom"
+      />
+
+      {/* Old Popular Courses - Kept for backward compatibility */}
+      <section className="hidden bg-slate-50 py-16">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-blue-600">Popular Courses in UK</h2>
