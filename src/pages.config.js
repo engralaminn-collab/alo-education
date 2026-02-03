@@ -48,22 +48,16 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import About from './pages/About';
-import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import BookConsultation from './pages/BookConsultation';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
-import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
-import CRMDashboard from './pages/CRMDashboard';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMMessages from './pages/CRMMessages';
 import CRMReports from './pages/CRMReports';
 import CRMSettings from './pages/CRMSettings';
-import CRMStudents from './pages/CRMStudents';
-import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
-import CRMUniversities from './pages/CRMUniversities';
 import Contact from './pages/Contact';
 import CourseDetails from './pages/CourseDetails';
 import CourseMatcher from './pages/CourseMatcher';
@@ -75,7 +69,6 @@ import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
 import MyProfile from './pages/MyProfile';
 import Services from './pages/Services';
-import StudentDashboard from './pages/StudentDashboard';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
 import StudyInDubai from './pages/StudyInDubai';
@@ -87,28 +80,30 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
+import CRMCounselors from './pages/CRMCounselors';
+import CRMDashboard from './pages/CRMDashboard';
+import CRMTasks from './pages/CRMTasks';
+import CRMUniversities from './pages/CRMUniversities';
+import StudentDashboard from './pages/StudentDashboard';
+import CRMStudents from './pages/CRMStudents';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
+import AlumniNetwork from './pages/AlumniNetwork';
+import CRMCommunications from './pages/CRMCommunications';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "About": About,
-    "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
     "BookConsultation": BookConsultation,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
-    "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
-    "CRMDashboard": CRMDashboard,
     "CRMInquiries": CRMInquiries,
     "CRMMessages": CRMMessages,
     "CRMReports": CRMReports,
     "CRMSettings": CRMSettings,
-    "CRMStudents": CRMStudents,
-    "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
-    "CRMUniversities": CRMUniversities,
     "Contact": Contact,
     "CourseDetails": CourseDetails,
     "CourseMatcher": CourseMatcher,
@@ -120,7 +115,6 @@ export const PAGES = {
     "MyDocuments": MyDocuments,
     "MyProfile": MyProfile,
     "Services": Services,
-    "StudentDashboard": StudentDashboard,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
     "StudyInDubai": StudyInDubai,
@@ -132,7 +126,15 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
+    "CRMCounselors": CRMCounselors,
+    "CRMDashboard": CRMDashboard,
+    "CRMTasks": CRMTasks,
+    "CRMUniversities": CRMUniversities,
+    "StudentDashboard": StudentDashboard,
+    "CRMStudents": CRMStudents,
     "CRMUniversityOutreach": CRMUniversityOutreach,
+    "AlumniNetwork": AlumniNetwork,
+    "CRMCommunications": CRMCommunications,
 }
 
 export const pagesConfig = {
