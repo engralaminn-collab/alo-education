@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIRecommendations from '@/components/matcher/AIRecommendations';
+import CourseComparison from '@/components/matcher/CourseComparison';
 
 const steps = [
   { id: 1, title: 'Education', icon: GraduationCap },
@@ -41,6 +43,8 @@ export default function CourseMatcher() {
   });
   const [matchedCourses, setMatchedCourses] = useState([]);
   const [isMatching, setIsMatching] = useState(false);
+  const [showAIRecommendations, setShowAIRecommendations] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState([]);
 
   const { data: courses = [] } = useQuery({
     queryKey: ['all-courses'],
@@ -497,14 +501,23 @@ export default function CourseMatcher() {
 
               {/* Step 4: Results */}
               {currentStep === 4 && (
-                <div>
-                  <Card className="border-0 shadow-lg mb-8">
+                <div className="space-y-8">
+                  {/* AI Recommendations Section */}
+                  {showAIRecommendations && (
+                    <AIRecommendations 
+                      profile={formData}
+                      courses={courses}
+                      universities={universities}
+                    />
+                  )}
+
+                  <Card className="border-0 shadow-lg">
                     <CardHeader>
                       <CardTitle className="text-2xl flex items-center gap-2">
-                        <Sparkles className="w-6 h-6 text-emerald-500" />
+                        <Sparkles className="w-6 h-6 text-alo-orange" />
                         Your Matched Courses
                       </CardTitle>
-                      <CardDescription>Based on your profile and preferences</CardDescription>
+                      <CardDescription>Based on your profile and preferences • Select courses to compare</CardDescription>
                     </CardHeader>
                   </Card>
 
@@ -522,68 +535,99 @@ export default function CourseMatcher() {
                       </CardContent>
                     </Card>
                   ) : (
-                    <div className="space-y-4">
-                      {matchedCourses.map((course, index) => (
-                        <motion.div
-                          key={course.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <Card className="border-0 shadow-sm hover:shadow-lg transition-all">
-                            <CardContent className="p-6">
-                              <div className="flex items-start gap-4">
-                                <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold ${
-                                  course.matchScore >= 80 ? 'bg-emerald-100 text-emerald-600' :
-                                  course.matchScore >= 60 ? 'bg-amber-100 text-amber-600' :
-                                  'bg-slate-100 text-slate-600'
-                                }`}>
-                                  {course.matchScore}%
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex flex-wrap gap-2 mb-2">
-                                    <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                                      {course.degree_level}
-                                    </Badge>
-                                    <Badge variant="outline" className="capitalize">
-                                      {course.field_of_study?.replace(/_/g, ' ')}
-                                    </Badge>
+                    <>
+                      <div className="space-y-4">
+                        {matchedCourses.map((course, index) => {
+                          const isSelected = selectedForComparison.includes(course.id);
+                          return (
+                            <motion.div
+                              key={course.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                            >
+                              <Card className={`border-0 shadow-sm hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-education-blue' : ''}`}>
+                                <CardContent className="p-6">
+                                  <div className="flex items-start gap-4">
+                                    {/* Checkbox for comparison */}
+                                    <input
+                                      type="checkbox"
+                                      checked={isSelected}
+                                      onChange={(e) => {
+                                        if (e.target.checked && selectedForComparison.length < 4) {
+                                          setSelectedForComparison([...selectedForComparison, course.id]);
+                                        } else if (!e.target.checked) {
+                                          setSelectedForComparison(selectedForComparison.filter(id => id !== course.id));
+                                        }
+                                      }}
+                                      className="mt-6 w-5 h-5 rounded border-slate-300 text-education-blue focus:ring-education-blue cursor-pointer"
+                                      disabled={!isSelected && selectedForComparison.length >= 4}
+                                    />
+                                    
+                                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold ${
+                                      course.matchScore >= 80 ? 'bg-emerald-100 text-emerald-600' :
+                                      course.matchScore >= 60 ? 'bg-amber-100 text-amber-600' :
+                                      'bg-slate-100 text-slate-600'
+                                    }`}>
+                                      {course.matchScore}%
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="flex flex-wrap gap-2 mb-2">
+                                        <Badge className="bg-education-blue/10 text-education-blue capitalize">
+                                          {course.level}
+                                        </Badge>
+                                        <Badge variant="outline" className="capitalize">
+                                          {course.subject_area?.replace(/_/g, ' ')}
+                                        </Badge>
+                                      </div>
+                                      <h3 className="text-lg font-bold text-slate-900 mb-1">{course.course_title}</h3>
+                                      {course.university && (
+                                        <p className="text-slate-500 flex items-center gap-1 mb-3">
+                                          <Building2 className="w-4 h-4" />
+                                          {course.university.university_name} • {course.university.city}, {course.university.country}
+                                        </p>
+                                      )}
+                                      
+                                      <div className="flex flex-wrap gap-2">
+                                        {course.eligibility.map((e, i) => (
+                                          <span key={i} className={`text-xs flex items-center gap-1 ${
+                                            e.type === 'pass' ? 'text-emerald-600' :
+                                            e.type === 'fail' ? 'text-red-600' :
+                                            'text-amber-600'
+                                          }`}>
+                                            {e.type === 'pass' ? <CheckCircle2 className="w-3 h-3" /> :
+                                             e.type === 'fail' ? <AlertCircle className="w-3 h-3" /> :
+                                             <AlertCircle className="w-3 h-3" />}
+                                            {e.text}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
+                                      <Button className="bg-slate-900 hover:bg-slate-800">
+                                        View
+                                        <ArrowRight className="w-4 h-4 ml-1" />
+                                      </Button>
+                                    </Link>
                                   </div>
-                                  <h3 className="text-lg font-bold text-slate-900 mb-1">{course.name}</h3>
-                                  {course.university && (
-                                    <p className="text-slate-500 flex items-center gap-1 mb-3">
-                                      <Building2 className="w-4 h-4" />
-                                      {course.university.name} • {course.university.city}, {course.university.country}
-                                    </p>
-                                  )}
-                                  
-                                  <div className="flex flex-wrap gap-2">
-                                    {course.eligibility.map((e, i) => (
-                                      <span key={i} className={`text-xs flex items-center gap-1 ${
-                                        e.type === 'pass' ? 'text-emerald-600' :
-                                        e.type === 'fail' ? 'text-red-600' :
-                                        'text-amber-600'
-                                      }`}>
-                                        {e.type === 'pass' ? <CheckCircle2 className="w-3 h-3" /> :
-                                         e.type === 'fail' ? <AlertCircle className="w-3 h-3" /> :
-                                         <AlertCircle className="w-3 h-3" />}
-                                        {e.text}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                                <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                  <Button className="bg-slate-900 hover:bg-slate-800">
-                                    View
-                                    <ArrowRight className="w-4 h-4 ml-1" />
-                                  </Button>
-                                </Link>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </motion.div>
-                      ))}
-                    </div>
+                                </CardContent>
+                              </Card>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Course Comparison Section */}
+                      {selectedForComparison.length > 0 && (
+                        <div className="mt-8">
+                          <CourseComparison
+                            courses={matchedCourses.filter(c => selectedForComparison.includes(c.id))}
+                            universities={universities}
+                            onRemove={(courseId) => setSelectedForComparison(selectedForComparison.filter(id => id !== courseId))}
+                          />
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}

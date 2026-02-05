@@ -13,6 +13,7 @@ import Destinations from '@/components/landing/Destinations';
 import Testimonials from '@/components/landing/Testimonials';
 import CTA from '@/components/landing/CTA';
 import Footer from '@/components/landing/Footer';
+import WhyChooseALO from '@/components/landing/WhyChooseALO';
 
 export default function Home() {
   const { data: universities } = useQuery({
@@ -29,6 +30,7 @@ export default function Home() {
       <PartnerLogos />
       <FeaturedUniversities universities={universities} />
       <Destinations />
+      <WhyChooseALO context={{ page: 'home' }} />
       <Testimonials />
       <CTA />
       <Footer />

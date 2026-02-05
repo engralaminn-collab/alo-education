@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import WhyChooseALO from '@/components/landing/WhyChooseALO';
 
 const values = [
   {
@@ -260,8 +261,11 @@ export default function About() {
         </div>
       </section>
 
+      {/* Why Choose ALO */}
+      <WhyChooseALO context={{ page: 'about' }} />
+
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-br from-emerald-600 to-cyan-600">
+      <section className="py-20 bg-gradient-brand">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
