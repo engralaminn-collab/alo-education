@@ -69,6 +69,7 @@ import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
+import CompareCourses from './pages/CompareCourses';
 import Contact from './pages/Contact';
 import CounselorDashboard from './pages/CounselorDashboard';
 import CourseDetails from './pages/CourseDetails';
@@ -97,7 +98,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CompareCourses from './pages/CompareCourses';
 import __Layout from './Layout.jsx';
 
 
@@ -124,6 +124,7 @@ export const PAGES = {
     "CRMTestimonials": CRMTestimonials,
     "CRMUniversities": CRMUniversities,
     "CRMUniversityOutreach": CRMUniversityOutreach,
+    "CompareCourses": CompareCourses,
     "Contact": Contact,
     "CounselorDashboard": CounselorDashboard,
     "CourseDetails": CourseDetails,
@@ -152,7 +153,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CompareCourses": CompareCourses,
 }
 
 export const pagesConfig = {
