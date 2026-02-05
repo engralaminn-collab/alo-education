@@ -45,6 +45,12 @@ export default function CourseMatcher() {
   const [isMatching, setIsMatching] = useState(false);
   const [showAIRecommendations, setShowAIRecommendations] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState([]);
+  const [advancedFilters, setAdvancedFilters] = useState({
+    duration: '',
+    tuition_range: [0, 100000],
+    start_date: '',
+    scholarship_only: false
+  });
 
   const { data: courses = [] } = useQuery({
     queryKey: ['all-courses'],
@@ -86,7 +92,25 @@ export default function CourseMatcher() {
       const gpaPercent = (parseFloat(formData.gpa) / parseFloat(formData.gpa_scale)) * 100;
       const englishScore = parseFloat(formData.english_score);
       
-      const matched = courses.map(course => {
+      let filteredCourses = courses;
+      
+      // Apply advanced filters
+      if (advancedFilters.duration) {
+        filteredCourses = filteredCourses.filter(c => c.duration?.includes(advancedFilters.duration));
+      }
+      if (advancedFilters.tuition_range) {
+        filteredCourses = filteredCourses.filter(c => 
+          !c.tuition_fee_min || (c.tuition_fee_min >= advancedFilters.tuition_range[0] && c.tuition_fee_min <= advancedFilters.tuition_range[1])
+        );
+      }
+      if (advancedFilters.start_date) {
+        filteredCourses = filteredCourses.filter(c => c.intake?.includes(advancedFilters.start_date));
+      }
+      if (advancedFilters.scholarship_only) {
+        filteredCourses = filteredCourses.filter(c => c.scholarship_available);
+      }
+      
+      const matched = filteredCourses.map(course => {
         let score = 0;
         let eligibility = [];
         
@@ -511,6 +535,76 @@ export default function CourseMatcher() {
                     />
                   )}
 
+                  {/* Advanced Filters */}
+                  <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-white">
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-education-blue" />
+                        Refine Your Results
+                      </h3>
+                      <div className="grid md:grid-cols-4 gap-4">
+                        <div>
+                          <Label className="text-sm text-slate-600 mb-2 block">Duration</Label>
+                          <Select value={advancedFilters.duration} onValueChange={(v) => setAdvancedFilters({...advancedFilters, duration: v})}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={null}>Any Duration</SelectItem>
+                              <SelectItem value="1 year">1 Year</SelectItem>
+                              <SelectItem value="2 years">2 Years</SelectItem>
+                              <SelectItem value="3 years">3 Years</SelectItem>
+                              <SelectItem value="4 years">4 Years</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-sm text-slate-600 mb-2 block">Start Date</Label>
+                          <Select value={advancedFilters.start_date} onValueChange={(v) => setAdvancedFilters({...advancedFilters, start_date: v})}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={null}>Any Intake</SelectItem>
+                              <SelectItem value="January">January</SelectItem>
+                              <SelectItem value="September">September</SelectItem>
+                              <SelectItem value="Fall">Fall</SelectItem>
+                              <SelectItem value="Spring">Spring</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="col-span-2">
+                          <Label className="text-sm text-slate-600 mb-2 block">
+                            Tuition Range: ${advancedFilters.tuition_range[0].toLocaleString()} - ${advancedFilters.tuition_range[1].toLocaleString()}
+                          </Label>
+                          <div className="pt-2">
+                            <input
+                              type="range"
+                              min="0"
+                              max="100000"
+                              step="5000"
+                              value={advancedFilters.tuition_range[1]}
+                              onChange={(e) => setAdvancedFilters({...advancedFilters, tuition_range: [0, parseInt(e.target.value)]})}
+                              className="w-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 mt-4">
+                        <input
+                          type="checkbox"
+                          id="scholarship_only"
+                          checked={advancedFilters.scholarship_only}
+                          onChange={(e) => setAdvancedFilters({...advancedFilters, scholarship_only: e.target.checked})}
+                          className="w-4 h-4 rounded border-slate-300 text-education-blue focus:ring-education-blue"
+                        />
+                        <Label htmlFor="scholarship_only" className="cursor-pointer text-sm">
+                          Show only courses with scholarships
+                        </Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+
                   <Card className="border-0 shadow-lg">
                     <CardHeader>
                       <CardTitle className="text-2xl flex items-center gap-2">
@@ -603,12 +697,26 @@ export default function CourseMatcher() {
                                         ))}
                                       </div>
                                     </div>
-                                    <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                      <Button className="bg-slate-900 hover:bg-slate-800">
-                                        View
-                                        <ArrowRight className="w-4 h-4 ml-1" />
-                                      </Button>
-                                    </Link>
+                                    <div className="flex flex-col gap-2">
+                                      {course.duration && (
+                                        <span className="text-xs text-slate-500 flex items-center gap-1">
+                                          <Clock className="w-3 h-3" />
+                                          {course.duration}
+                                        </span>
+                                      )}
+                                      {course.tuition_fee_min && (
+                                        <span className="text-xs text-slate-500 flex items-center gap-1">
+                                          <DollarSign className="w-3 h-3" />
+                                          ${course.tuition_fee_min.toLocaleString()}/year
+                                        </span>
+                                      )}
+                                      <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
+                                        <Button className="bg-gradient-brand hover:opacity-90 text-white">
+                                          View
+                                          <ArrowRight className="w-4 h-4 ml-1" />
+                                        </Button>
+                                      </Link>
+                                    </div>
                                   </div>
                                 </CardContent>
                               </Card>
