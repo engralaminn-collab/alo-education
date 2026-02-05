@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Brand Colors - ALO Education */
+    --alo-orange: 243 112 33;
+    --education-blue: 0 102 204;
+    --sunshine-accent: 255 179 71;
+    --neutral-black: 0 0 0;
+    --neutral-gray: 85 85 85;
+    
+    /* Tailwind default variables mapped to brand colors */
+    --background: 0 0% 100%;
+    --foreground: var(--neutral-black);
+    --card: 0 0% 100%;
+    --card-foreground: var(--neutral-black);
+    --popover: 0 0% 100%;
+    --popover-foreground: var(--neutral-black);
+    --primary: var(--education-blue);
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: var(--neutral-black);
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: var(--alo-orange);
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: var(--education-blue);
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Typography - Brand Guidelines */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+  }
+
+  .subheading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+  }
+
+  .tagline {
+    font-style: italic;
+    color: rgb(var(--alo-orange));
+  }
+}
+
+@layer utilities {
+  /* Brand Color Utilities */
+  .text-alo-orange {
+    color: rgb(var(--alo-orange));
+  }
+  
+  .bg-alo-orange {
+    background-color: rgb(var(--alo-orange));
+  }
+  
+  .text-education-blue {
+    color: rgb(var(--education-blue));
+  }
+  
+  .bg-education-blue {
+    background-color: rgb(var(--education-blue));
+  }
+  
+  .text-sunshine {
+    color: rgb(var(--sunshine-accent));
+  }
+  
+  .bg-sunshine {
+    background-color: rgb(var(--sunshine-accent));
+  }
+  
+  .border-alo-orange {
+    border-color: rgb(var(--alo-orange));
+  }
+  
+  .border-education-blue {
+    border-color: rgb(var(--education-blue));
+  }
+
+  /* Gradient utilities with brand colors */
+  .bg-gradient-brand {
+    background: linear-gradient(135deg, rgb(var(--education-blue)), rgb(var(--alo-orange)));
+  }
+  
+  .bg-gradient-brand-light {
+    background: linear-gradient(135deg, rgb(var(--education-blue) / 0.1), rgb(var(--alo-orange) / 0.1));
+  }
+}
