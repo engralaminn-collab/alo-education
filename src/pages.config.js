@@ -105,6 +105,7 @@ import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
 import IELTSPrep from './pages/IELTSPrep';
 import PTEPrep from './pages/PTEPrep';
 import CRMStudentProfile from './pages/CRMStudentProfile';
+import Resources from './pages/Resources';
 import __Layout from './Layout.jsx';
 
 
@@ -167,6 +168,7 @@ export const PAGES = {
     "IELTSPrep": IELTSPrep,
     "PTEPrep": PTEPrep,
     "CRMStudentProfile": CRMStudentProfile,
+    "Resources": Resources,
 }
 
 export const pagesConfig = {
