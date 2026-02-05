@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import WhyChooseALO from '@/components/landing/WhyChooseALO';
 
 export default function Contact() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -315,6 +316,8 @@ export default function Contact() {
           </div>
         </div>
       </div>
+
+      <WhyChooseALO context={{ page: 'contact', country: formData.country_of_interest, field: formData.field_of_study }} />
 
       <Footer />
     </div>

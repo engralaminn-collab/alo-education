@@ -28,6 +28,9 @@ import QuickDocumentUpload from '@/components/dashboard/QuickDocumentUpload';
 import RealTimeChat from '@/components/portal/RealTimeChat';
 import ApplicationTimeline from '@/components/applications/ApplicationTimeline';
 import ApplicationProgressBar from '@/components/applications/ApplicationProgressBar';
+import ApplicationTracker from '@/components/portal/ApplicationTracker';
+import AINextSteps from '@/components/dashboard/AINextSteps';
+import MyJourney from '@/components/dashboard/MyJourney';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -179,6 +182,12 @@ export default function StudentPortal() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
+            {/* Application Tracker */}
+            <ApplicationTracker />
+            
+            <AINextSteps />
+            <MyJourney />
+            
             {/* Stats Cards */}
             <div className="grid md:grid-cols-4 gap-4">
               <Card>
