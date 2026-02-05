@@ -17,6 +17,8 @@ import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIUniversityRecommendations from '@/components/courses/AIUniversityRecommendations';
+import AICourseRecommendations from '@/components/courses/AICourseRecommendations';
+import QuickApplicationModal from '@/components/applications/QuickApplicationModal';
 
 export default function CourseFinder() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,6 +35,9 @@ export default function CourseFinder() {
   });
   const [showAIRecommendations, setShowAIRecommendations] = useState(false);
   const [sortBy, setSortBy] = useState('relevance');
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
@@ -225,6 +230,24 @@ export default function CourseFinder() {
       </section>
 
       <div className="container mx-auto px-6 py-8">
+        {/* AI Course Recommendations */}
+        <AICourseRecommendations
+          studentProfile={userProfile}
+          searchCriteria={{
+            country: filters.country,
+            subject: filters.subject_area,
+            level: filters.level,
+            tuition_max: filters.tuition_max,
+          }}
+          courses={filteredCourses}
+          universities={universities}
+          onApply={(course, uni) => {
+            setSelectedCourse(course);
+            setSelectedUniversity(uni);
+            setShowApplicationModal(true);
+          }}
+        />
+
         {/* AI University Recommendations */}
         <AIUniversityRecommendations
           studentProfile={userProfile}
@@ -504,12 +527,23 @@ export default function CourseFinder() {
                                 )}
                               </div>
                             </div>
-                            <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                              <Button className="bg-gradient-brand hover:opacity-90 text-white">
-                                View Details
-                                <ArrowRight className="w-4 h-4 ml-1" />
+                            <div className="flex gap-2">
+                              <Button 
+                                onClick={() => {
+                                  setSelectedCourse(course);
+                                  setSelectedUniversity(university);
+                                  setShowApplicationModal(true);
+                                }}
+                                className="bg-gradient-brand hover:opacity-90 text-white"
+                              >
+                                Apply Now
                               </Button>
-                            </Link>
+                              <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
+                                <Button variant="outline">
+                                  Details
+                                </Button>
+                              </Link>
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -523,6 +557,14 @@ export default function CourseFinder() {
       </div>
 
       <Footer />
+
+      <QuickApplicationModal
+        open={showApplicationModal}
+        onClose={() => setShowApplicationModal(false)}
+        course={selectedCourse}
+        university={selectedUniversity}
+        studentProfile={userProfile}
+      />
     </div>
   );
 }

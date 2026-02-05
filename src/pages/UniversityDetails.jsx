@@ -568,6 +568,14 @@ export default function UniversityDetails() {
       </div>
 
       <Footer />
+
+      <QuickApplicationModal
+        open={showApplicationModal}
+        onClose={() => setShowApplicationModal(false)}
+        course={selectedCourse}
+        university={university}
+        studentProfile={userProfile}
+      />
     </div>
   );
 }
