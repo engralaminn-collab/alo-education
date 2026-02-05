@@ -99,6 +99,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import CourseFinder from './pages/CourseFinder';
+import CompleteProfile from './pages/CompleteProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -155,6 +156,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "CourseFinder": CourseFinder,
+    "CompleteProfile": CompleteProfile,
 }
 
 export const pagesConfig = {
