@@ -76,7 +76,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 py-24">
+      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-24">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920')] bg-cover bg-center opacity-10" />
         <div className="relative container mx-auto px-6">
           <div className="max-w-3xl">
@@ -84,7 +84,7 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium mb-6">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-alo-orange/10 border border-alo-orange/20 rounded-full text-sunshine text-sm font-medium mb-6">
                 <Building2 className="w-4 h-4" />
                 About ALO Education
               </span>
@@ -113,7 +113,7 @@ export default function About() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-alo-orange to-education-blue bg-clip-text text-transparent mb-2">
                   {stat.value}
                 </div>
                 <div className="text-slate-600">{stat.label}</div>
@@ -132,7 +132,7 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">
+              <span className="text-alo-orange font-semibold text-sm uppercase tracking-wider">
                 Our Mission
               </span>
               <h2 className="text-4xl font-bold text-slate-900 mt-2 mb-6">
@@ -151,7 +151,7 @@ export default function About() {
                   'Pre-departure and post-arrival support'
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-slate-700">
-                    <CheckCircle className="w-5 h-5 text-emerald-500" />
+                    <CheckCircle className="w-5 h-5 text-education-blue" />
                     {item}
                   </li>
                 ))}
@@ -170,8 +170,8 @@ export default function About() {
               />
               <div className="absolute -bottom-8 -left-8 bg-white rounded-xl p-6 shadow-xl">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center">
-                    <GraduationCap className="w-7 h-7 text-emerald-600" />
+                  <div className="w-14 h-14 rounded-full bg-gradient-brand-light flex items-center justify-center">
+                    <GraduationCap className="w-7 h-7 text-education-blue" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-slate-900">15+</div>
@@ -188,7 +188,7 @@ export default function About() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">
+            <span className="text-alo-orange font-semibold text-sm uppercase tracking-wider">
               Our Values
             </span>
             <h2 className="text-4xl font-bold text-slate-900 mt-2">
@@ -224,7 +224,7 @@ export default function About() {
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">
+            <span className="text-alo-orange font-semibold text-sm uppercase tracking-wider">
               Our Team
             </span>
             <h2 className="text-4xl font-bold text-slate-900 mt-2">
@@ -251,7 +251,7 @@ export default function About() {
                   </div>
                   <CardContent className="p-5 text-center">
                     <h3 className="text-lg font-bold text-slate-900">{member.name}</h3>
-                    <p className="text-emerald-600 font-medium text-sm mb-2">{member.role}</p>
+                    <p className="text-alo-orange font-medium text-sm mb-2">{member.role}</p>
                     <p className="text-slate-500 text-sm">{member.bio}</p>
                   </CardContent>
                 </Card>
@@ -280,7 +280,7 @@ export default function About() {
               Let's discuss your goals and create a personalized plan for your success.
             </p>
             <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="bg-white text-emerald-600 hover:bg-slate-100 px-8 h-14 text-lg">
+              <Button size="lg" className="bg-white text-education-blue hover:bg-slate-100 px-8 h-14 text-lg">
                 Book Free Consultation
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
