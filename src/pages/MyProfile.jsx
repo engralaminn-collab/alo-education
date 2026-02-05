@@ -57,11 +57,18 @@ export default function MyProfile() {
       issue_date: '',
       expiry_date: ''
     },
+    current_address: '',
+    permanent_address: '',
     emergency_contact: {
       name: '',
       email: '',
       phone: ''
     },
+    visa_refusal_history: {
+      has_refusal: false,
+      details: ''
+    },
+    immigration_history: '',
     visa_history: [],
     education_history: [],
     english_proficiency: {
@@ -73,7 +80,8 @@ export default function MyProfile() {
       listening_score: '',
       reading_score: '',
       writing_score: '',
-      speaking_score: ''
+      speaking_score: '',
+      expiry_date: ''
     },
     work_experience: [],
     work_experience_years: 0,
@@ -92,6 +100,10 @@ export default function MyProfile() {
         ...studentProfile,
         passport_details: studentProfile.passport_details || prev.passport_details,
         emergency_contact: studentProfile.emergency_contact || prev.emergency_contact,
+        current_address: studentProfile.current_address || '',
+        permanent_address: studentProfile.permanent_address || '',
+        visa_refusal_history: studentProfile.visa_refusal_history || prev.visa_refusal_history,
+        immigration_history: studentProfile.immigration_history || '',
         visa_history: studentProfile.visa_history || [],
         education_history: studentProfile.education_history || [],
         english_proficiency: studentProfile.english_proficiency || prev.english_proficiency,
@@ -205,10 +217,13 @@ export default function MyProfile() {
         {
           level: '',
           institution: '',
+          city_country: '',
+          board_university: '',
           field_of_study: '',
-          graduation_year: '',
           gpa: '',
-          gpa_scale: 4
+          gpa_scale: 4,
+          graduation_year: '',
+          study_duration: ''
         }
       ]
     }));
@@ -596,6 +611,75 @@ export default function MyProfile() {
 
               <Card className="border-0 shadow-sm">
                 <CardHeader>
+                  <CardTitle>Address Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label>Current Address <span className="text-red-500">*</span></Label>
+                    <Textarea
+                      value={formData.current_address}
+                      onChange={(e) => updateField('current_address', e.target.value)}
+                      className="mt-1"
+                      rows={2}
+                      placeholder="Enter your current residential address"
+                    />
+                  </div>
+                  <div>
+                    <Label>Permanent Address</Label>
+                    <Textarea
+                      value={formData.permanent_address}
+                      onChange={(e) => updateField('permanent_address', e.target.value)}
+                      className="mt-1"
+                      rows={2}
+                      placeholder="Enter your permanent address"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Visa & Immigration History</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Checkbox 
+                        checked={formData.visa_refusal_history.has_refusal}
+                        onCheckedChange={(checked) => updateField('visa_refusal_history.has_refusal', checked)}
+                      />
+                      <Label>I have had a visa refusal before</Label>
+                    </div>
+
+                    {formData.visa_refusal_history.has_refusal && (
+                      <div className="border-l-2 border-red-500 pl-6">
+                        <Label>Refusal Details <span className="text-red-500">*</span></Label>
+                        <Textarea
+                          value={formData.visa_refusal_history.details}
+                          onChange={(e) => updateField('visa_refusal_history.details', e.target.value)}
+                          className="mt-1"
+                          rows={3}
+                          placeholder="Please provide details about the visa refusal (country, date, reason)"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <Label>Immigration History (Optional)</Label>
+                    <Textarea
+                      value={formData.immigration_history}
+                      onChange={(e) => updateField('immigration_history', e.target.value)}
+                      className="mt-1"
+                      rows={3}
+                      placeholder="Any other immigration history you'd like to share"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
                   <CardTitle>Emergency Contact</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -682,7 +766,7 @@ export default function MyProfile() {
                         <div className="space-y-4 border-l-2 border-education-blue pl-6">
                           <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                              <Label>Institution Name</Label>
+                              <Label>Institution Name <span className="text-red-500">*</span></Label>
                               <Input
                                 value={edu.institution}
                                 onChange={(e) => updateEducation(index, 'institution', e.target.value)}
@@ -690,7 +774,28 @@ export default function MyProfile() {
                               />
                             </div>
                             <div>
-                              <Label>Field of Study</Label>
+                              <Label>City / Country</Label>
+                              <Input
+                                value={edu.city_country}
+                                onChange={(e) => updateEducation(index, 'city_country', e.target.value)}
+                                className="mt-1"
+                                placeholder="e.g., Dhaka, Bangladesh"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label>Board / University</Label>
+                              <Input
+                                value={edu.board_university}
+                                onChange={(e) => updateEducation(index, 'board_university', e.target.value)}
+                                className="mt-1"
+                                placeholder="e.g., Dhaka Board, University of Dhaka"
+                              />
+                            </div>
+                            <div>
+                              <Label>Subject / Major</Label>
                               <Input
                                 value={edu.field_of_study}
                                 onChange={(e) => updateEducation(index, 'field_of_study', e.target.value)}
@@ -699,18 +804,9 @@ export default function MyProfile() {
                             </div>
                           </div>
 
-                          <div className="grid md:grid-cols-3 gap-4">
+                          <div className="grid md:grid-cols-4 gap-4">
                             <div>
-                              <Label>Graduation Year</Label>
-                              <Input
-                                type="number"
-                                value={edu.graduation_year}
-                                onChange={(e) => updateEducation(index, 'graduation_year', e.target.value)}
-                                className="mt-1"
-                              />
-                            </div>
-                            <div>
-                              <Label>GPA / Percentage</Label>
+                              <Label>Result (GPA / %)</Label>
                               <Input
                                 type="number"
                                 step="0.01"
@@ -720,13 +816,31 @@ export default function MyProfile() {
                               />
                             </div>
                             <div>
-                              <Label>GPA Scale</Label>
+                              <Label>Scale</Label>
                               <Input
                                 type="number"
                                 value={edu.gpa_scale}
                                 onChange={(e) => updateEducation(index, 'gpa_scale', e.target.value)}
                                 className="mt-1"
                                 placeholder="4 or 5 or 100"
+                              />
+                            </div>
+                            <div>
+                              <Label>Passing Year</Label>
+                              <Input
+                                type="number"
+                                value={edu.graduation_year}
+                                onChange={(e) => updateEducation(index, 'graduation_year', e.target.value)}
+                                className="mt-1"
+                              />
+                            </div>
+                            <div>
+                              <Label>Study Duration</Label>
+                              <Input
+                                value={edu.study_duration}
+                                onChange={(e) => updateEducation(index, 'study_duration', e.target.value)}
+                                className="mt-1"
+                                placeholder="e.g., 4 years"
                               />
                             </div>
                           </div>
@@ -864,9 +978,9 @@ export default function MyProfile() {
 
                 {formData.english_proficiency.has_test ? (
                   <div className="space-y-6 border-l-2 border-education-blue pl-6">
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-4 gap-4">
                       <div>
-                        <Label>Test Type</Label>
+                        <Label>Test Type <span className="text-red-500">*</span></Label>
                         <Select 
                           value={formData.english_proficiency.test_type} 
                           onValueChange={(v) => updateField('english_proficiency.test_type', v)}
@@ -891,12 +1005,21 @@ export default function MyProfile() {
                         />
                       </div>
                       <div>
-                        <Label>Overall Score</Label>
+                        <Label>Overall Score <span className="text-red-500">*</span></Label>
                         <Input
                           type="number"
                           step="0.5"
                           value={formData.english_proficiency.overall_score}
                           onChange={(e) => updateField('english_proficiency.overall_score', e.target.value)}
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label>Expiry Date</Label>
+                        <Input
+                          type="date"
+                          value={formData.english_proficiency.expiry_date}
+                          onChange={(e) => updateField('english_proficiency.expiry_date', e.target.value)}
                           className="mt-1"
                         />
                       </div>
