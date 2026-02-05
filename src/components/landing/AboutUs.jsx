@@ -12,7 +12,7 @@ export default function AboutUs() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-emerald-600 font-semibold text-sm uppercase tracking-wider"
+              className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
             >
               About Us
             </motion.span>
@@ -88,8 +88,8 @@ export default function AboutUs() {
               { icon: TrendingUp, title: 'Innovation', desc: 'Continuously improving our services to meet evolving needs' }
             ].map((value, i) => (
               <div key={i} className="text-center p-6 bg-slate-50 rounded-xl">
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="w-6 h-6 text-emerald-600" />
+                <div className="w-12 h-12 bg-gradient-brand-light rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <value.icon className="w-6 h-6 text-education-blue" />
                 </div>
                 <h4 className="text-lg font-bold text-slate-900 mb-2">{value.title}</h4>
                 <p className="text-slate-600 text-sm">{value.desc}</p>

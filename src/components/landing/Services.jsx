@@ -68,7 +68,7 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-emerald-600 font-semibold text-sm uppercase tracking-wider"
+            className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
           >
             Our Services
           </motion.span>
@@ -103,7 +103,7 @@ export default function Services() {
             >
               <Card className="border-0 shadow-sm hover:shadow-xl transition-all duration-300 h-full group">
                 <CardContent className="p-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-gradient-brand rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <service.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
