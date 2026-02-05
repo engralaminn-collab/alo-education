@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MapPin, Star, Users, Globe, Calendar, Building2, 
   GraduationCap, DollarSign, Award, ChevronRight, 
-  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink
+  BookOpen, Clock, ArrowRight, Heart, Share2, ExternalLink,
+  Play, Quote, UserCircle, Video
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -33,6 +34,18 @@ export default function UniversityDetails() {
     queryKey: ['university-courses', universityId],
     queryFn: () => base44.entities.Course.filter({ university_id: universityId, status: 'open' }),
     enabled: !!universityId,
+  });
+
+  const { data: testimonials = [] } = useQuery({
+    queryKey: ['university-testimonials', university?.university_name],
+    queryFn: async () => {
+      const all = await base44.entities.Testimonial.filter({ 
+        university: university.university_name, 
+        status: 'approved' 
+      });
+      return all.slice(0, 6);
+    },
+    enabled: !!university?.university_name,
   });
 
   if (uniLoading) {
@@ -148,29 +161,59 @@ export default function UniversityDetails() {
             <Tabs defaultValue="overview" className="space-y-8">
               <TabsList className="bg-white shadow-sm p-1 rounded-xl">
                 <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
-                <TabsTrigger value="courses" className="rounded-lg">Courses ({courses.length})</TabsTrigger>
+                <TabsTrigger value="courses" className="rounded-lg">Programs ({courses.length})</TabsTrigger>
+                <TabsTrigger value="testimonials" className="rounded-lg">Testimonials</TabsTrigger>
+                <TabsTrigger value="campus" className="rounded-lg">Campus</TabsTrigger>
                 <TabsTrigger value="requirements" className="rounded-lg">Requirements</TabsTrigger>
-                <TabsTrigger value="campus" className="rounded-lg">Campus Life</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.name}</h2>
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
-                      {university.description || `${university.name} is a prestigious institution located in ${university.city}, ${university.country}. With a world ranking of #${university.ranking}, it offers exceptional education opportunities for international students seeking quality education abroad.`}
+                    <h2 className="text-2xl font-bold text-slate-900 mb-4">About {university.university_name}</h2>
+                    <p className="text-slate-600 leading-relaxed whitespace-pre-wrap mb-6">
+                      {university.about || `${university.university_name} is a prestigious institution located in ${university.city}, ${university.country}. ${university.ranking ? `With a world ranking of #${university.ranking},` : ''} it offers exceptional education opportunities for international students seeking quality education abroad.`}
                     </p>
 
-                    {university.facilities && university.facilities.length > 0 && (
-                      <div className="mt-8">
-                        <h3 className="text-lg font-semibold text-slate-900 mb-4">Campus Facilities</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {university.facilities.map((facility, i) => (
-                            <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-700">
-                              {facility}
-                            </Badge>
-                          ))}
+                    {/* Rankings Section */}
+                    <div className="grid md:grid-cols-3 gap-4 mt-8">
+                      {university.ranking && (
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl">
+                          <div className="flex items-center gap-2 text-blue-600 mb-1">
+                            <Award className="w-4 h-4" />
+                            <span className="text-sm font-medium">World Ranking</span>
+                          </div>
+                          <p className="text-2xl font-bold text-slate-900">#{university.ranking}</p>
                         </div>
+                      )}
+                      {university.qs_ranking && (
+                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl">
+                          <div className="flex items-center gap-2 text-emerald-600 mb-1">
+                            <Award className="w-4 h-4" />
+                            <span className="text-sm font-medium">QS Ranking</span>
+                          </div>
+                          <p className="text-2xl font-bold text-slate-900">#{university.qs_ranking}</p>
+                        </div>
+                      )}
+                      {university.times_ranking && (
+                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl">
+                          <div className="flex items-center gap-2 text-purple-600 mb-1">
+                            <Award className="w-4 h-4" />
+                            <span className="text-sm font-medium">Times Ranking</span>
+                          </div>
+                          <p className="text-2xl font-bold text-slate-900">#{university.times_ranking}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Scholarships */}
+                    {university.scholarships_summary && (
+                      <div className="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-100">
+                        <h3 className="text-lg font-semibold text-slate-900 mb-2 flex items-center gap-2">
+                          <DollarSign className="w-5 h-5 text-amber-600" />
+                          Scholarship Opportunities
+                        </h3>
+                        <p className="text-slate-600">{university.scholarships_summary}</p>
                       </div>
                     )}
                   </CardContent>
@@ -178,13 +221,44 @@ export default function UniversityDetails() {
               </TabsContent>
 
               <TabsContent value="courses">
+                <Card className="border-0 shadow-sm mb-6">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-slate-900 mb-2">Programs Offered</h2>
+                        <p className="text-slate-600">Explore {courses.length} programs available at {university.university_name}</p>
+                      </div>
+                      {university.website_url && (
+                        <a 
+                          href={university.website_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <Button variant="outline" className="gap-2">
+                            <ExternalLink className="w-4 h-4" />
+                            Official Courses Page
+                          </Button>
+                        </a>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <div className="space-y-4">
                   {courses.length === 0 ? (
                     <Card className="border-0 shadow-sm">
                       <CardContent className="p-8 text-center">
                         <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-slate-900 mb-2">No courses listed yet</h3>
-                        <p className="text-slate-500">Contact us for available programs</p>
+                        <h3 className="text-lg font-semibold text-slate-900 mb-2">No programs listed yet</h3>
+                        <p className="text-slate-500 mb-4">Contact us for available programs</p>
+                        {university.website_url && (
+                          <a href={university.website_url} target="_blank" rel="noopener noreferrer">
+                            <Button variant="outline">
+                              Visit Official Website
+                              <ExternalLink className="w-4 h-4 ml-2" />
+                            </Button>
+                          </a>
+                        )}
                       </CardContent>
                     </Card>
                   ) : (
@@ -199,31 +273,41 @@ export default function UniversityDetails() {
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-2">
-                                  <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                                    {course.degree_level}
+                                  <Badge className="bg-blue-50 text-blue-700">
+                                    {course.level}
                                   </Badge>
-                                  <Badge variant="outline" className="capitalize">
-                                    {course.field_of_study?.replace(/_/g, ' ')}
+                                  <Badge variant="outline">
+                                    {course.subject_area}
                                   </Badge>
                                 </div>
-                                <h3 className="text-lg font-semibold text-slate-900 mb-2">{course.name}</h3>
-                                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                                  {course.duration_months && (
+                                <h3 className="text-lg font-semibold text-slate-900 mb-2">{course.course_title}</h3>
+                                <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-3">
+                                  {course.duration && (
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
-                                      {course.duration_months} months
+                                      {course.duration}
                                     </span>
                                   )}
-                                  {course.tuition_fee && (
+                                  {course.tuition_fee_min && (
                                     <span className="flex items-center gap-1">
                                       <DollarSign className="w-4 h-4" />
-                                      {course.tuition_fee.toLocaleString()} {course.currency || 'USD'}/year
+                                      {course.currency === 'GBP' ? '£' : course.currency === 'EUR' ? '€' : '$'}
+                                      {course.tuition_fee_min.toLocaleString()}/year
+                                    </span>
+                                  )}
+                                  {course.intake && (
+                                    <span className="flex items-center gap-1">
+                                      <Calendar className="w-4 h-4" />
+                                      {course.intake}
                                     </span>
                                   )}
                                 </div>
+                                {course.overview && (
+                                  <p className="text-slate-600 text-sm line-clamp-2">{course.overview}</p>
+                                )}
                               </div>
                               <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                <Button variant="ghost" className="text-emerald-600">
+                                <Button variant="ghost" className="text-blue-600">
                                   View Details
                                   <ChevronRight className="w-4 h-4 ml-1" />
                                 </Button>
@@ -237,25 +321,150 @@ export default function UniversityDetails() {
                 </div>
               </TabsContent>
 
+              <TabsContent value="testimonials">
+                {testimonials.length === 0 ? (
+                  <Card className="border-0 shadow-sm">
+                    <CardContent className="p-8 text-center">
+                      <Quote className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-slate-900 mb-2">No testimonials yet</h3>
+                      <p className="text-slate-500">Student experiences will appear here</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-6">
+                    {testimonials.map((testimonial) => (
+                      <motion.div
+                        key={testimonial.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                      >
+                        <Card className="border-0 shadow-sm">
+                          <CardContent className="p-6">
+                            <div className="flex items-start gap-4">
+                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold shrink-0">
+                                {testimonial.student_photo ? (
+                                  <img 
+                                    src={testimonial.student_photo} 
+                                    alt={testimonial.student_name}
+                                    className="w-12 h-12 rounded-full object-cover"
+                                  />
+                                ) : (
+                                  testimonial.student_name?.charAt(0) || 'S'
+                                )}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div>
+                                    <h4 className="font-semibold text-slate-900">{testimonial.student_name}</h4>
+                                    <p className="text-sm text-slate-500">
+                                      {testimonial.course} • {testimonial.country}
+                                    </p>
+                                  </div>
+                                  {testimonial.rating && (
+                                    <div className="flex items-center gap-1">
+                                      {[...Array(testimonial.rating)].map((_, i) => (
+                                        <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="relative">
+                                  <Quote className="absolute -left-1 -top-1 w-6 h-6 text-slate-200" />
+                                  <p className="text-slate-600 pl-6 leading-relaxed">
+                                    {testimonial.testimonial_text}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="campus">
+                <Card className="border-0 shadow-sm">
+                  <CardContent className="p-8">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">Campus & Facilities</h2>
+                    
+                    {/* Campus Image/Virtual Tour */}
+                    <div className="relative rounded-xl overflow-hidden mb-8 group">
+                      <img 
+                        src={university.cover_image || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800'} 
+                        alt="Campus"
+                        className="w-full h-64 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button size="lg" variant="secondary" className="gap-2">
+                          <Video className="w-5 h-5" />
+                          Virtual Campus Tour
+                        </Button>
+                      </div>
+                    </div>
+
+                    <p className="text-slate-600 leading-relaxed mb-6">
+                      Experience vibrant campus life at {university.university_name} with state-of-the-art facilities, 
+                      diverse student organizations, and a welcoming international community. From modern libraries 
+                      to sports facilities and cultural events, there's something for everyone.
+                    </p>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-blue-50 rounded-xl">
+                        <Building2 className="w-8 h-8 text-blue-600 mb-2" />
+                        <h4 className="font-semibold text-slate-900 mb-1">Modern Facilities</h4>
+                        <p className="text-sm text-slate-600">State-of-the-art classrooms and research labs</p>
+                      </div>
+                      <div className="p-4 bg-emerald-50 rounded-xl">
+                        <Users className="w-8 h-8 text-emerald-600 mb-2" />
+                        <h4 className="font-semibold text-slate-900 mb-1">Student Life</h4>
+                        <p className="text-sm text-slate-600">Active clubs, societies, and events</p>
+                      </div>
+                      <div className="p-4 bg-purple-50 rounded-xl">
+                        <BookOpen className="w-8 h-8 text-purple-600 mb-2" />
+                        <h4 className="font-semibold text-slate-900 mb-1">Library & Resources</h4>
+                        <p className="text-sm text-slate-600">Extensive academic resources and study spaces</p>
+                      </div>
+                      <div className="p-4 bg-amber-50 rounded-xl">
+                        <Globe className="w-8 h-8 text-amber-600 mb-2" />
+                        <h4 className="font-semibold text-slate-900 mb-1">International Support</h4>
+                        <p className="text-sm text-slate-600">Dedicated services for international students</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="requirements">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-6">General Requirements</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">Entry Requirements</h2>
+                    
+                    {university.entry_requirements_summary && (
+                      <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <p className="text-slate-700">{university.entry_requirements_summary}</p>
+                      </div>
+                    )}
+
                     <div className="space-y-6">
                       <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
                           <GraduationCap className="w-5 h-5 text-blue-600" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-semibold text-slate-900">Academic Requirements</h4>
-                          <p className="text-slate-600 mt-1">Minimum GPA varies by program. Bachelor's require high school diploma; Master's require bachelor's degree.</p>
+                          <p className="text-slate-600 mt-1">
+                            {university.entry_requirements_summary || 
+                            'Minimum GPA varies by program. Bachelor\'s require high school diploma; Master\'s require bachelor\'s degree.'}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
                           <Globe className="w-5 h-5 text-emerald-600" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-semibold text-slate-900">English Proficiency</h4>
                           <p className="text-slate-600 mt-1">IELTS 6.0-7.5 or TOEFL 80-100+ depending on program level.</p>
                         </div>
@@ -264,10 +473,21 @@ export default function UniversityDetails() {
                         <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
                           <Calendar className="w-5 h-5 text-purple-600" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-semibold text-slate-900">Intake Periods</h4>
                           <p className="text-slate-600 mt-1">
-                            {university.intake_months?.join(', ') || 'September and January intakes available'}
+                            {university.intakes || 'September and January intakes available'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                          <Calendar className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-slate-900">Application Deadline</h4>
+                          <p className="text-slate-600 mt-1">
+                            {university.application_deadline || 'Varies by program - check official website'}
                           </p>
                         </div>
                       </div>
@@ -316,14 +536,14 @@ export default function UniversityDetails() {
                     <span className="font-medium text-slate-900">{university.acceptance_rate}%</span>
                   </div>
                 )}
-                {university.website && (
+                {university.website_url && (
                   <a 
-                    href={university.website} 
+                    href={university.website_url} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 w-full py-3 text-emerald-600 hover:text-emerald-700 font-medium"
                   >
-                    Visit Website
+                    Visit Official Website
                     <ExternalLink className="w-4 h-4" />
                   </a>
                 )}
