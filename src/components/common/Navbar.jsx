@@ -51,7 +51,7 @@ export default function Navbar() {
     { label: 'Universities', page: 'Universities' },
     { label: 'Scholarships', page: 'ScholarshipFinder' },
     { label: 'Services', page: 'Home', hash: '#services' },
-    { label: 'Resources', page: 'AlumniNetwork' },
+    { label: 'Resources', page: 'Resources' },
   ];
 
   return (
