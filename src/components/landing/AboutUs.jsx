@@ -48,9 +48,9 @@ export default function AboutUs() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-emerald-50 to-cyan-50 rounded-2xl p-8"
+              className="bg-gradient-brand-light rounded-2xl p-8"
             >
-              <div className="w-14 h-14 bg-emerald-500 rounded-xl flex items-center justify-center mb-6">
+              <div className="w-14 h-14 bg-education-blue rounded-xl flex items-center justify-center mb-6">
                 <Target className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
@@ -63,9 +63,9 @@ export default function AboutUs() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8"
+              className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-8"
             >
-              <div className="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center mb-6">
+              <div className="w-14 h-14 bg-alo-orange rounded-xl flex items-center justify-center mb-6">
                 <Eye className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h3>
