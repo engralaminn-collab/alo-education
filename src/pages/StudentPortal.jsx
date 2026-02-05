@@ -50,6 +50,7 @@ const statusColors = {
 export default function StudentPortal() {
   const [activeTab, setActiveTab] = useState('overview');
   const [showAddApplication, setShowAddApplication] = useState(false);
+  const [studentId, setStudentId] = useState(null);
 
   const { data: user } = useQuery({
     queryKey: ['current-user-portal'],
