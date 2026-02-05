@@ -31,6 +31,8 @@ import ApplicationProgressBar from '@/components/applications/ApplicationProgres
 import ApplicationTracker from '@/components/portal/ApplicationTracker';
 import AINextSteps from '@/components/dashboard/AINextSteps';
 import MyJourney from '@/components/dashboard/MyJourney';
+import ApplicationTrackingSystem from '@/components/student/ApplicationTrackingSystem';
+import AddApplicationModal from '@/components/student/AddApplicationModal';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -310,6 +312,13 @@ export default function StudentPortal() {
 
           {/* Applications Tab */}
           <TabsContent value="applications" className="space-y-6">
+            <ApplicationTrackingSystem
+              applications={applications}
+              universities={universityMap}
+              courses={courseMap}
+              onAddApplication={() => setShowAddApplication(true)}
+            />
+            
             <Card>
               <CardHeader>
                 <CardTitle>All Applications</CardTitle>
@@ -479,6 +488,12 @@ export default function StudentPortal() {
       </div>
 
       <Footer />
+      
+      <AddApplicationModal
+        open={showAddApplication}
+        onClose={() => setShowAddApplication(false)}
+        studentId={studentProfile?.id}
+      />
     </div>
   );
 }
