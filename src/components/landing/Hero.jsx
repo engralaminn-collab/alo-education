@@ -60,13 +60,13 @@ export default function Hero({ onSearch }) {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 0.1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
-        className="absolute top-20 right-20 w-72 h-72 bg-emerald-500 rounded-full blur-3xl"
+        className="absolute top-20 right-20 w-72 h-72 bg-alo-orange rounded-full blur-3xl"
       />
       <motion.div 
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 0.1, y: 0 }}
         transition={{ duration: 1, delay: 0.7 }}
-        className="absolute bottom-20 left-20 w-96 h-96 bg-blue-500 rounded-full blur-3xl"
+        className="absolute bottom-20 left-20 w-96 h-96 bg-education-blue rounded-full blur-3xl"
       />
 
       <div className="relative container mx-auto px-6 py-20">

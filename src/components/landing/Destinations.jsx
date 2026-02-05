@@ -58,7 +58,7 @@ export default function Destinations() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-emerald-400 font-semibold text-sm uppercase tracking-wider"
+            className="text-sunshine font-semibold text-sm uppercase tracking-wider"
           >
             Global Reach
           </motion.span>
@@ -95,11 +95,11 @@ export default function Destinations() {
                     <h3 className="text-2xl font-bold text-white mb-2">{dest.country}</h3>
                     <div className="flex items-center justify-between">
                       <div className="text-slate-300 text-sm">
-                        <span className="text-emerald-400 font-semibold">{dest.universities}</span> Universities
+                        <span className="text-sunshine font-semibold">{dest.universities}</span> Universities
                         <span className="mx-2">•</span>
-                        <span className="text-emerald-400 font-semibold">{dest.students}</span> Students
+                        <span className="text-sunshine font-semibold">{dest.students}</span> Students
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                      <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-education-blue transition-colors">
                         <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>
