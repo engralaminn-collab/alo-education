@@ -30,7 +30,7 @@ export default function Testimonials() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-emerald-600 font-semibold text-sm uppercase tracking-wider"
+            className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
           >
             Success Stories
           </motion.span>
@@ -55,13 +55,13 @@ export default function Testimonials() {
               transition={{ delay: index * 0.15 }}
               className="bg-white rounded-2xl p-8 shadow-xl shadow-slate-200/50 relative"
             >
-              <Quote className="absolute top-6 right-6 w-12 h-12 text-emerald-100" />
+              <Quote className="absolute top-6 right-6 w-12 h-12 text-education-blue/10" />
               
               <div className="flex items-center gap-4 mb-6">
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
-                  className="w-16 h-16 rounded-full object-cover ring-4 ring-emerald-50"
+                  className="w-16 h-16 rounded-full object-cover ring-4 ring-education-blue/10"
                 />
                 <div>
                   <h4 className="font-bold text-slate-900">{testimonial.name}</h4>
@@ -80,7 +80,7 @@ export default function Testimonials() {
               <div className="pt-4 border-t border-slate-100">
                 <p className="text-sm">
                   <span className="text-slate-500">Now studying at</span>
-                  <span className="font-semibold text-emerald-600 ml-1">{testimonial.university}</span>
+                  <span className="font-semibold text-education-blue ml-1">{testimonial.university}</span>
                 </p>
               </div>
             </motion.div>

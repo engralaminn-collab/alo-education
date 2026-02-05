@@ -18,7 +18,7 @@ export default function PartnerLogos() {
             Trusted partnerships with leading institutions worldwide
           </p>
           
-          <div className="bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl p-8 text-white">
+          <div className="bg-gradient-brand rounded-2xl p-8 text-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
               {[
                 { name: 'UK Universities', count: '70+' },
@@ -28,7 +28,7 @@ export default function PartnerLogos() {
               ].map((stat, i) => (
                 <div key={i} className="text-center">
                   <div className="text-4xl font-bold mb-1">{stat.count}</div>
-                  <div className="text-emerald-100">{stat.name}</div>
+                  <div className="text-white/80">{stat.name}</div>
                 </div>
               ))}
             </div>
