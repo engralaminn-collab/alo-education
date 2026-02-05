@@ -45,6 +45,7 @@ export default function Universities() {
   const [selectedForCompare, setSelectedForCompare] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [scholarshipAvailable, setScholarshipAvailable] = useState(false);
 
   // Read URL params
   useEffect(() => {
@@ -61,6 +62,11 @@ export default function Universities() {
   const { data: courses = [] } = useQuery({
     queryKey: ['courses'],
     queryFn: () => base44.entities.Course.list(),
+  });
+
+  const { data: scholarships = [] } = useQuery({
+    queryKey: ['scholarships'],
+    queryFn: () => base44.entities.Scholarship.filter({ status: 'active' }),
   });
 
   // Update suggestions when search changes
@@ -117,19 +123,27 @@ export default function Universities() {
                                   course.subject_area === fieldOfStudy
                                 );
     
+    // Filter by scholarship availability
+    const matchesScholarship = !scholarshipAvailable || 
+                               scholarships.some(scholarship => scholarship.university_id === uni.id);
+    
     return matchesSearch && matchesCountry && matchesTuition && matchesRanking && 
            matchesQsRanking && matchesTimesRanking && matchesStudentPop &&
-           matchesDegreeLevel && matchesFieldOfStudy;
+           matchesDegreeLevel && matchesFieldOfStudy && matchesScholarship;
   }).sort((a, b) => {
     // Sort functionality
     if (sortBy === 'ranking') {
       return (a.ranking || 9999) - (b.ranking || 9999);
     } else if (sortBy === 'name') {
-      return (a.name || '').localeCompare(b.name || '');
+      return (a.university_name || '').localeCompare(b.university_name || '');
     } else if (sortBy === 'fees-low') {
       return (a.tuition_range_min || 0) - (b.tuition_range_min || 0);
     } else if (sortBy === 'fees-high') {
       return (b.tuition_range_min || 0) - (a.tuition_range_min || 0);
+    } else if (sortBy === 'students-high') {
+      return (b.student_population || 0) - (a.student_population || 0);
+    } else if (sortBy === 'students-low') {
+      return (a.student_population || 0) - (b.student_population || 0);
     }
     return 0;
   });
@@ -144,6 +158,7 @@ export default function Universities() {
     setRankingFilter('all');
     setDegreeLevel('all');
     setFieldOfStudy('all');
+    setScholarshipAvailable(false);
   };
 
   const hasActiveFilters = searchQuery || selectedCountry !== 'all' || 
@@ -152,7 +167,7 @@ export default function Universities() {
                            timesRankingRange[0] > 0 || timesRankingRange[1] < 500 ||
                            studentPopRange[0] > 0 || studentPopRange[1] < 100000 ||
                            rankingFilter !== 'all' || degreeLevel !== 'all' || 
-                           fieldOfStudy !== 'all';
+                           fieldOfStudy !== 'all' || scholarshipAvailable;
 
   const FiltersContent = () => (
     <div className="space-y-6">
@@ -178,12 +193,12 @@ export default function Universities() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Levels</SelectItem>
-            <SelectItem value="foundation">Foundation</SelectItem>
-            <SelectItem value="bachelor">Bachelor's</SelectItem>
-            <SelectItem value="master">Master's</SelectItem>
-            <SelectItem value="phd">PhD</SelectItem>
-            <SelectItem value="diploma">Diploma</SelectItem>
-            <SelectItem value="certificate">Certificate</SelectItem>
+            <SelectItem value="Foundation">Foundation</SelectItem>
+            <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+            <SelectItem value="Postgraduate">Postgraduate</SelectItem>
+            <SelectItem value="PhD">PhD</SelectItem>
+            <SelectItem value="Diploma">Diploma</SelectItem>
+            <SelectItem value="Certificate">Certificate</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -279,6 +294,21 @@ export default function Universities() {
         />
       </div>
 
+      <div className="pt-4 border-t border-slate-200">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <Checkbox 
+            checked={scholarshipAvailable} 
+            onCheckedChange={setScholarshipAvailable}
+          />
+          <span className="text-sm font-medium text-slate-700">
+            Scholarships Available
+          </span>
+        </label>
+        <p className="text-xs text-slate-500 mt-1 ml-7">
+          Show only universities offering scholarships
+        </p>
+      </div>
+
       {hasActiveFilters && (
         <Button variant="outline" onClick={clearFilters} className="w-full">
           <X className="w-4 h-4 mr-2" />
@@ -371,7 +401,7 @@ export default function Universities() {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="font-semibold text-slate-900">Filters</h3>
                 {hasActiveFilters && (
-                  <Badge variant="secondary" className="bg-emerald-50 text-emerald-600">
+                  <Badge variant="secondary" className="bg-education-blue/10 text-education-blue">
                     {filteredUniversities.length} results
                   </Badge>
                 )}
@@ -404,6 +434,8 @@ export default function Universities() {
                     <SelectItem value="name">Name (A-Z)</SelectItem>
                     <SelectItem value="fees-low">Fees (Low to High)</SelectItem>
                     <SelectItem value="fees-high">Fees (High to Low)</SelectItem>
+                    <SelectItem value="students-high">Student Population (High to Low)</SelectItem>
+                    <SelectItem value="students-low">Student Population (Low to High)</SelectItem>
                   </SelectContent>
                 </Select>
                 {/* Mobile Filter Button */}
@@ -487,7 +519,7 @@ export default function Universities() {
                     >
                       <Card className={`group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 ${
                         viewMode === 'list' ? 'flex flex-row' : ''
-                      } ${selectedForCompare.some(u => u.id === uni.id) ? 'ring-2 ring-emerald-500' : ''}`}>
+                      } ${selectedForCompare.some(u => u.id === uni.id) ? 'ring-2 ring-education-blue' : ''}`}>
                         <div className="absolute top-3 right-3 z-10">
                           <input
                             type="checkbox"
@@ -500,7 +532,7 @@ export default function Universities() {
                                 setSelectedForCompare(selectedForCompare.filter(u => u.id !== uni.id));
                               }
                             }}
-                            className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
+                            className="w-5 h-5 rounded border-slate-300 text-education-blue cursor-pointer"
                             title="Select for comparison"
                           />
                         </div>
@@ -515,14 +547,20 @@ export default function Universities() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent" />
                             {uni.ranking && (
-                              <Badge className="absolute top-3 left-3 bg-emerald-500 text-white border-0">
+                              <Badge className="absolute top-3 left-3 bg-education-blue text-white border-0">
                                 <Star className="w-3 h-3 mr-1" />
                                 #{uni.ranking}
                               </Badge>
                             )}
+                            {scholarships.some(s => s.university_id === uni.id) && (
+                              <Badge className="absolute bottom-3 left-3 bg-sunshine text-slate-900 border-0">
+                                <DollarSign className="w-3 h-3 mr-1" />
+                                Scholarships
+                              </Badge>
+                            )}
                           </div>
                           <CardContent className={`${viewMode === 'list' ? 'flex-1 p-4' : 'p-5'}`}>
-                            <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                            <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-education-blue transition-colors">
                               {uni.university_name}
                             </h3>
                             <div className="flex items-center text-slate-500 text-sm mb-3">
@@ -537,13 +575,13 @@ export default function Universities() {
                                 </div>
                               )}
                               {uni.tuition_range_min && (
-                                <div className="flex items-center text-emerald-600 font-medium">
+                                <div className="flex items-center text-education-blue font-medium">
                                   <DollarSign className="w-4 h-4" />
                                   {uni.tuition_range_min.toLocaleString()}+
                                 </div>
                               )}
                             </div>
-                            <Button className="w-full mt-4 bg-slate-900 hover:bg-slate-800 group/btn">
+                            <Button className="w-full mt-4 bg-gradient-brand hover:opacity-90 group/btn">
                               View Details
                               <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                             </Button>
