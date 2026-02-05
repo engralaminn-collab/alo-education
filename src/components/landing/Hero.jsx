@@ -40,7 +40,7 @@ export default function Hero({ onSearch }) {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background with rotating images */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentCountryIndex}
@@ -76,7 +76,7 @@ export default function Hero({ onSearch }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium mb-8">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-alo-orange/10 border border-alo-orange/20 rounded-full text-sunshine text-sm font-medium mb-8">
               <Globe className="w-4 h-4" />
               Your Trusted Partner for Studying Abroad
             </span>
@@ -88,9 +88,9 @@ export default function Hero({ onSearch }) {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Your Trusted Partner for
-            <span className="block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              Studying Abroad
+            Your Future Starts Here
+            <span className="block bg-gradient-to-r from-alo-orange via-sunshine to-education-blue bg-clip-text text-transparent">
+              Study Abroad
             </span>
             in the{' '}
             <AnimatePresence mode="wait">
@@ -100,7 +100,7 @@ export default function Hero({ onSearch }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="inline-block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+                className="inline-block bg-gradient-to-r from-alo-orange to-sunshine bg-clip-text text-transparent"
               >
                 {countries[currentCountryIndex].name}
               </motion.span>
@@ -112,9 +112,17 @@ export default function Hero({ onSearch }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto"
+            className="text-xl text-slate-300 mb-2 max-w-2xl mx-auto"
           >
-            From your ambition to admission, we're with you all the way.
+            Guiding you to global opportunities.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+            className="tagline text-lg mb-12 max-w-2xl mx-auto"
+          >
+            We don't just advise, we commit.
           </motion.p>
 
           {/* Search Box */}
@@ -162,9 +170,9 @@ export default function Hero({ onSearch }) {
               </Select>
               <Link to={createPageUrl('Contact')}>
                 <Button 
-                  className="h-14 px-8 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold"
+                  className="h-14 px-8 bg-alo-orange hover:bg-alo-orange/90 text-white rounded-xl font-semibold"
                 >
-                  Book a Free Consultation
+                  Book Free Consultation
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -185,7 +193,7 @@ export default function Hero({ onSearch }) {
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 mb-3">
-                  <stat.icon className="w-6 h-6 text-emerald-400" />
+                  <stat.icon className="w-6 h-6 text-sunshine" />
                 </div>
                 <div className="text-3xl font-bold text-white">{stat.value}</div>
                 <div className="text-slate-400 text-sm">{stat.label}</div>

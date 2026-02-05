@@ -60,10 +60,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to={createPageUrl('Home')} className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-brand flex items-center justify-center">
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
-            <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+            <div className="flex flex-col">
+              <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+              <span className="tagline text-xs -mt-1">Your Future Starts Here</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -72,7 +75,7 @@ export default function Navbar() {
               <Link
                 key={link.page}
                 to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
-                className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
+                className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
               >
                 {link.label}
               </Link>
@@ -81,7 +84,7 @@ export default function Navbar() {
             {/* Destinations Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className={`font-medium hover:text-emerald-500 transition-colors flex items-center gap-1 ${textColor}`}>
+                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
                   Destinations
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -99,7 +102,7 @@ export default function Navbar() {
 
             <Link
               to={createPageUrl('Contact')}
-              className={`font-medium hover:text-emerald-500 transition-colors ${textColor}`}
+              className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
             >
               Book Free Counselling
             </Link>
@@ -238,7 +241,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Button 
-                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white"
+                    className="bg-gradient-brand text-white hover:opacity-90"
                     onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}
                   >
                     Portal Login
