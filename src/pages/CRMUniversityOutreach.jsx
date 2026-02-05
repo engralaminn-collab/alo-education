@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
 import UniversityOutreachGenerator from '@/components/crm/UniversityOutreachGenerator';
 import OutreachResponseTracker from '@/components/crm/OutreachResponseTracker';
+import AICampaignBuilder from '@/components/crm/AICampaignBuilder';
 import UniversitySuggester from '@/components/crm/UniversitySuggester';
 import AIEmailDrafter from '@/components/crm/AIEmailDrafter';
 import AutoFollowUpManager from '@/components/crm/AutoFollowUpManager';
@@ -159,6 +160,15 @@ export default function CRMUniversityOutreach() {
           outreaches={outreaches}
           students={students}
           universities={universities}
+        />
+      </div>
+
+      {/* AI Campaign Builder */}
+      <div className="mb-8">
+        <AICampaignBuilder 
+          students={students}
+          universities={universities}
+          courses={courses}
         />
       </div>
 
