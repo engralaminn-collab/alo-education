@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { 
   LayoutDashboard, FileText, Upload, MessageSquare, 
   User, Award, Brain, Calendar, Shield, MessageCircle,
-  CheckCircle, Clock, Building2, GraduationCap, TrendingUp
+  CheckCircle, Clock, Building2, GraduationCap, TrendingUp, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -33,6 +33,7 @@ import AINextSteps from '@/components/dashboard/AINextSteps';
 import MyJourney from '@/components/dashboard/MyJourney';
 import ApplicationTrackingSystem from '@/components/student/ApplicationTrackingSystem';
 import AddApplicationModal from '@/components/student/AddApplicationModal';
+import StudentChatbot from '@/components/portal/StudentChatbot';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -61,7 +62,9 @@ export default function StudentPortal() {
     queryKey: ['student-profile-portal', user?.email],
     queryFn: async () => {
       const profiles = await base44.entities.StudentProfile.filter({ email: user?.email });
-      return profiles[0];
+      const profile = profiles[0];
+      if (profile) setStudentId(profile.id);
+      return profile;
     },
     enabled: !!user?.email,
   });
@@ -143,10 +146,14 @@ export default function StudentPortal() {
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 h-auto">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto">
             <TabsTrigger value="overview" className="gap-2">
               <LayoutDashboard className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="ai-advisor" className="gap-2">
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">AI Advisor</span>
             </TabsTrigger>
             <TabsTrigger value="chat" className="gap-2">
               <MessageCircle className="w-4 h-4" />
@@ -173,6 +180,13 @@ export default function StudentPortal() {
               <span className="hidden sm:inline">Scholarships</span>
             </TabsTrigger>
           </TabsList>
+
+          {/* AI Advisor Tab */}
+          <TabsContent value="ai-advisor" className="space-y-6">
+            <Card className="border-2 border-purple-200 min-h-[600px]">
+              <StudentChatbot studentId={studentId} compact={false} />
+            </Card>
+          </TabsContent>
 
           {/* Chat Tab */}
           <TabsContent value="chat" className="space-y-6">
@@ -495,6 +509,9 @@ export default function StudentPortal() {
         onClose={() => setShowAddApplication(false)}
         studentId={studentProfile?.id}
       />
+
+      {/* Floating AI Chatbot */}
+      <StudentChatbot studentId={studentId} compact={true} />
     </div>
   );
 }
