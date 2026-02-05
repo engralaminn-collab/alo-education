@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIUniversityRecommendations from '@/components/courses/AIUniversityRecommendations';
 
 export default function CourseFinder() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -224,7 +225,21 @@ export default function CourseFinder() {
       </section>
 
       <div className="container mx-auto px-6 py-8">
-        {/* AI Recommendations */}
+        {/* AI University Recommendations */}
+        <AIUniversityRecommendations
+          studentProfile={userProfile}
+          searchCriteria={{
+            country: filters.country,
+            subject: filters.subject_area,
+            level: filters.level,
+            tuition_max: filters.tuition_max,
+            duration: filters.duration_max ? `${filters.duration_max} months` : null,
+          }}
+          courses={filteredCourses}
+          universities={universities}
+        />
+
+        {/* AI Course Recommendations */}
         {userProfile && showAIRecommendations && aiRecommendations.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
