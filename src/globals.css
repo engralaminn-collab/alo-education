@@ -6,34 +6,47 @@
 
 @layer base {
   :root {
-    /* Brand Colors - ALO Education */
-    --alo-orange: 243 112 33;
-    --education-blue: 0 102 204;
+    /* ALO BRAND - Primary Colors */
+    --alo-orange: 23 90% 54%;         /* #F37021 */
+    --education-blue: 210 100% 40%;   /* #0066CC */
     --sunshine-accent: 255 179 71;
     --neutral-black: 0 0 0;
     --neutral-gray: 85 85 85;
     
     /* Tailwind default variables mapped to brand colors */
     --background: 0 0% 100%;
-    --foreground: var(--neutral-black);
+    --foreground: 0 0% 9%;
     --card: 0 0% 100%;
-    --card-foreground: var(--neutral-black);
+    --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: var(--neutral-black);
-    --primary: var(--education-blue);
+    --popover-foreground: 0 0% 9%;
+    
+    /* Primary = ALO Orange */
+    --primary: 23 90% 54%;
     --primary-foreground: 0 0% 100%;
+    
     --secondary: 210 40% 96.1%;
-    --secondary-foreground: var(--neutral-black);
+    --secondary-foreground: 0 0% 9%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: var(--alo-orange);
+    
+    /* Accent = ALO Orange */
+    --accent: 23 90% 54%;
     --accent-foreground: 0 0% 100%;
+    
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: var(--education-blue);
+    
+    /* Ring = ALO Blue for focus states */
+    --ring: 210 100% 40%;
     --radius: 0.5rem;
+    
+    /* Sidebar tokens */
+    --sidebar-primary: 210 100% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-ring: 210 100% 40%;
   }
 
   * {
