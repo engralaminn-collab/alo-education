@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
   { icon: Users, label: 'My Dashboard', page: 'CounselorDashboard' },
+  { icon: TrendingUp, label: 'Performance', page: 'CRMPerformanceDashboard' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: Upload, label: 'Import Students', page: 'CRMImportStudents' },
