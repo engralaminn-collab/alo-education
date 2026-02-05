@@ -376,19 +376,25 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Faculty to Student Ratio */}
-                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                <tr className="border-b border-slate-100 hover:bg-slate-50 bg-blue-50/30">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-alo-orange" />
-                      Faculty:Student Ratio
+                      <div>
+                        <div>Faculty:Student Ratio</div>
+                        <div className="text-xs text-slate-500 font-normal">Lower is better</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4 text-center">
                       {uni.faculty_student_ratio ? (
-                        <Badge variant="outline" className="font-semibold">
-                          {uni.faculty_student_ratio}
-                        </Badge>
+                        <div>
+                          <Badge className="bg-alo-orange/10 text-alo-orange font-bold text-base">
+                            {uni.faculty_student_ratio}
+                          </Badge>
+                          <div className="text-xs text-slate-500 mt-1">More individual attention</div>
+                        </div>
                       ) : (
                         <span className="text-slate-400">N/A</span>
                       )}
@@ -397,21 +403,49 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Graduate Employability */}
-                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                <tr className="border-b border-slate-100 hover:bg-slate-50 bg-green-50/30">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <BriefcaseIcon className="w-4 h-4 text-education-blue" />
-                      Graduate Employability
+                      <div>
+                        <div>Graduate Employability</div>
+                        <div className="text-xs text-slate-500 font-normal">Within 6 months</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4 text-center">
                       {uni.graduate_employability_rate ? (
                         <div>
-                          <div className="font-semibold text-lg text-education-blue">
-                            {uni.graduate_employability_rate}%
+                          <div className="relative w-20 h-20 mx-auto mb-2">
+                            <svg className="transform -rotate-90 w-20 h-20">
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r="32"
+                                stroke="#e5e7eb"
+                                strokeWidth="8"
+                                fill="transparent"
+                              />
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r="32"
+                                stroke="#10b981"
+                                strokeWidth="8"
+                                fill="transparent"
+                                strokeDasharray={`${2 * Math.PI * 32}`}
+                                strokeDashoffset={`${2 * Math.PI * 32 * (1 - uni.graduate_employability_rate / 100)}`}
+                                className="transition-all"
+                              />
+                            </svg>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="text-xl font-bold text-green-600">
+                                {uni.graduate_employability_rate}%
+                              </span>
+                            </div>
                           </div>
-                          <div className="text-xs text-slate-500">employed within 6 months</div>
+                          <div className="text-xs text-slate-600 font-medium">Excellent prospects</div>
                         </div>
                       ) : (
                         <span className="text-slate-400">N/A</span>
@@ -421,24 +455,37 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Research Output */}
-                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                <tr className="border-b border-slate-100 hover:bg-slate-50 bg-purple-50/30">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <FlaskConical className="w-4 h-4 text-purple-500" />
-                      Research Output
+                      <div>
+                        <div>Research Output</div>
+                        <div className="text-xs text-slate-500 font-normal">Quality & quantity</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4 text-center">
                       {uni.research_output_score ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="w-24 bg-slate-200 rounded-full h-2">
+                        <div>
+                          <div className="mb-2">
+                            <div className="font-bold text-2xl text-purple-600">
+                              {uni.research_output_score}
+                            </div>
+                            <div className="text-xs text-slate-500">out of 100</div>
+                          </div>
+                          <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
                             <div 
-                              className="bg-gradient-brand h-2 rounded-full transition-all"
+                              className="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full transition-all shadow-sm"
                               style={{ width: `${uni.research_output_score}%` }}
                             />
                           </div>
-                          <span className="font-semibold text-sm">{uni.research_output_score}/100</span>
+                          <div className="text-xs text-slate-600 mt-1 font-medium">
+                            {uni.research_output_score >= 80 ? 'Outstanding' : 
+                             uni.research_output_score >= 60 ? 'Very Good' : 
+                             uni.research_output_score >= 40 ? 'Good' : 'Developing'}
+                          </div>
                         </div>
                       ) : (
                         <span className="text-slate-400">N/A</span>
@@ -448,24 +495,41 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Student Satisfaction */}
-                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                <tr className="border-b border-slate-100 hover:bg-slate-50 bg-yellow-50/30">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <Smile className="w-4 h-4 text-sunshine" />
-                      Student Satisfaction
+                      <div>
+                        <div>Student Satisfaction</div>
+                        <div className="text-xs text-slate-500 font-normal">Overall rating</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4 text-center">
                       {uni.student_satisfaction_score ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="w-24 bg-slate-200 rounded-full h-2">
+                        <div>
+                          <div className="flex justify-center gap-1 mb-2">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-5 h-5 ${
+                                  i < Math.round(uni.student_satisfaction_score / 20)
+                                    ? 'fill-sunshine text-sunshine'
+                                    : 'text-slate-300'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <div className="font-bold text-lg text-sunshine">
+                            {uni.student_satisfaction_score}/100
+                          </div>
+                          <div className="w-full bg-slate-200 rounded-full h-2 mt-2">
                             <div 
                               className="bg-sunshine h-2 rounded-full transition-all"
                               style={{ width: `${uni.student_satisfaction_score}%` }}
                             />
                           </div>
-                          <span className="font-semibold text-sm">{uni.student_satisfaction_score}/100</span>
                         </div>
                       ) : (
                         <span className="text-slate-400">N/A</span>
@@ -475,22 +539,30 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Program Rankings */}
-                <tr className="border-b-2 border-slate-200 hover:bg-slate-50">
+                <tr className="border-b-2 border-slate-200 hover:bg-slate-50 bg-indigo-50/30">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <Target className="w-4 h-4 text-education-blue" />
-                      Program Rankings
+                      <div>
+                        <div>Program Rankings</div>
+                        <div className="text-xs text-slate-500 font-normal">By subject area</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4">
                       {uni.program_rankings ? (
-                        <div className="space-y-1 text-left">
+                        <div className="space-y-2 text-left">
                           {Object.entries(uni.program_rankings).map(([program, rank]) => (
                             rank && (
-                              <div key={program} className="flex justify-between items-center text-xs">
-                                <span className="text-slate-600 capitalize">{program.replace(/_/g, ' ')}</span>
-                                <Badge className="bg-education-blue/10 text-education-blue text-xs ml-2">
+                              <div key={program} className="flex justify-between items-center text-xs bg-white rounded p-2 shadow-sm">
+                                <div className="flex items-center gap-2">
+                                  <GraduationCap className="w-3 h-3 text-education-blue" />
+                                  <span className="text-slate-700 capitalize font-medium">
+                                    {program.replace(/_/g, ' ')}
+                                  </span>
+                                </div>
+                                <Badge className="bg-gradient-brand text-white text-xs font-bold">
                                   #{rank}
                                 </Badge>
                               </div>
@@ -508,59 +580,67 @@ export default function CompareUniversities({
                 </tr>
 
                 {/* Campus Facilities */}
-                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                <tr className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
                     <div className="flex items-center gap-2">
                       <Building className="w-4 h-4 text-slate-600" />
-                      Campus Facilities
+                      <div>
+                        <div>Campus Facilities</div>
+                        <div className="text-xs text-slate-500 font-normal">Available amenities</div>
+                      </div>
                     </div>
                   </td>
                   {selectedUniversities.map(uni => (
                     <td key={uni.id} className="p-4">
                       {uni.campus_facilities ? (
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          {uni.campus_facilities.library && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <BookOpen className="w-3 h-3" />
-                              Library
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.sports_center && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <Dumbbell className="w-3 h-3" />
-                              Sports
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.student_accommodation && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <Home className="w-3 h-3" />
-                              Housing
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.research_labs && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <FlaskConical className="w-3 h-3" />
-                              Labs
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.career_services && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <BriefcaseIcon className="w-3 h-3" />
-                              Career
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.healthcare_center && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <HeartPulse className="w-3 h-3" />
-                              Health
-                            </Badge>
-                          )}
-                          {uni.campus_facilities.international_office && (
-                            <Badge variant="outline" className="text-xs flex items-center gap-1">
-                              <Globe className="w-3 h-3" />
-                              Intl. Office
-                            </Badge>
-                          )}
+                        <div>
+                          <div className="grid grid-cols-2 gap-2 mb-2">
+                            {uni.campus_facilities.library && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Library
+                              </div>
+                            )}
+                            {uni.campus_facilities.sports_center && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Sports
+                              </div>
+                            )}
+                            {uni.campus_facilities.student_accommodation && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Housing
+                              </div>
+                            )}
+                            {uni.campus_facilities.research_labs && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Labs
+                              </div>
+                            )}
+                            {uni.campus_facilities.career_services && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Career
+                              </div>
+                            )}
+                            {uni.campus_facilities.healthcare_center && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Health
+                              </div>
+                            )}
+                            {uni.campus_facilities.international_office && (
+                              <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 rounded px-2 py-1">
+                                <CheckCircle className="w-3 h-3" />
+                                Intl. Office
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-xs font-semibold text-slate-600 mt-2">
+                            {Object.values(uni.campus_facilities).filter(Boolean).length} / 7 facilities
+                          </div>
                           {!Object.values(uni.campus_facilities).some(v => v) && (
                             <span className="text-slate-400">N/A</span>
                           )}
