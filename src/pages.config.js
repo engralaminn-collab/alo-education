@@ -58,11 +58,14 @@ import CRMCommunications from './pages/CRMCommunications';
 import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
 import CRMDashboard from './pages/CRMDashboard';
+import CRMImportStudents from './pages/CRMImportStudents';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMMessages from './pages/CRMMessages';
+import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
 import CRMReports from './pages/CRMReports';
 import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import CRMSettings from './pages/CRMSettings';
+import CRMStudentProfile from './pages/CRMStudentProfile';
 import CRMStudentSuccess from './pages/CRMStudentSuccess';
 import CRMStudents from './pages/CRMStudents';
 import CRMTasks from './pages/CRMTasks';
@@ -78,12 +81,15 @@ import CourseFinder from './pages/CourseFinder';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
 import Home from './pages/Home';
+import IELTSPrep from './pages/IELTSPrep';
 import LanguagePrep from './pages/LanguagePrep';
 import Messages from './pages/Messages';
 import MyApplications from './pages/MyApplications';
 import MyComparisons from './pages/MyComparisons';
 import MyDocuments from './pages/MyDocuments';
 import MyProfile from './pages/MyProfile';
+import PTEPrep from './pages/PTEPrep';
+import Resources from './pages/Resources';
 import ScholarshipFinder from './pages/ScholarshipFinder';
 import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
@@ -100,12 +106,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CRMImportStudents from './pages/CRMImportStudents';
-import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
-import IELTSPrep from './pages/IELTSPrep';
-import PTEPrep from './pages/PTEPrep';
-import CRMStudentProfile from './pages/CRMStudentProfile';
-import Resources from './pages/Resources';
 import __Layout from './Layout.jsx';
 
 
@@ -121,11 +121,14 @@ export const PAGES = {
     "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
     "CRMDashboard": CRMDashboard,
+    "CRMImportStudents": CRMImportStudents,
     "CRMInquiries": CRMInquiries,
     "CRMMessages": CRMMessages,
+    "CRMPerformanceDashboard": CRMPerformanceDashboard,
     "CRMReports": CRMReports,
     "CRMSecureDocuments": CRMSecureDocuments,
     "CRMSettings": CRMSettings,
+    "CRMStudentProfile": CRMStudentProfile,
     "CRMStudentSuccess": CRMStudentSuccess,
     "CRMStudents": CRMStudents,
     "CRMTasks": CRMTasks,
@@ -141,12 +144,15 @@ export const PAGES = {
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
     "Home": Home,
+    "IELTSPrep": IELTSPrep,
     "LanguagePrep": LanguagePrep,
     "Messages": Messages,
     "MyApplications": MyApplications,
     "MyComparisons": MyComparisons,
     "MyDocuments": MyDocuments,
     "MyProfile": MyProfile,
+    "PTEPrep": PTEPrep,
+    "Resources": Resources,
     "ScholarshipFinder": ScholarshipFinder,
     "Services": Services,
     "SharedComparison": SharedComparison,
@@ -163,12 +169,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CRMImportStudents": CRMImportStudents,
-    "CRMPerformanceDashboard": CRMPerformanceDashboard,
-    "IELTSPrep": IELTSPrep,
-    "PTEPrep": PTEPrep,
-    "CRMStudentProfile": CRMStudentProfile,
-    "Resources": Resources,
 }
 
 export const pagesConfig = {

@@ -15,6 +15,7 @@ import AICampaignBuilder from '@/components/crm/AICampaignBuilder';
 import UniversitySuggester from '@/components/crm/UniversitySuggester';
 import AIEmailDrafter from '@/components/crm/AIEmailDrafter';
 import AutoFollowUpManager from '@/components/crm/AutoFollowUpManager';
+import AIPartnerOnboarding from '@/components/crm/AIPartnerOnboarding';
 
 export default function CRMUniversityOutreach() {
   const queryClient = useQueryClient();
@@ -170,6 +171,11 @@ export default function CRMUniversityOutreach() {
           universities={universities}
           courses={courses}
         />
+      </div>
+
+      {/* AI Partner Onboarding */}
+      <div className="mb-8">
+        <AIPartnerOnboarding universities={universities} />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
