@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
   X, Star, MapPin, Users, DollarSign, CheckCircle,
-  Building2, ArrowRight, TrendingUp, Save, Share2, Copy, Award, Globe, BookOpen
+  Building2, ArrowRight, TrendingUp, Save, Share2, Copy, Award, Globe, BookOpen,
+  GraduationCap, BriefcaseIcon, FlaskConical, Smile, School, Home, Dumbbell, 
+  HeartPulse, Building, Target
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -106,7 +108,7 @@ export default function CompareUniversities({
           <CardContent className="p-4">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-emerald-600" />
+                <Building2 className="w-5 h-5 text-education-blue" />
                 <span className="font-semibold text-slate-900">
                   {selectedUniversities.length} {selectedUniversities.length === 1 ? 'University' : 'Universities'} Selected
                 </span>
@@ -138,7 +140,7 @@ export default function CompareUniversities({
                 <Button
                   size="sm"
                   onClick={() => setShowComparison(true)}
-                  className="bg-emerald-500 hover:bg-emerald-600"
+                  className="bg-gradient-brand hover:opacity-90"
                   disabled={selectedUniversities.length < 2}
                 >
                   Compare Now
@@ -373,6 +375,203 @@ export default function CompareUniversities({
                   ))}
                 </tr>
 
+                {/* Faculty to Student Ratio */}
+                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-alo-orange" />
+                      Faculty:Student Ratio
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4 text-center">
+                      {uni.faculty_student_ratio ? (
+                        <Badge variant="outline" className="font-semibold">
+                          {uni.faculty_student_ratio}
+                        </Badge>
+                      ) : (
+                        <span className="text-slate-400">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Graduate Employability */}
+                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <BriefcaseIcon className="w-4 h-4 text-education-blue" />
+                      Graduate Employability
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4 text-center">
+                      {uni.graduate_employability_rate ? (
+                        <div>
+                          <div className="font-semibold text-lg text-education-blue">
+                            {uni.graduate_employability_rate}%
+                          </div>
+                          <div className="text-xs text-slate-500">employed within 6 months</div>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Research Output */}
+                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <FlaskConical className="w-4 h-4 text-purple-500" />
+                      Research Output
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4 text-center">
+                      {uni.research_output_score ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="w-24 bg-slate-200 rounded-full h-2">
+                            <div 
+                              className="bg-gradient-brand h-2 rounded-full transition-all"
+                              style={{ width: `${uni.research_output_score}%` }}
+                            />
+                          </div>
+                          <span className="font-semibold text-sm">{uni.research_output_score}/100</span>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Student Satisfaction */}
+                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <Smile className="w-4 h-4 text-sunshine" />
+                      Student Satisfaction
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4 text-center">
+                      {uni.student_satisfaction_score ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="w-24 bg-slate-200 rounded-full h-2">
+                            <div 
+                              className="bg-sunshine h-2 rounded-full transition-all"
+                              style={{ width: `${uni.student_satisfaction_score}%` }}
+                            />
+                          </div>
+                          <span className="font-semibold text-sm">{uni.student_satisfaction_score}/100</span>
+                        </div>
+                      ) : (
+                        <span className="text-slate-400">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Program Rankings */}
+                <tr className="border-b-2 border-slate-200 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <Target className="w-4 h-4 text-education-blue" />
+                      Program Rankings
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4">
+                      {uni.program_rankings ? (
+                        <div className="space-y-1 text-left">
+                          {Object.entries(uni.program_rankings).map(([program, rank]) => (
+                            rank && (
+                              <div key={program} className="flex justify-between items-center text-xs">
+                                <span className="text-slate-600 capitalize">{program.replace(/_/g, ' ')}</span>
+                                <Badge className="bg-education-blue/10 text-education-blue text-xs ml-2">
+                                  #{rank}
+                                </Badge>
+                              </div>
+                            )
+                          ))}
+                          {Object.values(uni.program_rankings).every(v => !v) && (
+                            <span className="text-slate-400 text-center block">N/A</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 text-center block">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
+                {/* Campus Facilities */}
+                <tr className="border-b border-slate-100 hover:bg-slate-50">
+                  <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
+                    <div className="flex items-center gap-2">
+                      <Building className="w-4 h-4 text-slate-600" />
+                      Campus Facilities
+                    </div>
+                  </td>
+                  {selectedUniversities.map(uni => (
+                    <td key={uni.id} className="p-4">
+                      {uni.campus_facilities ? (
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {uni.campus_facilities.library && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <BookOpen className="w-3 h-3" />
+                              Library
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.sports_center && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <Dumbbell className="w-3 h-3" />
+                              Sports
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.student_accommodation && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <Home className="w-3 h-3" />
+                              Housing
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.research_labs && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <FlaskConical className="w-3 h-3" />
+                              Labs
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.career_services && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <BriefcaseIcon className="w-3 h-3" />
+                              Career
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.healthcare_center && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <HeartPulse className="w-3 h-3" />
+                              Health
+                            </Badge>
+                          )}
+                          {uni.campus_facilities.international_office && (
+                            <Badge variant="outline" className="text-xs flex items-center gap-1">
+                              <Globe className="w-3 h-3" />
+                              Intl. Office
+                            </Badge>
+                          )}
+                          {!Object.values(uni.campus_facilities).some(v => v) && (
+                            <span className="text-slate-400">N/A</span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 text-center block">N/A</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+
                 {/* Intakes */}
                 <tr className="hover:bg-slate-50">
                   <td className="p-4 font-medium text-slate-700 bg-slate-50 sticky left-0 z-10">
@@ -425,7 +624,7 @@ export default function CompareUniversities({
                 Close
               </Button>
               <Link to={createPageUrl('Contact')}>
-                <Button className="bg-emerald-500 hover:bg-emerald-600">
+                <Button className="bg-gradient-brand hover:opacity-90">
                   Get Expert Guidance
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -465,7 +664,7 @@ export default function CompareUniversities({
               <Button
                 onClick={handleSave}
                 disabled={saveComparison.isPending}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                className="flex-1 bg-gradient-brand hover:opacity-90"
               >
                 {saveComparison.isPending ? 'Saving...' : 'Save'}
               </Button>
