@@ -20,6 +20,8 @@ import MilestoneTracker from '@/components/applications/MilestoneTracker';
 import ApplicationDeadlineManager from '@/components/applications/ApplicationDeadlineManager';
 import ApplicationNotesPanel from '@/components/applications/ApplicationNotesPanel';
 import AIEnrollmentPredictor from '@/components/applications/AIEnrollmentPredictor';
+import ApplicationDetailPanel from '@/components/crm/ApplicationDetailPanel';
+import ApplicationReportGenerator from '@/components/applications/ApplicationReportGenerator';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -101,14 +103,22 @@ export default function CRMApplications() {
 
   return (
     <CRMLayout title="Applications">
-      {/* Deadline Manager */}
-      <div className="mb-6">
-        <ApplicationDeadlineManager 
-          applications={applications}
-          students={students}
-          universities={universities}
-        />
-      </div>
+      <Tabs defaultValue="applications" className="mb-6">
+        <TabsList>
+          <TabsTrigger value="applications">Applications</TabsTrigger>
+          <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="deadlines">
+          <ApplicationDeadlineManager />
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <ApplicationReportGenerator />
+        </TabsContent>
+
+        <TabsContent value="applications">
 
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-6">
@@ -274,8 +284,26 @@ export default function CRMApplications() {
         </div>
       </Card>
 
+        </TabsContent>
+      </Tabs>
+
       {/* Application Detail Dialog */}
       <Dialog open={!!selectedApp} onOpenChange={(open) => !open && setSelectedApp(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Application Management</DialogTitle>
+          </DialogHeader>
+          {selectedApp && (
+            <ApplicationDetailPanel 
+              application={selectedApp} 
+              onClose={() => setSelectedApp(null)} 
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Old Detail Dialog - Backup */}
+      <Dialog open={false}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Application Details</DialogTitle>
