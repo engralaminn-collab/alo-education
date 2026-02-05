@@ -97,6 +97,7 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
+import CompareCourses from './pages/CompareCourses';
 import __Layout from './Layout.jsx';
 
 
@@ -151,6 +152,7 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
+    "CompareCourses": CompareCourses,
 }
 
 export const pagesConfig = {

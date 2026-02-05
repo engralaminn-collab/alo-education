@@ -5,22 +5,29 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { GraduationCap, Search, MapPin, DollarSign, ArrowRight, BookOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Checkbox } from "@/components/ui/checkbox";
+import { GraduationCap, Search, MapPin, DollarSign, ArrowRight, BookOpen, GitCompare, Calendar, Clock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 
 export default function CourseFilter({ courses = [], country }) {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterLevel, setFilterLevel] = useState('all');
   const [filterSubject, setFilterSubject] = useState('all');
   const [filterCity, setFilterCity] = useState('all');
   const [budgetRange, setBudgetRange] = useState([0, 50000]);
+  const [filterIntake, setFilterIntake] = useState('all');
+  const [filterDuration, setFilterDuration] = useState('all');
+  const [selectedCourses, setSelectedCourses] = useState([]);
 
   // Get unique values
   const subjects = ['all', ...new Set(courses.map(c => c.subject_area).filter(Boolean))];
   const cities = ['all', ...new Set(courses.map(c => c.city).filter(Boolean))];
   const levels = ['all', 'Undergraduate', 'Postgraduate', 'PhD', 'Foundation'];
+  const intakes = ['all', ...new Set(courses.flatMap(c => c.intake?.split(',').map(i => i.trim()) || []).filter(Boolean))];
+  const durations = ['all', ...new Set(courses.map(c => c.duration).filter(Boolean))];
 
   // Filter courses
   let filtered = courses.filter(course => {
@@ -31,9 +38,25 @@ export default function CourseFilter({ courses = [], country }) {
     const matchesCity = filterCity === 'all' || course.city === filterCity;
     const matchesBudget = !course.tuition_fee_min || 
                           (course.tuition_fee_min >= budgetRange[0] && course.tuition_fee_min <= budgetRange[1]);
+    const matchesIntake = filterIntake === 'all' || course.intake?.toLowerCase().includes(filterIntake.toLowerCase());
+    const matchesDuration = filterDuration === 'all' || course.duration === filterDuration;
     
-    return matchesSearch && matchesLevel && matchesSubject && matchesCity && matchesBudget;
+    return matchesSearch && matchesLevel && matchesSubject && matchesCity && matchesBudget && matchesIntake && matchesDuration;
   });
+
+  const handleCourseSelect = (courseId) => {
+    setSelectedCourses(prev => 
+      prev.includes(courseId) 
+        ? prev.filter(id => id !== courseId)
+        : prev.length < 4 ? [...prev, courseId] : prev
+    );
+  };
+
+  const handleCompare = () => {
+    if (selectedCourses.length >= 2) {
+      navigate(createPageUrl('CompareCourses') + `?ids=${selectedCourses.join(',')}`);
+    }
+  };
 
   return (
     <section className="bg-slate-50 py-16">
@@ -110,7 +133,33 @@ export default function CourseFilter({ courses = [], country }) {
               </SelectContent>
             </Select>
 
-            <div className="lg:col-span-2">
+            <Select value={filterIntake} onValueChange={setFilterIntake}>
+              <SelectTrigger className="h-12">
+                <SelectValue placeholder="Intake Month" />
+              </SelectTrigger>
+              <SelectContent>
+                {intakes.map(intake => (
+                  <SelectItem key={intake} value={intake}>
+                    {intake === 'all' ? 'All Intakes' : intake}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={filterDuration} onValueChange={setFilterDuration}>
+              <SelectTrigger className="h-12">
+                <SelectValue placeholder="Duration" />
+              </SelectTrigger>
+              <SelectContent>
+                {durations.map(duration => (
+                  <SelectItem key={duration} value={duration}>
+                    {duration === 'all' ? 'All Durations' : duration}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="lg:col-span-3">
               <label className="text-sm text-slate-600 mb-2 block flex items-center gap-2">
                 <DollarSign className="w-4 h-4" />
                 Budget: {budgetRange[0].toLocaleString()} - {budgetRange[1].toLocaleString()} / year
@@ -129,19 +178,35 @@ export default function CourseFilter({ courses = [], country }) {
             <span className="text-slate-600">
               Showing <span className="font-semibold text-slate-900">{filtered.length}</span> courses
             </span>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => {
-                setSearchTerm('');
-                setFilterLevel('all');
-                setFilterSubject('all');
-                setFilterCity('all');
-                setBudgetRange([0, 50000]);
-              }}
-            >
-              Reset Filters
-            </Button>
+            <div className="flex gap-2">
+              {selectedCourses.length > 0 && (
+                <Button 
+                  variant="default"
+                  size="sm"
+                  onClick={handleCompare}
+                  disabled={selectedCourses.length < 2}
+                >
+                  <GitCompare className="w-4 h-4 mr-2" />
+                  Compare ({selectedCourses.length})
+                </Button>
+              )}
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilterLevel('all');
+                  setFilterSubject('all');
+                  setFilterCity('all');
+                  setBudgetRange([0, 50000]);
+                  setFilterIntake('all');
+                  setFilterDuration('all');
+                  setSelectedCourses([]);
+                }}
+              >
+                Reset Filters
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -154,13 +219,28 @@ export default function CourseFilter({ courses = [], country }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                <Card className="border-0 shadow-lg hover:shadow-2xl transition-all h-full group">
-                  <CardContent className="p-6">
+              <Card className="border-0 shadow-lg hover:shadow-2xl transition-all h-full group relative">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
                     {/* Level Badge */}
-                    <Badge className="mb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                    <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
                       {course.level}
                     </Badge>
+                    
+                    {/* Compare Checkbox */}
+                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                      <Checkbox
+                        checked={selectedCourses.includes(course.id)}
+                        onCheckedChange={() => handleCourseSelect(course.id)}
+                        disabled={!selectedCourses.includes(course.id) && selectedCourses.length >= 4}
+                      />
+                      <label className="text-xs text-slate-600 cursor-pointer">
+                        Compare
+                      </label>
+                    </div>
+                  </div>
+
+                  <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
 
                     {/* Title */}
                     <h3 className="font-bold text-slate-900 text-lg mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
@@ -204,9 +284,9 @@ export default function CourseFilter({ courses = [], country }) {
                       View Details
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                  </CardContent>
-                </Card>
-              </Link>
+                  </Link>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
