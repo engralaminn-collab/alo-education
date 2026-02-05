@@ -70,9 +70,11 @@ import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import CompareCourses from './pages/CompareCourses';
+import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
 import CounselorDashboard from './pages/CounselorDashboard';
 import CourseDetails from './pages/CourseDetails';
+import CourseFinder from './pages/CourseFinder';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
 import Home from './pages/Home';
@@ -98,8 +100,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CourseFinder from './pages/CourseFinder';
-import CompleteProfile from './pages/CompleteProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -127,9 +127,11 @@ export const PAGES = {
     "CRMUniversities": CRMUniversities,
     "CRMUniversityOutreach": CRMUniversityOutreach,
     "CompareCourses": CompareCourses,
+    "CompleteProfile": CompleteProfile,
     "Contact": Contact,
     "CounselorDashboard": CounselorDashboard,
     "CourseDetails": CourseDetails,
+    "CourseFinder": CourseFinder,
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
     "Home": Home,
@@ -155,8 +157,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CourseFinder": CourseFinder,
-    "CompleteProfile": CompleteProfile,
 }
 
 export const pagesConfig = {
