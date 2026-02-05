@@ -26,6 +26,8 @@ import CommentSystem from '@/components/portal/CommentSystem';
 import WhatsAppEscalation from '@/components/portal/WhatsAppEscalation';
 import QuickDocumentUpload from '@/components/dashboard/QuickDocumentUpload';
 import RealTimeChat from '@/components/portal/RealTimeChat';
+import ApplicationTimeline from '@/components/applications/ApplicationTimeline';
+import ApplicationProgressBar from '@/components/applications/ApplicationProgressBar';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -262,22 +264,23 @@ export default function StudentPortal() {
                           const university = universityMap[app.university_id];
                           
                           return (
-                            <div key={app.id} className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                              <div className="flex items-start justify-between mb-2">
+                            <div key={app.id} className="p-4 bg-slate-50 rounded-lg space-y-3">
+                              <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                   <h4 className="font-semibold text-slate-900">{course?.course_title}</h4>
                                   <p className="text-sm text-slate-600">{university?.university_name}</p>
+                                  {app.offer_deadline && (
+                                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-1">
+                                      <Calendar className="w-3 h-3" />
+                                      Deadline: {format(new Date(app.offer_deadline), 'MMM d, yyyy')}
+                                    </div>
+                                  )}
                                 </div>
                                 <Badge className={statusColors[app.status]}>
                                   {app.status?.replace(/_/g, ' ')}
                                 </Badge>
                               </div>
-                              {app.offer_deadline && (
-                                <div className="flex items-center gap-1 text-xs text-slate-500">
-                                  <Calendar className="w-3 h-3" />
-                                  Deadline: {format(new Date(app.offer_deadline), 'MMM d, yyyy')}
-                                </div>
-                              )}
+                              <ApplicationTimeline application={app} compact={true} />
                             </div>
                           );
                         })}
@@ -322,51 +325,30 @@ export default function StudentPortal() {
                       return (
                         <Card key={app.id} className="border-0 shadow-sm">
                           <CardContent className="p-6">
-                            <div className="flex items-start gap-4">
-                              <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-                                <Building2 className="w-8 h-8 text-slate-400" />
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-start justify-between mb-3">
-                                  <div>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-1">
-                                      {course?.course_title}
-                                    </h3>
-                                    <p className="text-slate-600">{university?.university_name}</p>
-                                    <p className="text-sm text-slate-500 mt-1">
-                                      {university?.country} • {course?.level}
-                                    </p>
+                            <div className="space-y-4">
+                              <div className="flex items-start gap-4">
+                                <div className="w-16 h-16 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                                  <Building2 className="w-8 h-8 text-slate-400" />
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <h3 className="text-lg font-bold text-slate-900 mb-1">
+                                        {course?.course_title}
+                                      </h3>
+                                      <p className="text-slate-600">{university?.university_name}</p>
+                                      <p className="text-sm text-slate-500 mt-1">
+                                        {university?.country} • {course?.level}
+                                      </p>
+                                    </div>
+                                    <Badge className={statusColors[app.status]}>
+                                      {app.status?.replace(/_/g, ' ')}
+                                    </Badge>
                                   </div>
-                                  <Badge className={statusColors[app.status]}>
-                                    {app.status?.replace(/_/g, ' ')}
-                                  </Badge>
-                                </div>
-
-                                {/* Milestones Progress */}
-                                <div className="space-y-2">
-                                  {[
-                                    { key: 'documents_submitted', label: 'Documents Submitted' },
-                                    { key: 'application_submitted', label: 'Application Submitted' },
-                                    { key: 'offer_received', label: 'Offer Received' },
-                                    { key: 'visa_applied', label: 'Visa Applied' },
-                                    { key: 'enrolled', label: 'Enrolled' }
-                                  ].map(milestone => {
-                                    const completed = app.milestones?.[milestone.key]?.completed;
-                                    return (
-                                      <div key={milestone.key} className="flex items-center gap-2">
-                                        {completed ? (
-                                          <CheckCircle className="w-4 h-4 text-green-600" />
-                                        ) : (
-                                          <div className="w-4 h-4 rounded-full border-2 border-slate-300" />
-                                        )}
-                                        <span className={`text-sm ${completed ? 'text-green-700 font-medium' : 'text-slate-500'}`}>
-                                          {milestone.label}
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
                                 </div>
                               </div>
+
+                              <ApplicationProgressBar application={app} showLabels={true} />
                             </div>
                           </CardContent>
                         </Card>

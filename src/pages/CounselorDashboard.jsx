@@ -18,6 +18,8 @@ import { toast } from 'sonner';
 import CRMLayout from '@/components/crm/CRMLayout';
 import AIAssistant from '@/components/counselor/AIAssistant';
 import EnhancedAIEmailAssistant from '@/components/crm/EnhancedAIEmailAssistant';
+import ApplicationTimeline from '@/components/applications/ApplicationTimeline';
+import ApplicationProgressBar from '@/components/applications/ApplicationProgressBar';
 
 export default function CounselorDashboard() {
   const queryClient = useQueryClient();
@@ -609,7 +611,7 @@ export default function CounselorDashboard() {
                   <CardDescription>{student.email}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-slate-600">Profile Completeness</span>
@@ -621,18 +623,21 @@ export default function CounselorDashboard() {
                     </div>
 
                     {studentApps.length > 0 ? (
-                      <div>
-                        <h4 className="text-sm font-medium text-slate-900 mb-3">
+                      <div className="space-y-6">
+                        <h4 className="text-sm font-medium text-slate-900">
                           Applications ({studentApps.length})
                         </h4>
-                        <div className="space-y-2">
-                          {studentApps.map(app => (
-                            <div key={app.id} className="flex items-center justify-between text-sm border-b pb-2">
-                              <span className="text-slate-700">Application #{app.id.slice(0, 8)}</span>
+                        {studentApps.map(app => (
+                          <div key={app.id} className="border rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-4">
+                              <span className="text-sm font-medium text-slate-900">
+                                Application #{app.id.slice(0, 8)}
+                              </span>
                               <Badge variant="outline">{app.status}</Badge>
                             </div>
-                          ))}
-                        </div>
+                            <ApplicationProgressBar application={app} showLabels={true} />
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       <p className="text-sm text-slate-500 text-center py-4">

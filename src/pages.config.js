@@ -53,6 +53,7 @@ import AlumniProfile from './pages/AlumniProfile';
 import BookConsultation from './pages/BookConsultation';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
+import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
 import CRMCommunications from './pages/CRMCommunications';
 import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
@@ -62,6 +63,7 @@ import CRMMessages from './pages/CRMMessages';
 import CRMReports from './pages/CRMReports';
 import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import CRMSettings from './pages/CRMSettings';
+import CRMStudentSuccess from './pages/CRMStudentSuccess';
 import CRMStudents from './pages/CRMStudents';
 import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
@@ -82,21 +84,19 @@ import MyProfile from './pages/MyProfile';
 import ScholarshipFinder from './pages/ScholarshipFinder';
 import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
+import StudentDashboard from './pages/StudentDashboard';
 import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
 import StudyInDubai from './pages/StudyInDubai';
 import StudyInIreland from './pages/StudyInIreland';
 import StudyInNewZealand from './pages/StudyInNewZealand';
+import StudyInUK from './pages/StudyInUK';
 import StudyInUSA from './pages/StudyInUSA';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import StudentDashboard from './pages/StudentDashboard';
-import StudyInUK from './pages/StudyInUK';
-import CRMStudentSuccess from './pages/CRMStudentSuccess';
-import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
 import __Layout from './Layout.jsx';
 
 
@@ -107,6 +107,7 @@ export const PAGES = {
     "BookConsultation": BookConsultation,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
+    "CRMBulkCampaigns": CRMBulkCampaigns,
     "CRMCommunications": CRMCommunications,
     "CRMCounselors": CRMCounselors,
     "CRMCourses": CRMCourses,
@@ -116,6 +117,7 @@ export const PAGES = {
     "CRMReports": CRMReports,
     "CRMSecureDocuments": CRMSecureDocuments,
     "CRMSettings": CRMSettings,
+    "CRMStudentSuccess": CRMStudentSuccess,
     "CRMStudents": CRMStudents,
     "CRMTasks": CRMTasks,
     "CRMTestimonials": CRMTestimonials,
@@ -136,21 +138,19 @@ export const PAGES = {
     "ScholarshipFinder": ScholarshipFinder,
     "Services": Services,
     "SharedComparison": SharedComparison,
+    "StudentDashboard": StudentDashboard,
     "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
     "StudyInDubai": StudyInDubai,
     "StudyInIreland": StudyInIreland,
     "StudyInNewZealand": StudyInNewZealand,
+    "StudyInUK": StudyInUK,
     "StudyInUSA": StudyInUSA,
     "SubmitTestimonial": SubmitTestimonial,
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "StudentDashboard": StudentDashboard,
-    "StudyInUK": StudyInUK,
-    "CRMStudentSuccess": CRMStudentSuccess,
-    "CRMBulkCampaigns": CRMBulkCampaigns,
 }
 
 export const pagesConfig = {
