@@ -94,8 +94,8 @@ export default function Contact() {
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-emerald-600" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-brand-light flex items-center justify-center shrink-0">
+                    <Phone className="w-5 h-5 text-education-blue" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900">Phone</h4>
@@ -105,8 +105,8 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-brand-light flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5 text-education-blue" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900">Email</h4>
@@ -116,8 +116,8 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-purple-600" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-brand-light flex items-center justify-center shrink-0">
+                    <MapPin className="w-5 h-5 text-alo-orange" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900">Office</h4>
@@ -127,8 +127,8 @@ export default function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm">
-                  <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                    <Clock className="w-5 h-5 text-amber-600" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-brand-light flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5 text-sunshine" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-900">Working Hours</h4>
@@ -150,8 +150,8 @@ export default function Contact() {
               {submitted ? (
                 <Card className="border-0 shadow-lg">
                   <CardContent className="p-12 text-center">
-                    <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
-                      <CheckCircle className="w-10 h-10 text-emerald-600" />
+                    <div className="w-20 h-20 rounded-full bg-gradient-brand-light flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle className="w-10 h-10 text-education-blue" />
                     </div>
                     <h2 className="text-2xl font-bold text-slate-900 mb-4">Thank You!</h2>
                     <p className="text-slate-600 mb-6">
@@ -169,7 +169,7 @@ export default function Contact() {
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
                     <CardTitle className="text-2xl flex items-center gap-2">
-                      <GraduationCap className="w-6 h-6 text-emerald-600" />
+                      <GraduationCap className="w-6 h-6 text-education-blue" />
                       Book Free Consultation
                     </CardTitle>
                     <CardDescription>
@@ -293,7 +293,7 @@ export default function Contact() {
 
                       <Button 
                         type="submit" 
-                        className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white h-12 text-lg"
+                        className="w-full bg-gradient-brand text-white h-12 text-lg hover:opacity-90"
                         disabled={createInquiry.isPending}
                       >
                         {createInquiry.isPending ? (

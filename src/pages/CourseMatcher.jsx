@@ -173,7 +173,7 @@ export default function CourseMatcher() {
   const progress = (currentStep / steps.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Hero */}
       <section className="py-20">
         <div className="container mx-auto px-6">
@@ -422,7 +422,7 @@ export default function CourseMatcher() {
                             variant={formData.preferred_countries.includes(country) ? 'default' : 'outline'}
                             className={`cursor-pointer transition-all ${
                               formData.preferred_countries.includes(country) 
-                                ? 'bg-emerald-500 hover:bg-emerald-600' 
+                                ? 'bg-education-blue hover:bg-education-blue/90' 
                                 : 'hover:bg-slate-100'
                             }`}
                             onClick={() => {
@@ -466,7 +466,7 @@ export default function CourseMatcher() {
                               variant={formData.preferred_fields.includes(fieldKey) ? 'default' : 'outline'}
                               className={`cursor-pointer transition-all ${
                                 formData.preferred_fields.includes(fieldKey) 
-                                  ? 'bg-emerald-500 hover:bg-emerald-600' 
+                                  ? 'bg-education-blue hover:bg-education-blue/90' 
                                   : 'hover:bg-slate-100'
                               }`}
                               onClick={() => {
@@ -523,13 +523,13 @@ export default function CourseMatcher() {
 
                   {isMatching ? (
                     <div className="text-center py-20">
-                      <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                      <div className="w-16 h-16 border-4 border-education-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                       <p className="text-slate-600">Finding your perfect matches...</p>
                     </div>
                   ) : matchedCourses.length === 0 ? (
                     <Card className="border-0 shadow-sm">
                       <CardContent className="p-8 text-center">
-                        <AlertCircle className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <AlertCircle className="w-12 h-12 text-alo-orange/30 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold mb-2">No matches found</h3>
                         <p className="text-slate-500">Try adjusting your preferences</p>
                       </CardContent>

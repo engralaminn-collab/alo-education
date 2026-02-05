@@ -102,7 +102,7 @@ export default function StudentPortal() {
               Create your student profile to access the portal
             </p>
             <Link to={createPageUrl('MyProfile')}>
-              <Button className="bg-emerald-600 hover:bg-emerald-700">
+              <Button className="bg-education-blue hover:bg-education-blue/90">
                 Create Profile
               </Button>
             </Link>
@@ -115,7 +115,7 @@ export default function StudentPortal() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-8">
+      <div className="bg-gradient-brand py-8">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between">
             <div>
@@ -127,7 +127,7 @@ export default function StudentPortal() {
               </p>
             </div>
             <Link to={createPageUrl('MyProfile')}>
-              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
                 <User className="w-4 h-4 mr-2" />
                 Edit Profile
               </Button>
@@ -193,8 +193,8 @@ export default function StudentPortal() {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-lg bg-education-blue/10 flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-education-blue" />
                     </div>
                     <div>
                       <p className="text-slate-500 text-xs">Applications</p>
@@ -207,8 +207,8 @@ export default function StudentPortal() {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 text-emerald-600" />
+                    <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
                       <p className="text-slate-500 text-xs">Approved Docs</p>
@@ -221,8 +221,8 @@ export default function StudentPortal() {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-amber-600" />
+                    <div className="w-10 h-10 rounded-lg bg-sunshine/20 flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-sunshine" />
                     </div>
                     <div>
                       <p className="text-slate-500 text-xs">Pending Docs</p>
@@ -235,8 +235,8 @@ export default function StudentPortal() {
               <Card>
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-purple-600" />
+                    <div className="w-10 h-10 rounded-lg bg-education-blue/10 flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-education-blue" />
                     </div>
                     <div>
                       <p className="text-slate-500 text-xs">Profile</p>
@@ -320,7 +320,7 @@ export default function StudentPortal() {
                     <h3 className="font-semibold text-slate-900 mb-2">Start Your Journey</h3>
                     <p className="text-slate-500 mb-6">Find and apply to your dream courses</p>
                     <Link to={createPageUrl('CourseMatcher')}>
-                      <Button className="bg-emerald-600 hover:bg-emerald-700">
+                      <Button className="bg-education-blue hover:bg-education-blue/90">
                         Explore Courses
                       </Button>
                     </Link>
