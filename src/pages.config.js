@@ -50,7 +50,10 @@
 import About from './pages/About';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
+import ApplicationForm from './pages/ApplicationForm';
 import BookConsultation from './pages/BookConsultation';
+import CRMAIAssistant from './pages/CRMAIAssistant';
+import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
@@ -82,6 +85,7 @@ import CourseFinder from './pages/CourseFinder';
 import CourseFinderResults from './pages/CourseFinderResults';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
+import DuolingoPrep from './pages/DuolingoPrep';
 import Home from './pages/Home';
 import IELTSPrep from './pages/IELTSPrep';
 import LanguagePrep from './pages/LanguagePrep';
@@ -91,6 +95,7 @@ import MyApplications from './pages/MyApplications';
 import MyComparisons from './pages/MyComparisons';
 import MyDocuments from './pages/MyDocuments';
 import MyProfile from './pages/MyProfile';
+import OETPrep from './pages/OETPrep';
 import PTEPrep from './pages/PTEPrep';
 import Resources from './pages/Resources';
 import ScholarshipFinder from './pages/ScholarshipFinder';
@@ -107,16 +112,11 @@ import StudyInNewZealand from './pages/StudyInNewZealand';
 import StudyInUK from './pages/StudyInUK';
 import StudyInUSA from './pages/StudyInUSA';
 import SubmitTestimonial from './pages/SubmitTestimonial';
+import TOEFLPrep from './pages/TOEFLPrep';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
-import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import CRMAIAssistant from './pages/CRMAIAssistant';
-import ApplicationForm from './pages/ApplicationForm';
-import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
-import TOEFLPrep from './pages/TOEFLPrep';
-import DuolingoPrep from './pages/DuolingoPrep';
-import OETPrep from './pages/OETPrep';
 import UniversityComparison from './pages/UniversityComparison';
+import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import __Layout from './Layout.jsx';
 
 
@@ -124,7 +124,10 @@ export const PAGES = {
     "About": About,
     "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
+    "ApplicationForm": ApplicationForm,
     "BookConsultation": BookConsultation,
+    "CRMAIAssistant": CRMAIAssistant,
+    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMBulkCampaigns": CRMBulkCampaigns,
@@ -156,6 +159,7 @@ export const PAGES = {
     "CourseFinderResults": CourseFinderResults,
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
+    "DuolingoPrep": DuolingoPrep,
     "Home": Home,
     "IELTSPrep": IELTSPrep,
     "LanguagePrep": LanguagePrep,
@@ -165,6 +169,7 @@ export const PAGES = {
     "MyComparisons": MyComparisons,
     "MyDocuments": MyDocuments,
     "MyProfile": MyProfile,
+    "OETPrep": OETPrep,
     "PTEPrep": PTEPrep,
     "Resources": Resources,
     "ScholarshipFinder": ScholarshipFinder,
@@ -181,16 +186,11 @@ export const PAGES = {
     "StudyInUK": StudyInUK,
     "StudyInUSA": StudyInUSA,
     "SubmitTestimonial": SubmitTestimonial,
+    "TOEFLPrep": TOEFLPrep,
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
-    "UniversityDetailsPage": UniversityDetailsPage,
-    "CRMAIAssistant": CRMAIAssistant,
-    "ApplicationForm": ApplicationForm,
-    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
-    "TOEFLPrep": TOEFLPrep,
-    "DuolingoPrep": DuolingoPrep,
-    "OETPrep": OETPrep,
     "UniversityComparison": UniversityComparison,
+    "UniversityDetailsPage": UniversityDetailsPage,
 }
 
 export const pagesConfig = {
