@@ -16,6 +16,7 @@ import UniversitySuggester from '@/components/crm/UniversitySuggester';
 import AIEmailDrafter from '@/components/crm/AIEmailDrafter';
 import AutoFollowUpManager from '@/components/crm/AutoFollowUpManager';
 import AIPartnerOnboarding from '@/components/crm/AIPartnerOnboarding';
+import AICampaignCreator from '@/components/crm/AICampaignCreator';
 
 export default function CRMUniversityOutreach() {
   const queryClient = useQueryClient();
@@ -162,6 +163,11 @@ export default function CRMUniversityOutreach() {
           students={students}
           universities={universities}
         />
+      </div>
+
+      {/* AI Campaign Creator */}
+      <div className="mb-8">
+        <AICampaignCreator />
       </div>
 
       {/* AI Campaign Builder */}
