@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Mail, Zap, Brain, Award, Shield, Send, TrendingUp, Upload
+  Inbox, UserCog, LogOut, ChevronLeft, Mail, Zap, Brain, Award, Shield, Send, TrendingUp, Upload, Handshake
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -23,6 +23,7 @@ const menuItems = [
   { icon: TrendingUp, label: 'Status Monitor', page: 'CRMApplicationStatusMonitor' },
   { icon: TrendingUp, label: 'Student Success', page: 'CRMStudentSuccess' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
+  { icon: Handshake, label: 'Partnerships', page: 'CRMPartnerships' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
   { icon: Shield, label: 'Secure Docs', page: 'CRMSecureDocuments' },
