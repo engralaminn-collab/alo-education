@@ -121,6 +121,8 @@ import ServiceAccommodation from './pages/ServiceAccommodation';
 import ServicePreDeparture from './pages/ServicePreDeparture';
 import CRMApplicationStatusMonitor from './pages/CRMApplicationStatusMonitor';
 import CRMPartnerships from './pages/CRMPartnerships';
+import CourseFinderResults from './pages/CourseFinderResults';
+import CourseDetailsPage from './pages/CourseDetailsPage';
 import __Layout from './Layout.jsx';
 
 
@@ -199,6 +201,8 @@ export const PAGES = {
     "ServicePreDeparture": ServicePreDeparture,
     "CRMApplicationStatusMonitor": CRMApplicationStatusMonitor,
     "CRMPartnerships": CRMPartnerships,
+    "CourseFinderResults": CourseFinderResults,
+    "CourseDetailsPage": CourseDetailsPage,
 }
 
 export const pagesConfig = {
