@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Save, Plus, Trash2, User, GraduationCap, Briefcase, Shield, FileText, Target, DollarSign } from 'lucide-react';
+import StudentUniversityMatcher from '@/components/crm/StudentUniversityMatcher';
 
 const countries = ['Bangladesh', 'India', 'Pakistan', 'Nepal', 'Sri Lanka', 'Nigeria', 'Ghana', 'Kenya', 'Other'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -315,7 +316,7 @@ export default function CRMStudentProfile() {
         </div>
 
         <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="grid grid-cols-8 w-full">
+          <TabsList className="grid grid-cols-9 w-full">
             <TabsTrigger value="personal"><User className="w-4 h-4 mr-2" />Personal</TabsTrigger>
             <TabsTrigger value="passport"><Shield className="w-4 h-4 mr-2" />Passport</TabsTrigger>
             <TabsTrigger value="education"><GraduationCap className="w-4 h-4 mr-2" />Education</TabsTrigger>
@@ -324,6 +325,7 @@ export default function CRMStudentProfile() {
             <TabsTrigger value="lor"><FileText className="w-4 h-4 mr-2" />LOR</TabsTrigger>
             <TabsTrigger value="visa"><Shield className="w-4 h-4 mr-2" />Visa</TabsTrigger>
             <TabsTrigger value="preferences"><Target className="w-4 h-4 mr-2" />Preferences</TabsTrigger>
+            <TabsTrigger value="matcher">🎯 AI Matcher</TabsTrigger>
           </TabsList>
 
           {/* Personal & Contact */}
@@ -939,6 +941,14 @@ export default function CRMStudentProfile() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* AI Matcher */}
+          <TabsContent value="matcher">
+            <StudentUniversityMatcher 
+              studentId={studentId} 
+              studentName={`${formData.first_name} ${formData.last_name}`}
+            />
           </TabsContent>
 
           {/* Preferences & Funding */}
