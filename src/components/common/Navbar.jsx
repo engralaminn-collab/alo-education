@@ -50,8 +50,19 @@ export default function Navbar() {
     { label: 'Course Finder', page: 'CourseMatcher' },
     { label: 'Universities', page: 'Universities' },
     { label: 'Scholarships', page: 'ScholarshipFinder' },
-    { label: 'Services', page: 'Home', hash: '#services' },
     { label: 'Resources', page: 'Resources' },
+  ];
+
+  const services = [
+    { label: 'All Services', page: 'Services' },
+    { label: 'Free Counselling', page: 'ServiceFreeCounselling' },
+    { label: 'University Selection', page: 'ServiceUniversitySelection' },
+    { label: 'Application Assistance', page: 'ServiceApplicationAssistance' },
+    { label: 'SOP Review', page: 'ServiceSOPReview' },
+    { label: 'Visa Guidance', page: 'ServiceVisaGuidance' },
+    { label: 'Scholarship Support', page: 'ServiceScholarshipSupport' },
+    { label: 'Accommodation', page: 'ServiceAccommodation' },
+    { label: 'Pre-Departure', page: 'ServicePreDeparture' },
   ];
 
   return (
@@ -80,6 +91,25 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Services Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
+                  Services
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {services.map((service) => (
+                  <DropdownMenuItem key={service.page} asChild>
+                    <Link to={createPageUrl(service.page)} className="cursor-pointer">
+                      {service.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             {/* Destinations Dropdown */}
             <DropdownMenu>
@@ -202,6 +232,23 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
+
+                {/* Mobile Services */}
+                <div>
+                  <p className="text-sm font-semibold text-slate-500 mb-2">Services</p>
+                  <div className="flex flex-col gap-3 ml-2">
+                    {services.map((service) => (
+                      <Link
+                        key={service.page}
+                        to={createPageUrl(service.page)}
+                        onClick={() => setIsMobileOpen(false)}
+                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
+                      >
+                        {service.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
                 
                 {/* Mobile Destinations */}
                 <div>
