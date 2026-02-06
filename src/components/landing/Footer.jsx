@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { GraduationCap, Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   const capColors = [
@@ -23,7 +23,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 text-2xl">ALO Education</h3>
-                  <p className="text-alo-orange text-xs font-semibold italic">Your Future Starts Here</p>
+                  <p className="text-alo-orange text-xs font-semibold italic">Your Dream, Our Commitment</p>
                 </div>
               </div>
               <p className="text-slate-600 text-sm leading-relaxed">
@@ -51,17 +51,18 @@ export default function Footer() {
             <h4 className="text-slate-900 font-semibold mb-6">Destinations:</h4>
             <ul className="space-y-3">
               {[
-                { label: 'United Kingdom', page: 'StudyInUK' },
-                { label: 'United States', page: 'StudyInUSA' },
+                { label: 'UK', page: 'StudyInUK' },
                 { label: 'Australia', page: 'StudyInAustralia' },
                 { label: 'Canada', page: 'StudyInCanada' },
+                { label: 'Ireland', page: 'StudyInIreland' },
                 { label: 'New Zealand', page: 'StudyInNewZealand' },
-                { label: 'Europe', page: 'Universities' }
+                { label: 'USA', page: 'StudyInUSA' },
+                { label: 'Dubai', page: 'StudyInDubai' }
               ].map((link) => (
                 <li key={link.page}>
                   <Link 
                     to={createPageUrl(link.page)} 
-                    className="text-blue-600 hover:text-blue-700 transition-colors text-sm"
+                    className="text-education-blue hover:text-alo-orange transition-colors text-sm"
                   >
                     {link.label}
                   </Link>
@@ -75,15 +76,15 @@ export default function Footer() {
             <h4 className="text-slate-900 font-semibold mb-6">Quick Links:</h4>
             <ul className="space-y-3">
               {[
-                { label: 'Course Finder', page: 'CourseMatcher' },
+                { label: 'Course Finder', page: 'CourseFinder' },
                 { label: 'Services', page: 'Services' },
-                { label: 'English Test Prep', page: 'LanguagePrep' },
-                { label: 'Blogs', page: 'Home' }
+                { label: 'Language Prep', page: 'LanguagePrep' },
+                { label: 'Scholarships', page: 'ScholarshipFinder' }
               ].map((link) => (
                 <li key={link.page}>
                   <Link 
                     to={createPageUrl(link.page)} 
-                    className="text-blue-600 hover:text-blue-700 transition-colors text-sm"
+                    className="text-education-blue hover:text-alo-orange transition-colors text-sm"
                   >
                     {link.label}
                   </Link>
@@ -98,44 +99,79 @@ export default function Footer() {
             <ul className="space-y-3">
               {[
                 { label: 'About Us', page: 'About' },
-                { label: 'Team', page: 'About' },
-                { label: 'Find Us', page: 'Contact' },
-                { label: 'Contact Us', page: 'Contact' }
+                { label: 'Contact Us', page: 'Contact' },
+                { label: 'Code of Conduct', external: 'https://aloeducation.com/code-of-conduct' },
+                { label: 'Student Complaint Policy', external: 'https://aloeducation.com/complaint-policy' }
               ].map((link) => (
                 <li key={link.label}>
-                  <Link 
-                    to={createPageUrl(link.page)} 
-                    className="text-blue-600 hover:text-blue-700 transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a 
+                      href={link.external} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      to={createPageUrl(link.page)} 
+                      className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="text-slate-900 font-semibold mb-6">Contact Info:</h4>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="mailto:info@aloeducation.com" className="text-education-blue hover:text-alo-orange transition-colors">
+                  info@aloeducation.com
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="tel:+8801805020101" className="text-education-blue hover:text-alo-orange transition-colors">
+                  +880 180 502 0101
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="https://wa.me/8801805020101" target="_blank" rel="noopener noreferrer" className="text-education-blue hover:text-alo-orange transition-colors">
+                  WhatsApp: +880 180 502 0101
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="https://share.google/aarau5V2GfBrICZTj" target="_blank" rel="noopener noreferrer" className="text-education-blue hover:text-alo-orange transition-colors">
+                  Barek Mansion-02, 5th Floor<br />58/9 Box Culvert Road<br />Panthapath, Dhaka-1205
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
         {/* Graduation Caps Row */}
         <div className="mt-12 pt-8 border-t">
-          <div className="flex justify-center gap-8 flex-wrap mb-8">
+          <div className="flex justify-center gap-6 flex-wrap mb-8">
             {capColors.map((color, i) => (
-              <GraduationCap key={i} className={`w-8 h-8 ${color}`} />
+              <div key={i} className="animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}>
+                <GraduationCap className={`w-8 h-8 ${color}`} />
+              </div>
             ))}
           </div>
           
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-slate-600">
-              © Copyright 2026 <span className="font-bold text-education-blue">ALO Education</span>. Empowering Students Worldwide Since 2006. All Rights Reserved.
+              © <span className="font-bold text-education-blue">ALO Education</span>. All rights reserved.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-education-blue hover:text-alo-orange transition-colors font-medium">
-                Privacy Policy
-              </a>
-              <span className="text-slate-400">•</span>
-              <a href="#" className="text-education-blue hover:text-alo-orange transition-colors font-medium">
-                Cookie Policy
-              </a>
-            </div>
           </div>
         </div>
       </div>
