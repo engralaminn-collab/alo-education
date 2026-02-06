@@ -106,6 +106,13 @@ export default function Navbar() {
             >
               Book Free Counselling
             </Link>
+
+            <Link
+              to={createPageUrl('ProvideFeedback')}
+              className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
+            >
+              Share Feedback
+            </Link>
           </div>
 
           {/* Auth Buttons */}
