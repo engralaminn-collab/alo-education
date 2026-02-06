@@ -17,11 +17,6 @@ import {
   GraduationCap, User, Send, Mail, Plane
 } from 'lucide-react';
 import MilestoneTracker from '@/components/applications/MilestoneTracker';
-import ApplicationDeadlineManager from '@/components/applications/ApplicationDeadlineManager';
-import ApplicationNotesPanel from '@/components/applications/ApplicationNotesPanel';
-import AIEnrollmentPredictor from '@/components/applications/AIEnrollmentPredictor';
-import ApplicationDetailPanel from '@/components/crm/ApplicationDetailPanel';
-import ApplicationReportGenerator from '@/components/applications/ApplicationReportGenerator';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -86,13 +81,12 @@ export default function CRMApplications() {
     const matchesSearch = 
       student?.email?.toLowerCase().includes(search.toLowerCase()) ||
       student?.first_name?.toLowerCase().includes(search.toLowerCase()) ||
-      course?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      university?.name?.toLowerCase().includes(search.toLowerCase());
+      course?.course_title?.toLowerCase().includes(search.toLowerCase()) ||
+      university?.university_name?.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  // Stats
   const activeCount = applications.filter(a => 
     !['enrolled', 'rejected', 'withdrawn'].includes(a.status)
   ).length;
@@ -102,25 +96,14 @@ export default function CRMApplications() {
   const enrolledCount = applications.filter(a => a.status === 'enrolled').length;
 
   return (
-    <CRMLayout title="Applications">
-      <Tabs defaultValue="applications" className="mb-6">
-        <TabsList>
-          <TabsTrigger value="applications">Applications</TabsTrigger>
-          <TabsTrigger value="deadlines">Deadlines</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="deadlines">
-          <ApplicationDeadlineManager />
-        </TabsContent>
-
-        <TabsContent value="reports">
-          <ApplicationReportGenerator />
-        </TabsContent>
-
-        <TabsContent value="applications">
-
-      {/* Stats */}
+    <CRMLayout 
+      title="Applications"
+      actions={
+        <Button className="bg-emerald-500 hover:bg-emerald-600">
+          Create Application
+        </Button>
+      }
+    >
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <Card className="border-0 shadow-sm">
           <CardContent className="p-4">
@@ -148,7 +131,6 @@ export default function CRMApplications() {
         </Card>
       </div>
 
-      {/* Filters */}
       <Card className="border-0 shadow-sm mb-6">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
@@ -176,7 +158,6 @@ export default function CRMApplications() {
         </CardContent>
       </Card>
 
-      {/* Table */}
       <Card className="border-0 shadow-sm">
         <div className="overflow-x-auto">
           <Table>
@@ -234,12 +215,12 @@ export default function CRMApplications() {
                       </TableCell>
                       <TableCell>
                         <p className="font-medium text-slate-900 truncate max-w-[200px]">
-                          {course?.name || '-'}
+                          {course?.course_title || '-'}
                         </p>
-                        <p className="text-xs text-slate-500 capitalize">{course?.degree_level}</p>
+                        <p className="text-xs text-slate-500 capitalize">{course?.level}</p>
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm text-slate-600">{university?.name || '-'}</p>
+                        <p className="text-sm text-slate-600">{university?.university_name || '-'}</p>
                       </TableCell>
                       <TableCell>
                         <Badge className={status.color}>{status.label}</Badge>
@@ -284,26 +265,7 @@ export default function CRMApplications() {
         </div>
       </Card>
 
-        </TabsContent>
-      </Tabs>
-
-      {/* Application Detail Dialog */}
       <Dialog open={!!selectedApp} onOpenChange={(open) => !open && setSelectedApp(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Application Management</DialogTitle>
-          </DialogHeader>
-          {selectedApp && (
-            <ApplicationDetailPanel 
-              application={selectedApp} 
-              onClose={() => setSelectedApp(null)} 
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Old Detail Dialog - Backup */}
-      <Dialog open={false}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Application Details</DialogTitle>
@@ -316,20 +278,9 @@ export default function CRMApplications() {
               </TabsList>
               
               <TabsContent value="overview" className="space-y-6 mt-4">
-                <div className="grid lg:grid-cols-2 gap-6">
-                  {/* Milestone Tracker */}
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-4">Application Milestones</h4>
-                    <MilestoneTracker application={selectedApp} variant="vertical" />
-                  </div>
-
-                  {/* AI Prediction */}
-                  <AIEnrollmentPredictor
-                    application={selectedApp}
-                    student={studentMap[selectedApp.student_id]}
-                    university={universityMap[selectedApp.university_id]}
-                    allApplications={applications}
-                  />
+                <div>
+                  <h4 className="text-sm font-medium text-slate-500 mb-4">Application Milestones</h4>
+                  <MilestoneTracker application={selectedApp} variant="vertical" />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -376,142 +327,55 @@ export default function CRMApplications() {
                     <h4 className="text-sm font-medium text-slate-500 mb-2">Course</h4>
                     <div className="flex items-center gap-3">
                       <GraduationCap className="w-5 h-5 text-slate-400" />
-                      <span>{courseMap[selectedApp.course_id]?.name || '-'}</span>
+                      <span>{courseMap[selectedApp.course_id]?.course_title || '-'}</span>
                     </div>
                   </div>
-                  
                   <div>
                     <h4 className="text-sm font-medium text-slate-500 mb-2">University</h4>
                     <div className="flex items-center gap-3">
                       <Building2 className="w-5 h-5 text-slate-400" />
-                      <span>{universityMap[selectedApp.university_id]?.name || '-'}</span>
+                      <span>{universityMap[selectedApp.university_id]?.university_name || '-'}</span>
                     </div>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-4 gap-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Intake</h4>
-                    <Input 
-                      value={selectedApp.intake || ''}
-                      onChange={(e) => setSelectedApp({ ...selectedApp, intake: e.target.value })}
-                      placeholder="e.g. September 2025"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Offer Deadline</h4>
-                    <Input 
-                      type="date"
-                      value={selectedApp.offer_deadline || ''}
-                      onChange={(e) => setSelectedApp({ ...selectedApp, offer_deadline: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Tuition Fee</h4>
-                    <Input 
-                      type="number"
-                      value={selectedApp.tuition_fee || ''}
-                      onChange={(e) => setSelectedApp({ ...selectedApp, tuition_fee: parseFloat(e.target.value) })}
-                    />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Scholarship</h4>
-                    <Input 
-                      type="number"
-                      value={selectedApp.scholarship_amount || ''}
-                      onChange={(e) => setSelectedApp({ ...selectedApp, scholarship_amount: parseFloat(e.target.value) })}
-                    />
                   </div>
                 </div>
               </TabsContent>
-              
-              <TabsContent value="notes" className="mt-4">
-                <ApplicationNotesPanel applicationId={selectedApp.id} />
-                
-                <div className="space-y-4 mt-6">
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Update Milestones</h4>
-                    <div className="space-y-3 bg-slate-50 p-4 rounded-xl">
-                      {['documents_submitted', 'application_submitted', 'offer_received', 'visa_applied', 'visa_approved', 'enrolled'].map(key => {
-                        const milestone = selectedApp.milestones?.[key] || {};
-                        const labels = {
-                          documents_submitted: 'Documents Submitted',
-                          application_submitted: 'Application Submitted',
-                          offer_received: 'Offer Received',
-                          visa_applied: 'Visa Applied',
-                          visa_approved: 'Visa Approved',
-                          enrolled: 'Enrolled'
-                        };
-                        
-                        return (
-                          <div key={key} className="flex items-center gap-3 bg-white p-3 rounded-lg">
-                            <input
-                              type="checkbox"
-                              checked={milestone.completed || false}
-                              onChange={(e) => {
-                                const newMilestones = { 
-                                  ...selectedApp.milestones,
-                                  [key]: {
-                                    ...milestone,
-                                    completed: e.target.checked,
-                                    date: e.target.checked ? new Date().toISOString() : milestone.date
-                                  }
-                                };
-                                setSelectedApp({ ...selectedApp, milestones: newMilestones });
-                              }}
-                              className="w-5 h-5 rounded border-slate-300 text-emerald-500 cursor-pointer"
-                            />
-                            <label className="text-sm font-medium flex-1 cursor-pointer">
-                              {labels[key]}
-                            </label>
-                            {milestone.completed && milestone.date && (
-                              <span className="text-xs text-slate-400">
-                                {format(new Date(milestone.date), 'MMM d')}
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
 
+              <TabsContent value="notes" className="mt-4">
+                <div className="space-y-4">
                   <div>
-                    <h4 className="text-sm font-medium text-slate-500 mb-2">Counselor Notes</h4>
+                    <h4 className="text-sm font-medium text-slate-900 mb-2">Counselor Notes</h4>
                     <Textarea 
-                      rows={4}
                       value={selectedApp.counselor_notes || ''}
                       onChange={(e) => setSelectedApp({ ...selectedApp, counselor_notes: e.target.value })}
-                      placeholder="Add notes..."
+                      placeholder="Add counselor notes..."
+                      className="min-h-32"
                     />
                   </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-slate-900 mb-2">Student Notes</h4>
+                    <Textarea 
+                      value={selectedApp.student_notes || ''}
+                      onChange={(e) => setSelectedApp({ ...selectedApp, student_notes: e.target.value })}
+                      placeholder="Add student notes..."
+                      className="min-h-32"
+                    />
+                  </div>
+                  <Button 
+                    onClick={() => updateApplication.mutate({ 
+                      id: selectedApp.id, 
+                      data: { 
+                        counselor_notes: selectedApp.counselor_notes,
+                        student_notes: selectedApp.student_notes
+                      } 
+                    })}
+                    className="w-full bg-blue-600"
+                  >
+                    Save Notes
+                  </Button>
                 </div>
               </TabsContent>
             </Tabs>
           )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedApp(null)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={() => {
-                updateApplication.mutate({
-                  id: selectedApp.id,
-                  data: {
-                    status: selectedApp.status,
-                    intake: selectedApp.intake,
-                    offer_deadline: selectedApp.offer_deadline,
-                    tuition_fee: selectedApp.tuition_fee,
-                    scholarship_amount: selectedApp.scholarship_amount,
-                    counselor_notes: selectedApp.counselor_notes,
-                    milestones: selectedApp.milestones,
-                  }
-                });
-                setSelectedApp(null);
-              }}
-            >
-              Save Changes
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </CRMLayout>
