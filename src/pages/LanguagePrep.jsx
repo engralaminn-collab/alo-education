@@ -1,326 +1,355 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { 
+  BookOpen, CheckCircle, Clock, DollarSign, Globe, 
+  Zap, ArrowRight, Phone
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Clock, Calendar, DollarSign, Award, ArrowRight, CheckCircle, MessageSquare } from 'lucide-react';
+import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 
-const englishTests = [
+const tests = [
   {
     name: 'IELTS',
-    description: 'Accepted by UK, Australia, Canada, Europe, and many global universities.',
-    duration: '~2 hours 45 minutes',
+    duration: '2h 45m',
     results: '13 days',
-    scoring: 'Band score (0–9)',
-    cost: 'Varies by country',
-    link: 'IELTSPrep'
+    scoring: 'Band 0–9',
+    cost: 'Medium',
+    acceptance: 'UK, Australia, Canada, Europe',
+    page: 'IELTSPrep',
+    description: 'Most widely accepted English proficiency test'
   },
   {
     name: 'IELTS UKVI',
-    description: 'UK government-approved version of IELTS for visa applications.',
-    duration: '~2 hours 45 minutes',
+    duration: '2h 45m',
     results: '13 days',
-    scoring: 'Band score (0–9)',
-    cost: 'Slightly higher than standard IELTS',
-    link: 'IELTSPrep'
+    scoring: 'Band 0–9',
+    cost: 'Medium-High',
+    acceptance: 'UK Visa & Universities',
+    page: 'IELTSPrep',
+    description: 'UK government-approved for visa applications'
   },
   {
     name: 'PTE Academic',
-    description: 'Computer-based test accepted by many universities and immigration authorities.',
-    duration: '~2 hours',
+    duration: '~2h',
     results: '2–5 days',
-    scoring: '10–90 scale',
-    cost: 'Mid-range',
-    link: 'PTEPrep'
-  },
-  {
-    name: 'OIETC – ELLT',
-    description: 'Online English test accepted by selected UK universities.',
-    duration: '~2 hours',
-    results: 'Fast',
-    scoring: 'Pass-based',
-    cost: 'Lower than IELTS',
-    link: null
+    scoring: '10–90',
+    cost: 'Medium',
+    acceptance: 'Australia, UK, Canada',
+    page: 'PTEPrep',
+    description: 'Computer-based with fast results'
   },
   {
     name: 'TOEFL iBT',
-    description: 'Widely accepted, especially in the USA and Canada.',
-    duration: '~3 hours',
+    duration: '~3h',
     results: '6–10 days',
     scoring: '0–120',
-    cost: 'Higher than most tests',
-    link: null
+    cost: 'High',
+    acceptance: 'USA, Canada, Global',
+    page: 'TOEFLPrep',
+    description: 'Preferred for US and Canadian universities'
   },
   {
     name: 'Duolingo English Test',
-    description: 'Online test accepted by many universities globally.',
-    duration: '~1 hour',
-    results: 'Within 48 hours',
+    duration: '~1h',
+    results: '48 hours',
     scoring: '10–160',
     cost: 'Low',
-    link: null
+    acceptance: 'Global universities',
+    page: 'DuolingoPrep',
+    description: 'Fastest online English proficiency test'
   },
   {
-    name: 'LanguageCert',
-    description: 'UK-based English qualification accepted by selected institutions.',
-    duration: 'Varies',
-    results: 'Fast',
-    scoring: 'CEFR levels',
-    cost: 'Moderate',
-    link: null
-  },
-  {
-    name: 'Kaplan English Test',
-    description: 'Accepted by Kaplan partner universities.',
-    duration: 'Short',
-    results: 'Fast',
-    scoring: 'Internal scale',
-    cost: 'Low',
-    link: null
-  },
-  {
-    name: 'OET (for Health Professionals)',
-    description: 'Designed for healthcare courses and professionals.',
-    duration: '~3 hours',
+    name: 'OET (Healthcare)',
+    duration: '~3h',
     results: '14 days',
     scoring: 'Grade-based',
     cost: 'High',
-    link: null
-  },
-  {
-    name: 'CAE / CPE',
-    description: 'Cambridge English advanced certifications.',
-    duration: 'Long format',
-    results: 'Several weeks',
-    scoring: 'Grade-based',
-    cost: 'High',
-    link: null
+    acceptance: 'Health professional courses',
+    page: 'OETPrep',
+    description: 'Specialized for healthcare professionals'
   }
 ];
 
-const academicTests = [
-  { name: 'GRE', description: 'Required for many postgraduate programs.' },
-  { name: 'GMAT', description: 'Required for MBA and business programs.' },
-  { name: 'SAT', description: 'Undergraduate admission test.' },
-  { name: 'ACT', description: 'Alternative undergraduate admission test.' }
-];
-
 const comparisonData = [
-  { test: 'IELTS', duration: '2h 45m', results: '13 days', scoring: 'Band 0–9', cost: 'Medium', bestFor: 'UK, Australia, Canada' },
-  { test: 'IELTS UKVI', duration: '2h 45m', results: '13 days', scoring: 'Band 0–9', cost: 'Slightly higher', bestFor: 'UK visa' },
-  { test: 'PTE Academic', duration: '~2h', results: '2–5 days', scoring: '10–90', cost: 'Medium', bestFor: 'Australia, UK' },
-  { test: 'TOEFL iBT', duration: '~3h', results: '6–10 days', scoring: '0–120', cost: 'High', bestFor: 'USA, Canada' },
-  { test: 'Duolingo', duration: '~1h', results: '48 hours', scoring: '10–160', cost: 'Low', bestFor: 'Fast applications' },
-  { test: 'OET', duration: '~3h', results: '14 days', scoring: 'Grade-based', cost: 'High', bestFor: 'Healthcare courses' }
+  { test: 'IELTS', duration: '2h 45m', results: '13 days', scoring: 'Band 0–9', cost: '£180–250', best: 'UK, Australia, Canada' },
+  { test: 'IELTS UKVI', duration: '2h 45m', results: '13 days', scoring: 'Band 0–9', cost: '£200–270', best: 'UK Visa' },
+  { test: 'PTE Academic', duration: '~2h', results: '2–5 days', scoring: '10–90', cost: '$185–300', best: 'Australia, UK' },
+  { test: 'TOEFL iBT', duration: '~3h', results: '6–10 days', scoring: '0–120', cost: '$220', best: 'USA, Canada' },
+  { test: 'Duolingo', duration: '~1h', results: '48 hours', scoring: '10–160', cost: '$59', best: 'Quick applications' },
+  { test: 'OET', duration: '~3h', results: '14 days', scoring: 'Grade-based', cost: '$250–380', best: 'Healthcare' }
 ];
 
 const faqs = [
   {
     q: 'Which English test is best for UK study?',
-    a: 'IELTS or IELTS UKVI, depending on visa requirements.'
+    a: 'IELTS or IELTS UKVI are most widely accepted by UK universities. IELTS UKVI is specifically required for UK visa routes.'
   },
   {
-    q: 'Can I apply without IELTS?',
-    a: 'Some universities accept Duolingo, PTE, or MOI, subject to eligibility.'
+    q: 'Can I apply without an English proficiency test?',
+    a: 'Some universities accept alternative pathways like Duolingo or MOI (Medium of Instruction) waiver. Check with your chosen university.'
   },
   {
-    q: 'Is English test mandatory for visa?',
-    a: 'In most cases, yes. Requirements vary by country and course level.'
+    q: 'Is an English test mandatory for visa approval?',
+    a: 'Yes, in most cases. Requirements vary by country, course level, and immigration rules. Always verify with your destination country.'
   },
   {
-    q: 'Can I retake the test if I don\'t meet the score?',
-    a: 'Yes. Most English tests allow multiple attempts.'
+    q: 'Can I retake the test if I don\'t meet my required score?',
+    a: 'Yes. Most English tests allow multiple attempts. Plan retakes well in advance of application deadlines.'
   },
   {
-    q: 'Does ALO provide coaching?',
-    a: 'We provide preparation guidance, resources, and strategy support.'
+    q: 'Does ALO provide English coaching?',
+    a: 'ALO provides comprehensive preparation guidance, study strategies, resources, and mock test support to help you achieve your target score.'
+  },
+  {
+    q: 'How much should I score on IELTS for university admission?',
+    a: 'Most universities require IELTS 6.0–7.5. Check specific university requirements for your course. Visa requirements may be different.'
+  }
+];
+
+const testimonials = [
+  {
+    name: 'Sarah Johnson',
+    destination: 'UK',
+    test: 'IELTS',
+    score: '7.0',
+    story: 'Required IELTS 6.5 for undergraduate admission. Achieved 7.0 with ALO guidance and secured visa approval smoothly.'
+  },
+  {
+    name: 'Priya Patel',
+    destination: 'Australia',
+    test: 'PTE Academic',
+    score: '79/90',
+    story: 'Struggled with IELTS writing. Switched to PTE with ALO counselling and achieved required score within 1 month.'
+  },
+  {
+    name: 'Ahmed Hassan',
+    destination: 'Canada',
+    test: 'Duolingo',
+    score: '140/160',
+    story: 'Applied late for intake. Used Duolingo English Test and received offer letter within days.'
   }
 ];
 
 export default function LanguagePrep() {
+  const [activeTab, setActiveTab] = useState('tests');
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <section className="relative h-[400px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-education-blue to-alo-orange">
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Language Preparation</h1>
-          <p className="text-xl md:text-2xl mb-6">
-            English tests for university entry
-          </p>
-          <p className="text-lg mb-8">
-            Access study materials, practice tests, and expert guidance to achieve your required score
-          </p>
-          <Link to={createPageUrl('Contact')}>
-            <Button size="lg" className="bg-white text-education-blue hover:bg-white/90 gap-2">
-              <MessageSquare size={20} />
-              Book Free Counselling
-            </Button>
-          </Link>
+      <section className="bg-gradient-brand text-white py-16">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Language Prep</h1>
+            <p className="text-xl text-white/90 mb-6">
+              English tests for university entry. Access study materials, practice tests, and expert guidance to achieve your required score.
+            </p>
+            <Link to={createPageUrl('BookConsultation')}>
+              <Button className="bg-white text-education-blue hover:bg-slate-100 text-lg">
+                <Phone className="w-4 h-4 mr-2" />
+                Book Free Counselling
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-16 space-y-20">
-        {/* Introduction */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Introduction</h2>
-          <div className="prose prose-lg max-w-none text-gray-700 space-y-4">
-            <p>
-              English language proficiency is a core requirement for admission to universities in the UK, USA, Canada, 
-              Australia, Europe, and other study destinations. Most institutions and visa authorities require proof of 
-              English ability to ensure students can understand lectures, complete assignments, and communicate effectively.
-            </p>
-            <p>
-              ALO Education helps students select the right English test, prepare efficiently, and meet both university 
-              admission and visa compliance requirements with confidence.
-            </p>
-          </div>
-        </section>
-
-        {/* Why Take English Tests */}
-        <section className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
-            Why take an English language proficiency test to study abroad?
-          </h2>
-          <div className="prose prose-lg max-w-none text-gray-700 space-y-4">
-            <p>
-              Universities require international students to meet minimum English language standards to ensure academic success. 
-              These standards are verified through recognised English proficiency tests such as IELTS, PTE, TOEFL, and others.
-            </p>
-            <p>
-              Although these standardised tests can be challenging, the right preparation strategy can significantly improve 
-              your score. Many tests also allow retakes, giving students multiple chances to meet their required band or score.
-            </p>
-            <p className="font-semibold text-education-blue">ALO Education provides personalised English language preparation support, helping students:</p>
-            <ul className="space-y-2">
-              <li className="flex items-start gap-2">
-                <CheckCircle className="text-alo-orange flex-shrink-0 mt-1" size={20} />
-                <span>Choose the correct test</span>
+      <div className="container mx-auto px-6 py-12">
+        {/* Introduction Section */}
+        <motion.section 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-16 max-w-4xl"
+        >
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">Why English Language Proficiency Matters</h2>
+          <p className="text-slate-600 leading-relaxed mb-4">
+            English language proficiency is a core requirement for admission to universities in the UK, USA, Canada, Australia, Europe, and other study destinations. Most institutions and visa authorities require proof of English ability to ensure students can understand lectures, complete assignments, and communicate effectively.
+          </p>
+          <p className="text-slate-600 leading-relaxed mb-4">
+            ALO Education helps students select the right English test, prepare efficiently, and meet both university admission and visa compliance requirements with confidence.
+          </p>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-6">
+            <h3 className="font-semibold text-slate-900 mb-4">ALO Education helps you:</h3>
+            <ul className="space-y-2 text-slate-600">
+              <li className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-education-blue flex-shrink-0" />
+                Choose the correct test for your profile
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="text-alo-orange flex-shrink-0 mt-1" size={20} />
-                <span>Understand test formats and scoring</span>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-education-blue flex-shrink-0" />
+                Understand test formats and scoring
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="text-alo-orange flex-shrink-0 mt-1" size={20} />
-                <span>Prepare effectively within their timeline</span>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-education-blue flex-shrink-0" />
+                Prepare effectively within your timeline
               </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="text-alo-orange flex-shrink-0 mt-1" size={20} />
-                <span>Meet university and visa requirements</span>
+              <li className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-education-blue flex-shrink-0" />
+                Meet university and visa requirements
               </li>
             </ul>
           </div>
-        </section>
+        </motion.section>
 
-        {/* English Language Tests */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">English Language Proficiency Tests</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Understanding the format, duration, scoring system, cost, and acceptance of each test helps students 
-            choose the best option for their study plans.
-          </p>
+        {/* Tabs Section */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="tests">English Tests</TabsTrigger>
+            <TabsTrigger value="comparison">Comparison</TabsTrigger>
+            <TabsTrigger value="faq">FAQ</TabsTrigger>
+          </TabsList>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {englishTests.map((test) => (
-              <Card key={test.name} className="border-2 border-education-blue hover:shadow-xl transition-all group">
-                <CardHeader className="bg-gradient-to-br from-education-blue/5 to-alo-orange/5">
-                  <CardTitle className="text-alo-orange">{test.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  <p className="text-sm text-gray-600 min-h-[3rem]">{test.description}</p>
-                  
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Clock size={16} className="text-education-blue" />
-                      <span><strong>Duration:</strong> {test.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} className="text-education-blue" />
-                      <span><strong>Results:</strong> {test.results}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Award size={16} className="text-education-blue" />
-                      <span><strong>Scoring:</strong> {test.scoring}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DollarSign size={16} className="text-education-blue" />
-                      <span><strong>Cost:</strong> {test.cost}</span>
-                    </div>
-                  </div>
-
-                  {test.link ? (
-                    <Link to={createPageUrl(test.link)}>
-                      <Button className="w-full bg-alo-orange hover:bg-alo-orange/90 gap-2 group-hover:gap-3 transition-all">
-                        Learn More
-                        <ArrowRight size={16} />
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button className="w-full bg-alo-orange hover:bg-alo-orange/90" disabled>
-                      Coming Soon
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Academic Tests */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Academic / Aptitude Tests</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {academicTests.map((test) => (
-              <Card key={test.name} className="border-2 border-alo-orange hover:shadow-lg transition-all">
-                <CardContent className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-education-blue mb-2">{test.name}</h3>
-                  <p className="text-sm text-gray-600">{test.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Comparison Table */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Test Comparison Overview</h2>
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gradient-to-r from-education-blue to-alo-orange text-white">
-                  <tr>
-                    <th className="px-6 py-4 text-left">Test</th>
-                    <th className="px-6 py-4 text-left">Duration</th>
-                    <th className="px-6 py-4 text-left">Results</th>
-                    <th className="px-6 py-4 text-left">Scoring</th>
-                    <th className="px-6 py-4 text-left">Cost</th>
-                    <th className="px-6 py-4 text-left">Best For</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonData.map((row, index) => (
-                    <tr key={row.test} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="px-6 py-4 font-semibold text-education-blue">{row.test}</td>
-                      <td className="px-6 py-4">{row.duration}</td>
-                      <td className="px-6 py-4">{row.results}</td>
-                      <td className="px-6 py-4">{row.scoring}</td>
-                      <td className="px-6 py-4">{row.cost}</td>
-                      <td className="px-6 py-4">{row.bestFor}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* English Tests Tab */}
+          <TabsContent value="tests" className="space-y-8">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-8">English Language Tests</h2>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tests.map((test, idx) => (
+                  <motion.div
+                    key={test.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <Card className="h-full border-2 border-education-blue hover:shadow-lg transition-all">
+                      <CardHeader className="border-b border-education-blue bg-white">
+                        <CardTitle className="text-alo-orange">{test.name}</CardTitle>
+                        <p className="text-sm text-slate-600 mt-2">{test.description}</p>
+                      </CardHeader>
+                      <CardContent className="p-6 space-y-4">
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-slate-400" />
+                            <span className="text-slate-600">Duration: <strong>{test.duration}</strong></span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-slate-400" />
+                            <span className="text-slate-600">Results: <strong>{test.results}</strong></span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Globe className="w-4 h-4 text-slate-400" />
+                            <span className="text-slate-600">Score: <strong>{test.scoring}</strong></span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <DollarSign className="w-4 h-4 text-slate-400" />
+                            <span className="text-slate-600">Cost: <strong>{test.cost}</strong></span>
+                          </div>
+                        </div>
+                        <Badge className="w-full justify-center bg-blue-50 text-education-blue border border-education-blue">
+                          {test.acceptance}
+                        </Badge>
+                        <Link to={createPageUrl(test.page)}>
+                          <Button className="w-full bg-alo-orange hover:bg-orange-600">
+                            Learn More
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* ALO Support */}
-        <section className="bg-gradient-to-br from-education-blue/10 to-alo-orange/10 rounded-2xl p-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">ALO Education – Language Prep Support</h2>
-          <p className="text-lg text-gray-700 mb-6">
-            ALO Education provides end-to-end language preparation support, including:
+            {/* Academic Tests Section */}
+            <div className="mt-12 pt-8 border-t">
+              <h3 className="text-2xl font-bold text-slate-900 mb-6">Academic & Aptitude Tests</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                {[
+                  { name: 'GRE', desc: 'Required for many postgraduate programs' },
+                  { name: 'GMAT', desc: 'Required for MBA and business programs' },
+                  { name: 'SAT', desc: 'Undergraduate admission test' },
+                  { name: 'ACT', desc: 'Alternative undergraduate admission test' }
+                ].map(test => (
+                  <Card key={test.name} className="border border-slate-200">
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold text-slate-900">{test.name}</h4>
+                      <p className="text-sm text-slate-600 mt-2">{test.desc}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <Button className="w-full mt-6 bg-education-blue hover:bg-blue-700">
+                Learn More About Academic Tests
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* Comparison Tab */}
+          <TabsContent value="comparison" className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">Test Comparison Overview</h2>
+              <p className="text-slate-600 mb-6">
+                Compare all tests based on duration, result timeline, scoring system, cost, and university & visa acceptance.
+              </p>
+              
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Test</TableHead>
+                      <TableHead>Duration</TableHead>
+                      <TableHead>Results</TableHead>
+                      <TableHead>Scoring</TableHead>
+                      <TableHead>Cost</TableHead>
+                      <TableHead>Best For</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {comparisonData.map((row) => (
+                      <TableRow key={row.test}>
+                        <TableCell className="font-medium">{row.test}</TableCell>
+                        <TableCell>{row.duration}</TableCell>
+                        <TableCell>{row.results}</TableCell>
+                        <TableCell>{row.scoring}</TableCell>
+                        <TableCell>{row.cost}</TableCell>
+                        <TableCell>{row.best}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* FAQ Tab */}
+          <TabsContent value="faq" className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
+              
+              <Accordion type="single" collapsible className="w-full max-w-3xl">
+                {faqs.map((faq, idx) => (
+                  <AccordionItem key={idx} value={`faq-${idx}`}>
+                    <AccordionTrigger className="font-semibold text-slate-900">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* ALO Education Support Section */}
+        <section className="my-16 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 border border-blue-200">
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">ALO Education – Your Language Prep Partner</h2>
+          <p className="text-slate-600 mb-6">
+            We provide end-to-end language preparation support, including:
           </p>
           <div className="grid md:grid-cols-2 gap-4 mb-8">
             {[
@@ -329,46 +358,63 @@ export default function LanguagePrep() {
               'Score planning strategy',
               'Study material guidance',
               'Mock tests & feedback',
-              'Language waiver (MOI) eligibility check',
-              'University-specific acceptance guidance'
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-3">
-                <CheckCircle className="text-alo-orange flex-shrink-0" size={20} />
-                <span className="text-gray-700">{item}</span>
+              'Language waiver (MOI) eligibility check'
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-education-blue flex-shrink-0" />
+                <span className="text-slate-700">{item}</span>
               </div>
             ))}
           </div>
-          <p className="text-xl font-bold text-education-blue">We focus on results, not just registration.</p>
+          <p className="text-slate-600 italic font-semibold">We focus on results, not just registration.</p>
         </section>
 
-        {/* FAQs */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">FAQ – Language Tests, Visa & Admission</h2>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <Card key={index} className="border-2">
-                <CardContent className="p-6">
-                  <h3 className="font-bold text-education-blue mb-2">{faq.q}</h3>
-                  <p className="text-gray-700">{faq.a}</p>
-                </CardContent>
-              </Card>
+        {/* Testimonials Section */}
+        <section className="my-16">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Student Success Stories</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+              >
+                <Card className="h-full border-0 shadow-sm hover:shadow-lg transition-all">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h4 className="font-semibold text-slate-900">{testimonial.name}</h4>
+                        <p className="text-sm text-slate-600">{testimonial.destination}</p>
+                      </div>
+                      <Badge className="bg-education-blue">{testimonial.test}</Badge>
+                    </div>
+                    <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                      <p className="text-2xl font-bold text-education-blue">{testimonial.score}</p>
+                      <p className="text-xs text-slate-600">Final Score</p>
+                    </div>
+                    <p className="text-slate-600 text-sm">{testimonial.story}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="bg-gradient-to-r from-education-blue to-alo-orange rounded-2xl p-12 text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">Not sure which English test you need?</h2>
-          <p className="text-xl mb-8">Our experts will guide you based on your profile and destination.</p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="bg-white text-education-blue hover:bg-white/90">
+        {/* CTA Section */}
+        <section className="my-16 bg-alo-orange rounded-xl p-8 text-white text-center">
+          <h2 className="text-3xl font-bold mb-4">Not Sure Which English Test You Need?</h2>
+          <p className="text-lg mb-8 text-white/90">
+            Our experts will guide you based on your profile and destination.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button className="bg-white text-alo-orange hover:bg-slate-100 text-lg">
+              Learn More
+            </Button>
+            <Link to={createPageUrl('BookConsultation')}>
+              <Button variant="outline" className="border-white text-white hover:bg-white/20 text-lg w-full sm:w-auto">
+                <Phone className="w-4 h-4 mr-2" />
                 Book Free Counselling
-              </Button>
-            </Link>
-            <Link to={createPageUrl('IELTSPrep')}>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20">
-                Prepare with ALO
               </Button>
             </Link>
           </div>
