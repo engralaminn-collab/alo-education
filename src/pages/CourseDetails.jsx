@@ -12,6 +12,7 @@ import Footer from '@/components/landing/Footer';
 export default function CourseDetails() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const courseId = location.state?.courseId || new URLSearchParams(window.location.search).get('id');
 
   const { data: course, isLoading } = useQuery({
@@ -30,6 +31,11 @@ export default function CourseDetails() {
       return unis.find(u => u.id === course.university_id);
     },
     enabled: !!course?.university_id
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: () => base44.auth.me()
   });
 
   if (isLoading) {
@@ -51,8 +57,28 @@ export default function CourseDetails() {
     );
   }
 
-  const handleApplyNow = () => {
-    navigate(createPageUrl('ApplicationForm'));
+  const handleApplyNow = async () => {
+    if (!user) {
+      navigate(createPageUrl('StudentPortal'));
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      // Create application record
+      await base44.entities.Application.create({
+        student_id: user.id,
+        course_id: course.id,
+        university_id: university.id,
+        status: 'draft'
+      });
+      toast.success('Application started! Redirecting to form...');
+      navigate(createPageUrl('ApplicationForm'), { state: { courseId: course.id } });
+    } catch (error) {
+      toast.error('Failed to start application');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const intakeList = course.intake?.split(',').map(i => i.trim()) || [];
@@ -217,11 +243,26 @@ export default function CourseDetails() {
             {/* Apply Button */}
             <Button
               onClick={handleApplyNow}
+              disabled={isSubmitting}
               className="w-full h-14 bg-alo-orange hover:bg-orange-600 text-white text-lg font-bold"
             >
-              Apply Now
-              <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Apply Now
+                  <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
+                </>
+              )}
             </Button>
+            {!user && (
+              <p className="text-center text-sm text-slate-600 mt-4">
+                You must be logged in to apply. Please <Button variant="link" size="sm" onClick={() => navigate(createPageUrl('StudentPortal'))} className="text-education-blue">login or register</Button>.
+              </p>
+            )}
           </div>
         </div>
 

@@ -66,7 +66,7 @@ export default function CourseFinderResults() {
   };
 
   const handleApplyNow = (courseId) => {
-    navigate(createPageUrl('StudentPortal'));
+    navigate(createPageUrl('ApplicationForm'));
   };
 
   return (
