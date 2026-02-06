@@ -116,6 +116,7 @@ import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import TOEFLPrep from './pages/TOEFLPrep';
 import DuolingoPrep from './pages/DuolingoPrep';
 import OETPrep from './pages/OETPrep';
+import UniversityComparison from './pages/UniversityComparison';
 import __Layout from './Layout.jsx';
 
 
@@ -189,6 +190,7 @@ export const PAGES = {
     "TOEFLPrep": TOEFLPrep,
     "DuolingoPrep": DuolingoPrep,
     "OETPrep": OETPrep,
+    "UniversityComparison": UniversityComparison,
 }
 
 export const pagesConfig = {
