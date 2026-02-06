@@ -5,15 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
-import { ArrowLeft, CheckCircle, MapPin, DollarSign, Clock, FileText, Award } from 'lucide-react';
+import { ArrowLeft, MapPin, DollarSign, Clock, Award } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 
 export default function CourseDetailsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const courseId = location.state?.courseId;
-  const { user } = useAuth();
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course-detail', courseId],
@@ -51,10 +49,6 @@ export default function CourseDetailsPage() {
   }
 
   const handleApplyNow = () => {
-    if (!user) {
-      navigate(createPageUrl('Home'));
-      return;
-    }
     navigate(createPageUrl('MyApplications'));
   };
 
@@ -222,15 +216,9 @@ export default function CourseDetailsPage() {
               onClick={handleApplyNow}
               className="w-full h-14 bg-alo-orange hover:bg-orange-600 text-white text-lg font-bold"
             >
-              {user ? 'Apply Now' : 'Login to Apply'}
+              Apply Now
               <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
             </Button>
-
-            {!user && (
-              <p className="text-center text-slate-600 text-sm">
-                You need to be logged in to apply for this course
-              </p>
-            )}
           </div>
         </div>
 
