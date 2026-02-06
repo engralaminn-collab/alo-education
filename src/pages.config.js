@@ -113,6 +113,9 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import ApplicationForm from './pages/ApplicationForm';
 import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
+import TOEFLPrep from './pages/TOEFLPrep';
+import DuolingoPrep from './pages/DuolingoPrep';
+import OETPrep from './pages/OETPrep';
 import __Layout from './Layout.jsx';
 
 
@@ -183,6 +186,9 @@ export const PAGES = {
     "CRMAIAssistant": CRMAIAssistant,
     "ApplicationForm": ApplicationForm,
     "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
+    "TOEFLPrep": TOEFLPrep,
+    "DuolingoPrep": DuolingoPrep,
+    "OETPrep": OETPrep,
 }
 
 export const pagesConfig = {
