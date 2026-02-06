@@ -111,6 +111,14 @@ import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import ManagerCounselorWorkload from './pages/ManagerCounselorWorkload';
 import ProvideFeedback from './pages/ProvideFeedback';
+import ServiceFreeCounselling from './pages/ServiceFreeCounselling';
+import ServiceUniversitySelection from './pages/ServiceUniversitySelection';
+import ServiceApplicationAssistance from './pages/ServiceApplicationAssistance';
+import ServiceSOPReview from './pages/ServiceSOPReview';
+import ServiceVisaGuidance from './pages/ServiceVisaGuidance';
+import ServiceScholarshipSupport from './pages/ServiceScholarshipSupport';
+import ServiceAccommodation from './pages/ServiceAccommodation';
+import ServicePreDeparture from './pages/ServicePreDeparture';
 import __Layout from './Layout.jsx';
 
 
@@ -179,6 +187,14 @@ export const PAGES = {
     "UniversityDetails": UniversityDetails,
     "ManagerCounselorWorkload": ManagerCounselorWorkload,
     "ProvideFeedback": ProvideFeedback,
+    "ServiceFreeCounselling": ServiceFreeCounselling,
+    "ServiceUniversitySelection": ServiceUniversitySelection,
+    "ServiceApplicationAssistance": ServiceApplicationAssistance,
+    "ServiceSOPReview": ServiceSOPReview,
+    "ServiceVisaGuidance": ServiceVisaGuidance,
+    "ServiceScholarshipSupport": ServiceScholarshipSupport,
+    "ServiceAccommodation": ServiceAccommodation,
+    "ServicePreDeparture": ServicePreDeparture,
 }
 
 export const pagesConfig = {
