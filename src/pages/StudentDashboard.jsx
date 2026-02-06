@@ -8,7 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { 
   GraduationCap, FileText, MessageSquare, User, 
   Clock, CheckCircle, AlertCircle, ArrowRight,
-  Calendar, Upload, Building2
+  Calendar, Upload, Building2, Gift, BookOpen, Globe, 
+  Sparkles, Briefcase, TrendingUp, Share2, Copy
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -345,6 +346,87 @@ export default function StudentDashboard() {
               </Card>
             )}
 
+            {/* Referral Program */}
+            <Card className="border-0 shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Gift className="w-5 h-5 text-amber-500" />
+                  Referral Program
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg text-center">
+                    <p className="text-sm text-slate-600">Referrals</p>
+                    <p className="text-2xl font-bold text-blue-600">0</p>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg text-center">
+                    <p className="text-sm text-slate-600">Earned (BDT)</p>
+                    <p className="text-2xl font-bold text-green-600">0</p>
+                  </div>
+                </div>
+                <div className="bg-slate-100 p-3 rounded-lg">
+                  <p className="text-xs text-slate-600 mb-2">Your Code</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="text" 
+                      value={user?.email?.split('@')[0]?.substring(0, 4) || '0e5c'} 
+                      readOnly 
+                      className="flex-1 bg-white p-2 rounded text-sm font-mono"
+                    />
+                    <Button size="icon" variant="outline" className="h-9 w-9">
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                    <Button size="icon" variant="outline" className="h-9 w-9">
+                      <Share2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Test Preparation */}
+            <Card className="border-0 shadow-sm border-l-4 border-l-orange-500">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-orange-500" />
+                  Test Preparation
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-4">Prepare for English proficiency tests</p>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {['IELTS', 'PTE', 'OIETC', 'Duolingo'].map(test => (
+                    <Button key={test} variant="outline" size="sm" className="text-xs">
+                      {test}
+                    </Button>
+                  ))}
+                </div>
+                <Link to={createPageUrl('LanguagePrep')}>
+                  <Button variant="outline" size="sm" className="w-full text-xs">
+                    View All Test Prep
+                    <ArrowRight className="w-3 h-3 ml-1" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* AI Career Path */}
+            <Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-pink-50">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2 text-purple-700">
+                  <Sparkles className="w-5 h-5" />
+                  AI Career Path
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-4">Discover your ideal study path</p>
+                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-sm">
+                  Get Career Guidance
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Quick Actions */}
             <Card className="border-0 shadow-sm">
               <CardHeader>
@@ -363,24 +445,34 @@ export default function StudentDashboard() {
                     Course Matcher
                   </Button>
                 </Link>
-                <Link to={createPageUrl('Contact')} className="block">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Book Consultation
-                  </Button>
-                </Link>
+                <Button variant="outline" className="w-full justify-start">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Find Scholarships
+                </Button>
               </CardContent>
             </Card>
 
-            {/* Next Steps */}
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-500 to-cyan-500 text-white">
+            {/* Alumni Network */}
+            <Button variant="outline" className="w-full justify-start">
+              <User className="w-4 h-4 mr-2" />
+              Alumni Network
+            </Button>
+
+            {/* Appointments */}
+            <Button variant="outline" className="w-full justify-start">
+              <Calendar className="w-4 h-4 mr-2" />
+              Schedule Appointment
+            </Button>
+
+            {/* Need Help */}
+            <Card className="border-0 shadow-sm bg-gradient-to-br from-teal-500 to-cyan-500 text-white">
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-2">Need Help?</h3>
                 <p className="text-white/80 mb-4 text-sm">
                   Our team is here to guide you through every step of your journey.
                 </p>
                 <Link to={createPageUrl('Contact')}>
-                  <Button className="w-full bg-white text-emerald-600 hover:bg-slate-100">
+                  <Button className="w-full bg-white text-teal-600 hover:bg-slate-100">
                     Contact Support
                   </Button>
                 </Link>
