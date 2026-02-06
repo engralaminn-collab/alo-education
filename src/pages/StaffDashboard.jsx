@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from './utils';
+import { createPageUrl } from '@/utils';
 
 export default function StaffDashboard() {
   const [user, setUser] = useState(null);
