@@ -79,155 +79,35 @@ export default function CourseFinder() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-brand text-white py-16">
+      <section className="bg-gradient-to-r from-education-blue to-blue-900 text-white py-16">
         <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Find Your Perfect Course
-            </h1>
-            <p className="text-xl text-white/90 mb-8">
-              Discover courses from top universities worldwide with AI-powered recommendations
-            </p>
-            
-            {/* Search */}
-            <div className="bg-white rounded-xl p-2 flex items-center gap-2">
-              <Search className="w-5 h-5 text-slate-400 ml-2" />
-              <Input
-                placeholder="Search courses by name or subject..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="border-0 focus-visible:ring-0 text-slate-900"
-              />
-              {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSearchQuery('')}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Course Finder</h1>
+            <p className="text-xl text-white/90">Discover your perfect course from top universities worldwide</p>
           </motion.div>
         </div>
       </section>
 
-      <div className="container mx-auto px-6 py-8">
-        {/* AI Course Recommendations */}
-        <AICourseRecommendations
-          studentProfile={userProfile}
-          searchCriteria={{
-            country: filters.country,
-            subject: filters.subject_area,
-            level: filters.level,
-            tuition_max: filters.tuition_max,
-          }}
-          courses={filteredCourses}
-          universities={universities}
-          onApply={(course, uni) => {
-            setSelectedCourse(course);
-            setSelectedUniversity(uni);
-            setShowApplicationModal(true);
-          }}
-        />
+      <div className="container mx-auto px-6 py-12">
+        <Card className="border-0 shadow-xl max-w-5xl mx-auto">
+          <CardContent className="p-8">
+            <Tabs defaultValue="courses" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="courses" className="text-lg">COURSES</TabsTrigger>
+                <TabsTrigger value="universities" className="text-lg">UNIVERSITIES</TabsTrigger>
+              </TabsList>
 
-        {/* AI University Recommendations */}
-        <AIUniversityRecommendations
-          studentProfile={userProfile}
-          searchCriteria={{
-            country: filters.country,
-            subject: filters.subject_area,
-            level: filters.level,
-            tuition_max: filters.tuition_max,
-            duration: filters.duration_max ? `${filters.duration_max} months` : null,
-          }}
-          courses={filteredCourses}
-          universities={universities}
-        />
-
-        {/* AI Course Recommendations */}
-        {userProfile && showAIRecommendations && aiRecommendations.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-education-blue/5 to-alo-orange/5">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Sparkles className="w-5 h-5 text-alo-orange" />
-                  <h2 className="text-xl font-bold text-slate-900">AI-Powered Recommendations for You</h2>
-                </div>
-                <p className="text-slate-600 mb-4">Based on your profile and preferences</p>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {aiRecommendations.map((course) => (
-                    <Link key={course.id} to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                      <Card className="hover:shadow-lg transition-all border-education-blue/20">
-                        <CardContent className="p-4">
-                          <Badge className="bg-alo-orange text-white mb-2">
-                            {course.aiScore}% Match
-                          </Badge>
-                          <h3 className="font-semibold text-slate-900 mb-1 line-clamp-2">{course.course_title}</h3>
-                          <p className="text-sm text-slate-500 line-clamp-1">
-                            {universityMap[course.university_id]?.university_name}
-                          </p>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
-        <div className="grid lg:grid-cols-4 gap-6">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="border-0 shadow-lg sticky top-6">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-bold flex items-center gap-2">
-                    <Filter className="w-5 h-5 text-alo-orange" />
-                    Filters
-                  </h3>
-                  <Button variant="ghost" size="sm" onClick={clearFilters}>
-                    Clear
-                  </Button>
-                </div>
-
-                <div className="space-y-6">
-                  {/* Degree Level */}
+              {/* COURSES TAB */}
+              <TabsContent value="courses" className="space-y-6 mt-8">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Subject / Course */}
                   <div>
-                    <Label className="text-slate-700 mb-2 block">Degree Level</Label>
-                    <Select value={filters.level} onValueChange={(v) => setFilters({...filters, level: v})}>
+                    <Label className="font-semibold text-slate-900 mb-2 block">Subject / Course</Label>
+                    <Select value={courseFilters.subject} onValueChange={(v) => setCourseFilters({...courseFilters, subject: v})}>
                       <SelectTrigger>
-                        <SelectValue placeholder="All levels" />
+                        <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All levels</SelectItem>
-                        <SelectItem value="Undergraduate">Undergraduate</SelectItem>
-                        <SelectItem value="Postgraduate">Postgraduate</SelectItem>
-                        <SelectItem value="PhD">PhD</SelectItem>
-                        <SelectItem value="Foundation">Foundation</SelectItem>
-                        <SelectItem value="Diploma">Diploma</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Subject Area */}
-                  <div>
-                    <Label className="text-slate-700 mb-2 block">Subject Area</Label>
-                    <Select value={filters.subject_area} onValueChange={(v) => setFilters({...filters, subject_area: v})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="All subjects" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value={null}>All subjects</SelectItem>
                         {uniqueSubjects.map(subject => (
                           <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                         ))}
@@ -235,15 +115,31 @@ export default function CourseFinder() {
                     </Select>
                   </div>
 
-                  {/* Country */}
+                  {/* Study Level */}
                   <div>
-                    <Label className="text-slate-700 mb-2 block">Country</Label>
-                    <Select value={filters.country} onValueChange={(v) => setFilters({...filters, country: v})}>
+                    <Label className="font-semibold text-slate-900 mb-2 block">Study Level</Label>
+                    <Select value={courseFilters.level} onValueChange={(v) => setCourseFilters({...courseFilters, level: v})}>
                       <SelectTrigger>
-                        <SelectValue placeholder="All countries" />
+                        <SelectValue placeholder="Select level" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All countries</SelectItem>
+                        <SelectItem value="Foundation">Foundation</SelectItem>
+                        <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+                        <SelectItem value="Postgraduate">Postgraduate</SelectItem>
+                        <SelectItem value="MRes">MRes</SelectItem>
+                        <SelectItem value="PhD">PhD</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Destination Country */}
+                  <div>
+                    <Label className="font-semibold text-slate-900 mb-2 block">Destination Country</Label>
+                    <Select value={courseFilters.country} onValueChange={(v) => setCourseFilters({...courseFilters, country: v})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select country" />
+                      </SelectTrigger>
+                      <SelectContent>
                         {uniqueCountries.map(country => (
                           <SelectItem key={country} value={country}>{country}</SelectItem>
                         ))}
@@ -251,207 +147,82 @@ export default function CourseFinder() {
                     </Select>
                   </div>
 
-                  {/* Duration */}
+                  {/* Intake */}
                   <div>
-                    <Label className="text-slate-700 mb-2 block">Duration (months)</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Input
-                        type="number"
-                        placeholder="Min"
-                        value={filters.duration_min}
-                        onChange={(e) => setFilters({...filters, duration_min: e.target.value})}
-                      />
-                      <Input
-                        type="number"
-                        placeholder="Max"
-                        value={filters.duration_max}
-                        onChange={(e) => setFilters({...filters, duration_max: e.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Tuition Fee Range */}
-                  <div>
-                    <Label className="text-slate-700 mb-2 block">
-                      Tuition Fee (USD): ${filters.tuition_min.toLocaleString()} - ${filters.tuition_max.toLocaleString()}
-                    </Label>
-                    <Slider
-                      min={0}
-                      max={100000}
-                      step={1000}
-                      value={[filters.tuition_min, filters.tuition_max]}
-                      onValueChange={([min, max]) => setFilters({...filters, tuition_min: min, tuition_max: max})}
-                      className="mt-2"
-                    />
-                  </div>
-
-                  {/* Start Date */}
-                  <div>
-                    <Label className="text-slate-700 mb-2 block">Intake</Label>
-                    <Select value={filters.start_date} onValueChange={(v) => setFilters({...filters, start_date: v})}>
+                    <Label className="font-semibold text-slate-900 mb-2 block">Intake (Optional)</Label>
+                    <Select 
+                      value={courseFilters.intakes[0] || ''} 
+                      onValueChange={(v) => setCourseFilters({...courseFilters, intakes: v ? [v] : []})}
+                    >
                       <SelectTrigger>
-                        <SelectValue placeholder="All intakes" />
+                        <SelectValue placeholder="Select intake" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={null}>All intakes</SelectItem>
-                        <SelectItem value="January">January</SelectItem>
-                        <SelectItem value="February">February</SelectItem>
-                        <SelectItem value="September">September</SelectItem>
-                        <SelectItem value="Fall">Fall</SelectItem>
-                        <SelectItem value="Spring">Spring</SelectItem>
+                        {allIntakes.map(intake => (
+                          <SelectItem key={intake} value={intake}>{intake}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={handleCoursesSearch}
+                  className="w-full h-12 bg-alo-orange hover:bg-orange-600 text-white text-lg font-bold"
+                >
+                  <Search className="w-5 h-5 mr-2" />
+                  Search Courses
+                </Button>
+              </TabsContent>
+
+              {/* UNIVERSITIES TAB */}
+              <TabsContent value="universities" className="space-y-6 mt-8">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Looking For */}
+                  <div>
+                    <Label className="font-semibold text-slate-900 mb-2 block">I'm Looking For</Label>
+                    <Select value={uniFilters.subject} onValueChange={(v) => setUniFilters({...uniFilters, subject: v})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select subject" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {uniqueSubjects.map(subject => (
+                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
 
-                  {/* Scholarship Available */}
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="scholarship"
-                      checked={filters.scholarship}
-                      onChange={(e) => setFilters({...filters, scholarship: e.target.checked})}
-                      className="w-4 h-4 rounded border-slate-300 text-education-blue focus:ring-education-blue"
-                    />
-                    <Label htmlFor="scholarship" className="cursor-pointer">
-                      Scholarship Available
-                    </Label>
+                  {/* Want To Study In */}
+                  <div>
+                    <Label className="font-semibold text-slate-900 mb-2 block">I Want to Study In</Label>
+                    <Select value={uniFilters.universityName} onValueChange={(v) => setUniFilters({...uniFilters, universityName: v})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select university" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {universities.map(uni => (
+                          <SelectItem key={uni.id} value={uni.id}>{uni.university_name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Course List */}
-          <div className="lg:col-span-3">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900">{sortedCourses.length} Courses Found</h2>
-                <p className="text-slate-500">Explore courses that match your criteria</p>
-              </div>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="relevance">Most Relevant</SelectItem>
-                  <SelectItem value="tuition_low">Tuition: Low to High</SelectItem>
-                  <SelectItem value="tuition_high">Tuition: High to Low</SelectItem>
-                  <SelectItem value="duration">Duration</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {isLoading ? (
-              <div className="text-center py-20">
-                <div className="w-16 h-16 border-4 border-education-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-slate-600">Loading courses...</p>
-              </div>
-            ) : sortedCourses.length === 0 ? (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="p-12 text-center">
-                  <BookOpen className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2">No courses found</h3>
-                  <p className="text-slate-500 mb-4">Try adjusting your filters or search query</p>
-                  <Button onClick={clearFilters} variant="outline">
-                    Clear All Filters
-                  </Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="space-y-4">
-                {sortedCourses.map((course) => {
-                  const university = universityMap[course.university_id];
-                  return (
-                    <motion.div
-                      key={course.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <Card className="border-0 shadow-sm hover:shadow-lg transition-all">
-                        <CardContent className="p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="flex-1">
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                <Badge className="bg-education-blue/10 text-education-blue">
-                                  {course.level}
-                                </Badge>
-                                <Badge variant="outline">
-                                  {course.subject_area}
-                                </Badge>
-                                {course.scholarship_available && (
-                                  <Badge className="bg-sunshine text-white">
-                                    <Award className="w-3 h-3 mr-1" />
-                                    Scholarship
-                                  </Badge>
-                                )}
-                              </div>
-                              <h3 className="text-xl font-bold text-slate-900 mb-2">{course.course_title}</h3>
-                              {university && (
-                                <p className="text-slate-500 flex items-center gap-1 mb-3">
-                                  <Building2 className="w-4 h-4" />
-                                  {university.university_name} • {university.city}, {university.country}
-                                </p>
-                              )}
-                              
-                              <div className="flex flex-wrap gap-4 text-sm text-slate-600">
-                                {course.duration && (
-                                  <span className="flex items-center gap-1">
-                                    <Clock className="w-4 h-4" />
-                                    {course.duration}
-                                  </span>
-                                )}
-                                {course.tuition_fee_min && (
-                                  <span className="flex items-center gap-1">
-                                    <DollarSign className="w-4 h-4" />
-                                    ${course.tuition_fee_min.toLocaleString()} - ${course.tuition_fee_max?.toLocaleString() || 'N/A'}
-                                  </span>
-                                )}
-                                {course.intake && (
-                                  <span className="flex items-center gap-1">
-                                    <Calendar className="w-4 h-4" />
-                                    {course.intake}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button 
-                                onClick={() => {
-                                  setSelectedCourse(course);
-                                  setSelectedUniversity(university);
-                                  setShowApplicationModal(true);
-                                }}
-                                className="bg-gradient-brand hover:opacity-90 text-white"
-                              >
-                                Apply Now
-                              </Button>
-                              <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                <Button variant="outline">
-                                  Details
-                                </Button>
-                              </Link>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
+                <Button 
+                  onClick={handleUniversitiesSearch}
+                  className="w-full h-12 bg-alo-orange hover:bg-orange-600 text-white text-lg font-bold"
+                >
+                  <Search className="w-5 h-5 mr-2" />
+                  Search Universities
+                </Button>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
       </div>
 
       <Footer />
-
-      <QuickApplicationModal
-        open={showApplicationModal}
-        onClose={() => setShowApplicationModal(false)}
-        course={selectedCourse}
-        university={selectedUniversity}
-        studentProfile={userProfile}
-      />
     </div>
   );
 }
