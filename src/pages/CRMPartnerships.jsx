@@ -15,6 +15,9 @@ import AddPartnershipModal from '@/components/crm/AddPartnershipModal';
 import PartnershipDetailPanel from '@/components/crm/PartnershipDetailPanel';
 import PartnershipPerformanceMetrics from '@/components/crm/PartnershipPerformanceMetrics';
 import PartnershipAnalyticsDashboard from '@/components/crm/PartnershipAnalyticsDashboard';
+import PartnerCommunicationTimeline from '@/components/crm/PartnerCommunicationTimeline';
+import PartnerEngagementTracker from '@/components/crm/PartnerEngagementTracker';
+import PartnershipDocumentManager from '@/components/crm/PartnershipDocumentManager';
 import { toast } from 'sonner';
 
 export default function CRMPartnerships() {
@@ -141,6 +144,7 @@ export default function CRMPartnerships() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="engagement">Engagement</TabsTrigger>
           <TabsTrigger value="agreements">Agreements</TabsTrigger>
           <TabsTrigger value="contacts">Contacts</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -151,6 +155,15 @@ export default function CRMPartnerships() {
             agreements={agreements}
             applications={applications}
             universities={universities}
+          />
+        </TabsContent>
+
+        <TabsContent value="engagement" className="mt-6">
+          <PartnerEngagementTracker
+            universities={universities}
+            agreements={agreements}
+            interactions={interactions}
+            applications={applications}
           />
         </TabsContent>
 
