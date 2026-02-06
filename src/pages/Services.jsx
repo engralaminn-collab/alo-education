@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ALOButton from '@/components/ui/alo-button';
 import { Badge } from "@/components/ui/badge";
 import { 
   GraduationCap, FileText, Plane, Award, 
@@ -179,10 +180,10 @@ export default function Services() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-slate-600 mb-4">{service.description}</p>
-                    <Button variant="outline" className="w-full">
+                    <ALOButton className="w-full">
                       Learn More
                       <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
+                    </ALOButton>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -222,10 +223,10 @@ export default function Services() {
                 Take the first step towards studying abroad!
               </h2>
               <Link to={createPageUrl('Contact')}>
-                <Button size="lg" className="bg-white text-emerald-600 hover:bg-slate-100">
+                <ALOButton size="lg">
                   Book free counselling
                   <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
+                </ALOButton>
               </Link>
             </CardContent>
           </Card>

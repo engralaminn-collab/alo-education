@@ -1,6 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import ALOButton from '@/components/ui/alo-button';
 
 import Hero from '@/components/landing/Hero';
 import AboutUs from '@/components/landing/AboutUs';
