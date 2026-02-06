@@ -2,7 +2,7 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
-import Hero from '@/components/landing/Hero';
+import HeroWithCourseFinder from '@/components/hero/HeroWithCourseFinder';
 import AboutUs from '@/components/landing/AboutUs';
 import Services from '@/components/landing/Services';
 import Team from '@/components/landing/Team';
@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Hero />
+      <HeroWithCourseFinder />
       <AboutUs />
       <Services />
       <Team />
