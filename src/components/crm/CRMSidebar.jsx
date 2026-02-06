@@ -20,6 +20,7 @@ const menuItems = [
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: Upload, label: 'Import Students', page: 'CRMImportStudents' },
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
+  { icon: TrendingUp, label: 'Status Monitor', page: 'CRMApplicationStatusMonitor' },
   { icon: TrendingUp, label: 'Student Success', page: 'CRMStudentSuccess' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
