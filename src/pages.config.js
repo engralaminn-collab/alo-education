@@ -83,6 +83,7 @@ import Courses from './pages/Courses';
 import Home from './pages/Home';
 import IELTSPrep from './pages/IELTSPrep';
 import LanguagePrep from './pages/LanguagePrep';
+import ManagerDashboard from './pages/ManagerDashboard';
 import Messages from './pages/Messages';
 import MyApplications from './pages/MyApplications';
 import MyComparisons from './pages/MyComparisons';
@@ -93,6 +94,7 @@ import Resources from './pages/Resources';
 import ScholarshipFinder from './pages/ScholarshipFinder';
 import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
+import StaffDashboard from './pages/StaffDashboard';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
@@ -106,8 +108,7 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import StaffDashboard from './pages/StaffDashboard';
-import ManagerDashboard from './pages/ManagerDashboard';
+import CRMPerformanceReports from './pages/CRMPerformanceReports';
 import __Layout from './Layout.jsx';
 
 
@@ -148,6 +149,7 @@ export const PAGES = {
     "Home": Home,
     "IELTSPrep": IELTSPrep,
     "LanguagePrep": LanguagePrep,
+    "ManagerDashboard": ManagerDashboard,
     "Messages": Messages,
     "MyApplications": MyApplications,
     "MyComparisons": MyComparisons,
@@ -158,6 +160,7 @@ export const PAGES = {
     "ScholarshipFinder": ScholarshipFinder,
     "Services": Services,
     "SharedComparison": SharedComparison,
+    "StaffDashboard": StaffDashboard,
     "StudentDashboard": StudentDashboard,
     "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
@@ -171,8 +174,7 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "StaffDashboard": StaffDashboard,
-    "ManagerDashboard": ManagerDashboard,
+    "CRMPerformanceReports": CRMPerformanceReports,
 }
 
 export const pagesConfig = {
