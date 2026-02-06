@@ -110,6 +110,7 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
 import ManagerCounselorWorkload from './pages/ManagerCounselorWorkload';
+import ProvideFeedback from './pages/ProvideFeedback';
 import __Layout from './Layout.jsx';
 
 
@@ -177,6 +178,7 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
     "ManagerCounselorWorkload": ManagerCounselorWorkload,
+    "ProvideFeedback": ProvideFeedback,
 }
 
 export const pagesConfig = {
