@@ -73,12 +73,19 @@ export default function CountryCourseGrid({ courses, universities, country }) {
                 </div>
               </div>
 
-              <Link to={createPageUrl('CourseDetails') + '?id=' + course.id}>
-                <Button className="w-full bg-education-blue hover:bg-education-blue/90 text-white gap-2 group-hover:gap-3 transition-all">
-                  Learn More
-                  <ArrowRight size={16} />
-                </Button>
-              </Link>
+              <div className="space-y-2">
+                <Link to={createPageUrl('CourseDetails') + '?id=' + course.id}>
+                  <Button variant="outline" className="w-full border-education-blue text-education-blue hover:bg-education-blue hover:text-white gap-2 group-hover:gap-3 transition-all">
+                    Learn More
+                    <ArrowRight size={16} />
+                  </Button>
+                </Link>
+                <Link to={createPageUrl('StudentPortal')}>
+                  <Button className="w-full bg-alo-orange hover:bg-alo-orange/90 text-white">
+                    Apply Now
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         );
