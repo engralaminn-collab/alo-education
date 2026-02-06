@@ -9,6 +9,8 @@ import {
   Building2, Users, FileText, TrendingUp, 
   Mail, Phone, Calendar, DollarSign 
 } from 'lucide-react';
+import PartnerCommunicationTimeline from './PartnerCommunicationTimeline';
+import PartnershipDocumentManager from './PartnershipDocumentManager';
 
 export default function PartnershipDetailPanel({ university, onClose }) {
   const { data: agreements = [] } = useQuery({
@@ -74,6 +76,8 @@ export default function PartnershipDetailPanel({ university, onClose }) {
           <TabsList>
             <TabsTrigger value="agreements">Agreements</TabsTrigger>
             <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="communication">Communication</TabsTrigger>
+            <TabsTrigger value="documents">Documents</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>
           </TabsList>
 
@@ -158,6 +162,27 @@ export default function PartnershipDetailPanel({ university, onClose }) {
 
             {contacts.length === 0 && (
               <p className="text-center py-8 text-slate-500">No contacts</p>
+            )}
+          </TabsContent>
+
+          <TabsContent value="communication" className="mt-4">
+            <PartnerCommunicationTimeline 
+              universityId={university.id}
+              university={university}
+            />
+          </TabsContent>
+
+          <TabsContent value="documents" className="mt-4">
+            {activeAgreement ? (
+              <PartnershipDocumentManager 
+                agreementId={activeAgreement.id}
+                agreement={activeAgreement}
+              />
+            ) : (
+              <div className="text-center py-12 text-slate-500">
+                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                <p>No active agreement to manage documents</p>
+              </div>
             )}
           </TabsContent>
 

@@ -41,6 +41,11 @@ export default function CRMPartnerships() {
     queryFn: () => base44.entities.UniversityContact.list()
   });
 
+  const { data: interactions = [] } = useQuery({
+    queryKey: ['university-interactions'],
+    queryFn: () => base44.entities.UniversityInteraction.list()
+  });
+
   const { data: applications = [] } = useQuery({
     queryKey: ['applications-partnerships'],
     queryFn: () => base44.entities.Application.list()
