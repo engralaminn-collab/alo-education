@@ -47,11 +47,16 @@ export default function Navbar() {
   ];
 
   const navLinks = [
-    { label: 'Course Finder', page: 'CourseMatcher' },
-    { label: 'Universities', page: 'Universities' },
-    { label: 'Scholarships', page: 'ScholarshipFinder' },
+    { label: 'Course Finder', page: 'CourseFinder' },
     { label: 'Services', page: 'Home', hash: '#services' },
-    { label: 'Resources', page: 'Resources' },
+    { label: 'Language Prep', page: 'LanguagePrep' },
+  ];
+
+  const resources = [
+    { label: 'Blog & Articles', page: 'Resources' },
+    { label: 'Scholarships', page: 'ScholarshipFinder' },
+    { label: 'Test Prep - IELTS', page: 'IELTSPrep' },
+    { label: 'Test Prep - PTE', page: 'PTEPrep' },
   ];
 
   return (
@@ -70,17 +75,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.page}
-                to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
-                className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            
+          <div className="hidden lg:flex items-center gap-8">
             {/* Destinations Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -100,62 +95,95 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link
-              to={createPageUrl('Contact')}
-              className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
-            >
-              Book Free Counselling
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.page}
+                to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Resources Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
+                  Resources
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {resources.map((res) => (
+                  <DropdownMenuItem key={res.page} asChild>
+                    <Link to={createPageUrl(res.page)} className="cursor-pointer">
+                      {res.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Portal Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
+                  Portal
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('StudentPortal')} className="cursor-pointer flex items-center gap-2">
+                    <LayoutDashboard className="w-4 h-4" />
+                    Student Portal
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('MyApplications')} className="cursor-pointer flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    My Applications
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('Messages')} className="cursor-pointer flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    Messages
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to={createPageUrl('MyComparisons')} className="cursor-pointer flex items-center gap-2">
+                    <Award className="w-4 h-4" />
+                    My Comparisons
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
-          {/* Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
+          {/* Auth Button */}
+          <div className="hidden lg:flex items-center">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className={`gap-2 ${textColor}`}>
                     <User className="w-5 h-5" />
-                    <span>Portal</span>
+                    <span>{user.full_name?.split(' ')[0]}</span>
                     <ChevronDown className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem asChild>
-                    <Link to={createPageUrl('StudentPortal')} className="flex items-center gap-2">
-                      <LayoutDashboard className="w-4 h-4" />
-                      Student Portal
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to={createPageUrl('MyApplications')} className="flex items-center gap-2">
-                      <FileText className="w-4 h-4" />
-                      My Applications
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to={createPageUrl('Messages')} className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4" />
-                      Messages
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to={createPageUrl('MyComparisons')} className="flex items-center gap-2">
-                      <FileText className="w-4 h-4" />
-                      My Comparisons
-                    </Link>
-                  </DropdownMenuItem>
                   {user.role === 'admin' && (
                     <>
-                      <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
                         <Link to={createPageUrl('CRMDashboard')} className="flex items-center gap-2">
                           <LayoutDashboard className="w-4 h-4" />
                           CRM Dashboard
                         </Link>
                       </DropdownMenuItem>
+                      <DropdownMenuSeparator />
                     </>
                   )}
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => base44.auth.logout()} className="text-red-600">
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
@@ -163,16 +191,14 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <>
-                <Button 
-                  variant="ghost" 
-                  className={textColor}
-                  onClick={() => base44.auth.redirectToLogin()}
-                >
-                  <User className="w-5 h-5 mr-2" />
-                  Portal
-                </Button>
-              </>
+              <Button 
+                variant="ghost" 
+                className={textColor}
+                onClick={() => base44.auth.redirectToLogin()}
+              >
+                <User className="w-5 h-5 mr-2" />
+                Login
+              </Button>
             )}
           </div>
 
@@ -185,27 +211,16 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-6 mt-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.page}
-                    to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
-                    onClick={() => setIsMobileOpen(false)}
-                    className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                
-                {/* Mobile Destinations */}
+                {/* Destinations */}
                 <div>
-                  <p className="text-sm font-semibold text-slate-500 mb-2">Destinations</p>
-                  <div className="flex flex-col gap-3 ml-2">
+                  <p className="text-sm font-semibold text-slate-500 mb-3">Destinations</p>
+                  <div className="flex flex-col gap-2 ml-2">
                     {destinations.map((dest) => (
                       <Link
                         key={dest.page}
                         to={createPageUrl(dest.page)}
                         onClick={() => setIsMobileOpen(false)}
-                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
+                        className="text-base text-slate-700 hover:text-alo-orange transition-colors"
                       >
                         {dest.label}
                       </Link>
@@ -213,23 +228,43 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <Link
-                  to={createPageUrl('Contact')}
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
-                >
-                  Book Free Counselling
-                </Link>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.page}
+                    to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="text-lg font-medium text-slate-800 hover:text-alo-orange transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                {/* Resources */}
+                <div>
+                  <p className="text-sm font-semibold text-slate-500 mb-3">Resources</p>
+                  <div className="flex flex-col gap-2 ml-2">
+                    {resources.map((res) => (
+                      <Link
+                        key={res.page}
+                        to={createPageUrl(res.page)}
+                        onClick={() => setIsMobileOpen(false)}
+                        className="text-base text-slate-700 hover:text-alo-orange transition-colors"
+                      >
+                        {res.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
                 
                 <hr className="border-slate-200" />
                 {user ? (
                   <>
                     <Link
-                      to={createPageUrl('StudentDashboard')}
+                      to={createPageUrl('StudentPortal')}
                       onClick={() => setIsMobileOpen(false)}
                       className="text-lg font-medium text-slate-800"
                     >
-                      Portal / Dashboard
+                      Portal
                     </Link>
                     <Button 
                       variant="outline" 
@@ -241,10 +276,10 @@ export default function Navbar() {
                   </>
                 ) : (
                   <Button 
-                    className="bg-gradient-brand text-white hover:opacity-90"
+                    className="bg-gradient-brand text-white hover:opacity-90 w-full"
                     onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}
                   >
-                    Portal Login
+                    Login
                   </Button>
                 )}
               </div>
