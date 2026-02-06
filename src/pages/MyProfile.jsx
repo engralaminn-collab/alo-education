@@ -89,6 +89,10 @@ export default function MyProfile() {
     preferred_countries: [],
     preferred_degree_level: '',
     preferred_fields: [],
+    academic_background_summary: '',
+    career_goals: '',
+    preferred_degree_level: '',
+    visa_status: 'not_applicable',
     budget_max: '',
     target_intake: '',
   });
@@ -110,7 +114,11 @@ export default function MyProfile() {
         work_experience: studentProfile.work_experience || [],
         recommendation_letters: studentProfile.recommendation_letters || [],
         preferred_countries: studentProfile.preferred_countries || [],
-        preferred_fields: studentProfile.preferred_fields || []
+        preferred_fields: studentProfile.preferred_fields || [],
+        academic_background_summary: studentProfile.academic_background_summary || '',
+        career_goals: studentProfile.career_goals || '',
+        preferred_degree_level: studentProfile.preferred_degree_level || '',
+        visa_status: studentProfile.visa_status || 'not_applicable'
       }));
     }
   }, [studentProfile]);
@@ -134,7 +142,8 @@ export default function MyProfile() {
         data.first_name, data.last_name, data.phone, data.email, data.nationality,
         data.date_of_birth, data.passport_details?.has_passport,
         data.education_history?.length > 0, data.english_proficiency?.has_test,
-        data.preferred_countries?.length > 0, data.preferred_degree_level
+        data.preferred_countries?.length > 0, data.preferred_degree_level,
+        data.academic_background_summary, data.career_goals, data.visa_status
       ];
       const completeness = Math.round((checks.filter(Boolean).length / checks.length) * 100);
 
@@ -1318,10 +1327,10 @@ export default function MyProfile() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Foundation">Foundation</SelectItem>
+                      <SelectItem value="Diploma">Diploma</SelectItem>
                       <SelectItem value="Undergraduate">Undergraduate</SelectItem>
                       <SelectItem value="Postgraduate">Postgraduate</SelectItem>
                       <SelectItem value="PhD">PhD</SelectItem>
-                      <SelectItem value="Diploma">Diploma</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1349,6 +1358,77 @@ export default function MyProfile() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="career">
+            <div className="space-y-6">
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Academic Background</CardTitle>
+                  <CardDescription>Summarize your academic achievements and strengths</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label>Academic Background Summary</Label>
+                    <Textarea
+                      value={formData.academic_background_summary}
+                      onChange={(e) => updateField('academic_background_summary', e.target.value)}
+                      className="mt-1"
+                      rows={4}
+                      placeholder="Describe your academic achievements, strengths, and key accomplishments..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Career Goals</CardTitle>
+                  <CardDescription>Share your career aspirations and long-term goals</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label>Career Aspirations</Label>
+                    <Textarea
+                      value={formData.career_goals}
+                      onChange={(e) => updateField('career_goals', e.target.value)}
+                      className="mt-1"
+                      rows={4}
+                      placeholder="What are your career goals? What industry or role interests you? How will studying abroad help you achieve these goals?"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Current Visa Status</CardTitle>
+                  <CardDescription>Select your current visa status or situation</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label>Visa Status <span className="text-red-500">*</span></Label>
+                    <Select 
+                      value={formData.visa_status} 
+                      onValueChange={(v) => updateField('visa_status', v)}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select visa status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="not_applicable">Not Applicable</SelectItem>
+                        <SelectItem value="not_required">Not Required</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="approved">Approved</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                        <SelectItem value="expired">Expired</SelectItem>
+                        <SelectItem value="in_process">In Process</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
