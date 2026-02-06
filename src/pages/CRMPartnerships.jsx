@@ -14,6 +14,8 @@ import {
 import AddPartnershipModal from '@/components/crm/AddPartnershipModal';
 import PartnershipDetailPanel from '@/components/crm/PartnershipDetailPanel';
 import PartnershipPerformanceMetrics from '@/components/crm/PartnershipPerformanceMetrics';
+import PartnershipAnalyticsDashboard from '@/components/crm/PartnershipAnalyticsDashboard';
+import { toast } from 'sonner';
 
 export default function CRMPartnerships() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,6 +56,15 @@ export default function CRMPartnerships() {
 
   const universitiesWithPartnerships = new Set(activeAgreements.map(a => a.university_id));
 
+  const checkRenewals = async () => {
+    try {
+      const response = await base44.functions.invoke('checkPartnershipRenewals');
+      toast.success(`Found ${response.data.renewalsFound} renewal alerts. ${response.data.emailsSent} emails sent.`);
+    } catch (error) {
+      toast.error('Failed to check renewals');
+    }
+  };
+
   const filteredUniversities = universities.filter(u => 
     u.university_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.country?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -63,10 +74,16 @@ export default function CRMPartnerships() {
     <CRMLayout
       title="University Partnerships"
       actions={
-        <Button onClick={() => setShowAddModal(true)} className="bg-blue-600">
-          <Plus className="w-4 h-4 mr-2" />
-          New Partnership
-        </Button>
+        <div className="flex gap-3">
+          <Button onClick={checkRenewals} variant="outline" className="border-orange-600 text-orange-600">
+            <AlertCircle className="w-4 h-4 mr-2" />
+            Check Renewals
+          </Button>
+          <Button onClick={() => setShowAddModal(true)} className="bg-blue-600">
+            <Plus className="w-4 h-4 mr-2" />
+            New Partnership
+          </Button>
+        </div>
       }
     >
       {/* Summary Cards */}
@@ -123,10 +140,19 @@ export default function CRMPartnerships() {
       <Tabs defaultValue="overview">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="agreements">Agreements</TabsTrigger>
           <TabsTrigger value="contacts">Contacts</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="analytics" className="mt-6">
+          <PartnershipAnalyticsDashboard 
+            agreements={agreements}
+            applications={applications}
+            universities={universities}
+          />
+        </TabsContent>
 
         <TabsContent value="overview" className="mt-6 space-y-6">
           <div className="flex items-center gap-4">
