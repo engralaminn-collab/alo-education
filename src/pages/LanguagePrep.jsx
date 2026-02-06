@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -80,6 +82,14 @@ const englishTests = [
 ];
 
 export default function LanguagePrep() {
+  const { data: testimonials = [] } = useQuery({
+    queryKey: ['language-testimonials'],
+    queryFn: async () => {
+      const tests = await base44.entities.Testimonial.filter({ status: 'approved' });
+      return tests.slice(0, 3);
+    },
+  });
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
@@ -96,7 +106,7 @@ export default function LanguagePrep() {
             <p className="text-xl text-white/90 mb-6">
               Master English proficiency tests for university entry. Access study materials, practice tests, and expert guidance to achieve your required score.
             </p>
-            <Link to={createPageUrl('Contact')}>
+            <Link to={createPageUrl('BookConsultation')}>
               <Button className="bg-white text-alo-orange hover:bg-slate-100 text-lg h-12 px-8">
                 Book Free Counselling
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -296,18 +306,18 @@ export default function LanguagePrep() {
                 Our experts will guide you based on your profile and destination.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to={createPageUrl('Contact')}>
-                  <Button className="bg-white text-alo-orange hover:bg-slate-100 text-lg h-12 px-8">
-                    Book Free Counselling
-                  </Button>
-                </Link>
-                <Link to={createPageUrl('Contact')}>
-                  <Button variant="outline" className="border-white text-white hover:bg-white/20 text-lg h-12 px-8">
-                    Get in Touch
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-              </div>
+                 <Link to={createPageUrl('BookConsultation')}>
+                   <Button className="bg-white text-alo-orange hover:bg-slate-100 text-lg h-12 px-8">
+                     Book Free Counselling
+                   </Button>
+                 </Link>
+                 <Link to={createPageUrl('InAppMessaging')}>
+                   <Button variant="outline" className="border-white text-white hover:bg-white/20 text-lg h-12 px-8">
+                     Chat with Counselor
+                     <ArrowRight className="w-5 h-5 ml-2" />
+                   </Button>
+                 </Link>
+               </div>
               
               <div className="mt-10 pt-10 border-t border-white/30 flex flex-col sm:flex-row justify-center gap-8">
                 <a href="mailto:info@aloeducation.com" className="flex items-center gap-2 text-white hover:text-slate-100">
