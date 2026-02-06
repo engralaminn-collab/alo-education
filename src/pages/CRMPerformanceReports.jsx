@@ -1,14 +1,16 @@
 import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import CRMLayout from '@/components/crm/CRMLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Download, BarChart3, TrendingUp, Building2, GraduationCap } from 'lucide-react';
+import { Download, BarChart3, TrendingUp, Building2, GraduationCap, Sparkles, RefreshCw } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { toast } from 'sonner';
+import PerformanceInsightsPanel from '@/components/reports/PerformanceInsightsPanel';
+import PerformanceCharts from '@/components/reports/PerformanceCharts';
 
 export default function CRMPerformanceReports() {
   const [filters, setFilters] = useState({
@@ -48,6 +50,22 @@ export default function CRMPerformanceReports() {
   const { data: universities = [] } = useQuery({
     queryKey: ['universities-report'],
     queryFn: () => base44.entities.University.list()
+  });
+
+  const [aiInsights, setAiInsights] = useState(null);
+
+  const analyzePerformance = useMutation({
+    mutationFn: async () => {
+      const response = await base44.functions.invoke('analyzePerformanceTrends', { filters });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setAiInsights(data);
+      toast.success('AI analysis complete!');
+    },
+    onError: (error) => {
+      toast.error('Analysis failed: ' + error.message);
+    }
   });
 
   // Check if user is admin/manager
@@ -299,15 +317,88 @@ export default function CRMPerformanceReports() {
         </Card>
 
         {/* Tabs */}
-        <Tabs defaultValue="status-summary">
-          <TabsList className="grid grid-cols-6 w-full">
-            <TabsTrigger value="status-summary">App Status Summary</TabsTrigger>
-            <TabsTrigger value="comparison">App Status Comparison</TabsTrigger>
-            <TabsTrigger value="detailed">Detailed Analysis</TabsTrigger>
-            <TabsTrigger value="business">Business Intelligence</TabsTrigger>
+        <Tabs defaultValue="ai-insights">
+          <TabsList className="grid grid-cols-7 w-full">
+            <TabsTrigger value="ai-insights">
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Insights
+            </TabsTrigger>
+            <TabsTrigger value="charts">Analytics</TabsTrigger>
+            <TabsTrigger value="status-summary">Status Summary</TabsTrigger>
+            <TabsTrigger value="comparison">Comparison</TabsTrigger>
             <TabsTrigger value="destination">Destination</TabsTrigger>
             <TabsTrigger value="university">University</TabsTrigger>
+            <TabsTrigger value="business">Business Intel</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="ai-insights" className="space-y-6 mt-6">
+            {!aiInsights ? (
+              <Card className="border-2 border-purple-200">
+                <CardContent className="py-12 text-center">
+                  <Sparkles className="w-16 h-16 text-purple-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                    AI Performance Analysis
+                  </h3>
+                  <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                    Get AI-powered insights on performance trends, top counselors, successful strategies, and recommendations
+                  </p>
+                  <Button
+                    onClick={() => analyzePerformance.mutate()}
+                    disabled={analyzePerformance.isPending}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  >
+                    {analyzePerformance.isPending ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        Analyzing Performance...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Generate AI Insights
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div>
+                <div className="flex justify-end mb-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => analyzePerformance.mutate()}
+                    disabled={analyzePerformance.isPending}
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refresh Analysis
+                  </Button>
+                </div>
+                <PerformanceInsightsPanel insights={aiInsights.insights} />
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="charts" className="mt-6">
+            {aiInsights ? (
+              <PerformanceCharts metrics={aiInsights.metrics} />
+            ) : (
+              <Card>
+                <CardContent className="py-12 text-center">
+                  <BarChart3 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-600 mb-4">Generate AI insights first to view analytics charts</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => analyzePerformance.mutate()}
+                    disabled={analyzePerformance.isPending}
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Insights
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
 
           <TabsContent value="status-summary" className="space-y-6 mt-6">
             {/* Unique Students */}
@@ -520,16 +611,7 @@ export default function CRMPerformanceReports() {
             <Card>
               <CardContent className="py-12 text-center">
                 <BarChart3 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-600">Comparison charts coming soon</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="detailed" className="mt-6">
-            <Card>
-              <CardContent className="py-12 text-center">
-                <TrendingUp className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-600">Detailed analysis coming soon</p>
+                <p className="text-slate-600">Check AI Insights tab for comparative analysis</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -538,7 +620,7 @@ export default function CRMPerformanceReports() {
             <Card>
               <CardContent className="py-12 text-center">
                 <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-600">Business intelligence coming soon</p>
+                <p className="text-slate-600">View AI Insights and Analytics tabs for business intelligence</p>
               </CardContent>
             </Card>
           </TabsContent>

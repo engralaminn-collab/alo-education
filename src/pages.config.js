@@ -62,6 +62,7 @@ import CRMImportStudents from './pages/CRMImportStudents';
 import CRMInquiries from './pages/CRMInquiries';
 import CRMMessages from './pages/CRMMessages';
 import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
+import CRMPerformanceReports from './pages/CRMPerformanceReports';
 import CRMReports from './pages/CRMReports';
 import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import CRMSettings from './pages/CRMSettings';
@@ -108,7 +109,6 @@ import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetails from './pages/UniversityDetails';
-import CRMPerformanceReports from './pages/CRMPerformanceReports';
 import __Layout from './Layout.jsx';
 
 
@@ -128,6 +128,7 @@ export const PAGES = {
     "CRMInquiries": CRMInquiries,
     "CRMMessages": CRMMessages,
     "CRMPerformanceDashboard": CRMPerformanceDashboard,
+    "CRMPerformanceReports": CRMPerformanceReports,
     "CRMReports": CRMReports,
     "CRMSecureDocuments": CRMSecureDocuments,
     "CRMSettings": CRMSettings,
@@ -174,7 +175,6 @@ export const PAGES = {
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
     "UniversityDetails": UniversityDetails,
-    "CRMPerformanceReports": CRMPerformanceReports,
 }
 
 export const pagesConfig = {
