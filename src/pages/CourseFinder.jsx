@@ -38,7 +38,7 @@ export default function CourseFinder() {
     universityName: ''
   });
 
-  const { data: courses = [], isLoading } = useQuery({
+  const { data: courses = [] } = useQuery({
     queryKey: ['courses'],
     queryFn: () => base44.entities.Course.filter({ status: 'open' })
   });
@@ -48,145 +48,33 @@ export default function CourseFinder() {
     queryFn: () => base44.entities.University.list()
   });
 
-  const { data: userProfile } = useQuery({
-    queryKey: ['user-profile'],
-    queryFn: async () => {
-      const user = await base44.auth.me();
-      if (user) {
-        const profiles = await base44.entities.StudentProfile.filter({ email: user.email });
-        return profiles[0];
-      }
-      return null;
-    }
-  });
-
   const universityMap = universities.reduce((acc, uni) => {
     acc[uni.id] = uni;
     return acc;
   }, {});
 
-  // AI-powered course recommendations based on user profile and interactions
-  const getAIRecommendations = () => {
-    if (!userProfile) return courses.slice(0, 3);
-    
-    return courses.map(course => {
-      let aiScore = 50; // Base score
-      
-      // Match preferred fields
-      if (userProfile.preferred_fields?.includes(course.subject_area)) {
-        aiScore += 20;
-      }
-      
-      // Match degree level
-      if (userProfile.preferred_degree_level === course.level) {
-        aiScore += 15;
-      }
-      
-      // Match country preference
-      const uni = universityMap[course.university_id];
-      if (uni && userProfile.preferred_countries?.includes(uni.country)) {
-        aiScore += 15;
-      }
-      
-      // Budget match
-      if (userProfile.budget_max && course.tuition_fee_min && course.tuition_fee_min <= userProfile.budget_max) {
-        aiScore += 10;
-      }
-      
-      return { ...course, aiScore };
-    }).sort((a, b) => b.aiScore - a.aiScore).slice(0, 5);
-  };
-
-  // Advanced filtering
-  const filteredCourses = courses.filter(course => {
-    // Search query
-    if (searchQuery && !course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    // Level filter
-    if (filters.level && course.level !== filters.level) {
-      return false;
-    }
-    
-    // Subject area filter
-    if (filters.subject_area && course.subject_area !== filters.subject_area) {
-      return false;
-    }
-    
-    // Country filter
-    const uni = universityMap[course.university_id];
-    if (filters.country && uni?.country !== filters.country) {
-      return false;
-    }
-    
-    // Duration filter (parse duration string like "2 years" or "18 months")
-    if (filters.duration_min || filters.duration_max) {
-      const durationMatch = course.duration?.match(/(\d+)\s*(year|month)/i);
-      if (durationMatch) {
-        const value = parseInt(durationMatch[1]);
-        const unit = durationMatch[2].toLowerCase();
-        const months = unit === 'year' ? value * 12 : value;
-        
-        if (filters.duration_min && months < parseInt(filters.duration_min)) return false;
-        if (filters.duration_max && months > parseInt(filters.duration_max)) return false;
-      }
-    }
-    
-    // Tuition filter
-    if (course.tuition_fee_min) {
-      if (course.tuition_fee_min < filters.tuition_min) return false;
-      if (course.tuition_fee_min > filters.tuition_max) return false;
-    }
-    
-    // Scholarship filter
-    if (filters.scholarship && !course.scholarship_available) {
-      return false;
-    }
-    
-    // Start date/intake filter
-    if (filters.start_date && course.intake && !course.intake.includes(filters.start_date)) {
-      return false;
-    }
-    
-    return true;
-  });
-
-  // Sorting
-  const sortedCourses = [...filteredCourses].sort((a, b) => {
-    if (sortBy === 'tuition_low') {
-      return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
-    }
-    if (sortBy === 'tuition_high') {
-      return (b.tuition_fee_min || 0) - (a.tuition_fee_min || 0);
-    }
-    if (sortBy === 'duration') {
-      const aDur = a.duration?.match(/(\d+)/)?.[1] || 0;
-      const bDur = b.duration?.match(/(\d+)/)?.[1] || 0;
-      return aDur - bDur;
-    }
-    return 0; // relevance (default)
-  });
-
-  const clearFilters = () => {
-    setFilters({
-      level: '',
-      subject_area: '',
-      country: '',
-      duration_min: '',
-      duration_max: '',
-      tuition_min: 0,
-      tuition_max: 100000,
-      start_date: '',
-      scholarship: false
-    });
-    setSearchQuery('');
-  };
-
-  const aiRecommendations = getAIRecommendations();
   const uniqueSubjects = [...new Set(courses.map(c => c.subject_area).filter(Boolean))];
   const uniqueCountries = [...new Set(courses.map(c => universityMap[c.university_id]?.country).filter(Boolean))];
+
+  // Handle COURSES Tab Search
+  const handleCoursesSearch = () => {
+    navigate(createPageUrl('CourseFinderResults'), { 
+      state: { 
+        searchType: 'courses',
+        ...courseFilters
+      } 
+    });
+  };
+
+  // Handle UNIVERSITIES Tab Search
+  const handleUniversitiesSearch = () => {
+    navigate(createPageUrl('CourseFinderResults'), { 
+      state: { 
+        searchType: 'universities',
+        ...uniFilters
+      } 
+    });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
