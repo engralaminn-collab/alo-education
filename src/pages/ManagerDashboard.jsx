@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import AfterHoursSettings from '@/components/manager/AfterHoursSettings';
 
 export default function ManagerDashboard() {
   const [user, setUser] = useState(null);
@@ -172,7 +173,10 @@ export default function ManagerDashboard() {
           </Card>
         </div>
 
-        <Tabs defaultValue="overdue">
+        {/* After-Hours Status */}
+        <AfterHoursSettings />
+
+        <Tabs defaultValue="overdue" className="mt-8">
           <TabsList className="grid grid-cols-3 w-full max-w-2xl">
             <TabsTrigger value="overdue">Overdue ({overdueChats.length})</TabsTrigger>
             <TabsTrigger value="unassigned">Unassigned ({unassignedChats.length})</TabsTrigger>
