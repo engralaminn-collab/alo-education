@@ -79,6 +79,7 @@ import Contact from './pages/Contact';
 import CounselorDashboard from './pages/CounselorDashboard';
 import CourseDetails from './pages/CourseDetails';
 import CourseFinder from './pages/CourseFinder';
+import CourseFinderResults from './pages/CourseFinderResults';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
 import Home from './pages/Home';
@@ -108,19 +109,6 @@ import StudyInUSA from './pages/StudyInUSA';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
-import ManagerCounselorWorkload from './pages/ManagerCounselorWorkload';
-import ProvideFeedback from './pages/ProvideFeedback';
-import ServiceFreeCounselling from './pages/ServiceFreeCounselling';
-import ServiceUniversitySelection from './pages/ServiceUniversitySelection';
-import ServiceApplicationAssistance from './pages/ServiceApplicationAssistance';
-import ServiceSOPReview from './pages/ServiceSOPReview';
-import ServiceVisaGuidance from './pages/ServiceVisaGuidance';
-import ServiceScholarshipSupport from './pages/ServiceScholarshipSupport';
-import ServiceAccommodation from './pages/ServiceAccommodation';
-import ServicePreDeparture from './pages/ServicePreDeparture';
-import CRMApplicationStatusMonitor from './pages/CRMApplicationStatusMonitor';
-import CRMPartnerships from './pages/CRMPartnerships';
-import CourseFinderResults from './pages/CourseFinderResults';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import __Layout from './Layout.jsx';
 
@@ -158,6 +146,7 @@ export const PAGES = {
     "CounselorDashboard": CounselorDashboard,
     "CourseDetails": CourseDetails,
     "CourseFinder": CourseFinder,
+    "CourseFinderResults": CourseFinderResults,
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
     "Home": Home,
@@ -187,19 +176,6 @@ export const PAGES = {
     "SubmitTestimonial": SubmitTestimonial,
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
-    "ManagerCounselorWorkload": ManagerCounselorWorkload,
-    "ProvideFeedback": ProvideFeedback,
-    "ServiceFreeCounselling": ServiceFreeCounselling,
-    "ServiceUniversitySelection": ServiceUniversitySelection,
-    "ServiceApplicationAssistance": ServiceApplicationAssistance,
-    "ServiceSOPReview": ServiceSOPReview,
-    "ServiceVisaGuidance": ServiceVisaGuidance,
-    "ServiceScholarshipSupport": ServiceScholarshipSupport,
-    "ServiceAccommodation": ServiceAccommodation,
-    "ServicePreDeparture": ServicePreDeparture,
-    "CRMApplicationStatusMonitor": CRMApplicationStatusMonitor,
-    "CRMPartnerships": CRMPartnerships,
-    "CourseFinderResults": CourseFinderResults,
     "UniversityDetailsPage": UniversityDetailsPage,
 }
 
