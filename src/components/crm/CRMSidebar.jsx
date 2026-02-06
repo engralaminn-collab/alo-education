@@ -14,6 +14,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
   { icon: Users, label: 'My Dashboard', page: 'CounselorDashboard' },
   { icon: TrendingUp, label: 'Performance', page: 'CRMPerformanceDashboard' },
+  { icon: Award, label: 'Reports', page: 'CRMPerformanceReports' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: Upload, label: 'Import Students', page: 'CRMImportStudents' },
@@ -28,7 +29,7 @@ const menuItems = [
   { icon: Brain, label: 'Communications', page: 'CRMCommunications' },
   { icon: Send, label: 'Bulk Campaigns', page: 'CRMBulkCampaigns' },
   { icon: Zap, label: 'Automation', page: 'CRMAutomation' },
-  { icon: BarChart3, label: 'Reports', page: 'CRMReports' },
+  { icon: BarChart3, label: 'AI Reports', page: 'CRMReports' },
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];
 
