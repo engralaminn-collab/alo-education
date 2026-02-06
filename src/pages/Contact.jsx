@@ -59,19 +59,27 @@ export default function Contact() {
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
       <section 
-        className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 py-20 bg-cover bg-center"
+        className="relative bg-gradient-to-br from-education-blue to-alo-orange py-20 bg-cover bg-center"
         style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&h=600&fit=crop)' }}
       >
-        <div className="absolute inset-0 bg-slate-900/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-education-blue/95 to-alo-orange/95"></div>
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center text-white">
-            <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-80" />
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Get in Touch
-            </h1>
-            <p className="text-xl text-slate-300">
-              Start your study abroad journey with a free consultation
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium mb-4">
+                <MessageSquare className="w-4 h-4" />
+                ALO Education Contact
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                Get in Touch
+              </h1>
+              <p className="text-xl text-white/90">
+                Start your study abroad journey with ALO Education - Book a free consultation today
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
