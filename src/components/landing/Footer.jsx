@@ -17,17 +17,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-education-blue to-alo-orange flex items-center justify-center shadow-lg">
-                  <GraduationCap className="w-8 h-8 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-2xl">ALO Education</h3>
-                  <p className="text-alo-orange text-xs font-semibold italic">Your Future Starts Here</p>
-                </div>
-              </div>
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/693eca99c6c08f82cce5122b/70d60b7a4_fgdh.jpg" alt="ALO Education" className="h-16 mb-4" />
               <p className="text-slate-600 text-sm leading-relaxed">
-                From your ambition to admission, ALO Education is with you all the way. Your trusted partner in international education since 2006.
+                From your ambition to admission, we're with you all the way.
               </p>
             </div>
             <div className="flex gap-3">
@@ -123,19 +115,13 @@ export default function Footer() {
             ))}
           </div>
           
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-slate-600">
-              © Copyright 2026 <span className="font-bold text-education-blue">ALO Education</span>. Empowering Students Worldwide Since 2006. All Rights Reserved.
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-600">
+            <p>
+              © Copyright 2025 ALO Education. All Rights Reserved
             </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-education-blue hover:text-alo-orange transition-colors font-medium">
-                Privacy Policy
-              </a>
-              <span className="text-slate-400">•</span>
-              <a href="#" className="text-education-blue hover:text-alo-orange transition-colors font-medium">
-                Cookie Policy
-              </a>
-            </div>
+            <a href="#" className="text-slate-600 hover:text-blue-600 transition-colors">
+              • Cookie policy
+            </a>
           </div>
         </div>
       </div>

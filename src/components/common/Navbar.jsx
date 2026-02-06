@@ -46,24 +46,12 @@ export default function Navbar() {
     { label: 'Dubai (UAE)', page: 'StudyInDubai' },
   ];
 
-  const resourcesLinks = [
-    { label: 'All Resources', page: 'Resources' },
-    { label: 'IELTS Prep', page: 'IELTSPrep' },
-    { label: 'PTE Prep', page: 'PTEPrep' },
-    { label: 'Alumni Network', page: 'AlumniNetwork' },
-    { label: 'Testimonials', page: 'TestimonialsPage' },
-  ];
-
-  const services = [
-    { label: 'All Services', page: 'Services' },
-    { label: 'Free Counselling', page: 'ServiceFreeCounselling' },
-    { label: 'University Selection', page: 'ServiceUniversitySelection' },
-    { label: 'Application Assistance', page: 'ServiceApplicationAssistance' },
-    { label: 'SOP Review', page: 'ServiceSOPReview' },
-    { label: 'Visa Guidance', page: 'ServiceVisaGuidance' },
-    { label: 'Scholarship Support', page: 'ServiceScholarshipSupport' },
-    { label: 'Accommodation', page: 'ServiceAccommodation' },
-    { label: 'Pre-Departure', page: 'ServicePreDeparture' },
+  const navLinks = [
+    { label: 'Course Finder', page: 'CourseMatcher' },
+    { label: 'Universities', page: 'Universities' },
+    { label: 'Scholarships', page: 'ScholarshipFinder' },
+    { label: 'Services', page: 'Home', hash: '#services' },
+    { label: 'Resources', page: 'Resources' },
   ];
 
   return (
@@ -71,18 +59,28 @@ export default function Navbar() {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to={createPageUrl('Home')} className="flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-education-blue to-alo-orange flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
-              <GraduationCap className="w-7 h-7 text-white" />
+          <Link to={createPageUrl('Home')} className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-brand flex items-center justify-center">
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className={`text-2xl font-bold ${textColor} tracking-tight`}>ALO Education</span>
-              <span className="text-alo-orange text-xs font-semibold -mt-1 italic">Your Future Starts Here</span>
+              <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+              <span className="tagline text-xs -mt-1">Your Future Starts Here</span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.page}
+                to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+            
             {/* Destinations Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -103,56 +101,11 @@ export default function Navbar() {
             </DropdownMenu>
 
             <Link
-              to={createPageUrl('CourseMatcher')}
+              to={createPageUrl('Contact')}
               className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
             >
-              Course Finder
+              Book Free Counselling
             </Link>
-
-            {/* Services Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
-                  Services
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {services.map((service) => (
-                  <DropdownMenuItem key={service.page} asChild>
-                    <Link to={createPageUrl(service.page)} className="cursor-pointer">
-                      {service.label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Link
-              to={createPageUrl('LanguagePrep')}
-              className={`font-medium hover:text-alo-orange transition-colors ${textColor}`}
-            >
-              Language Prep
-            </Link>
-
-            {/* Resources Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className={`font-medium hover:text-alo-orange transition-colors flex items-center gap-1 ${textColor}`}>
-                  Resources
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {resourcesLinks.map((resource) => (
-                  <DropdownMenuItem key={resource.page} asChild>
-                    <Link to={createPageUrl(resource.page)} className="cursor-pointer">
-                      {resource.label}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
 
           {/* Auth Buttons */}
@@ -232,6 +185,17 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-6 mt-8">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.page}
+                    to={link.hash ? `${createPageUrl(link.page)}${link.hash}` : createPageUrl(link.page)}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                
                 {/* Mobile Destinations */}
                 <div>
                   <p className="text-sm font-semibold text-slate-500 mb-2">Destinations</p>
@@ -250,54 +214,12 @@ export default function Navbar() {
                 </div>
 
                 <Link
-                  to={createPageUrl('CourseMatcher')}
+                  to={createPageUrl('Contact')}
                   onClick={() => setIsMobileOpen(false)}
                   className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
                 >
-                  Course Finder
+                  Book Free Counselling
                 </Link>
-
-                {/* Mobile Services */}
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 mb-2">Services</p>
-                  <div className="flex flex-col gap-3 ml-2">
-                    {services.map((service) => (
-                      <Link
-                        key={service.page}
-                        to={createPageUrl(service.page)}
-                        onClick={() => setIsMobileOpen(false)}
-                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
-                      >
-                        {service.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <Link
-                  to={createPageUrl('LanguagePrep')}
-                  onClick={() => setIsMobileOpen(false)}
-                  className="text-lg font-medium text-slate-800 hover:text-emerald-500 transition-colors"
-                >
-                  Language Prep
-                </Link>
-
-                {/* Mobile Resources */}
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 mb-2">Resources</p>
-                  <div className="flex flex-col gap-3 ml-2">
-                    {resourcesLinks.map((resource) => (
-                      <Link
-                        key={resource.page}
-                        to={createPageUrl(resource.page)}
-                        onClick={() => setIsMobileOpen(false)}
-                        className="text-base font-medium text-slate-700 hover:text-emerald-500 transition-colors"
-                      >
-                        {resource.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
                 
                 <hr className="border-slate-200" />
                 {user ? (

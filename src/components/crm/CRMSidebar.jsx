@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Mail, Zap, Brain, Award, Shield, Send, TrendingUp, Upload, Handshake
+  Inbox, UserCog, LogOut, ChevronLeft, Mail, Zap, Brain, Award, Shield, Send, TrendingUp, Upload
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -13,17 +13,14 @@ import { cn } from "@/lib/utils";
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
   { icon: Users, label: 'My Dashboard', page: 'CounselorDashboard' },
-  { icon: Users, label: 'Workload Monitor', page: 'ManagerCounselorWorkload' },
   { icon: TrendingUp, label: 'Performance', page: 'CRMPerformanceDashboard' },
   { icon: Award, label: 'Reports', page: 'CRMPerformanceReports' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
   { icon: Upload, label: 'Import Students', page: 'CRMImportStudents' },
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
-  { icon: TrendingUp, label: 'Status Monitor', page: 'CRMApplicationStatusMonitor' },
   { icon: TrendingUp, label: 'Student Success', page: 'CRMStudentSuccess' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
-  { icon: Handshake, label: 'Partnerships', page: 'CRMPartnerships' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
   { icon: Shield, label: 'Secure Docs', page: 'CRMSecureDocuments' },

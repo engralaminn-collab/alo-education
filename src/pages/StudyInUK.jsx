@@ -318,16 +318,6 @@ export default function StudyInUK() {
           ]} />
         </section>
 
-        {/* Sticky CTA */}
-        <div className="fixed bottom-6 right-6 z-40 flex gap-3">
-          <Link to={createPageUrl('Contact')}>
-            <Button size="lg" className="bg-alo-orange hover:bg-alo-orange/90 text-white shadow-2xl gap-2">
-              <MessageSquare size={20} />
-              Book Free Counselling
-            </Button>
-          </Link>
-        </div>
-
         {/* CTA Section */}
         <section className="bg-gradient-to-r from-education-blue to-alo-orange rounded-2xl p-12 text-center text-white">
           <h2 className="text-4xl font-bold mb-4">Ready to Start Your UK Journey?</h2>

@@ -1,6 +1,4 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -11,20 +9,6 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import TestimonialDisplay from '@/components/feedback/TestimonialDisplay';
-
-function TestimonialDisplaySection() {
-  const { data: testimonials = [] } = useQuery({
-    queryKey: ['featured-testimonials'],
-    queryFn: () => base44.entities.Feedback.filter({ 
-      is_public: true, 
-      status: 'approved',
-      is_featured: true 
-    }, '-created_date', 6)
-  });
-
-  return <TestimonialDisplay testimonials={testimonials} variant="grid" />;
-}
 import WhyChooseALO from '@/components/landing/WhyChooseALO';
 
 const values = [
