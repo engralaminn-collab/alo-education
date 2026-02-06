@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,37 +8,35 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { 
-  Search, Filter, X, Building2, Clock, DollarSign, 
-  Calendar, MapPin, Award, Sparkles, BookOpen, ArrowRight
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, ArrowRight } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import AIUniversityRecommendations from '@/components/courses/AIUniversityRecommendations';
-import AICourseRecommendations from '@/components/courses/AICourseRecommendations';
-import QuickApplicationModal from '@/components/applications/QuickApplicationModal';
+
+// Helper: Generate intakes 2026 Jan to Dec
+const generateIntakes = () => {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return months.map(month => `2026-${month}`);
+};
 
 export default function CourseFinder() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
+  const navigate = useNavigate();
+  const allIntakes = generateIntakes();
+
+  // Course Finder - COURSES Tab
+  const [courseFilters, setCourseFilters] = useState({
+    subject: '',
     level: '',
-    subject_area: '',
     country: '',
-    duration_min: '',
-    duration_max: '',
-    tuition_min: 0,
-    tuition_max: 100000,
-    start_date: '',
-    scholarship: false
+    intakes: []
   });
-  const [showAIRecommendations, setShowAIRecommendations] = useState(false);
-  const [sortBy, setSortBy] = useState('relevance');
-  const [showApplicationModal, setShowApplicationModal] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [selectedUniversity, setSelectedUniversity] = useState(null);
+
+  // Course Finder - UNIVERSITIES Tab
+  const [uniFilters, setUniFilters] = useState({
+    subject: '',
+    universityName: ''
+  });
 
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['courses'],
