@@ -59,13 +59,13 @@ export default function Navbar() {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to={createPageUrl('Home')} className="flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-education-blue to-alo-orange flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
-              <GraduationCap className="w-7 h-7 text-white" />
+          <Link to={createPageUrl('Home')} className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-brand flex items-center justify-center">
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className={`text-2xl font-bold ${textColor} tracking-tight`}>ALO Education</span>
-              <span className="text-alo-orange text-xs font-semibold -mt-1 italic">Your Future Starts Here</span>
+              <span className={`text-xl font-bold ${textColor}`}>ALO Education</span>
+              <span className="tagline text-xs -mt-1">Your Future Starts Here</span>
             </div>
           </Link>
 

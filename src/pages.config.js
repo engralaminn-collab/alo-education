@@ -81,6 +81,7 @@ import CourseDetails from './pages/CourseDetails';
 import CourseFinder from './pages/CourseFinder';
 import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
+import Home from './pages/Home';
 import IELTSPrep from './pages/IELTSPrep';
 import LanguagePrep from './pages/LanguagePrep';
 import ManagerDashboard from './pages/ManagerDashboard';
@@ -107,21 +108,7 @@ import StudyInUSA from './pages/StudyInUSA';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
-import ManagerCounselorWorkload from './pages/ManagerCounselorWorkload';
-import ProvideFeedback from './pages/ProvideFeedback';
-import ServiceFreeCounselling from './pages/ServiceFreeCounselling';
-import ServiceUniversitySelection from './pages/ServiceUniversitySelection';
-import ServiceApplicationAssistance from './pages/ServiceApplicationAssistance';
-import ServiceSOPReview from './pages/ServiceSOPReview';
-import ServiceVisaGuidance from './pages/ServiceVisaGuidance';
-import ServiceScholarshipSupport from './pages/ServiceScholarshipSupport';
-import ServiceAccommodation from './pages/ServiceAccommodation';
-import ServicePreDeparture from './pages/ServicePreDeparture';
-import CRMApplicationStatusMonitor from './pages/CRMApplicationStatusMonitor';
-import CRMPartnerships from './pages/CRMPartnerships';
-import Home from './pages/Home';
 import UniversityDetails from './pages/UniversityDetails';
-import CourseFinderResults from './pages/CourseFinderResults';
 import __Layout from './Layout.jsx';
 
 
@@ -160,6 +147,7 @@ export const PAGES = {
     "CourseFinder": CourseFinder,
     "CourseMatcher": CourseMatcher,
     "Courses": Courses,
+    "Home": Home,
     "IELTSPrep": IELTSPrep,
     "LanguagePrep": LanguagePrep,
     "ManagerDashboard": ManagerDashboard,
@@ -186,21 +174,7 @@ export const PAGES = {
     "SubmitTestimonial": SubmitTestimonial,
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
-    "ManagerCounselorWorkload": ManagerCounselorWorkload,
-    "ProvideFeedback": ProvideFeedback,
-    "ServiceFreeCounselling": ServiceFreeCounselling,
-    "ServiceUniversitySelection": ServiceUniversitySelection,
-    "ServiceApplicationAssistance": ServiceApplicationAssistance,
-    "ServiceSOPReview": ServiceSOPReview,
-    "ServiceVisaGuidance": ServiceVisaGuidance,
-    "ServiceScholarshipSupport": ServiceScholarshipSupport,
-    "ServiceAccommodation": ServiceAccommodation,
-    "ServicePreDeparture": ServicePreDeparture,
-    "CRMApplicationStatusMonitor": CRMApplicationStatusMonitor,
-    "CRMPartnerships": CRMPartnerships,
-    "Home": Home,
     "UniversityDetails": UniversityDetails,
-    "CourseFinderResults": CourseFinderResults,
 }
 
 export const pagesConfig = {
