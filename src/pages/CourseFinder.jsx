@@ -13,6 +13,7 @@ import { Search, ArrowRight } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIRecommendationEngine from '@/components/courses/AIRecommendationEngine';
 
 // Helper: Generate intakes 2026 Jan to Dec
 const generateIntakes = () => {
@@ -76,6 +77,12 @@ export default function CourseFinder() {
     });
   };
 
+  const handleCourseSelect = (course) => {
+    navigate(createPageUrl('CourseDetails'), { 
+      state: { courseId: course.id } 
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
@@ -89,9 +96,22 @@ export default function CourseFinder() {
       </section>
 
       <div className="container mx-auto px-6 py-12">
-        <Card className="border-0 shadow-xl max-w-5xl mx-auto">
-          <CardContent className="p-8">
-            <Tabs defaultValue="courses" className="w-full">
+        <Tabs defaultValue="search" className="w-full space-y-8">
+          <TabsList className="grid w-full grid-cols-2 max-w-2xl mx-auto">
+            <TabsTrigger value="search" className="text-lg">Search Courses</TabsTrigger>
+            <TabsTrigger value="ai-recommend" className="text-lg">AI Recommendations</TabsTrigger>
+          </TabsList>
+
+          {/* AI Recommendations Tab */}
+          <TabsContent value="ai-recommend" className="max-w-6xl mx-auto">
+            <AIRecommendationEngine onCourseSelect={handleCourseSelect} />
+          </TabsContent>
+
+          {/* Traditional Search Tab */}
+          <TabsContent value="search">
+            <Card className="border-0 shadow-xl max-w-5xl mx-auto">
+              <CardContent className="p-8">
+                <Tabs defaultValue="courses" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="courses" className="text-lg">COURSES</TabsTrigger>
                 <TabsTrigger value="universities" className="text-lg">UNIVERSITIES</TabsTrigger>
@@ -217,9 +237,11 @@ export default function CourseFinder() {
                   Search Universities
                 </Button>
               </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+                </Tabs>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
 
       <Footer />
