@@ -16,6 +16,7 @@ import { createPageUrl } from '@/utils';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import { ApplicationStatusWidget, UpcomingDeadlinesWidget, AlertsNotificationsWidget, QuickLinksWidget } from '@/components/portal/DashboardWidgets';
 import AIInsights from '@/components/dashboard/AIInsights';
 import DocumentStatus from '@/components/dashboard/DocumentStatus';
 import UpcomingDeadlines from '@/components/dashboard/UpcomingDeadlines';
@@ -200,12 +201,28 @@ export default function StudentPortal() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            {/* Application Tracker */}
-            <ApplicationTracker />
-            
+            {/* Dashboard Widgets */}
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <ApplicationTracker />
+              </div>
+              <div className="space-y-4">
+                <ApplicationStatusWidget applications={applications} courseMap={courseMap} universityMap={universityMap} />
+                <UpcomingDeadlinesWidget applications={applications} courseMap={courseMap} universityMap={universityMap} />
+              </div>
+            </div>
+
+            {/* Alerts & Quick Links */}
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <AlertsNotificationsWidget applications={applications} studentProfile={studentProfile} />
+              </div>
+              <QuickLinksWidget />
+            </div>
+
             <AINextSteps />
             <MyJourney />
-            
+
             {/* Stats Cards */}
             <div className="grid md:grid-cols-4 gap-4">
               <Card>
