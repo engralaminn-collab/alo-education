@@ -34,6 +34,7 @@ import MyJourney from '@/components/dashboard/MyJourney';
 import ApplicationTrackingSystem from '@/components/student/ApplicationTrackingSystem';
 import AddApplicationModal from '@/components/student/AddApplicationModal';
 import StudentChatbot from '@/components/portal/StudentChatbot';
+import FinancialDashboard from '@/components/portal/FinancialDashboard';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
@@ -146,7 +147,7 @@ export default function StudentPortal() {
       <div className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 h-auto">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9 h-auto">
             <TabsTrigger value="overview" className="gap-2">
               <LayoutDashboard className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -166,6 +167,10 @@ export default function StudentPortal() {
             <TabsTrigger value="documents" className="gap-2">
               <Upload className="w-4 h-4" />
               <span className="hidden sm:inline">Documents</span>
+            </TabsTrigger>
+            <TabsTrigger value="financials" className="gap-2">
+              <Award className="w-4 h-4" />
+              <span className="hidden sm:inline">Financials</span>
             </TabsTrigger>
             <TabsTrigger value="comments" className="gap-2">
               <MessageSquare className="w-4 h-4" />
@@ -493,6 +498,11 @@ export default function StudentPortal() {
             />
             
             <CommunicationHistory studentId={studentProfile.id} />
+          </TabsContent>
+
+          {/* Financials Tab */}
+          <TabsContent value="financials" className="space-y-6">
+            <FinancialDashboard studentId={studentProfile.id} />
           </TabsContent>
 
           {/* Scholarships Tab */}
