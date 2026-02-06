@@ -35,6 +35,7 @@ import ApplicationTrackingSystem from '@/components/student/ApplicationTrackingS
 import AddApplicationModal from '@/components/student/AddApplicationModal';
 import StudentChatbot from '@/components/portal/StudentChatbot';
 import FinancialDashboard from '@/components/portal/FinancialDashboard';
+import AIUniversityMatcher from '@/components/recommendations/AIUniversityMatcher';
 
 const statusColors = {
   draft: 'bg-slate-100 text-slate-700',
