@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Student profile not found' }, { status: 404 });
     }
 
-    // Get all universities and courses
+    // Get all universities, courses, and partnerships
     const universities = await base44.asServiceRole.entities.University.filter({ 
       status: 'active' 
     });
@@ -29,6 +29,9 @@ Deno.serve(async (req) => {
       status: 'open' 
     });
     const scholarships = await base44.asServiceRole.entities.Scholarship.list();
+    const partnerships = await base44.asServiceRole.entities.UniversityAgreement.filter({ 
+      status: 'active' 
+    });
 
     // Build student profile summary
     const profileSummary = {
@@ -45,17 +48,22 @@ Deno.serve(async (req) => {
     };
 
     // Build database summary for AI
-    const universitySummary = universities.slice(0, 50).map(u => ({
-      id: u.id,
-      name: u.university_name,
-      country: u.country,
-      city: u.city,
-      ranking: u.qs_ranking || u.ranking,
-      acceptance_rate: u.acceptance_rate,
-      student_satisfaction: u.student_satisfaction_score,
-      employability: u.graduate_employability_rate,
-      international_students_percent: u.international_students_percent
-    }));
+    const universitySummary = universities.slice(0, 50).map(u => {
+      const partnership = partnerships.find(p => p.university_id === u.id);
+      return {
+        id: u.id,
+        name: u.university_name,
+        country: u.country,
+        city: u.city,
+        ranking: u.qs_ranking || u.ranking,
+        acceptance_rate: u.acceptance_rate,
+        student_satisfaction: u.student_satisfaction_score,
+        employability: u.graduate_employability_rate,
+        international_students_percent: u.international_students_percent,
+        has_partnership: !!partnership,
+        commission_rate: partnership?.commission_rate
+      };
+    });
 
     const courseSummary = courses.slice(0, 100).map(c => ({
       id: c.id,
@@ -98,8 +106,9 @@ ${JSON.stringify(scholarshipSummary, null, 2)}
 TASK:
 1. Match student to TOP 8 most suitable university-course combinations
 2. Consider: academic level, field of study, budget, country preferences, language scores
-3. Prioritize universities with good rankings, high acceptance rates, and employability
+3. Prioritize universities with good rankings, high acceptance rates, employability, and active partnerships
 4. For each match, identify relevant scholarships and estimate visa success rate
+5. Boost match score slightly (+5-10%) if university has active partnership agreement
 
 Return JSON array of matches with:
 - university_id: string

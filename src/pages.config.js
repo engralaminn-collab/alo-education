@@ -120,6 +120,7 @@ import ServiceScholarshipSupport from './pages/ServiceScholarshipSupport';
 import ServiceAccommodation from './pages/ServiceAccommodation';
 import ServicePreDeparture from './pages/ServicePreDeparture';
 import CRMApplicationStatusMonitor from './pages/CRMApplicationStatusMonitor';
+import CRMPartnerships from './pages/CRMPartnerships';
 import __Layout from './Layout.jsx';
 
 
@@ -197,6 +198,7 @@ export const PAGES = {
     "ServiceAccommodation": ServiceAccommodation,
     "ServicePreDeparture": ServicePreDeparture,
     "CRMApplicationStatusMonitor": CRMApplicationStatusMonitor,
+    "CRMPartnerships": CRMPartnerships,
 }
 
 export const pagesConfig = {
