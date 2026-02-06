@@ -139,7 +139,6 @@ export default function ProvideFeedback() {
                           <CardTitle className="text-lg">
                             {university?.university_name} - {course?.course_title}
                           </CardTitle>
-                        </CardTitle>
                         </CardHeader>
                         <CardContent>
                           <FeedbackForm
