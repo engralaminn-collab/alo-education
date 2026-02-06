@@ -111,6 +111,8 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import CRMAIAssistant from './pages/CRMAIAssistant';
+import ApplicationForm from './pages/ApplicationForm';
+import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -179,6 +181,8 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityDetailsPage": UniversityDetailsPage,
     "CRMAIAssistant": CRMAIAssistant,
+    "ApplicationForm": ApplicationForm,
+    "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
 }
 
 export const pagesConfig = {
