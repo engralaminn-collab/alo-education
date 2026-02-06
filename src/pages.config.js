@@ -123,6 +123,7 @@ import StudentDashboardPersonalized from './pages/StudentDashboardPersonalized';
 import InAppMessaging from './pages/InAppMessaging';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import OnboardingStatus from './pages/OnboardingStatus';
+import CounselorMessaging from './pages/CounselorMessaging';
 import __Layout from './Layout.jsx';
 
 
@@ -203,6 +204,7 @@ export const PAGES = {
     "InAppMessaging": InAppMessaging,
     "UniversityOnboarding": UniversityOnboarding,
     "OnboardingStatus": OnboardingStatus,
+    "CounselorMessaging": CounselorMessaging,
 }
 
 export const pagesConfig = {
