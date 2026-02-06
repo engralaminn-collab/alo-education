@@ -46,16 +46,24 @@ export default function ScholarshipFinder() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-16">
+      <section className="bg-gradient-to-br from-alo-orange via-education-blue to-alo-orange py-16">
         <div className="container mx-auto px-6">
           <div className="text-center text-white max-w-3xl mx-auto">
-            <Award className="w-16 h-16 mx-auto mb-4 opacity-80" />
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              AI Scholarship Finder
-            </h1>
-            <p className="text-xl text-white/90">
-              Discover scholarships tailored to your profile with AI-powered matching
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium mb-4">
+                <Award className="w-4 h-4" />
+                ALO Education Scholarship Finder
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                AI Scholarship Finder
+              </h1>
+              <p className="text-xl text-white/90">
+                Discover scholarships with ALO Education's AI-powered matching system
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>

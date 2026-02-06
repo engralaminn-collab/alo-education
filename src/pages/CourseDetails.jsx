@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   Clock, DollarSign, Award, Calendar, Building2, 
   GraduationCap, Globe, BookOpen, ArrowRight, CheckCircle,
-  MapPin, Users, Star, GitCompare, ExternalLink
+  MapPin, Users, Star, GitCompare
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -18,11 +17,8 @@ import CompareUniversities from '@/components/universities/CompareUniversities';
 import { toast } from 'sonner';
 
 export default function CourseDetails() {
-  const location = useLocation();
   const urlParams = new URLSearchParams(window.location.search);
-  const courseIdParam = urlParams.get('id');
-  const courseIdState = location.state?.courseId;
-  const courseId = courseIdParam || courseIdState;
+  const courseId = urlParams.get('id');
   const [selectedForComparison, setSelectedForComparison] = useState([]);
 
   const { data: course, isLoading: courseLoading } = useQuery({
@@ -135,36 +131,26 @@ export default function CourseDetails() {
               )}
             </div>
 
-            <div className="flex flex-wrap gap-3 mt-6">
-              {university?.website_url && (
-                <a href={university.website_url} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Visit Website
-                  </Button>
-                </a>
-              )}
-              {university && (
-                <Button
-                  onClick={() => {
-                    if (selectedForComparison.find(u => u.id === university.id)) {
-                      setSelectedForComparison(selectedForComparison.filter(u => u.id !== university.id));
-                    } else {
-                      if (selectedForComparison.length >= 4) {
-                        toast.error('Maximum 4 universities for comparison');
-                        return;
-                      }
-                      setSelectedForComparison([...selectedForComparison, university]);
+            {university && (
+              <Button
+                onClick={() => {
+                  if (selectedForComparison.find(u => u.id === university.id)) {
+                    setSelectedForComparison(selectedForComparison.filter(u => u.id !== university.id));
+                  } else {
+                    if (selectedForComparison.length >= 4) {
+                      toast.error('Maximum 4 universities for comparison');
+                      return;
                     }
-                  }}
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10"
-                >
-                  <GitCompare className="w-4 h-4 mr-2" />
-                  {selectedForComparison.find(u => u.id === university.id) ? 'Remove from Compare' : 'Add to Compare'}
-                </Button>
-              )}
-            </div>
+                    setSelectedForComparison([...selectedForComparison, university]);
+                  }
+                }}
+                variant="outline"
+                className="mt-6 border-white/30 text-white hover:bg-white/10"
+              >
+                <GitCompare className="w-4 h-4 mr-2" />
+                {selectedForComparison.find(u => u.id === university.id) ? 'Remove from Compare' : 'Add to Compare'}
+              </Button>
+            )}
           </motion.div>
         </div>
       </section>
@@ -264,42 +250,36 @@ export default function CourseDetails() {
                   <span className="font-medium capitalize">{course.subject_area?.replace(/_/g, ' ')}</span>
                 </div>
                 {course.intake && (
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                  <div className="flex justify-between items-center py-2">
                     <span className="text-slate-500">Next Intake</span>
                     <span className="font-medium">{course.intake}</span>
-                  </div>
-                )}
-                {course.application_deadline && (
-                  <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                    <span className="text-slate-500">Application Deadline</span>
-                    <span className="font-medium">{course.application_deadline}</span>
-                  </div>
-                )}
-                {university?.qs_ranking && (
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-slate-500">QS Ranking</span>
-                    <span className="font-medium">#{university.qs_ranking}</span>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* Apply CTA */}
-             <Card className="border-0 shadow-sm bg-gradient-to-br from-alo-orange to-orange-600 text-white">
-               <CardContent className="p-6 text-center">
-                 <GraduationCap className="w-12 h-12 mx-auto mb-4 opacity-90" />
-                 <h3 className="text-xl font-bold mb-2">Ready to Apply?</h3>
-                 <p className="text-white/90 mb-6 text-sm">
-                   Login or register to submit your application
-                 </p>
-                 <Link to={createPageUrl('StudentPortal')} className="block">
-                   <Button className="w-full bg-white text-alo-orange hover:bg-slate-100 font-bold">
-                     Apply Now
-                     <ArrowRight className="w-4 h-4 ml-2" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
+            <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-500 to-cyan-500 text-white">
+              <CardContent className="p-6 text-center">
+                <GraduationCap className="w-12 h-12 mx-auto mb-4 opacity-80" />
+                <h3 className="text-xl font-bold mb-2">Interested in this course?</h3>
+                <p className="text-white/80 mb-6 text-sm">
+                  Check your eligibility and get personalized guidance
+                </p>
+                <div className="space-y-3">
+                  <Link to={createPageUrl('CourseMatcher')} className="block">
+                    <Button className="w-full bg-white text-emerald-600 hover:bg-slate-100">
+                      Check Eligibility
+                    </Button>
+                  </Link>
+                  <Link to={createPageUrl('Contact') + `?course=${course.id}`} className="block">
+                    <Button variant="outline" className="w-full border-white/30 text-white hover:bg-white/10">
+                      Get Expert Advice
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Scholarship Info */}
             {course.scholarship_available && (

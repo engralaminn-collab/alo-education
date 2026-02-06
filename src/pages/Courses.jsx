@@ -199,15 +199,24 @@ export default function Courses() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
+      <section className="bg-gradient-to-br from-education-blue to-alo-orange py-16">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Find Your Perfect Course
-            </h1>
-            <p className="text-xl text-slate-300">
-              Explore {courses.length}+ programs from top universities worldwide
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium mb-4">
+                <BookOpen className="w-4 h-4" />
+                ALO Education Course Finder
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Find Your Perfect Course
+              </h1>
+              <p className="text-xl text-slate-300">
+                Explore {courses.length}+ programs from top universities worldwide with expert ALO Education guidance
+              </p>
+            </motion.div>
           </div>
 
           <div className="mt-8 flex flex-col md:flex-row gap-4">
