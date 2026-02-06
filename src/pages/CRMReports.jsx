@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import StudentAnalyticsDashboard from '@/components/reports/StudentAnalyticsDashboard';
 import CounselorPerformanceDashboard from '@/components/reports/CounselorPerformanceDashboard';
 import OutreachSuccessDashboard from '@/components/reports/OutreachSuccessDashboard';
+import ScheduledReportsManager from '@/components/reports/ScheduledReportsManager';
 
 export default function CRMReports() {
   const [reportType, setReportType] = useState('all');
@@ -99,6 +100,8 @@ export default function CRMReports() {
       }
     >
       <div className="p-6 space-y-6">
+        <ScheduledReportsManager />
+
         {!insightsData ? (
           <Card className="border-2 border-dashed border-slate-300">
             <CardContent className="py-12 text-center">
