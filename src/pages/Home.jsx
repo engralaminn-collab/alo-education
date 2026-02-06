@@ -3,7 +3,6 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
 import Hero from '@/components/landing/Hero';
-import SmartCourseFinder from '@/components/finder/SmartCourseFinder';
 import AboutUs from '@/components/landing/AboutUs';
 import Services from '@/components/landing/Services';
 import Team from '@/components/landing/Team';
@@ -25,11 +24,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <Hero />
-      <div className="py-12 bg-slate-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <SmartCourseFinder variant="compact" />
-        </div>
-      </div>
       <AboutUs />
       <Services />
       <Team />
