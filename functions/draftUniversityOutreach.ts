@@ -9,11 +9,12 @@ Deno.serve(async (req) => {
             return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { studentId, universityId, programs, reasons } = await req.json();
+        const { studentId, universityId, programId, programs, reasons, careerProspects } = await req.json();
 
         // Fetch data
         const student = await base44.entities.StudentProfile.get(studentId);
         const university = await base44.entities.University.get(universityId);
+        const program = programId ? await base44.entities.Course.get(programId) : null;
         
         // Get university contacts
         const contacts = await base44.entities.UniversityContact.filter({ 
@@ -38,11 +39,19 @@ UNIVERSITY:
 - Name: ${university.university_name}
 - Country: ${university.country}
 
-RECOMMENDED PROGRAMS:
-${programs?.join(', ') || 'General inquiry'}
+${program ? `SPECIFIC PROGRAM OF INTEREST:
+- Program: ${program.course_title}
+- Level: ${program.level}
+- Duration: ${program.duration}
+- Tuition: ${program.currency} ${program.tuition_fee_min}-${program.tuition_fee_max}
+- Subject Area: ${program.subject_area}
+- IELTS Required: ${program.ielts_overall || 'TBD'}
+` : 'RECOMMENDED PROGRAMS:\n' + (programs?.join(', ') || 'General inquiry')}
 
 MATCHING REASONS:
 ${reasons?.join(', ') || 'Strong profile fit'}
+
+${careerProspects ? `CAREER PROSPECTS:\n${careerProspects}` : ''}
 
 TASK: Draft a professional, personalized email to ${university.university_name}'s admissions team introducing this student.
 
