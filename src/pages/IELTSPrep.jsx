@@ -1,4 +1,6 @@
 import React from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +14,16 @@ import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 
 export default function IELTSPrep() {
+  const { data: ieltsCourses = [] } = useQuery({
+    queryKey: ['ielts-courses'],
+    queryFn: async () => {
+      const courses = await base44.entities.Course.filter({ 
+        subject_area: 'English Language' 
+      });
+      return courses.slice(0, 5);
+    },
+  });
+
   const preparation = [
     'Free initial language assessment',
     'Target band score planning based on university and visa needs',
@@ -233,10 +245,12 @@ export default function IELTSPrep() {
                   Book Free IELTS Counselling
                 </Button>
               </Link>
-              <Button variant="outline" className="border-white text-white hover:bg-white/20 text-lg">
-                Prepare with ALO
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+              <Link to={createPageUrl('InAppMessaging')}>
+                <Button variant="outline" className="border-white text-white hover:bg-white/20 text-lg">
+                  Chat with Counselor
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
           </motion.section>
         </div>
