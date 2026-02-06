@@ -189,6 +189,8 @@ export default function StudentPortal() {
 
           {/* AI Advisor Tab */}
           <TabsContent value="ai-advisor" className="space-y-6">
+            <AIUniversityMatcher studentProfileId={studentProfile.id} />
+            
             <Card className="border-2 border-purple-200 min-h-[600px]">
               <StudentChatbot studentId={studentId} compact={false} />
             </Card>
