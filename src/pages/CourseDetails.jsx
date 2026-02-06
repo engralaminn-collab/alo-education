@@ -1,313 +1,251 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Clock, DollarSign, Award, Calendar, Building2, 
-  GraduationCap, Globe, BookOpen, ArrowRight, CheckCircle,
-  MapPin, Users, Star, GitCompare
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, MapPin, DollarSign, Clock, Award } from 'lucide-react';
 import { createPageUrl } from '@/utils';
-import { motion } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
-import CompareUniversities from '@/components/universities/CompareUniversities';
-import { toast } from 'sonner';
 
 export default function CourseDetails() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const courseId = urlParams.get('id');
-  const [selectedForComparison, setSelectedForComparison] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const courseId = location.state?.courseId || new URLSearchParams(window.location.search).get('id');
 
-  const { data: course, isLoading: courseLoading } = useQuery({
-    queryKey: ['course', courseId],
+  const { data: course, isLoading } = useQuery({
+    queryKey: ['course-detail', courseId],
     queryFn: async () => {
-      const courses = await base44.entities.Course.filter({ id: courseId });
-      return courses[0];
+      const courses = await base44.entities.Course.list();
+      return courses.find(c => c.id === courseId);
     },
-    enabled: !!courseId,
+    enabled: !!courseId
   });
 
   const { data: university } = useQuery({
-    queryKey: ['university', course?.university_id],
+    queryKey: ['university-detail', course?.university_id],
     queryFn: async () => {
-      const unis = await base44.entities.University.filter({ id: course.university_id });
-      return unis[0];
+      const unis = await base44.entities.University.list();
+      return unis.find(u => u.id === course.university_id);
     },
-    enabled: !!course?.university_id,
+    enabled: !!course?.university_id
   });
 
-  if (courseLoading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 pt-20">
-        <div className="container mx-auto px-6 py-8">
-          <div className="animate-pulse space-y-6">
-            <div className="h-64 bg-slate-200 rounded-xl" />
-            <div className="h-96 bg-slate-200 rounded-xl" />
-          </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-slate-500">Loading course details...</p>
+      </div>
+    );
+  }
+
+  if (!course || !university) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-slate-500 mb-4">Course not found</p>
+          <Button onClick={() => navigate(createPageUrl('Home'))}>Back to Home</Button>
         </div>
       </div>
     );
   }
 
-  if (!course) {
-    return (
-      <div className="min-h-screen bg-slate-50 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <BookOpen className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Course not found</h2>
-          <Link to={createPageUrl('Courses')}>
-            <Button>Browse Courses</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const handleApplyNow = () => {
+    navigate(createPageUrl('ApplicationForm'));
+  };
+
+  const intakeList = course.intake?.split(',').map(i => i.trim()) || [];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 py-16">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl"
-          >
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <Badge className="bg-emerald-500 text-white capitalize">
-                {course.level}
-              </Badge>
-              <Badge variant="outline" className="bg-white/10 text-white border-white/20 capitalize">
-                {course.subject_area?.replace(/_/g, ' ')}
-              </Badge>
-              {course.scholarship_available && (
-                <Badge className="bg-amber-500 text-white">
-                  <Award className="w-3 h-3 mr-1" />
-                  Scholarship Available
-                </Badge>
-              )}
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {course.course_title}
-            </h1>
-            
-            {university && (
-              <div className="flex items-center gap-3 text-white/80 mb-6">
-                <Building2 className="w-5 h-5" />
-                <span className="text-lg">{university.university_name}</span>
-                <span className="mx-2">•</span>
-                <MapPin className="w-5 h-5" />
-                <span>{university.city}, {university.country}</span>
+    <div className="min-h-screen bg-slate-50 pt-24 pb-12">
+      <div className="max-w-4xl mx-auto px-4">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="mb-6 text-alo-orange hover:text-orange-600"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+          <div className="bg-gradient-to-r from-alo-orange to-orange-600 p-8 text-white">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex-1">
+                <h1 className="text-4xl font-bold mb-2">{course.course_title}</h1>
+                <div className="flex items-center gap-2 text-orange-100">
+                  <MapPin className="w-5 h-5" />
+                  <span className="text-lg">{university.university_name}</span>
+                </div>
               </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-6 text-white/80">
-              {course.duration && (
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
-                  <span>{course.duration}</span>
-                </div>
-              )}
-              {(course.tuition_fee_min || course.tuition_fee_max) && (
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5" />
-                  <span>
-                    {course.tuition_fee_min && course.tuition_fee_max 
-                      ? `${course.tuition_fee_min.toLocaleString()}-${course.tuition_fee_max.toLocaleString()}`
-                      : (course.tuition_fee_min || course.tuition_fee_max).toLocaleString()
-                    } {course.currency || 'USD'}/year
-                  </span>
-                </div>
-              )}
-              {university?.ranking && (
-                <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5" />
-                  <span>World Rank #{university.ranking}</span>
-                </div>
+              {university.logo && (
+                <img src={university.logo} alt={university.university_name} className="h-16 w-auto" />
               )}
             </div>
-
-            {university && (
-              <Button
-                onClick={() => {
-                  if (selectedForComparison.find(u => u.id === university.id)) {
-                    setSelectedForComparison(selectedForComparison.filter(u => u.id !== university.id));
-                  } else {
-                    if (selectedForComparison.length >= 4) {
-                      toast.error('Maximum 4 universities for comparison');
-                      return;
-                    }
-                    setSelectedForComparison([...selectedForComparison, university]);
-                  }
-                }}
-                variant="outline"
-                className="mt-6 border-white/30 text-white hover:bg-white/10"
-              >
-                <GitCompare className="w-4 h-4 mr-2" />
-                {selectedForComparison.find(u => u.id === university.id) ? 'Remove from Compare' : 'Add to Compare'}
-              </Button>
-            )}
-          </motion.div>
-        </div>
-      </section>
-
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Overview */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle>Program Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-600 leading-relaxed">
-                  {course.overview || `This ${course.level}'s program in ${course.subject_area?.replace(/_/g, ' ')} at ${university?.university_name || 'the university'} offers a comprehensive curriculum designed to prepare students for successful careers in their chosen field.`}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Requirements */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle>Entry Requirements</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {course.entry_requirements ? (
-                  <div className="text-slate-600 leading-relaxed">
-                    <p>{course.entry_requirements}</p>
-                    {course.ielts_required && (
-                      <div className="mt-4 p-4 bg-emerald-50 rounded-lg">
-                        <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-emerald-600" />
-                          English Language Requirements
-                        </h4>
-                        <p className="text-sm text-slate-600">
-                          IELTS Overall: {course.ielts_overall || 'N/A'}
-                          {course.ielts_min_each && ` (min ${course.ielts_min_each} in each band)`}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-slate-600">Contact the university for detailed entry requirements</p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* University Info */}
-            {university && (
-              <Card className="border-0 shadow-sm">
-                <CardHeader>
-                  <CardTitle>About {university.university_name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-600 leading-relaxed mb-6">
-                    {university.about || `${university.university_name} is located in ${university.city}, ${university.country}.`}
-                  </p>
-                  <Link to={createPageUrl('UniversityDetails') + `?id=${university.id}`}>
-                    <Button variant="outline">
-                      View University Profile
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            )}
+            <div className="flex gap-3 flex-wrap">
+              <Badge className="bg-white text-orange-600 font-semibold">{course.level}</Badge>
+              {course.scholarship_available && (
+                <Badge className="bg-green-500 font-semibold">Scholarships Available</Badge>
+              )}
+            </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Key Facts */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg">Key Facts</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-500">Duration</span>
-                  <span className="font-medium">{course.duration || 'N/A'}</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-500">Tuition Fee</span>
-                  <span className="font-medium">
-                    {course.tuition_fee_min && course.tuition_fee_max
-                      ? `${course.currency || 'USD'} ${course.tuition_fee_min.toLocaleString()}-${course.tuition_fee_max.toLocaleString()}/year`
-                      : 'Contact for fees'
-                    }
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-500">Degree Level</span>
-                  <span className="font-medium capitalize">{course.level}</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-slate-100">
-                  <span className="text-slate-500">Field</span>
-                  <span className="font-medium capitalize">{course.subject_area?.replace(/_/g, ' ')}</span>
-                </div>
-                {course.intake && (
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-slate-500">Next Intake</span>
-                    <span className="font-medium">{course.intake}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Apply CTA */}
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-500 to-cyan-500 text-white">
-              <CardContent className="p-6 text-center">
-                <GraduationCap className="w-12 h-12 mx-auto mb-4 opacity-80" />
-                <h3 className="text-xl font-bold mb-2">Interested in this course?</h3>
-                <p className="text-white/80 mb-6 text-sm">
-                  Check your eligibility and get personalized guidance
-                </p>
-                <div className="space-y-3">
-                  <Link to={createPageUrl('CourseMatcher')} className="block">
-                    <Button className="w-full bg-white text-emerald-600 hover:bg-slate-100">
-                      Check Eligibility
-                    </Button>
-                  </Link>
-                  <Link to={createPageUrl('Contact') + `?course=${course.id}`} className="block">
-                    <Button variant="outline" className="w-full border-white/30 text-white hover:bg-white/10">
-                      Get Expert Advice
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Scholarship Info */}
-            {course.scholarship_available && (
-              <Card className="border-0 shadow-sm border-l-4 border-l-amber-500">
+          <div className="p-8 space-y-8">
+            {/* Quick Facts */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
                 <CardContent className="p-6">
-                  <div className="flex items-start gap-3">
-                    <Award className="w-6 h-6 text-amber-500 mt-0.5" />
+                  <div className="flex items-center gap-4">
+                    <DollarSign className="w-10 h-10 text-green-600" />
                     <div>
-                      <h4 className="font-semibold text-slate-900 mb-1">Scholarships Available</h4>
-                      <p className="text-sm text-slate-600">
-                        This program offers scholarship opportunities. Contact us to learn more about eligibility and application process.
+                      <p className="text-sm text-slate-600">Tuition Fee</p>
+                      <p className="text-2xl font-bold text-slate-900">
+                        ${course.tuition_fee_min?.toLocaleString()} - ${course.tuition_fee_max?.toLocaleString()}
                       </p>
+                      <p className="text-xs text-slate-500 mt-1">{course.currency || 'USD'} per year</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <Clock className="w-10 h-10 text-blue-600" />
+                    <div>
+                      <p className="text-sm text-slate-600">Application Deadline</p>
+                      <p className="text-2xl font-bold text-slate-900">{course.application_deadline || 'Rolling'}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <Clock className="w-10 h-10 text-purple-600" />
+                    <div>
+                      <p className="text-sm text-slate-600">Course Duration</p>
+                      <p className="text-2xl font-bold text-slate-900">{course.duration || 'N/A'}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <Award className="w-10 h-10 text-orange-600" />
+                    <div>
+                      <p className="text-sm text-slate-600">Subject Area</p>
+                      <p className="text-2xl font-bold text-slate-900">{course.subject_area || 'N/A'}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Course Overview */}
+            {course.overview && (
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Course Overview</h2>
+                <p className="text-slate-700 leading-relaxed">{course.overview}</p>
+              </div>
             )}
+
+            {/* Entry Requirements */}
+            {course.entry_requirements && (
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Entry Requirements</h2>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <p className="text-slate-700 leading-relaxed">{course.entry_requirements}</p>
+                </div>
+              </div>
+            )}
+
+            {/* English Proficiency */}
+            {course.ielts_overall && (
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">English Language Requirements</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardContent className="p-6">
+                      <p className="text-sm text-slate-600 mb-2">IELTS Overall</p>
+                      <p className="text-3xl font-bold text-blue-600">{course.ielts_overall}</p>
+                    </CardContent>
+                  </Card>
+                  {course.ielts_min_each && (
+                    <Card>
+                      <CardContent className="p-6">
+                        <p className="text-sm text-slate-600 mb-2">Minimum in Each Band</p>
+                        <p className="text-3xl font-bold text-blue-600">{course.ielts_min_each}</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Available Intakes */}
+            {intakeList.length > 0 && (
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Available Intakes</h2>
+                <div className="flex flex-wrap gap-3">
+                  {intakeList.map(intake => (
+                    <Badge key={intake} className="bg-purple-100 text-purple-800 text-base px-4 py-2">
+                      {intake}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Scholarships */}
+            {course.scholarship_available && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                <div className="flex items-start gap-3">
+                  <Award className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-bold text-green-900 mb-2">Scholarships Available</h3>
+                    <p className="text-green-800">This course offers scholarship opportunities. Contact our counselors for more details.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Apply Button */}
+            <Button
+              onClick={handleApplyNow}
+              className="w-full h-14 bg-alo-orange hover:bg-orange-600 text-white text-lg font-bold"
+            >
+              Apply Now
+              <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
+            </Button>
           </div>
         </div>
+
+        {/* University Info */}
+        <Card>
+          <CardHeader>
+            <CardTitle>About {university.university_name}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-slate-700">{university.about}</p>
+            {university.website_url && (
+              <Button
+                variant="outline"
+                onClick={() => window.open(university.website_url, '_blank')}
+                className="border-alo-orange text-alo-orange hover:bg-orange-50"
+              >
+                Visit University Website
+                <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
+              </Button>
+            )}
+          </CardContent>
+        </Card>
       </div>
-
       <Footer />
-
-      <CompareUniversities
-        selectedUniversities={selectedForComparison}
-        onRemove={(id) => setSelectedForComparison(selectedForComparison.filter(u => u.id !== id))}
-        onClear={() => setSelectedForComparison([])}
-      />
     </div>
   );
 }

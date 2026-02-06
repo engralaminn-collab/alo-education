@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import About from './pages/About';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import BookConsultation from './pages/BookConsultation';
@@ -74,9 +75,13 @@ import CRMUniversities from './pages/CRMUniversities';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import CompareCourses from './pages/CompareCourses';
 import CompleteProfile from './pages/CompleteProfile';
+import Contact from './pages/Contact';
+import CounselorDashboard from './pages/CounselorDashboard';
 import CourseDetails from './pages/CourseDetails';
 import CourseFinder from './pages/CourseFinder';
+import CourseMatcher from './pages/CourseMatcher';
 import Courses from './pages/Courses';
+import Home from './pages/Home';
 import IELTSPrep from './pages/IELTSPrep';
 import LanguagePrep from './pages/LanguagePrep';
 import ManagerDashboard from './pages/ManagerDashboard';
@@ -87,33 +92,41 @@ import MyDocuments from './pages/MyDocuments';
 import MyProfile from './pages/MyProfile';
 import PTEPrep from './pages/PTEPrep';
 import Resources from './pages/Resources';
+import ScholarshipFinder from './pages/ScholarshipFinder';
+import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
 import StaffDashboard from './pages/StaffDashboard';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
 import StudyInDubai from './pages/StudyInDubai';
 import StudyInIreland from './pages/StudyInIreland';
 import StudyInNewZealand from './pages/StudyInNewZealand';
+import StudyInUK from './pages/StudyInUK';
 import StudyInUSA from './pages/StudyInUSA';
 import SubmitTestimonial from './pages/SubmitTestimonial';
 import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
-import CounselorDashboard from './pages/CounselorDashboard';
+import ManagerCounselorWorkload from './pages/ManagerCounselorWorkload';
+import ProvideFeedback from './pages/ProvideFeedback';
+import ServiceFreeCounselling from './pages/ServiceFreeCounselling';
+import ServiceUniversitySelection from './pages/ServiceUniversitySelection';
+import ServiceApplicationAssistance from './pages/ServiceApplicationAssistance';
+import ServiceSOPReview from './pages/ServiceSOPReview';
+import ServiceVisaGuidance from './pages/ServiceVisaGuidance';
+import ServiceScholarshipSupport from './pages/ServiceScholarshipSupport';
+import ServiceAccommodation from './pages/ServiceAccommodation';
+import ServicePreDeparture from './pages/ServicePreDeparture';
+import CRMApplicationStatusMonitor from './pages/CRMApplicationStatusMonitor';
+import CRMPartnerships from './pages/CRMPartnerships';
 import CourseFinderResults from './pages/CourseFinderResults';
-import Home from './pages/Home';
-import StudyInUK from './pages/StudyInUK';
-import ScholarshipFinder from './pages/ScholarshipFinder';
-import Services from './pages/Services';
-import UniversityDetails from './pages/UniversityDetails';
-import StudentPortal from './pages/StudentPortal';
-import Contact from './pages/Contact';
-import CourseMatcher from './pages/CourseMatcher';
-import About from './pages/About';
+import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "About": About,
     "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
     "BookConsultation": BookConsultation,
@@ -141,9 +154,13 @@ export const PAGES = {
     "CRMUniversityOutreach": CRMUniversityOutreach,
     "CompareCourses": CompareCourses,
     "CompleteProfile": CompleteProfile,
+    "Contact": Contact,
+    "CounselorDashboard": CounselorDashboard,
     "CourseDetails": CourseDetails,
     "CourseFinder": CourseFinder,
+    "CourseMatcher": CourseMatcher,
     "Courses": Courses,
+    "Home": Home,
     "IELTSPrep": IELTSPrep,
     "LanguagePrep": LanguagePrep,
     "ManagerDashboard": ManagerDashboard,
@@ -154,29 +171,36 @@ export const PAGES = {
     "MyProfile": MyProfile,
     "PTEPrep": PTEPrep,
     "Resources": Resources,
+    "ScholarshipFinder": ScholarshipFinder,
+    "Services": Services,
     "SharedComparison": SharedComparison,
     "StaffDashboard": StaffDashboard,
     "StudentDashboard": StudentDashboard,
+    "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
     "StudyInDubai": StudyInDubai,
     "StudyInIreland": StudyInIreland,
     "StudyInNewZealand": StudyInNewZealand,
+    "StudyInUK": StudyInUK,
     "StudyInUSA": StudyInUSA,
     "SubmitTestimonial": SubmitTestimonial,
     "TestimonialsPage": TestimonialsPage,
     "Universities": Universities,
-    "CounselorDashboard": CounselorDashboard,
+    "ManagerCounselorWorkload": ManagerCounselorWorkload,
+    "ProvideFeedback": ProvideFeedback,
+    "ServiceFreeCounselling": ServiceFreeCounselling,
+    "ServiceUniversitySelection": ServiceUniversitySelection,
+    "ServiceApplicationAssistance": ServiceApplicationAssistance,
+    "ServiceSOPReview": ServiceSOPReview,
+    "ServiceVisaGuidance": ServiceVisaGuidance,
+    "ServiceScholarshipSupport": ServiceScholarshipSupport,
+    "ServiceAccommodation": ServiceAccommodation,
+    "ServicePreDeparture": ServicePreDeparture,
+    "CRMApplicationStatusMonitor": CRMApplicationStatusMonitor,
+    "CRMPartnerships": CRMPartnerships,
     "CourseFinderResults": CourseFinderResults,
-    "Home": Home,
-    "StudyInUK": StudyInUK,
-    "ScholarshipFinder": ScholarshipFinder,
-    "Services": Services,
-    "UniversityDetails": UniversityDetails,
-    "StudentPortal": StudentPortal,
-    "Contact": Contact,
-    "CourseMatcher": CourseMatcher,
-    "About": About,
+    "UniversityDetailsPage": UniversityDetailsPage,
 }
 
 export const pagesConfig = {
