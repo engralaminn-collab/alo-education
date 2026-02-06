@@ -121,6 +121,8 @@ import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import StudentDashboardPersonalized from './pages/StudentDashboardPersonalized';
 import InAppMessaging from './pages/InAppMessaging';
+import UniversityOnboarding from './pages/UniversityOnboarding';
+import OnboardingStatus from './pages/OnboardingStatus';
 import __Layout from './Layout.jsx';
 
 
@@ -199,6 +201,8 @@ export const PAGES = {
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "StudentDashboardPersonalized": StudentDashboardPersonalized,
     "InAppMessaging": InAppMessaging,
+    "UniversityOnboarding": UniversityOnboarding,
+    "OnboardingStatus": OnboardingStatus,
 }
 
 export const pagesConfig = {
