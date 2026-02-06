@@ -60,7 +60,10 @@ export default function UniversityOutreachGenerator({ studentId, onSuccess }) {
     { key: '{{STUDENT_EMAIL}}', label: 'Student Email' },
     { key: '{{STUDENT_PHONE}}', label: 'Student Phone' },
     { key: '{{UNIVERSITY_NAME}}', label: 'University Name' },
-    { key: '{{STUDENT_INTERESTS}}', label: 'Student Interests' }
+    { key: '{{STUDENT_INTERESTS}}', label: 'Preferred Fields' },
+    { key: '{{CAREER_GOALS}}', label: 'Career Goals' },
+    { key: '{{ACHIEVEMENTS}}', label: 'Key Achievements' },
+    { key: '{{ACTIVITIES}}', label: 'Activities & Involvement' }
   ];
 
   return (

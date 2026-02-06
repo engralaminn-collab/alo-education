@@ -32,12 +32,24 @@ Deno.serve(async (req) => {
       if (!university) return null;
 
       // Personalize email content
+      const achievements = studentData.achievements || [];
+      const activities = studentData.activities || [];
+      const achievementsText = achievements.length > 0
+        ? achievements.map(a => `${a.title}: ${a.score}`).join(', ')
+        : 'Not specified';
+      const activitiesText = activities.length > 0
+        ? activities.map(a => `${a.activity_name} (${a.category})`).join(', ')
+        : 'Not specified';
+
       const personalizedBody = emailTemplate
         .replace('{{STUDENT_NAME}}', studentData.first_name || 'Student')
         .replace('{{STUDENT_EMAIL}}', studentData.email)
         .replace('{{STUDENT_PHONE}}', studentData.phone || 'Not provided')
         .replace('{{UNIVERSITY_NAME}}', university.university_name)
-        .replace('{{STUDENT_INTERESTS}}', studentData.preferred_fields?.join(', ') || 'Multiple fields');
+        .replace('{{STUDENT_INTERESTS}}', studentData.preferred_fields?.join(', ') || 'Multiple fields')
+        .replace('{{CAREER_GOALS}}', studentData.notes || 'Not specified')
+        .replace('{{ACHIEVEMENTS}}', achievementsText)
+        .replace('{{ACTIVITIES}}', activitiesText);
 
       // Send email to university
       await base44.integrations.Core.SendEmail({
