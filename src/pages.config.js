@@ -118,6 +118,9 @@ import Universities from './pages/Universities';
 import UniversityComparison from './pages/UniversityComparison';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
+import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
+import StudentDashboardPersonalized from './pages/StudentDashboardPersonalized';
+import InAppMessaging from './pages/InAppMessaging';
 import __Layout from './Layout.jsx';
 
 
@@ -193,6 +196,9 @@ export const PAGES = {
     "UniversityComparison": UniversityComparison,
     "UniversityDetailsPage": UniversityDetailsPage,
     "CRMAnalyticsOutreach": CRMAnalyticsOutreach,
+    "UniversityPartnerPortal": UniversityPartnerPortal,
+    "StudentDashboardPersonalized": StudentDashboardPersonalized,
+    "InAppMessaging": InAppMessaging,
 }
 
 export const pagesConfig = {
