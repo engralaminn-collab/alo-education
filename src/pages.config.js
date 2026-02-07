@@ -127,6 +127,10 @@ import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import CounselorChat from './pages/CounselorChat';
 import CounselorPerformanceDashboard from './pages/CounselorPerformanceDashboard';
 import AdminAnalytics from './pages/AdminAnalytics';
+import RoleBasedDashboard from './pages/RoleBasedDashboard';
+import VisaOfficerPortal from './pages/VisaOfficerPortal';
+import AccountsPortal from './pages/AccountsPortal';
+import PartnerPortal from './pages/PartnerPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -211,6 +215,10 @@ export const PAGES = {
     "CounselorChat": CounselorChat,
     "CounselorPerformanceDashboard": CounselorPerformanceDashboard,
     "AdminAnalytics": AdminAnalytics,
+    "RoleBasedDashboard": RoleBasedDashboard,
+    "VisaOfficerPortal": VisaOfficerPortal,
+    "AccountsPortal": AccountsPortal,
+    "PartnerPortal": PartnerPortal,
 }
 
 export const pagesConfig = {
