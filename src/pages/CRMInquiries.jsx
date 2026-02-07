@@ -30,13 +30,22 @@ export default function CRMInquiries() {
   const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [convertDialogOpen, setConvertDialogOpen] = useState(false);
   const [notes, setNotes] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { data: inquiries = [], isLoading } = useQuery({
+  const { data: inquiries = [], isLoading, refetch } = useQuery({
     queryKey: ['crm-inquiries'],
     queryFn: () => base44.entities.Inquiry.list('-created_date'),
   });
+
+  // Pull to refresh handler
+  const handlePullToRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+    toast.success('Inquiries refreshed');
+  };
 
   const { data: counselors = [] } = useQuery({
     queryKey: ['counselors'],
@@ -99,62 +108,86 @@ export default function CRMInquiries() {
 
   return (
     <CRMLayout title="Inquiries">
-      {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-4 mb-6">
-        <Card className="border-0 shadow-sm bg-emerald-50">
+      {/* Pull to Refresh Indicator */}
+      {isRefreshing && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-800 shadow-lg rounded-full px-4 py-2 z-50">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Refreshing...</p>
+        </div>
+      )}
+      
+      {/* Pull to Refresh Area */}
+      <div 
+        className="md:hidden"
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          e.currentTarget.dataset.startY = touch.clientY;
+        }}
+        onTouchMove={(e) => {
+          const touch = e.touches[0];
+          const startY = parseFloat(e.currentTarget.dataset.startY || '0');
+          const diff = touch.clientY - startY;
+          if (diff > 80 && window.scrollY === 0 && !isRefreshing) {
+            handlePullToRefresh();
+          }
+        }}
+      >
+        {/* Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-emerald-600">New</p>
-                <p className="text-2xl font-bold text-emerald-700">{newCount}</p>
+                <p className="text-sm text-emerald-600 dark:text-emerald-400">New</p>
+                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{newCount}</p>
               </div>
-              <Clock className="w-8 h-8 text-emerald-300" />
+              <Clock className="w-8 h-8 text-emerald-300 dark:text-emerald-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-blue-50">
+        <Card className="border-0 shadow-sm bg-blue-50 dark:bg-blue-950/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600">Contacted</p>
-                <p className="text-2xl font-bold text-blue-700">{contactedCount}</p>
+                <p className="text-sm text-blue-600 dark:text-blue-400">Contacted</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{contactedCount}</p>
               </div>
-              <MessageSquare className="w-8 h-8 text-blue-300" />
+              <MessageSquare className="w-8 h-8 text-blue-300 dark:text-blue-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-green-50">
+        <Card className="border-0 shadow-sm bg-green-50 dark:bg-green-950/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-600">Converted</p>
-                <p className="text-2xl font-bold text-green-700">{convertedCount}</p>
+                <p className="text-sm text-green-600 dark:text-green-400">Converted</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{convertedCount}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-300" />
+              <CheckCircle className="w-8 h-8 text-green-300 dark:text-green-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-slate-50">
+        <Card className="border-0 shadow-sm bg-slate-50 dark:bg-slate-800">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600">Conversion Rate</p>
-                <p className="text-2xl font-bold text-slate-700">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Conversion Rate</p>
+                <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">
                   {inquiries.length > 0 ? Math.round((convertedCount / inquiries.length) * 100) : 0}%
                 </p>
               </div>
-              <ArrowRight className="w-8 h-8 text-slate-300" />
+              <ArrowRight className="w-8 h-8 text-slate-300 dark:text-slate-600" />
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
 
       {/* Filters */}
-      <Card className="border-0 shadow-sm mb-6">
+      <Card className="border-0 shadow-sm mb-6 dark:bg-slate-800">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
               <Input
                 placeholder="Search inquiries..."
                 value={search}

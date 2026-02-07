@@ -54,6 +54,7 @@ import ApplicationForm from './pages/ApplicationForm';
 import BookConsultation from './pages/BookConsultation';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
+import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
@@ -80,6 +81,7 @@ import CompareCourses from './pages/CompareCourses';
 import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
 import CounselorDashboard from './pages/CounselorDashboard';
+import CounselorMessaging from './pages/CounselorMessaging';
 import CourseDetails from './pages/CourseDetails';
 import CourseFinder from './pages/CourseFinder';
 import CourseFinderResults from './pages/CourseFinderResults';
@@ -88,6 +90,7 @@ import Courses from './pages/Courses';
 import DuolingoPrep from './pages/DuolingoPrep';
 import Home from './pages/Home';
 import IELTSPrep from './pages/IELTSPrep';
+import InAppMessaging from './pages/InAppMessaging';
 import LanguagePrep from './pages/LanguagePrep';
 import ManagerDashboard from './pages/ManagerDashboard';
 import Messages from './pages/Messages';
@@ -96,6 +99,7 @@ import MyComparisons from './pages/MyComparisons';
 import MyDocuments from './pages/MyDocuments';
 import MyProfile from './pages/MyProfile';
 import OETPrep from './pages/OETPrep';
+import OnboardingStatus from './pages/OnboardingStatus';
 import PTEPrep from './pages/PTEPrep';
 import Resources from './pages/Resources';
 import ScholarshipFinder from './pages/ScholarshipFinder';
@@ -103,6 +107,7 @@ import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
 import StaffDashboard from './pages/StaffDashboard';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentDashboardPersonalized from './pages/StudentDashboardPersonalized';
 import StudentPortal from './pages/StudentPortal';
 import StudyInAustralia from './pages/StudyInAustralia';
 import StudyInCanada from './pages/StudyInCanada';
@@ -117,13 +122,8 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import Universities from './pages/Universities';
 import UniversityComparison from './pages/UniversityComparison';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
-import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
-import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
-import StudentDashboardPersonalized from './pages/StudentDashboardPersonalized';
-import InAppMessaging from './pages/InAppMessaging';
 import UniversityOnboarding from './pages/UniversityOnboarding';
-import OnboardingStatus from './pages/OnboardingStatus';
-import CounselorMessaging from './pages/CounselorMessaging';
+import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -135,6 +135,7 @@ export const PAGES = {
     "BookConsultation": BookConsultation,
     "CRMAIAssistant": CRMAIAssistant,
     "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
+    "CRMAnalyticsOutreach": CRMAnalyticsOutreach,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMBulkCampaigns": CRMBulkCampaigns,
@@ -161,6 +162,7 @@ export const PAGES = {
     "CompleteProfile": CompleteProfile,
     "Contact": Contact,
     "CounselorDashboard": CounselorDashboard,
+    "CounselorMessaging": CounselorMessaging,
     "CourseDetails": CourseDetails,
     "CourseFinder": CourseFinder,
     "CourseFinderResults": CourseFinderResults,
@@ -169,6 +171,7 @@ export const PAGES = {
     "DuolingoPrep": DuolingoPrep,
     "Home": Home,
     "IELTSPrep": IELTSPrep,
+    "InAppMessaging": InAppMessaging,
     "LanguagePrep": LanguagePrep,
     "ManagerDashboard": ManagerDashboard,
     "Messages": Messages,
@@ -177,6 +180,7 @@ export const PAGES = {
     "MyDocuments": MyDocuments,
     "MyProfile": MyProfile,
     "OETPrep": OETPrep,
+    "OnboardingStatus": OnboardingStatus,
     "PTEPrep": PTEPrep,
     "Resources": Resources,
     "ScholarshipFinder": ScholarshipFinder,
@@ -184,6 +188,7 @@ export const PAGES = {
     "SharedComparison": SharedComparison,
     "StaffDashboard": StaffDashboard,
     "StudentDashboard": StudentDashboard,
+    "StudentDashboardPersonalized": StudentDashboardPersonalized,
     "StudentPortal": StudentPortal,
     "StudyInAustralia": StudyInAustralia,
     "StudyInCanada": StudyInCanada,
@@ -198,13 +203,8 @@ export const PAGES = {
     "Universities": Universities,
     "UniversityComparison": UniversityComparison,
     "UniversityDetailsPage": UniversityDetailsPage,
-    "CRMAnalyticsOutreach": CRMAnalyticsOutreach,
-    "UniversityPartnerPortal": UniversityPartnerPortal,
-    "StudentDashboardPersonalized": StudentDashboardPersonalized,
-    "InAppMessaging": InAppMessaging,
     "UniversityOnboarding": UniversityOnboarding,
-    "OnboardingStatus": OnboardingStatus,
-    "CounselorMessaging": CounselorMessaging,
+    "UniversityPartnerPortal": UniversityPartnerPortal,
 }
 
 export const pagesConfig = {
