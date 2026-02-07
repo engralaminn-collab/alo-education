@@ -26,6 +26,7 @@ import ReferralLinkGenerator from '@/components/partner/ReferralLinkGenerator';
 import ReferralPerformance from '@/components/partner/ReferralPerformance';
 import EnhancedAnalytics from '@/components/partner/EnhancedAnalytics';
 import StudentInteractionLog from '@/components/partner/StudentInteractionLog';
+import StudentJourneyMap from '@/components/partner/StudentJourneyMap';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
