@@ -188,8 +188,12 @@ export default function PartnerPortal() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
 
-
+        {/* Lead Submission Content */}
+        <TabsContent value="submit-lead" className="space-y-4">
+          <EnhancedLeadSubmission />
+        </TabsContent>
 
         {/* Students Tab */}
         <TabsContent value="students" className="space-y-4">
@@ -304,11 +308,6 @@ export default function PartnerPortal() {
             </Card>
           </TabsContent>
         )}
-
-        {/* Lead Submission Content */}
-        <TabsContent value="submit-lead" className="space-y-4">
-          <EnhancedLeadSubmission />
-        </TabsContent>
 
         {/* Commissions Tab */}
         <TabsContent value="commissions" className="space-y-4">
