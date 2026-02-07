@@ -348,6 +348,7 @@ export default function PartnerPortal() {
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="space-y-6">
           <EnhancedAnalytics partnerId={staffRole?.partner_organization_id} />
+          <StudentJourneyMap partnerId={staffRole?.partner_organization_id} />
           <PartnerAnalyticsDashboard partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
