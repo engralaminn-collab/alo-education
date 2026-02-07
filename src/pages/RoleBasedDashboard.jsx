@@ -30,17 +30,16 @@ export default function RoleBasedDashboard() {
 
   const role = staffRole?.[0]?.role || user?.role || 'student';
 
-  // Route based on role
+  // Route based on role - Partners get full CRM access like counselors
   switch (role) {
     case 'admin':
     case 'counsellor':
-      return <CRMDashboard />;
+    case 'partner':
+      return role === 'partner' ? <PartnerPortal /> : <CRMDashboard />;
     case 'visa_officer':
       return <VisaOfficerPortal />;
     case 'accounts':
       return <AccountsPortal />;
-    case 'partner':
-      return <PartnerPortal />;
     case 'student':
     default:
       return <StudentPortal />;
