@@ -18,6 +18,7 @@ import CommissionDashboard from '@/components/partner/CommissionDashboard';
 import EnhancedLeadSubmission from '@/components/partner/EnhancedLeadSubmission';
 import PartnerAnalyticsDashboard from '@/components/partner/PartnerAnalyticsDashboard';
 import ReferralSourceTracker from '@/components/partner/ReferralSourceTracker';
+import AICommandInterface from '@/components/partner/AICommandInterface';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -336,7 +337,7 @@ export default function PartnerPortal() {
 
         {/* Settings Tab (Super Admin only) */}
         {isSuperAdmin && (
-          <TabsContent value="settings">
+          <TabsContent value="settings" className="space-y-6">
             <Card className="border-0 shadow-sm dark:bg-slate-800">
               <CardHeader>
                 <CardTitle className="dark:text-white">Partner Settings</CardTitle>
@@ -350,6 +351,8 @@ export default function PartnerPortal() {
                 </Button>
               </CardContent>
             </Card>
+
+            <AICommandInterface partnerId={staffRole?.partner_organization_id} />
           </TabsContent>
         )}
       </Tabs>
