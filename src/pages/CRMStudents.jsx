@@ -139,10 +139,10 @@ export default function CRMStudents() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card className="border-0 shadow-sm dark:bg-slate-800">
-        <div className="overflow-x-auto">
-          <Table>
+        {/* Table */}
+        <Card className="border-0 shadow-sm dark:bg-slate-800">
+          <div className="overflow-x-auto">
+            <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Student</TableHead>
@@ -262,9 +262,9 @@ export default function CRMStudents() {
           </Table>
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between p-4 border-t dark:border-slate-700">
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between p-4 border-t dark:border-slate-700">
             <p className="text-sm text-slate-500 dark:text-slate-400">
               Showing {(page - 1) * perPage + 1} to {Math.min(page * perPage, filteredStudents.length)} of {filteredStudents.length}
             </p>
@@ -288,10 +288,11 @@ export default function CRMStudents() {
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </Card>
+          )}
+        </Card>
+      </div>
 
       {/* Student Detail Dialog */}
       <Dialog open={!!selectedStudent} onOpenChange={(open) => !open && setSelectedStudent(null)}>
