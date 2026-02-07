@@ -261,7 +261,6 @@ export default function CRMStudents() {
             </TableBody>
           </Table>
         </div>
-      </div>
 
         {/* Pagination */}
         {totalPages > 1 && (
