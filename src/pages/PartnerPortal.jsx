@@ -27,6 +27,7 @@ import ReferralPerformance from '@/components/partner/ReferralPerformance';
 import EnhancedAnalytics from '@/components/partner/EnhancedAnalytics';
 import StudentInteractionLog from '@/components/partner/StudentInteractionLog';
 import StudentJourneyMap from '@/components/partner/StudentJourneyMap';
+import AIMarketingGenerator from '@/components/partner/AIMarketingGenerator';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -361,6 +362,7 @@ export default function PartnerPortal() {
         {/* Settings Tab (Super Admin only) */}
         {isSuperAdmin && (
           <TabsContent value="settings" className="space-y-6">
+            <AIMarketingGenerator partnerId={staffRole?.partner_organization_id} />
             <TeamManagement partnerId={staffRole?.partner_organization_id} />
             <AICommandInterface partnerId={staffRole?.partner_organization_id} />
           </TabsContent>
