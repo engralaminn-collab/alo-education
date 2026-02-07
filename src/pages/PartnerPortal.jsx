@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
   Users, DollarSign, TrendingUp, Search, FileText, 
-  MessageSquare, BarChart3, Settings, Home, UserPlus, Activity 
+  MessageSquare, BarChart3, Settings, Home, UserPlus, Activity, Target 
 } from 'lucide-react';
 import CRMLayout from '@/components/crm/CRMLayout';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,8 @@ import { createPageUrl } from '@/utils';
 import ReferralFunnel from '@/components/partner/ReferralFunnel';
 import CommissionDashboard from '@/components/partner/CommissionDashboard';
 import EnhancedLeadSubmission from '@/components/partner/EnhancedLeadSubmission';
+import PartnerAnalyticsDashboard from '@/components/partner/PartnerAnalyticsDashboard';
+import ReferralSourceTracker from '@/components/partner/ReferralSourceTracker';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -106,6 +108,14 @@ export default function PartnerPortal() {
           <TabsTrigger value="commissions" className="select-none">
             <DollarSign className="w-4 h-4 mr-2" />
             Commissions
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="select-none">
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Analytics
+          </TabsTrigger>
+          <TabsTrigger value="sources" className="select-none">
+            <Target className="w-4 h-4 mr-2" />
+            Sources
           </TabsTrigger>
           {isSuperAdmin && (
             <TabsTrigger value="settings" className="select-none">
@@ -312,6 +322,16 @@ export default function PartnerPortal() {
         {/* Commissions Tab */}
         <TabsContent value="commissions" className="space-y-4">
           <CommissionDashboard partnerId={staffRole?.partner_organization_id} />
+        </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics" className="space-y-4">
+          <PartnerAnalyticsDashboard partnerId={staffRole?.partner_organization_id} />
+        </TabsContent>
+
+        {/* Sources Tab */}
+        <TabsContent value="sources" className="space-y-4">
+          <ReferralSourceTracker partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
         {/* Settings Tab (Super Admin only) */}
