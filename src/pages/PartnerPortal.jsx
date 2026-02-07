@@ -8,11 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
   Users, DollarSign, TrendingUp, Search, FileText, 
-  MessageSquare, BarChart3, Settings, Home 
+  MessageSquare, BarChart3, Settings, Home, UserPlus, Activity 
 } from 'lucide-react';
 import CRMLayout from '@/components/crm/CRMLayout';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import ReferralFunnel from '@/components/partner/ReferralFunnel';
+import CommissionDashboard from '@/components/partner/CommissionDashboard';
+import EnhancedLeadSubmission from '@/components/partner/EnhancedLeadSubmission';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -79,8 +82,12 @@ export default function PartnerPortal() {
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="bg-white dark:bg-slate-800 shadow-sm">
           <TabsTrigger value="overview" className="select-none">
-            <Home className="w-4 h-4 mr-2" />
-            Overview
+            <Activity className="w-4 h-4 mr-2" />
+            Funnel
+          </TabsTrigger>
+          <TabsTrigger value="submit-lead" className="select-none">
+            <UserPlus className="w-4 h-4 mr-2" />
+            Submit Lead
           </TabsTrigger>
           <TabsTrigger value="students" className="select-none">
             <Users className="w-4 h-4 mr-2" />
@@ -110,6 +117,11 @@ export default function PartnerPortal() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
+          <ReferralFunnel partnerId={staffRole?.partner_organization_id} />
+        </TabsContent>
+
+        {/* Lead Submission Tab */}
+        <TabsContent value="submit-lead" className="space-y-4">
           {/* Role Badge */}
           <Card className="border-0 shadow-sm bg-education-blue text-white">
             <CardContent className="p-4">
@@ -177,29 +189,7 @@ export default function PartnerPortal() {
             </Card>
           </div>
 
-          {/* Recent Students */}
-          <Card className="border-0 shadow-sm dark:bg-slate-800">
-            <CardHeader>
-              <CardTitle className="dark:text-white">Recent Students</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {partnerStudents.slice(0, 5).map(student => (
-                  <div
-                    key={student.id}
-                    className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium dark:text-white">{student.first_name} {student.last_name}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{student.email}</p>
-                    </div>
-                    <Badge>{student.status || 'new_lead'}</Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+
 
         {/* Students Tab */}
         <TabsContent value="students" className="space-y-4">
@@ -315,36 +305,14 @@ export default function PartnerPortal() {
           </TabsContent>
         )}
 
+        {/* Lead Submission Content */}
+        <TabsContent value="submit-lead" className="space-y-4">
+          <EnhancedLeadSubmission />
+        </TabsContent>
+
         {/* Commissions Tab */}
         <TabsContent value="commissions" className="space-y-4">
-          <Card className="border-0 shadow-sm dark:bg-slate-800">
-            <CardHeader>
-              <CardTitle className="dark:text-white">Commission Records</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {commissions.map(commission => (
-                  <div
-                    key={commission.id}
-                    className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium dark:text-white">Invoice #{commission.invoice_number || 'N/A'}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {commission.currency || 'USD'} {commission.amount}
-                      </p>
-                    </div>
-                    <Badge className={
-                      commission.status === 'paid' ? 'bg-green-100 text-green-700' :
-                      'bg-amber-100 text-amber-700'
-                    }>
-                      {commission.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <CommissionDashboard partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
         {/* Settings Tab (Super Admin only) */}
