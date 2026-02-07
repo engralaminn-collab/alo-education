@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '@/components/common/Navbar';
 import LiveChatWidget from '@/components/common/LiveChatWidget';
+import NotificationCenter from '@/components/notifications/NotificationCenter';
 import { Home, Sparkles, Users, Settings, ArrowLeft } from 'lucide-react';
 import { createPageUrl } from './utils';
 import { Link, useNavigate } from 'react-router-dom';
@@ -41,6 +42,7 @@ export default function Layout({ children, currentPageName }) {
             ) : (
               <h1 className="text-lg font-bold text-slate-900 dark:text-white">ALO Education</h1>
             )}
+            <NotificationCenter />
           </div>
         </div>
         

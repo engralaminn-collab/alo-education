@@ -126,6 +126,7 @@ import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import CounselorChat from './pages/CounselorChat';
 import CounselorPerformanceDashboard from './pages/CounselorPerformanceDashboard';
+import AdminAnalytics from './pages/AdminAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -209,6 +210,7 @@ export const PAGES = {
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "CounselorChat": CounselorChat,
     "CounselorPerformanceDashboard": CounselorPerformanceDashboard,
+    "AdminAnalytics": AdminAnalytics,
 }
 
 export const pagesConfig = {
