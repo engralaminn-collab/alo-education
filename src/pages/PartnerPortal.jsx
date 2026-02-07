@@ -234,7 +234,9 @@ export default function PartnerPortal() {
         </TabsContent>
 
         {/* Students Tab */}
-        <TabsContent value="students" className="space-y-4">
+        <TabsContent value="students" className="space-y-6">
+          <StudentInteractionLog partnerId={staffRole?.partner_organization_id} />
+          
           <Card className="border-0 shadow-sm dark:bg-slate-800">
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -344,7 +346,8 @@ export default function PartnerPortal() {
         </TabsContent>
 
         {/* Analytics Tab */}
-        <TabsContent value="analytics" className="space-y-4">
+        <TabsContent value="analytics" className="space-y-6">
+          <EnhancedAnalytics partnerId={staffRole?.partner_organization_id} />
           <PartnerAnalyticsDashboard partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
