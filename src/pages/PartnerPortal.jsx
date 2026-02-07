@@ -22,6 +22,7 @@ import AICommandInterface from '@/components/partner/AICommandInterface';
 import PartnerChat from '@/components/partner/PartnerChat';
 import PartnerNotifications from '@/components/partner/PartnerNotifications';
 import TeamManagement from '@/components/partner/TeamManagement';
+import ReferralLinkGenerator from '@/components/partner/ReferralLinkGenerator';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');

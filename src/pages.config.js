@@ -105,6 +105,7 @@ import MyProfile from './pages/MyProfile';
 import OETPrep from './pages/OETPrep';
 import OnboardingStatus from './pages/OnboardingStatus';
 import PTEPrep from './pages/PTEPrep';
+import PartnerOnboarding from './pages/PartnerOnboarding';
 import PartnerPortal from './pages/PartnerPortal';
 import Resources from './pages/Resources';
 import RoleBasedDashboard from './pages/RoleBasedDashboard';
@@ -131,7 +132,7 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
-import PartnerOnboarding from './pages/PartnerOnboarding';
+import ReferralPage from './pages/ReferralPage';
 import __Layout from './Layout.jsx';
 
 
@@ -194,6 +195,7 @@ export const PAGES = {
     "OETPrep": OETPrep,
     "OnboardingStatus": OnboardingStatus,
     "PTEPrep": PTEPrep,
+    "PartnerOnboarding": PartnerOnboarding,
     "PartnerPortal": PartnerPortal,
     "Resources": Resources,
     "RoleBasedDashboard": RoleBasedDashboard,
@@ -220,7 +222,7 @@ export const PAGES = {
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
-    "PartnerOnboarding": PartnerOnboarding,
+    "ReferralPage": ReferralPage,
 }
 
 export const pagesConfig = {
