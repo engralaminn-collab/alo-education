@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
   Users, DollarSign, TrendingUp, Search, FileText, 
-  MessageSquare, BarChart3, Settings, Home, UserPlus, Activity, Target 
+  MessageSquare, BarChart3, Settings, Home, UserPlus, Activity, Target, Bell 
 } from 'lucide-react';
 import CRMLayout from '@/components/crm/CRMLayout';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,9 @@ import EnhancedLeadSubmission from '@/components/partner/EnhancedLeadSubmission'
 import PartnerAnalyticsDashboard from '@/components/partner/PartnerAnalyticsDashboard';
 import ReferralSourceTracker from '@/components/partner/ReferralSourceTracker';
 import AICommandInterface from '@/components/partner/AICommandInterface';
+import PartnerChat from '@/components/partner/PartnerChat';
+import PartnerNotifications from '@/components/partner/PartnerNotifications';
+import TeamManagement from '@/components/partner/TeamManagement';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -80,6 +83,15 @@ export default function PartnerPortal() {
   const isSuperAdmin = accessLevel === 'super_admin';
   const isCounselor = accessLevel === 'counselor' || isSuperAdmin;
 
+  const { data: unreadNotifications = [] } = useQuery({
+    queryKey: ['unread-notifications', user?.id],
+    queryFn: async () => {
+      const notifs = await base44.entities.Notification.filter({ user_id: user?.id });
+      return notifs.filter(n => !n.is_read);
+    },
+    enabled: !!user?.id
+  });
+
   return (
     <CRMLayout title="Partner Portal">
       <Tabs defaultValue="overview" className="space-y-4">
@@ -106,6 +118,15 @@ export default function PartnerPortal() {
               Messaging
             </TabsTrigger>
           )}
+          <TabsTrigger value="notifications" className="select-none relative">
+            <Bell className="w-4 h-4 mr-2" />
+            Notifications
+            {unreadNotifications.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {unreadNotifications.length}
+              </span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="commissions" className="select-none">
             <DollarSign className="w-4 h-4 mr-2" />
             Commissions
@@ -302,23 +323,14 @@ export default function PartnerPortal() {
         {/* Messaging Tab (Counselor access) */}
         {isCounselor && (
           <TabsContent value="messaging">
-            <Card className="border-0 shadow-sm dark:bg-slate-800">
-              <CardContent className="p-8 text-center">
-                <MessageSquare className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold dark:text-white mb-2">Messaging Center</h3>
-                <p className="text-slate-500 dark:text-slate-400 mb-4">
-                  Full messaging features available
-                </p>
-                <Button 
-                  onClick={() => navigate(createPageUrl('CounselorChat'))}
-                  className="bg-education-blue select-none"
-                >
-                  Open Messaging
-                </Button>
-              </CardContent>
-            </Card>
+            <PartnerChat partnerId={staffRole?.partner_organization_id} currentUser={user} />
           </TabsContent>
         )}
+
+        {/* Notifications Tab */}
+        <TabsContent value="notifications">
+          <PartnerNotifications partnerId={staffRole?.partner_organization_id} currentUser={user} />
+        </TabsContent>
 
         {/* Commissions Tab */}
         <TabsContent value="commissions" className="space-y-4">
@@ -338,20 +350,7 @@ export default function PartnerPortal() {
         {/* Settings Tab (Super Admin only) */}
         {isSuperAdmin && (
           <TabsContent value="settings" className="space-y-6">
-            <Card className="border-0 shadow-sm dark:bg-slate-800">
-              <CardHeader>
-                <CardTitle className="dark:text-white">Partner Settings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">
-                  Manage team members, permissions, and organization settings.
-                </p>
-                <Button className="bg-education-blue select-none">
-                  Manage Team
-                </Button>
-              </CardContent>
-            </Card>
-
+            <TeamManagement partnerId={staffRole?.partner_organization_id} />
             <AICommandInterface partnerId={staffRole?.partner_organization_id} />
           </TabsContent>
         )}
