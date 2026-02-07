@@ -48,6 +48,8 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import About from './pages/About';
+import AccountsPortal from './pages/AccountsPortal';
+import AdminAnalytics from './pages/AdminAnalytics';
 import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import ApplicationForm from './pages/ApplicationForm';
@@ -80,8 +82,10 @@ import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
 import CompareCourses from './pages/CompareCourses';
 import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
+import CounselorChat from './pages/CounselorChat';
 import CounselorDashboard from './pages/CounselorDashboard';
 import CounselorMessaging from './pages/CounselorMessaging';
+import CounselorPerformanceDashboard from './pages/CounselorPerformanceDashboard';
 import CourseDetails from './pages/CourseDetails';
 import CourseFinder from './pages/CourseFinder';
 import CourseFinderResults from './pages/CourseFinderResults';
@@ -101,7 +105,9 @@ import MyProfile from './pages/MyProfile';
 import OETPrep from './pages/OETPrep';
 import OnboardingStatus from './pages/OnboardingStatus';
 import PTEPrep from './pages/PTEPrep';
+import PartnerPortal from './pages/PartnerPortal';
 import Resources from './pages/Resources';
+import RoleBasedDashboard from './pages/RoleBasedDashboard';
 import ScholarshipFinder from './pages/ScholarshipFinder';
 import Services from './pages/Services';
 import SharedComparison from './pages/SharedComparison';
@@ -124,18 +130,15 @@ import UniversityComparison from './pages/UniversityComparison';
 import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
-import CounselorChat from './pages/CounselorChat';
-import CounselorPerformanceDashboard from './pages/CounselorPerformanceDashboard';
-import AdminAnalytics from './pages/AdminAnalytics';
-import RoleBasedDashboard from './pages/RoleBasedDashboard';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
-import AccountsPortal from './pages/AccountsPortal';
-import PartnerPortal from './pages/PartnerPortal';
+import PartnerOnboarding from './pages/PartnerOnboarding';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "About": About,
+    "AccountsPortal": AccountsPortal,
+    "AdminAnalytics": AdminAnalytics,
     "AlumniNetwork": AlumniNetwork,
     "AlumniProfile": AlumniProfile,
     "ApplicationForm": ApplicationForm,
@@ -168,8 +171,10 @@ export const PAGES = {
     "CompareCourses": CompareCourses,
     "CompleteProfile": CompleteProfile,
     "Contact": Contact,
+    "CounselorChat": CounselorChat,
     "CounselorDashboard": CounselorDashboard,
     "CounselorMessaging": CounselorMessaging,
+    "CounselorPerformanceDashboard": CounselorPerformanceDashboard,
     "CourseDetails": CourseDetails,
     "CourseFinder": CourseFinder,
     "CourseFinderResults": CourseFinderResults,
@@ -189,7 +194,9 @@ export const PAGES = {
     "OETPrep": OETPrep,
     "OnboardingStatus": OnboardingStatus,
     "PTEPrep": PTEPrep,
+    "PartnerPortal": PartnerPortal,
     "Resources": Resources,
+    "RoleBasedDashboard": RoleBasedDashboard,
     "ScholarshipFinder": ScholarshipFinder,
     "Services": Services,
     "SharedComparison": SharedComparison,
@@ -212,13 +219,8 @@ export const PAGES = {
     "UniversityDetailsPage": UniversityDetailsPage,
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
-    "CounselorChat": CounselorChat,
-    "CounselorPerformanceDashboard": CounselorPerformanceDashboard,
-    "AdminAnalytics": AdminAnalytics,
-    "RoleBasedDashboard": RoleBasedDashboard,
     "VisaOfficerPortal": VisaOfficerPortal,
-    "AccountsPortal": AccountsPortal,
-    "PartnerPortal": PartnerPortal,
+    "PartnerOnboarding": PartnerOnboarding,
 }
 
 export const pagesConfig = {
