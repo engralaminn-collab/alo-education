@@ -24,6 +24,8 @@ import PartnerNotifications from '@/components/partner/PartnerNotifications';
 import TeamManagement from '@/components/partner/TeamManagement';
 import ReferralLinkGenerator from '@/components/partner/ReferralLinkGenerator';
 import ReferralPerformance from '@/components/partner/ReferralPerformance';
+import EnhancedAnalytics from '@/components/partner/EnhancedAnalytics';
+import StudentInteractionLog from '@/components/partner/StudentInteractionLog';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
