@@ -28,6 +28,9 @@ import EnhancedAnalytics from '@/components/partner/EnhancedAnalytics';
 import StudentInteractionLog from '@/components/partner/StudentInteractionLog';
 import StudentJourneyMap from '@/components/partner/StudentJourneyMap';
 import AIMarketingGenerator from '@/components/partner/AIMarketingGenerator';
+import PartnerTrainingModule from '@/components/partner/PartnerTrainingModule';
+import PredictiveAnalytics from '@/components/partner/PredictiveAnalytics';
+import AtRiskStudentsDashboard from '@/components/partner/AtRiskStudentsDashboard';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -349,6 +352,7 @@ export default function PartnerPortal() {
 
         {/* Analytics Tab */}
         <TabsContent value="analytics" className="space-y-6">
+          <PredictiveAnalytics partnerId={staffRole?.partner_organization_id} />
           <EnhancedAnalytics partnerId={staffRole?.partner_organization_id} />
           <StudentJourneyMap partnerId={staffRole?.partner_organization_id} />
           <PartnerAnalyticsDashboard partnerId={staffRole?.partner_organization_id} />
@@ -362,6 +366,12 @@ export default function PartnerPortal() {
         {/* Settings Tab (Super Admin only) */}
         {isSuperAdmin && (
           <TabsContent value="settings" className="space-y-6">
+            <PartnerTrainingModule 
+              partnerId={staffRole?.partner_organization_id}
+              userId={user?.id}
+              specialization={staffRole?.specialization}
+              targetMarkets={staffRole?.target_markets}
+            />
             <AIMarketingGenerator partnerId={staffRole?.partner_organization_id} />
             <TeamManagement partnerId={staffRole?.partner_organization_id} />
             <AICommandInterface partnerId={staffRole?.partner_organization_id} />
