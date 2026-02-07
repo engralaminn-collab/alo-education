@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Users, MessageSquare, TrendingUp, Clock, Plus, Search,
-  BookMarked, Calendar, Filter, Loader2
+  BookMarked, Calendar, Filter, Loader2, MessageCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -85,10 +85,19 @@ export default function CounselorDashboard() {
               </h1>
               <p className="text-slate-600 mt-1">Manage your students and track their progress</p>
             </div>
-            <Button className="bg-education-blue hover:bg-blue-700 gap-2">
-              <Plus className="w-4 h-4" />
-              New Task
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => window.open('https://wa.me/', '_blank')}
+                className="bg-green-600 hover:bg-green-700 gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </Button>
+              <Button className="bg-education-blue hover:bg-blue-700 gap-2">
+                <Plus className="w-4 h-4" />
+                New Task
+              </Button>
+            </div>
           </div>
 
           {/* Key Statistics */}
