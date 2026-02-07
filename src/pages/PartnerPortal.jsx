@@ -224,8 +224,9 @@ export default function PartnerPortal() {
         </TabsContent>
 
         {/* Lead Submission Content */}
-        <TabsContent value="submit-lead" className="space-y-4">
-          <EnhancedLeadSubmission />
+        <TabsContent value="submit-lead" className="space-y-6">
+          <ReferralLinkGenerator partnerId={staffRole?.partner_organization_id} />
+          <EnhancedLeadSubmission partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
         {/* Students Tab */}
