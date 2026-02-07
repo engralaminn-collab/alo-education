@@ -25,6 +25,7 @@ export default function EnhancedLeadSubmission() {
     source_campaign: '',
     notes: ''
   });
+  const [referralSource, setReferralSource] = useState('Direct/Other');
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -48,6 +49,7 @@ export default function EnhancedLeadSubmission() {
         partner_id: staffRole?.partner_organization_id,
         lead_data: leadData,
         referral_code,
+        referral_source: referralSource,
         status: 'submitted'
       });
 
@@ -89,6 +91,7 @@ export default function EnhancedLeadSubmission() {
         source_campaign: '',
         notes: ''
       });
+      setReferralSource('Direct/Other');
     },
     onError: (error) => {
       toast.error('Failed to submit lead: ' + error.message);
@@ -175,6 +178,29 @@ export default function EnhancedLeadSubmission() {
                   className="dark:bg-slate-700"
                 />
               </div>
+            </div>
+
+            {/* Referral Source */}
+            <div>
+              <h4 className="font-semibold mb-3 dark:text-white">Referral Source</h4>
+              <Select value={referralSource} onValueChange={setReferralSource}>
+                <SelectTrigger className="dark:bg-slate-700">
+                  <SelectValue placeholder="Select referral source" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Website">Website</SelectItem>
+                  <SelectItem value="Social Media - Facebook">Social Media - Facebook</SelectItem>
+                  <SelectItem value="Social Media - Instagram">Social Media - Instagram</SelectItem>
+                  <SelectItem value="Social Media - LinkedIn">Social Media - LinkedIn</SelectItem>
+                  <SelectItem value="Email Campaign">Email Campaign</SelectItem>
+                  <SelectItem value="WhatsApp">WhatsApp</SelectItem>
+                  <SelectItem value="Direct Contact">Direct Contact</SelectItem>
+                  <SelectItem value="Referral Link">Referral Link</SelectItem>
+                  <SelectItem value="Event/Webinar">Event/Webinar</SelectItem>
+                  <SelectItem value="Partner Network">Partner Network</SelectItem>
+                  <SelectItem value="Direct/Other">Direct/Other</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Study Preferences */}
