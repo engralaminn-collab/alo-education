@@ -107,6 +107,7 @@ import OnboardingStatus from './pages/OnboardingStatus';
 import PTEPrep from './pages/PTEPrep';
 import PartnerOnboarding from './pages/PartnerOnboarding';
 import PartnerPortal from './pages/PartnerPortal';
+import ReferralPage from './pages/ReferralPage';
 import Resources from './pages/Resources';
 import RoleBasedDashboard from './pages/RoleBasedDashboard';
 import ScholarshipFinder from './pages/ScholarshipFinder';
@@ -132,7 +133,6 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
-import ReferralPage from './pages/ReferralPage';
 import __Layout from './Layout.jsx';
 
 
@@ -197,6 +197,7 @@ export const PAGES = {
     "PTEPrep": PTEPrep,
     "PartnerOnboarding": PartnerOnboarding,
     "PartnerPortal": PartnerPortal,
+    "ReferralPage": ReferralPage,
     "Resources": Resources,
     "RoleBasedDashboard": RoleBasedDashboard,
     "ScholarshipFinder": ScholarshipFinder,
@@ -222,7 +223,6 @@ export const PAGES = {
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
-    "ReferralPage": ReferralPage,
 }
 
 export const pagesConfig = {

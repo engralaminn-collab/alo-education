@@ -23,6 +23,7 @@ import PartnerChat from '@/components/partner/PartnerChat';
 import PartnerNotifications from '@/components/partner/PartnerNotifications';
 import TeamManagement from '@/components/partner/TeamManagement';
 import ReferralLinkGenerator from '@/components/partner/ReferralLinkGenerator';
+import ReferralPerformance from '@/components/partner/ReferralPerformance';
 
 export default function PartnerPortal() {
   const [search, setSearch] = useState('');
@@ -149,7 +150,8 @@ export default function PartnerPortal() {
         </TabsList>
 
         {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview" className="space-y-6">
+          <ReferralPerformance partnerId={staffRole?.partner_organization_id} />
           <ReferralFunnel partnerId={staffRole?.partner_organization_id} />
         </TabsContent>
 
