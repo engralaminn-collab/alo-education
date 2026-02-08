@@ -14,6 +14,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Save, Plus, Trash2, User, GraduationCap, Briefcase, Shield, FileText, Target, DollarSign } from 'lucide-react';
 import StudentUniversityMatcher from '@/components/crm/StudentUniversityMatcher';
+import ApplicationProgressTracker from '@/components/student/ApplicationProgressTracker';
+import PersonalizedOutreachPanel from '@/components/student/PersonalizedOutreachPanel';
+import DocumentAnalysisPanel from '@/components/student/DocumentAnalysisPanel';
 
 const countries = ['Bangladesh', 'India', 'Pakistan', 'Nepal', 'Sri Lanka', 'Nigeria', 'Ghana', 'Kenya', 'Other'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -28,6 +31,18 @@ export default function CRMStudentProfile() {
     queryFn: () => base44.entities.StudentProfile.filter({ id: studentId }),
     enabled: !!studentId,
     select: (data) => data[0]
+  });
+
+  const { data: applications = [] } = useQuery({
+    queryKey: ['student-applications', studentId],
+    queryFn: () => base44.entities.Application.filter({ student_id: studentId }),
+    enabled: !!studentId
+  });
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ['student-documents', studentId],
+    queryFn: () => base44.entities.Document.filter({ student_id: studentId }),
+    enabled: !!studentId
   });
 
   const [formData, setFormData] = useState({
@@ -316,7 +331,7 @@ export default function CRMStudentProfile() {
         </div>
 
         <Tabs defaultValue="personal" className="space-y-6">
-          <TabsList className="grid grid-cols-9 w-full">
+          <TabsList className="grid grid-cols-6 lg:grid-cols-12 w-full">
             <TabsTrigger value="personal"><User className="w-4 h-4 mr-2" />Personal</TabsTrigger>
             <TabsTrigger value="passport"><Shield className="w-4 h-4 mr-2" />Passport</TabsTrigger>
             <TabsTrigger value="education"><GraduationCap className="w-4 h-4 mr-2" />Education</TabsTrigger>
@@ -326,6 +341,9 @@ export default function CRMStudentProfile() {
             <TabsTrigger value="visa"><Shield className="w-4 h-4 mr-2" />Visa</TabsTrigger>
             <TabsTrigger value="preferences"><Target className="w-4 h-4 mr-2" />Preferences</TabsTrigger>
             <TabsTrigger value="matcher">🎯 AI Matcher</TabsTrigger>
+            <TabsTrigger value="applications">📊 Applications</TabsTrigger>
+            <TabsTrigger value="documents">📄 Documents</TabsTrigger>
+            <TabsTrigger value="outreach">💬 Outreach</TabsTrigger>
           </TabsList>
 
           {/* Personal & Contact */}
@@ -949,6 +967,53 @@ export default function CRMStudentProfile() {
               studentId={studentId} 
               studentName={`${formData.first_name} ${formData.last_name}`}
             />
+          </TabsContent>
+
+          {/* Applications with AI Progress Tracking */}
+          <TabsContent value="applications">
+            <div className="space-y-6">
+              {applications.length > 0 ? (
+                applications.map(app => (
+                  <ApplicationProgressTracker 
+                    key={app.id} 
+                    application={app}
+                    onRefresh={() => queryClient.invalidateQueries({ queryKey: ['student-applications'] })}
+                  />
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center text-slate-500">
+                    <p>No applications yet</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* Documents with AI Analysis */}
+          <TabsContent value="documents">
+            <div className="space-y-4">
+              {documents.length > 0 ? (
+                documents.map(doc => (
+                  <DocumentAnalysisPanel 
+                    key={doc.id} 
+                    document={doc}
+                    onAnalysisComplete={() => queryClient.invalidateQueries({ queryKey: ['student-documents'] })}
+                  />
+                ))
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center text-slate-500">
+                    <p>No documents uploaded yet</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* AI Personalized Outreach */}
+          <TabsContent value="outreach">
+            {student && <PersonalizedOutreachPanel student={student} />}
           </TabsContent>
 
           {/* Preferences & Funding */}
