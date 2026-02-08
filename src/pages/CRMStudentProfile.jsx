@@ -20,6 +20,7 @@ import DocumentAnalysisPanel from '@/components/student/DocumentAnalysisPanel';
 import AIRecommendationsPanel from '@/components/student/AIRecommendationsPanel';
 import ScholarshipRecommendations from '@/components/scholarships/ScholarshipRecommendations';
 import CommunicationHub from '@/components/communications/CommunicationHub';
+import FinancialAidPredictor from '@/components/student/FinancialAidPredictor';
 
 const countries = ['Bangladesh', 'India', 'Pakistan', 'Nepal', 'Sri Lanka', 'Nigeria', 'Ghana', 'Kenya', 'Other'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1024,7 +1025,10 @@ export default function CRMStudentProfile() {
 
           {/* AI Scholarship Recommendations */}
           <TabsContent value="scholarships">
-            {studentId && <ScholarshipRecommendations studentId={studentId} />}
+            <div className="space-y-6">
+              {studentId && <FinancialAidPredictor studentId={studentId} />}
+              {studentId && <ScholarshipRecommendations studentId={studentId} />}
+            </div>
           </TabsContent>
 
           {/* AI Personalized Outreach */}

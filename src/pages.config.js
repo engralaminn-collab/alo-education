@@ -54,6 +54,7 @@ import AlumniNetwork from './pages/AlumniNetwork';
 import AlumniProfile from './pages/AlumniProfile';
 import ApplicationForm from './pages/ApplicationForm';
 import BookConsultation from './pages/BookConsultation';
+import CEODashboard from './pages/CEODashboard';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
@@ -69,6 +70,7 @@ import CRMInquiries from './pages/CRMInquiries';
 import CRMMessages from './pages/CRMMessages';
 import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
 import CRMPerformanceReports from './pages/CRMPerformanceReports';
+import CRMPredictiveAnalytics from './pages/CRMPredictiveAnalytics';
 import CRMReports from './pages/CRMReports';
 import CRMSecureDocuments from './pages/CRMSecureDocuments';
 import CRMSettings from './pages/CRMSettings';
@@ -79,6 +81,7 @@ import CRMTasks from './pages/CRMTasks';
 import CRMTestimonials from './pages/CRMTestimonials';
 import CRMUniversities from './pages/CRMUniversities';
 import CRMUniversityOutreach from './pages/CRMUniversityOutreach';
+import CRMWorkflows from './pages/CRMWorkflows';
 import CompareCourses from './pages/CompareCourses';
 import CompleteProfile from './pages/CompleteProfile';
 import Contact from './pages/Contact';
@@ -133,9 +136,7 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
-import CEODashboard from './pages/CEODashboard';
-import CRMWorkflows from './pages/CRMWorkflows';
-import CRMPredictiveAnalytics from './pages/CRMPredictiveAnalytics';
+import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -147,6 +148,7 @@ export const PAGES = {
     "AlumniProfile": AlumniProfile,
     "ApplicationForm": ApplicationForm,
     "BookConsultation": BookConsultation,
+    "CEODashboard": CEODashboard,
     "CRMAIAssistant": CRMAIAssistant,
     "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
     "CRMAnalyticsOutreach": CRMAnalyticsOutreach,
@@ -162,6 +164,7 @@ export const PAGES = {
     "CRMMessages": CRMMessages,
     "CRMPerformanceDashboard": CRMPerformanceDashboard,
     "CRMPerformanceReports": CRMPerformanceReports,
+    "CRMPredictiveAnalytics": CRMPredictiveAnalytics,
     "CRMReports": CRMReports,
     "CRMSecureDocuments": CRMSecureDocuments,
     "CRMSettings": CRMSettings,
@@ -172,6 +175,7 @@ export const PAGES = {
     "CRMTestimonials": CRMTestimonials,
     "CRMUniversities": CRMUniversities,
     "CRMUniversityOutreach": CRMUniversityOutreach,
+    "CRMWorkflows": CRMWorkflows,
     "CompareCourses": CompareCourses,
     "CompleteProfile": CompleteProfile,
     "Contact": Contact,
@@ -226,9 +230,7 @@ export const PAGES = {
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
-    "CEODashboard": CEODashboard,
-    "CRMWorkflows": CRMWorkflows,
-    "CRMPredictiveAnalytics": CRMPredictiveAnalytics,
+    "CRMCounselorAnalytics": CRMCounselorAnalytics,
 }
 
 export const pagesConfig = {
