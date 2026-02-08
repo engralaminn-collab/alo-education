@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { 
   Search, Mail, Phone, Calendar, ArrowRight, 
-  CheckCircle, XCircle, Clock, User, MessageSquare
+  CheckCircle, XCircle, Clock, User, MessageSquare, Sparkles, TrendingUp
 } from 'lucide-react';
 import { format } from 'date-fns';
 import CRMLayout from '@/components/crm/CRMLayout';
@@ -57,6 +57,16 @@ export default function CRMInquiries() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
       toast.success('Inquiry updated');
+    },
+  });
+
+  const qualifyLead = useMutation({
+    mutationFn: async (inquiry_id) => {
+      return await base44.functions.invoke('qualifyLead', { inquiry_id });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
+      toast.success('Lead qualified by AI');
     },
   });
 
@@ -280,16 +290,33 @@ export default function CRMInquiries() {
                           )}
                         </div>
                         <div className="flex flex-col gap-2">
-                          {inquiry.country_of_interest && (
-                            <Badge variant="outline" className="capitalize">
-                              {inquiry.country_of_interest}
-                            </Badge>
-                          )}
-                          {inquiry.degree_level && (
-                            <Badge variant="outline" className="capitalize">
-                              {inquiry.degree_level}
-                            </Badge>
-                          )}
+                         {inquiry.qualification_status && (
+                           <Badge className={
+                             inquiry.qualification_status === 'hot' ? 'bg-red-100 text-red-700 border-red-300' :
+                             inquiry.qualification_status === 'warm' ? 'bg-orange-100 text-orange-700 border-orange-300' :
+                             inquiry.qualification_status === 'cold' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                             'bg-gray-100 text-gray-700 border-gray-300'
+                           }>
+                             {inquiry.qualification_status === 'hot' ? '🔥' : 
+                              inquiry.qualification_status === 'warm' ? '☀️' :
+                              inquiry.qualification_status === 'cold' ? '❄️' : '⚪'} {inquiry.qualification_status.toUpperCase()}
+                           </Badge>
+                         )}
+                         {inquiry.qualification_score && (
+                           <Badge variant="outline" className="font-mono">
+                             {inquiry.qualification_score}/100
+                           </Badge>
+                         )}
+                         {inquiry.country_of_interest && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.country_of_interest}
+                           </Badge>
+                         )}
+                         {inquiry.degree_level && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.degree_level}
+                           </Badge>
+                         )}
                         </div>
                       </div>
                     </CardContent>
@@ -351,6 +378,41 @@ export default function CRMInquiries() {
                 </div>
               )}
 
+              {selectedInquiry.qualification_status && (
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-blue-900">AI Qualification</h4>
+                  </div>
+                  <div className="flex items-center gap-4 mb-3">
+                    <Badge className={
+                      selectedInquiry.qualification_status === 'hot' ? 'bg-red-500' :
+                      selectedInquiry.qualification_status === 'warm' ? 'bg-orange-500' :
+                      selectedInquiry.qualification_status === 'cold' ? 'bg-blue-500' : 'bg-gray-500'
+                    }>
+                      {selectedInquiry.qualification_status.toUpperCase()}
+                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <span className="font-bold text-lg">{selectedInquiry.qualification_score}/100</span>
+                    </div>
+                  </div>
+                  {selectedInquiry.qualification_reasons && (
+                    <div>
+                      <p className="text-xs font-medium text-blue-700 mb-2">Qualification Factors:</p>
+                      <ul className="space-y-1">
+                        {selectedInquiry.qualification_reasons.map((reason, i) => (
+                          <li key={i} className="text-sm text-blue-900 flex items-start gap-2">
+                            <span className="text-blue-500 mt-0.5">•</span>
+                            <span>{reason}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div>
                 <label className="text-sm font-medium">Assign To</label>
                 <Select 
@@ -375,6 +437,17 @@ export default function CRMInquiries() {
               </div>
 
               <DialogFooter className="flex-col sm:flex-row gap-2">
+                {!selectedInquiry.qualification_status && (
+                  <Button 
+                    variant="outline"
+                    onClick={() => qualifyLead.mutate(selectedInquiry.id)}
+                    disabled={qualifyLead.isPending}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    {qualifyLead.isPending ? 'Qualifying...' : 'AI Qualify Lead'}
+                  </Button>
+                )}
                 {selectedInquiry.status === 'new' && (
                   <Button 
                     variant="outline"
