@@ -11,6 +11,10 @@ import { format } from 'date-fns';
 
 export default function CommunicationHub({ studentId }) {
   const [analysis, setAnalysis] = useState(null);
+  const [outreachSuggestions, setOutreachSuggestions] = useState(null);
+  const [selectedChannel, setSelectedChannel] = useState('email');
+  const [editingMessage, setEditingMessage] = useState(null);
+  const queryClient = useQueryClient();
 
   const { data: communications = [] } = useQuery({
     queryKey: ['communication-logs', studentId],
