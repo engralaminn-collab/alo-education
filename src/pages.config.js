@@ -134,6 +134,8 @@ import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
 import CEODashboard from './pages/CEODashboard';
+import CRMWorkflows from './pages/CRMWorkflows';
+import CRMPredictiveAnalytics from './pages/CRMPredictiveAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -225,6 +227,8 @@ export const PAGES = {
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
     "CEODashboard": CEODashboard,
+    "CRMWorkflows": CRMWorkflows,
+    "CRMPredictiveAnalytics": CRMPredictiveAnalytics,
 }
 
 export const pagesConfig = {
