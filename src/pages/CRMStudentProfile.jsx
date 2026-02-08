@@ -18,6 +18,8 @@ import ApplicationProgressTracker from '@/components/student/ApplicationProgress
 import PersonalizedOutreachPanel from '@/components/student/PersonalizedOutreachPanel';
 import DocumentAnalysisPanel from '@/components/student/DocumentAnalysisPanel';
 import AIRecommendationsPanel from '@/components/student/AIRecommendationsPanel';
+import ScholarshipRecommendations from '@/components/scholarships/ScholarshipRecommendations';
+import CommunicationHub from '@/components/communications/CommunicationHub';
 
 const countries = ['Bangladesh', 'India', 'Pakistan', 'Nepal', 'Sri Lanka', 'Nigeria', 'Ghana', 'Kenya', 'Other'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -344,8 +346,10 @@ export default function CRMStudentProfile() {
             <TabsTrigger value="matcher">🎯 AI Matcher</TabsTrigger>
             <TabsTrigger value="applications">📊 Applications</TabsTrigger>
             <TabsTrigger value="recommendations">✨ AI Recommendations</TabsTrigger>
+            <TabsTrigger value="scholarships">🏆 Scholarships</TabsTrigger>
             <TabsTrigger value="documents">📄 Documents</TabsTrigger>
             <TabsTrigger value="outreach">💬 Outreach</TabsTrigger>
+            <TabsTrigger value="communications">📞 Comm Hub</TabsTrigger>
           </TabsList>
 
           {/* Personal & Contact */}
@@ -1018,9 +1022,19 @@ export default function CRMStudentProfile() {
             {studentId && <AIRecommendationsPanel studentId={studentId} />}
           </TabsContent>
 
+          {/* AI Scholarship Recommendations */}
+          <TabsContent value="scholarships">
+            {studentId && <ScholarshipRecommendations studentId={studentId} />}
+          </TabsContent>
+
           {/* AI Personalized Outreach */}
           <TabsContent value="outreach">
             {student && <PersonalizedOutreachPanel student={student} />}
+          </TabsContent>
+
+          {/* AI Communication Hub */}
+          <TabsContent value="communications">
+            {studentId && <CommunicationHub studentId={studentId} />}
           </TabsContent>
 
           {/* Preferences & Funding */}
