@@ -137,6 +137,8 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
+import CRMApplicationDashboard from './pages/CRMApplicationDashboard';
+import CRMCourseCatalog from './pages/CRMCourseCatalog';
 import __Layout from './Layout.jsx';
 
 
@@ -231,6 +233,8 @@ export const PAGES = {
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
+    "CRMApplicationDashboard": CRMApplicationDashboard,
+    "CRMCourseCatalog": CRMCourseCatalog,
 }
 
 export const pagesConfig = {
