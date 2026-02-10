@@ -140,6 +140,8 @@ import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
 import CRMReportingAnalytics from './pages/CRMReportingAnalytics';
+import StudentChatbot from './pages/StudentChatbot';
+import CounselorOnboardingPortal from './pages/CounselorOnboardingPortal';
 import __Layout from './Layout.jsx';
 
 
@@ -237,6 +239,8 @@ export const PAGES = {
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
     "CRMReportingAnalytics": CRMReportingAnalytics,
+    "StudentChatbot": StudentChatbot,
+    "CounselorOnboardingPortal": CounselorOnboardingPortal,
 }
 
 export const pagesConfig = {
