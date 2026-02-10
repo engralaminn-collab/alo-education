@@ -43,6 +43,10 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.country_of_interest || !formData.degree_level) {
+      toast.error('Please select a country and degree level.');
+      return;
+    }
     createInquiry.mutate({
       ...formData,
       source: 'website',

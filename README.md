@@ -34,6 +34,20 @@ It is intended for:
 ⚠️ **Public Repository Notice:**  
 No secrets, API keys, or credentials are stored in this repository. All sensitive values must be provided via environment variables.
 
+### ✅ Environment setup
+To disable any Base44 communication after migration and use your own API, set the flags below in your environment (see `.env.example`):
+
+```
+VITE_DISABLE_BASE44=true
+VITE_API_BASE_URL=
+VITE_AUTH_LOGIN_URL=
+```
+
+### 📄 Full setup guide
+See `docs/SETUP.md` for full environment, deployment, and DNS configuration guidance.
+
+For merging two repositories into `main` and redeploying on DigitalOcean, see `docs/MERGE_AND_DEPLOY.md`.
+
 ---
 
 ## 🧠 Core Features
