@@ -1,0 +1,12 @@
+# Keep alo-education branding/theme files during merges
+# Always prefer primary repo versions for these paths.
+tailwind.config.* merge=ours
+postcss.config.* merge=ours
+**/globals.css merge=ours
+**/theme/** merge=ours
+**/tokens/** merge=ours
+**/colors.* merge=ours
+src/styles/variables.css merge=ours
+src/styles/theme.* merge=ours
+src/lib/theme.* merge=ours
+src/constants/colors.* merge=ours

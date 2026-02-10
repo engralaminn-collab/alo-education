@@ -10,8 +10,8 @@ if [ -d "$WORKDIR" ]; then
   exit 1
 fi
 
-# Paths to preserve from primary repo (branding/layout identity)
-BRANDING_PATHS=(
+# Paths/patterns to preserve from primary repo (branding/layout identity)
+BRANDING_PATTERNS=(
   "src/index.css"
   "src/App.css"
   "public"
@@ -19,7 +19,17 @@ BRANDING_PATHS=(
   "src/components/ui"
   "src/pages/Home.jsx"
   "src/pages/Landing.jsx"
-  "tailwind.config.js"
+  "tailwind.config.*"
+  "postcss.config.*"
+  "src/styles/globals.css"
+  "styles/globals.css"
+  "app/globals.css"
+  "src/theme"
+  "src/tokens"
+  "src/styles/theme.*"
+  "src/lib/theme.*"
+  "src/constants/colors.*"
+  "src/styles/variables.css"
 )
 
 echo "[1/8] Clone primary repo"
@@ -32,11 +42,27 @@ git pull origin main
 
 echo "[3/8] Save primary branding snapshot"
 mkdir -p .brand-snapshot
-for p in "${BRANDING_PATHS[@]}"; do
-  if [ -e "$p" ]; then
-    mkdir -p ".brand-snapshot/$(dirname "$p")"
-    cp -R "$p" ".brand-snapshot/$p"
+BRANDING_PATHS=()
+for pattern in "${BRANDING_PATTERNS[@]}"; do
+  while IFS= read -r match; do
+    [ -n "$match" ] && BRANDING_PATHS+=("$match")
+  done < <(compgen -G "$pattern" || true)
+done
+
+# include exact directories/files that may not be expanded by compgen in some shells
+for exact in "${BRANDING_PATTERNS[@]}"; do
+  if [ -e "$exact" ]; then
+    BRANDING_PATHS+=("$exact")
   fi
+done
+
+# de-duplicate
+mapfile -t BRANDING_PATHS < <(printf '%s
+' "${BRANDING_PATHS[@]}" | awk 'NF && !seen[$0]++')
+
+for p in "${BRANDING_PATHS[@]}"; do
+  mkdir -p ".brand-snapshot/$(dirname "$p")"
+  cp -R "$p" ".brand-snapshot/$p"
 done
 
 echo "[4/8] Add/fetch secondary remote"

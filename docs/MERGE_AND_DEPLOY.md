@@ -125,3 +125,18 @@ bash scripts/migrate_all_missing_features.sh \
   main \
   true
 ```
+
+
+## Branding protection policy (required)
+
+During migration keep these from `alo-education` primary repo:
+- `tailwind.config.*`
+- `postcss.config.*`
+- `src/styles/globals.css`, `styles/globals.css`, `app/globals.css`
+- theme/token files (`src/theme/**`, `src/tokens/**`, `src/styles/theme.*`, `src/lib/theme.*`, `src/constants/colors.*`)
+- `src/styles/variables.css`
+
+Rule:
+- If `alo-education-last` has different colors/palette, map to existing tokens and do not replace primary palette.
+
+This repository now includes `.gitattributes` merge rules (`merge=ours`) for branding/theme paths.
