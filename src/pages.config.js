@@ -58,12 +58,14 @@ import CEODashboard from './pages/CEODashboard';
 import CRMAIAssistant from './pages/CRMAIAssistant';
 import CRMAnalyticsDashboard from './pages/CRMAnalyticsDashboard';
 import CRMAnalyticsOutreach from './pages/CRMAnalyticsOutreach';
+import CRMApplicationDashboard from './pages/CRMApplicationDashboard';
 import CRMApplications from './pages/CRMApplications';
 import CRMAutomation from './pages/CRMAutomation';
 import CRMBulkCampaigns from './pages/CRMBulkCampaigns';
 import CRMCommunications from './pages/CRMCommunications';
 import CRMCounselorAnalytics from './pages/CRMCounselorAnalytics';
 import CRMCounselors from './pages/CRMCounselors';
+import CRMCourseCatalog from './pages/CRMCourseCatalog';
 import CRMCourses from './pages/CRMCourses';
 import CRMDashboard from './pages/CRMDashboard';
 import CRMImportStudents from './pages/CRMImportStudents';
@@ -137,8 +139,7 @@ import UniversityDetailsPage from './pages/UniversityDetailsPage';
 import UniversityOnboarding from './pages/UniversityOnboarding';
 import UniversityPartnerPortal from './pages/UniversityPartnerPortal';
 import VisaOfficerPortal from './pages/VisaOfficerPortal';
-import CRMApplicationDashboard from './pages/CRMApplicationDashboard';
-import CRMCourseCatalog from './pages/CRMCourseCatalog';
+import CRMReportingAnalytics from './pages/CRMReportingAnalytics';
 import __Layout from './Layout.jsx';
 
 
@@ -154,12 +155,14 @@ export const PAGES = {
     "CRMAIAssistant": CRMAIAssistant,
     "CRMAnalyticsDashboard": CRMAnalyticsDashboard,
     "CRMAnalyticsOutreach": CRMAnalyticsOutreach,
+    "CRMApplicationDashboard": CRMApplicationDashboard,
     "CRMApplications": CRMApplications,
     "CRMAutomation": CRMAutomation,
     "CRMBulkCampaigns": CRMBulkCampaigns,
     "CRMCommunications": CRMCommunications,
     "CRMCounselorAnalytics": CRMCounselorAnalytics,
     "CRMCounselors": CRMCounselors,
+    "CRMCourseCatalog": CRMCourseCatalog,
     "CRMCourses": CRMCourses,
     "CRMDashboard": CRMDashboard,
     "CRMImportStudents": CRMImportStudents,
@@ -233,8 +236,7 @@ export const PAGES = {
     "UniversityOnboarding": UniversityOnboarding,
     "UniversityPartnerPortal": UniversityPartnerPortal,
     "VisaOfficerPortal": VisaOfficerPortal,
-    "CRMApplicationDashboard": CRMApplicationDashboard,
-    "CRMCourseCatalog": CRMCourseCatalog,
+    "CRMReportingAnalytics": CRMReportingAnalytics,
 }
 
 export const pagesConfig = {
