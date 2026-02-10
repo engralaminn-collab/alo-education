@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 export default function CTA() {
   return (
-    <section className="py-24 bg-gradient-to-br from-emerald-600 via-emerald-500 to-cyan-500 relative overflow-hidden">
+    <section className="py-24 bg-gradient-brand relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
@@ -43,7 +43,7 @@ export default function CTA() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="bg-white text-emerald-600 hover:bg-slate-100 px-8 h-14 text-lg font-semibold">
+              <Button size="lg" className="bg-white text-education-blue hover:bg-slate-100 px-8 h-14 text-lg font-semibold">
                 Book Free Consultation
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import ALOButton from '@/components/ui/alo-button';
 
 import Hero from '@/components/landing/Hero';
 import TrustBanner from '@/components/landing/TrustBanner';
@@ -14,6 +15,7 @@ import Destinations from '@/components/landing/Destinations';
 import Testimonials from '@/components/landing/Testimonials';
 import CTA from '@/components/landing/CTA';
 import Footer from '@/components/landing/Footer';
+import WhyChooseALO from '@/components/landing/WhyChooseALO';
 
 export default function Home() {
   const { data: universities } = useQuery({
@@ -32,6 +34,13 @@ export default function Home() {
       <Testimonials />
       <Team />
       <PartnerLogos />
+<<<<<<< HEAD
+=======
+      <FeaturedUniversities universities={universities} />
+      <Destinations />
+      <WhyChooseALO context={{ page: 'home' }} />
+      <Testimonials />
+>>>>>>> last/main
       <CTA />
       <Footer />
     </div>

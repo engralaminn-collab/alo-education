@@ -70,7 +70,19 @@ export default function Services() {
         />
       </div>
       <div className="container mx-auto px-6">
+<<<<<<< HEAD
         <div className="text-center mb-16 max-w-4xl mx-auto">
+=======
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
+          >
+            Our Services
+          </motion.span>
+>>>>>>> last/main
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -101,7 +113,11 @@ export default function Services() {
             >
               <Card className="border-0 hover:shadow-xl transition-all duration-300 h-full group" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}>
                 <CardContent className="p-6">
+<<<<<<< HEAD
                   <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ backgroundColor: '#0066CC' }}>
+=======
+                  <div className="w-14 h-14 bg-gradient-brand rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+>>>>>>> last/main
                     <service.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-black mb-3">{service.title}</h3>

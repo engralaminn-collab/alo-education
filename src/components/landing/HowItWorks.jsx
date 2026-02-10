@@ -7,25 +7,25 @@ const steps = [
     icon: Search,
     title: "Discover",
     description: "Explore universities and courses that match your profile and preferences.",
-    color: "from-blue-500 to-cyan-500"
+    color: "from-education-blue to-blue-600"
   },
   {
     icon: UserCheck,
     title: "Get Matched",
     description: "Connect with a dedicated counselor who understands your goals.",
-    color: "from-emerald-500 to-teal-500"
+    color: "from-alo-orange to-sunshine"
   },
   {
     icon: FileCheck,
     title: "Apply",
     description: "We guide you through applications, documents, and submissions.",
-    color: "from-purple-500 to-pink-500"
+    color: "from-education-blue to-alo-orange"
   },
   {
     icon: Plane,
     title: "Fly Away",
     description: "Get your visa, pack your bags, and start your adventure!",
-    color: "from-orange-500 to-red-500"
+    color: "from-sunshine to-alo-orange"
   }
 ];
 
@@ -41,7 +41,7 @@ export default function HowItWorks() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-emerald-600 font-semibold text-sm uppercase tracking-wider"
+            className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
           >
             Simple Process
           </motion.span>

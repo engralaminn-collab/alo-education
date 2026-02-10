@@ -13,7 +13,11 @@ import CRMLayout from '@/components/crm/CRMLayout';
 const COLORS = ['#0066CC', '#F37021', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
 
 export default function CRMAnalyticsDashboard() {
+<<<<<<< HEAD
   const [timeframe, setTimeframe] = useState('30'); // days
+=======
+  const [timeframe, setTimeframe] = useState('30');
+>>>>>>> last/main
 
   const { data: applications = [] } = useQuery({
     queryKey: ['analytics-applications'],
@@ -35,7 +39,10 @@ export default function CRMAnalyticsDashboard() {
     queryFn: () => base44.entities.Counselor.list(),
   });
 
+<<<<<<< HEAD
   // KPI Calculations
+=======
+>>>>>>> last/main
   const totalApplications = applications.length;
   const enrolledApps = applications.filter(a => a.status === 'enrolled').length;
   const conversionRate = totalApplications > 0 ? ((enrolledApps / totalApplications) * 100).toFixed(1) : 0;
@@ -60,7 +67,10 @@ export default function CRMAnalyticsDashboard() {
     ? (((recentApplications.length - previousPeriodApps.length) / previousPeriodApps.length) * 100).toFixed(1)
     : 0;
 
+<<<<<<< HEAD
   // Course Popularity
+=======
+>>>>>>> last/main
   const courseCounts = {};
   applications.forEach(app => {
     const course = courses.find(c => c.id === app.course_id);
@@ -73,7 +83,10 @@ export default function CRMAnalyticsDashboard() {
     .slice(0, 10)
     .map(([name, value]) => ({ name: name.substring(0, 30) + '...', value }));
 
+<<<<<<< HEAD
   // Destination Demand
+=======
+>>>>>>> last/main
   const countryCounts = {};
   applications.forEach(app => {
     const country = app.destination_country || 'Unknown';
@@ -84,7 +97,10 @@ export default function CRMAnalyticsDashboard() {
     .slice(0, 6)
     .map(([name, value]) => ({ name, value }));
 
+<<<<<<< HEAD
   // Monthly Trends
+=======
+>>>>>>> last/main
   const monthlyData = {};
   applications.forEach(app => {
     const month = new Date(app.created_date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
@@ -94,7 +110,10 @@ export default function CRMAnalyticsDashboard() {
     .slice(-6)
     .map(([month, applications]) => ({ month, applications }));
 
+<<<<<<< HEAD
   // Counselor Performance
+=======
+>>>>>>> last/main
   const counselorStats = counselors.map(counselor => {
     const counselorApps = applications.filter(a => a.assigned_counsellor === counselor.user_id);
     const enrolled = counselorApps.filter(a => a.status === 'enrolled').length;
@@ -106,7 +125,10 @@ export default function CRMAnalyticsDashboard() {
     };
   }).sort((a, b) => b.applications - a.applications).slice(0, 10);
 
+<<<<<<< HEAD
   // Status Distribution
+=======
+>>>>>>> last/main
   const statusCounts = {};
   applications.forEach(app => {
     statusCounts[app.status] = (statusCounts[app.status] || 0) + 1;
@@ -136,7 +158,10 @@ export default function CRMAnalyticsDashboard() {
           </select>
         </div>
 
+<<<<<<< HEAD
         {/* KPI Cards */}
+=======
+>>>>>>> last/main
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="pb-2">

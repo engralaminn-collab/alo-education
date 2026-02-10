@@ -57,8 +57,33 @@ const destinations = [
 ];
 
 export default function Destinations() {
+<<<<<<< HEAD
   const [activeTab, setActiveTab] = useState(0);
   const tabs = destinations.map(d => d.country);
+=======
+  return (
+    <section className="py-24 bg-slate-900">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sunshine font-semibold text-sm uppercase tracking-wider"
+          >
+            Global Reach
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-white mt-2"
+          >
+            Popular Destinations
+          </motion.h2>
+        </div>
+>>>>>>> last/main
 
   return (
     <section className="py-24 bg-white">
@@ -88,8 +113,36 @@ export default function Destinations() {
               }`}
               style={activeTab === index ? { backgroundColor: '#0066CC' } : {}}
             >
+<<<<<<< HEAD
               {tab}
             </button>
+=======
+              <Link to={createPageUrl('Universities') + `?country=${dest.code}`}>
+                <div className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer">
+                  <img
+                    src={dest.image}
+                    alt={dest.country}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                  
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <h3 className="text-2xl font-bold text-white mb-2">{dest.country}</h3>
+                    <div className="flex items-center justify-between">
+                      <div className="text-slate-300 text-sm">
+                        <span className="text-sunshine font-semibold">{dest.universities}</span> Universities
+                        <span className="mx-2">•</span>
+                        <span className="text-sunshine font-semibold">{dest.students}</span> Students
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-education-blue transition-colors">
+                        <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+>>>>>>> last/main
           ))}
         </div>
 
