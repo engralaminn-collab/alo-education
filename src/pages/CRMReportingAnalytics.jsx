@@ -7,6 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, TrendingUp, Users, BookOpen, Award, Calendar, Sparkles, Download } from 'lucide-react';
 import { toast } from 'sonner';
+import AnomalyDetectionDashboard from '@/components/analytics/AnomalyDetectionDashboard';
+import ScenarioAnalysis from '@/components/analytics/ScenarioAnalysis';
+import CounselorImpactWidget from '@/components/analytics/CounselorImpactWidget';
 
 export default function CRMReportingAnalytics() {
   const [selectedReport, setSelectedReport] = useState(null);
@@ -63,6 +66,7 @@ export default function CRMReportingAnalytics() {
           <TabsList>
             <TabsTrigger value="reports">Reports</TabsTrigger>
             <TabsTrigger value="predictions">Predictive Analytics</TabsTrigger>
+            <TabsTrigger value="advanced">Advanced Analytics</TabsTrigger>
           </TabsList>
 
           {/* Reports Tab */}
@@ -478,6 +482,15 @@ export default function CRMReportingAnalytics() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Advanced Analytics Tab */}
+          <TabsContent value="advanced" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <AnomalyDetectionDashboard />
+              <ScenarioAnalysis />
+            </div>
+            <CounselorImpactWidget />
           </TabsContent>
         </Tabs>
       </div>

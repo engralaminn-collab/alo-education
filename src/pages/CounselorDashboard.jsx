@@ -16,6 +16,8 @@ import StudentOverviewCard from '@/components/counselor/StudentOverviewCard';
 import CounselorTasksWidget from '@/components/counselor/CounselorTasksWidget';
 import RecentCommunicationsWidget from '@/components/counselor/RecentCommunicationsWidget';
 import ApplicationProgressWidget from '@/components/counselor/ApplicationProgressWidget';
+import AITaskAutomation from '@/components/counselor/AITaskAutomation';
+import AICounselorCoaching from '@/components/counselor/AICounselorCoaching';
 
 export default function CounselorDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -213,6 +215,12 @@ export default function CounselorDashboard() {
               <ApplicationProgressWidget counselorId={user?.id} />
             </div>
           </div>
+
+          {/* AI Task Automation */}
+          <AITaskAutomation />
+          
+          {/* AI Coaching */}
+          <AICounselorCoaching />
 
           {/* Canned Responses Quick Access */}
           <Card className="border-0 shadow-sm">
