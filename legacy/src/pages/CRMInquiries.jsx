@@ -1,0 +1,508 @@
+import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { 
+  Search, Mail, Phone, Calendar, ArrowRight, 
+  CheckCircle, XCircle, Clock, User, MessageSquare, Sparkles, TrendingUp
+} from 'lucide-react';
+import { format } from 'date-fns';
+import CRMLayout from '@/components/crm/CRMLayout';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const statusConfig = {
+  new: { color: 'bg-emerald-100 text-emerald-700', icon: Clock },
+  contacted: { color: 'bg-blue-100 text-blue-700', icon: MessageSquare },
+  converted: { color: 'bg-green-100 text-green-700', icon: CheckCircle },
+  not_interested: { color: 'bg-slate-100 text-slate-500', icon: XCircle },
+};
+
+export default function CRMInquiries() {
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [selectedInquiry, setSelectedInquiry] = useState(null);
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
+  const [notes, setNotes] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const { data: inquiries = [], isLoading, refetch } = useQuery({
+    queryKey: ['crm-inquiries'],
+    queryFn: () => base44.entities.Inquiry.list('-created_date'),
+  });
+
+  // Pull to refresh handler
+  const handlePullToRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+    toast.success('Inquiries refreshed');
+  };
+
+  const { data: counselors = [] } = useQuery({
+    queryKey: ['counselors'],
+    queryFn: () => base44.entities.Counselor.filter({ status: 'active' }),
+  });
+
+  const updateInquiry = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.Inquiry.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
+      toast.success('Inquiry updated');
+    },
+  });
+
+  const qualifyLead = useMutation({
+    mutationFn: async (inquiry_id) => {
+      return await base44.functions.invoke('qualifyLead', { inquiry_id });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
+      toast.success('Lead qualified by AI');
+    },
+  });
+
+  const convertToStudent = useMutation({
+    mutationFn: async (inquiry) => {
+      // Create student profile
+      const student = await base44.entities.StudentProfile.create({
+        email: inquiry.email,
+        first_name: inquiry.name.split(' ')[0],
+        last_name: inquiry.name.split(' ').slice(1).join(' '),
+        phone: inquiry.phone,
+        preferred_countries: inquiry.country_of_interest ? [inquiry.country_of_interest] : [],
+        preferred_degree_level: inquiry.degree_level,
+        preferred_fields: inquiry.field_of_study ? [inquiry.field_of_study] : [],
+        source: 'website',
+        status: 'new_lead',
+        counselor_id: inquiry.assigned_to,
+        notes: inquiry.message,
+      });
+      
+      // Update inquiry status
+      await base44.entities.Inquiry.update(inquiry.id, {
+        status: 'converted',
+        converted_to_student: student.id,
+      });
+      
+      return student;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
+      queryClient.invalidateQueries({ queryKey: ['crm-students'] });
+      setConvertDialogOpen(false);
+      setSelectedInquiry(null);
+      toast.success('Inquiry converted to student!');
+    },
+  });
+
+  const filteredInquiries = inquiries.filter(i => {
+    const matchesSearch = 
+      i.name?.toLowerCase().includes(search.toLowerCase()) ||
+      i.email?.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || i.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const newCount = inquiries.filter(i => i.status === 'new').length;
+  const contactedCount = inquiries.filter(i => i.status === 'contacted').length;
+  const convertedCount = inquiries.filter(i => i.status === 'converted').length;
+
+  return (
+    <CRMLayout title="Inquiries">
+      {/* Pull to Refresh Indicator */}
+      {isRefreshing && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-800 shadow-lg rounded-full px-4 py-2 z-50">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Refreshing...</p>
+        </div>
+      )}
+      
+      {/* Pull to Refresh Area */}
+      <div 
+        className="md:hidden"
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          e.currentTarget.dataset.startY = touch.clientY;
+        }}
+        onTouchMove={(e) => {
+          const touch = e.touches[0];
+          const startY = parseFloat(e.currentTarget.dataset.startY || '0');
+          const diff = touch.clientY - startY;
+          if (diff > 80 && window.scrollY === 0 && !isRefreshing) {
+            handlePullToRefresh();
+          }
+        }}
+      >
+        {/* Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/30">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-emerald-600 dark:text-emerald-400">New</p>
+                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{newCount}</p>
+              </div>
+              <Clock className="w-8 h-8 text-emerald-300 dark:text-emerald-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-sm bg-blue-50 dark:bg-blue-950/30">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-blue-600 dark:text-blue-400">Contacted</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{contactedCount}</p>
+              </div>
+              <MessageSquare className="w-8 h-8 text-blue-300 dark:text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-sm bg-green-50 dark:bg-green-950/30">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-green-600 dark:text-green-400">Converted</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{convertedCount}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-green-300 dark:text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border-0 shadow-sm bg-slate-50 dark:bg-slate-800">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Conversion Rate</p>
+                <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">
+                  {inquiries.length > 0 ? Math.round((convertedCount / inquiries.length) * 100) : 0}%
+                </p>
+              </div>
+              <ArrowRight className="w-8 h-8 text-slate-300 dark:text-slate-600" />
+            </div>
+          </CardContent>
+        </Card>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <Card className="border-0 shadow-sm mb-6 dark:bg-slate-800">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <Input
+                placeholder="Search inquiries..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="new">New</SelectItem>
+                <SelectItem value="contacted">Contacted</SelectItem>
+                <SelectItem value="converted">Converted</SelectItem>
+                <SelectItem value="not_interested">Not Interested</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Inquiry List */}
+      <div className="grid gap-4">
+        <AnimatePresence>
+          {isLoading ? (
+            [...Array(5)].map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-6">
+                  <div className="h-16 bg-slate-100 rounded" />
+                </CardContent>
+              </Card>
+            ))
+          ) : filteredInquiries.length === 0 ? (
+            <Card className="border-0 shadow-sm">
+              <CardContent className="p-12 text-center">
+                <Mail className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">No inquiries found</h3>
+                <p className="text-slate-500">New inquiries will appear here</p>
+              </CardContent>
+            </Card>
+          ) : (
+            filteredInquiries.map((inquiry, index) => {
+              const status = statusConfig[inquiry.status] || statusConfig.new;
+              const StatusIcon = status.icon;
+              
+              return (
+                <motion.div
+                  key={inquiry.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Card 
+                    className="border-0 shadow-sm hover:shadow-lg transition-all cursor-pointer"
+                    onClick={() => setSelectedInquiry(inquiry)}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-semibold">
+                          {inquiry.name?.charAt(0)?.toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-slate-900">{inquiry.name}</h3>
+                            <Badge className={status.color}>
+                              <StatusIcon className="w-3 h-3 mr-1" />
+                              {inquiry.status}
+                            </Badge>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                            <span className="flex items-center gap-1">
+                              <Mail className="w-4 h-4" />
+                              {inquiry.email}
+                            </span>
+                            {inquiry.phone && (
+                              <span className="flex items-center gap-1">
+                                <Phone className="w-4 h-4" />
+                                {inquiry.phone}
+                              </span>
+                            )}
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {inquiry.created_date && format(new Date(inquiry.created_date), 'MMM d, yyyy')}
+                            </span>
+                          </div>
+                          {inquiry.message && (
+                            <p className="text-slate-600 mt-2 line-clamp-2">{inquiry.message}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                         {inquiry.qualification_status && (
+                           <Badge className={
+                             inquiry.qualification_status === 'hot' ? 'bg-red-100 text-red-700 border-red-300' :
+                             inquiry.qualification_status === 'warm' ? 'bg-orange-100 text-orange-700 border-orange-300' :
+                             inquiry.qualification_status === 'cold' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                             'bg-gray-100 text-gray-700 border-gray-300'
+                           }>
+                             {inquiry.qualification_status === 'hot' ? '🔥' : 
+                              inquiry.qualification_status === 'warm' ? '☀️' :
+                              inquiry.qualification_status === 'cold' ? '❄️' : '⚪'} {inquiry.qualification_status.toUpperCase()}
+                           </Badge>
+                         )}
+                         {inquiry.qualification_score && (
+                           <Badge variant="outline" className="font-mono">
+                             {inquiry.qualification_score}/100
+                           </Badge>
+                         )}
+                         {inquiry.country_of_interest && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.country_of_interest}
+                           </Badge>
+                         )}
+                         {inquiry.degree_level && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.degree_level}
+                           </Badge>
+                         )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Inquiry Detail Dialog */}
+      <Dialog open={!!selectedInquiry && !convertDialogOpen} onOpenChange={(open) => !open && setSelectedInquiry(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Inquiry Details</DialogTitle>
+          </DialogHeader>
+          {selectedInquiry && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl font-bold text-slate-600">
+                  {selectedInquiry.name?.charAt(0)?.toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">{selectedInquiry.name}</h3>
+                  <Badge className={statusConfig[selectedInquiry.status]?.color}>
+                    {selectedInquiry.status}
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-4 h-4 text-slate-400" />
+                    <span>{selectedInquiry.email}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-4 h-4 text-slate-400" />
+                    <span>{selectedInquiry.phone || '-'}</span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <span className="text-sm text-slate-500">Country Interest:</span>
+                    <span className="ml-2 capitalize">{selectedInquiry.country_of_interest || '-'}</span>
+                  </div>
+                  <div>
+                    <span className="text-sm text-slate-500">Degree Level:</span>
+                    <span className="ml-2 capitalize">{selectedInquiry.degree_level || '-'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {selectedInquiry.message && (
+                <div>
+                  <h4 className="font-semibold mb-2">Message</h4>
+                  <p className="text-slate-600 bg-slate-50 p-4 rounded-lg">{selectedInquiry.message}</p>
+                </div>
+              )}
+
+              {selectedInquiry.qualification_status && (
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-blue-900">AI Qualification</h4>
+                  </div>
+                  <div className="flex items-center gap-4 mb-3">
+                    <Badge className={
+                      selectedInquiry.qualification_status === 'hot' ? 'bg-red-500' :
+                      selectedInquiry.qualification_status === 'warm' ? 'bg-orange-500' :
+                      selectedInquiry.qualification_status === 'cold' ? 'bg-blue-500' : 'bg-gray-500'
+                    }>
+                      {selectedInquiry.qualification_status.toUpperCase()}
+                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <span className="font-bold text-lg">{selectedInquiry.qualification_score}/100</span>
+                    </div>
+                  </div>
+                  {selectedInquiry.qualification_reasons && (
+                    <div>
+                      <p className="text-xs font-medium text-blue-700 mb-2">Qualification Factors:</p>
+                      <ul className="space-y-1">
+                        {selectedInquiry.qualification_reasons.map((reason, i) => (
+                          <li key={i} className="text-sm text-blue-900 flex items-start gap-2">
+                            <span className="text-blue-500 mt-0.5">•</span>
+                            <span>{reason}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div>
+                <label className="text-sm font-medium">Assign To</label>
+                <Select 
+                  value={selectedInquiry.assigned_to || ''} 
+                  onValueChange={(v) => {
+                    updateInquiry.mutate({ 
+                      id: selectedInquiry.id, 
+                      data: { assigned_to: v } 
+                    });
+                    setSelectedInquiry({ ...selectedInquiry, assigned_to: v });
+                  }}
+                >
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select counselor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {counselors.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <DialogFooter className="flex-col sm:flex-row gap-2">
+                {!selectedInquiry.qualification_status && (
+                  <Button 
+                    variant="outline"
+                    onClick={() => qualifyLead.mutate(selectedInquiry.id)}
+                    disabled={qualifyLead.isPending}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    {qualifyLead.isPending ? 'Qualifying...' : 'AI Qualify Lead'}
+                  </Button>
+                )}
+                {selectedInquiry.status === 'new' && (
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      updateInquiry.mutate({ 
+                        id: selectedInquiry.id, 
+                        data: { status: 'contacted' } 
+                      });
+                      setSelectedInquiry({ ...selectedInquiry, status: 'contacted' });
+                    }}
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Mark as Contacted
+                  </Button>
+                )}
+                {selectedInquiry.status !== 'converted' && (
+                  <Button 
+                    className="bg-emerald-500 hover:bg-emerald-600"
+                    onClick={() => setConvertDialogOpen(true)}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Convert to Student
+                  </Button>
+                )}
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Convert Dialog */}
+      <Dialog open={convertDialogOpen} onOpenChange={setConvertDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Convert to Student</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-slate-600">
+              This will create a new student profile for <strong>{selectedInquiry?.name}</strong> with their inquiry information.
+            </p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setConvertDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                className="bg-emerald-500 hover:bg-emerald-600"
+                onClick={() => convertToStudent.mutate(selectedInquiry)}
+                disabled={convertToStudent.isPending}
+              >
+                {convertToStudent.isPending ? 'Converting...' : 'Convert'}
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </CRMLayout>
+  );
+}
