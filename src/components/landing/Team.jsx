@@ -32,6 +32,7 @@ export default function Team() {
   return (
     <section className="py-24 bg-slate-50">
       <div className="container mx-auto px-6">
+<<<<<<< HEAD
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -45,6 +46,36 @@ export default function Team() {
             Our dedicated professionals are here to guide you every step of the way
           </p>
         </motion.div>
+=======
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
+          >
+            Our Leadership
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-slate-900 mt-2"
+          >
+            Meet the ALO's Team
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-slate-600 mt-4"
+          >
+            Our Commitment to Your Study-Abroad Dream
+          </motion.p>
+        </div>
+>>>>>>> last/main
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
@@ -56,6 +87,7 @@ export default function Team() {
               transition={{ delay: index * 0.1 }}
               className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
             >
+<<<<<<< HEAD
               <div className="relative h-64 overflow-hidden">
                 <img
                   src={member.image}
@@ -69,6 +101,25 @@ export default function Team() {
                 <p className="font-semibold mb-3" style={{ color: '#F37021' }}>{member.title}</p>
                 <p className="text-slate-600 text-sm leading-relaxed">{member.bio}</p>
               </div>
+=======
+              <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                <div className="relative h-80 overflow-hidden">
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-2xl font-bold text-white mb-1">{member.name}</h3>
+                    <p className="text-sunshine font-medium">{member.title}</p>
+                  </div>
+                </div>
+                <CardContent className="p-6">
+                  <p className="text-slate-600 leading-relaxed">{member.bio}</p>
+                </CardContent>
+              </Card>
+>>>>>>> last/main
             </motion.div>
           ))}
         </div>

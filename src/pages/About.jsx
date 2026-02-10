@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ALOButton from '@/components/ui/alo-button';
 import { 
   GraduationCap, Globe, Users, Award, Target, Heart,
   CheckCircle, ArrowRight, Building2
@@ -276,10 +277,10 @@ export default function About() {
               Let's discuss your goals and create a personalized plan for your success.
             </p>
             <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="bg-white text-emerald-600 hover:bg-slate-100 px-8 h-14 text-lg">
+              <ALOButton size="lg" className="px-8 h-14 text-lg">
                 Book Free Consultation
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              </ALOButton>
             </Link>
           </motion.div>
         </div>

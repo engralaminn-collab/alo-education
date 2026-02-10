@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -360,6 +361,17 @@ export default function CRMWorkflows() {
             </div>
           </DialogContent>
         </Dialog>
+=======
+import React from 'react';
+import CRMLayout from '@/components/crm/CRMLayout';
+import WorkflowAutomationBuilder from '@/components/crm/WorkflowAutomationBuilder';
+
+export default function CRMWorkflows() {
+  return (
+    <CRMLayout title="Workflow Automation">
+      <div className="p-6">
+        <WorkflowAutomationBuilder />
+>>>>>>> last/main
       </div>
     </CRMLayout>
   );

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
@@ -606,6 +607,18 @@ export default function CRMCounselorAnalytics() {
           </div>
         </TabsContent>
       </Tabs>
+=======
+import React from 'react';
+import CRMLayout from '@/components/crm/CRMLayout';
+import CounselorPerformanceDashboard from '@/components/analytics/CounselorPerformanceDashboard';
+
+export default function CRMCounselorAnalytics() {
+  return (
+    <CRMLayout title="Counselor Analytics">
+      <div className="p-6">
+        <CounselorPerformanceDashboard />
+      </div>
+>>>>>>> last/main
     </CRMLayout>
   );
 }

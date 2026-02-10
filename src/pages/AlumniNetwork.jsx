@@ -8,8 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Users, Search, Briefcase, MapPin, GraduationCap, Linkedin, Mail, MessageSquare, Filter, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+=======
+>>>>>>> last/main
 import Footer from '@/components/landing/Footer';
 
 export default function AlumniNetwork() {
