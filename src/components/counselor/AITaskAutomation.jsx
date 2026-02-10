@@ -4,211 +4,211 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Zap, Clock, Mail, Phone, Calendar, FileText, CheckCircle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sparkles, ListTodo, MessageSquare, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function AITaskAutomation({ studentId, onTasksCreated }) {
-  const [automationResult, setAutomationResult] = useState(null);
+export default function AITaskAutomation() {
+  const [prioritizedTasks, setPrioritizedTasks] = useState(null);
+  const [outreach, setOutreach] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-  // Run automation
-  const automate = useMutation({
+  const prioritizeTasks = useMutation({
     mutationFn: async () => {
-      const { data } = await base44.functions.invoke('automateTasksAndReminders', {
-        student_id: studentId,
-        run_for_all: !studentId
+      const { data } = await base44.functions.invoke('prioritizeCounselorTasks', {});
+      return data;
+    },
+    onSuccess: (data) => {
+      setPrioritizedTasks(data);
+      toast.success('Tasks prioritized by AI');
+    }
+  });
+
+  const generateOutreach = useMutation({
+    mutationFn: async ({ student_id, query_type }) => {
+      const { data } = await base44.functions.invoke('autoGenerateOutreach', {
+        student_id,
+        query_type
       });
       return data;
     },
     onSuccess: (data) => {
-      setAutomationResult(data);
-      toast.success(`${data.actions_taken} automated actions created`);
-      if (onTasksCreated) onTasksCreated();
+      setOutreach(data);
+      toast.success('Outreach messages generated');
     }
   });
 
-  // Generate outreach draft
-  const [draftParams, setDraftParams] = useState({ query_type: 'general_follow_up', channel: 'email' });
-  const [outreachDraft, setOutreachDraft] = useState(null);
-
-  const generateDraft = useMutation({
-    mutationFn: async () => {
-      const { data } = await base44.functions.invoke('generateOutreachDraft', {
-        student_id: studentId,
-        ...draftParams
-      });
-      return data;
-    },
-    onSuccess: (data) => {
-      setOutreachDraft(data);
-      toast.success('Outreach draft generated');
-    }
-  });
-
-  const actionIcons = {
-    call: Phone,
-    email: Mail,
-    whatsapp: Phone,
-    meeting: Calendar,
-    document_reminder: FileText,
-    deadline_follow_up: Clock
+  const urgencyColors = {
+    critical: 'bg-red-100 text-red-800',
+    high: 'bg-orange-100 text-orange-800',
+    medium: 'bg-yellow-100 text-yellow-800',
+    low: 'bg-blue-100 text-blue-800'
   };
 
-  const queryTypes = [
-    { value: 'document_request', label: 'Document Request' },
-    { value: 'application_update', label: 'Application Update' },
-    { value: 'deadline_reminder', label: 'Deadline Reminder' },
-    { value: 'offer_congratulations', label: 'Offer Congratulations' },
-    { value: 'visa_guidance', label: 'Visa Guidance' },
-    { value: 'general_follow_up', label: 'General Follow-up' }
-  ];
-
   return (
-    <div className="space-y-6">
-      {/* Task Automation */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-blue-600" />
-            AI Task Automation
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-indigo-600" />
+          AI Task Automation
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="prioritize" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="prioritize">Prioritize Tasks</TabsTrigger>
+            <TabsTrigger value="outreach">Draft Outreach</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="prioritize" className="space-y-4">
             <p className="text-sm text-slate-600">
-              AI analyzes student engagement, application stages, and deadlines to automatically create tasks and reminders.
+              AI analyzes your tasks and prioritizes based on urgency and deadlines.
             </p>
+
             <Button
-              onClick={() => automate.mutate()}
-              disabled={automate.isPending}
-              className="bg-blue-600"
+              onClick={() => prioritizeTasks.mutate()}
+              disabled={prioritizeTasks.isPending}
+              className="bg-indigo-600 w-full"
             >
-              <Sparkles className="w-4 h-4 mr-2" />
-              {automate.isPending ? 'Analyzing...' : 'Run Automation'}
+              <ListTodo className="w-4 h-4 mr-2" />
+              {prioritizeTasks.isPending ? 'Analyzing...' : 'Prioritize My Tasks'}
             </Button>
 
-            {automationResult && (
-              <div className="mt-4 space-y-3">
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <p className="font-semibold text-green-900">
-                    ✓ {automationResult.actions_taken} automated actions created
-                  </p>
-                </div>
-
-                {automationResult.automated_actions?.map((action, i) => {
-                  const Icon = actionIcons[action.action?.action_type] || CheckCircle;
-                  return (
-                    <div key={i} className="bg-white border rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <Icon className="w-5 h-5 text-blue-600 mt-0.5" />
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h5 className="font-semibold">{action.action?.title}</h5>
-                            <Badge>{action.type === 'task_created' ? 'Task' : 'Reminder'}</Badge>
-                          </div>
-                          <p className="text-sm text-slate-600">{action.action?.description || action.reason}</p>
-                          {action.action?.due_date && (
-                            <p className="text-xs text-slate-500 mt-1">
-                              Due: {new Date(action.action.due_date).toLocaleDateString()}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Outreach Draft Generator */}
-      {studentId && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Mail className="w-5 h-5 text-purple-600" />
-              AI Outreach Draft Generator
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Query Type</label>
-                  <select
-                    value={draftParams.query_type}
-                    onChange={(e) => setDraftParams({ ...draftParams, query_type: e.target.value })}
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  >
-                    {queryTypes.map(qt => (
-                      <option key={qt.value} value={qt.value}>{qt.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Channel</label>
-                  <select
-                    value={draftParams.channel}
-                    onChange={(e) => setDraftParams({ ...draftParams, channel: e.target.value })}
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  >
-                    <option value="email">Email</option>
-                    <option value="sms">SMS</option>
-                    <option value="whatsapp">WhatsApp</option>
-                  </select>
-                </div>
-              </div>
-
-              <Button
-                onClick={() => generateDraft.mutate()}
-                disabled={generateDraft.isPending}
-                className="bg-purple-600 w-full"
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
-                {generateDraft.isPending ? 'Generating...' : 'Generate Draft'}
-              </Button>
-
-              {outreachDraft?.draft && (
-                <div className="mt-4 space-y-3">
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <p className="text-xs font-medium text-purple-700 mb-1">SUBJECT:</p>
-                    <p className="font-semibold text-purple-900">{outreachDraft.draft.subject}</p>
-                  </div>
-
-                  <div className="bg-white border rounded-lg p-4">
-                    <p className="text-xs font-medium text-slate-600 mb-2">MESSAGE:</p>
-                    <div className="text-sm text-slate-800 whitespace-pre-wrap">
-                      {outreachDraft.draft.body}
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-50 p-3 rounded-lg">
-                    <p className="text-xs font-medium text-slate-600 mb-1">KEY POINTS:</p>
+            {prioritizedTasks && (
+              <div className="space-y-4">
+                {/* Daily Focus */}
+                {prioritizedTasks.daily_focus?.length > 0 && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+                    <h5 className="font-semibold text-indigo-900 mb-2">Today's Focus</h5>
                     <ul className="space-y-1">
-                      {outreachDraft.draft.key_points?.map((point, i) => (
-                        <li key={i} className="text-sm text-slate-700">• {point}</li>
+                      {prioritizedTasks.daily_focus.map((focus, i) => (
+                        <li key={i} className="text-sm text-indigo-800">🎯 {focus}</li>
                       ))}
                     </ul>
                   </div>
+                )}
 
-                  <div className="flex items-center justify-between text-xs text-slate-600">
-                    <span>Tone: {outreachDraft.draft.tone}</span>
-                    <span>Follow-up in: {outreachDraft.draft.follow_up_days} days</span>
+                {/* Prioritized Tasks */}
+                {prioritizedTasks.prioritized_tasks?.length > 0 && (
+                  <div className="space-y-2">
+                    <h5 className="font-semibold">Prioritized Task List</h5>
+                    {prioritizedTasks.prioritized_tasks.map((task, i) => (
+                      <div key={i} className="bg-white border rounded-lg p-3">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex-1">
+                            <h6 className="font-semibold text-sm">{task.title}</h6>
+                            <p className="text-xs text-slate-600">{task.student_name}</p>
+                          </div>
+                          <div className="text-right">
+                            <Badge className={urgencyColors[task.urgency_level]}>
+                              {task.urgency_level}
+                            </Badge>
+                            <p className="text-xs text-slate-500 mt-1">Score: {task.priority_score}</p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-slate-700 mb-2">{task.reasoning}</p>
+                        <div className="bg-blue-50 p-2 rounded text-xs">
+                          <strong>Action:</strong> {task.recommended_action}
+                          <span className="text-slate-500 ml-2">~{task.estimated_time_minutes}min</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                )}
 
-                  <div className="flex gap-2">
-                    <Button size="sm" className="flex-1">Use Draft</Button>
-                    <Button size="sm" variant="outline" onClick={() => generateDraft.mutate()}>
-                      Regenerate
-                    </Button>
+                {/* Quick Wins */}
+                {prioritizedTasks.quick_wins?.length > 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <h5 className="font-semibold text-green-900 mb-2">Quick Wins (Do These First)</h5>
+                    <ul className="space-y-1">
+                      {prioritizedTasks.quick_wins.map((win, i) => (
+                        <li key={i} className="text-sm text-green-800">✓ {win}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="outreach" className="space-y-4">
+            <p className="text-sm text-slate-600">
+              AI drafts personalized outreach messages for common student queries.
+            </p>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Student ID</label>
+              <input
+                type="text"
+                placeholder="Enter student ID"
+                className="w-full border rounded-md px-3 py-2 text-sm mb-3"
+                onChange={(e) => setSelectedStudent(e.target.value)}
+              />
+
+              <div className="grid grid-cols-2 gap-2">
+                <Button size="sm" onClick={() => generateOutreach.mutate({ student_id: selectedStudent, query_type: 'application_status' })} disabled={!selectedStudent || generateOutreach.isPending}>
+                  Application Status
+                </Button>
+                <Button size="sm" onClick={() => generateOutreach.mutate({ student_id: selectedStudent, query_type: 'deadline_reminder' })} disabled={!selectedStudent || generateOutreach.isPending}>
+                  Deadline Reminder
+                </Button>
+                <Button size="sm" onClick={() => generateOutreach.mutate({ student_id: selectedStudent, query_type: 'document_request' })} disabled={!selectedStudent || generateOutreach.isPending}>
+                  Document Request
+                </Button>
+                <Button size="sm" onClick={() => generateOutreach.mutate({ student_id: selectedStudent, query_type: 'visa_guidance' })} disabled={!selectedStudent || generateOutreach.isPending}>
+                  Visa Guidance
+                </Button>
+              </div>
+            </div>
+
+            {outreach?.outreach && (
+              <div className="space-y-3">
+                {/* Email */}
+                <div className="bg-white border rounded-lg p-3">
+                  <h5 className="font-semibold mb-2 flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    Email Draft
+                  </h5>
+                  <div className="space-y-2">
+                    <div className="bg-slate-50 p-2 rounded">
+                      <p className="text-xs text-slate-600">Subject:</p>
+                      <p className="text-sm font-medium">{outreach.outreach.email.subject}</p>
+                    </div>
+                    <div className="bg-slate-50 p-2 rounded">
+                      <p className="text-xs text-slate-600 mb-1">Body:</p>
+                      <p className="text-sm whitespace-pre-wrap">{outreach.outreach.email.body}</p>
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+
+                {/* SMS */}
+                <div className="bg-white border rounded-lg p-3">
+                  <h5 className="font-semibold mb-2">SMS Draft</h5>
+                  <p className="text-sm bg-slate-50 p-2 rounded">{outreach.outreach.sms}</p>
+                </div>
+
+                {/* WhatsApp */}
+                <div className="bg-white border rounded-lg p-3">
+                  <h5 className="font-semibold mb-2">WhatsApp Draft</h5>
+                  <p className="text-sm bg-slate-50 p-2 rounded">{outreach.outreach.whatsapp}</p>
+                </div>
+
+                {/* Talking Points */}
+                {outreach.outreach.talking_points?.length > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <h5 className="font-semibold text-blue-900 mb-2">Key Talking Points</h5>
+                    <ul className="space-y-1">
+                      {outreach.outreach.talking_points.map((point, i) => (
+                        <li key={i} className="text-sm text-blue-800">• {point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 }
