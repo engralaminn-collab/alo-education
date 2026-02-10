@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
+import AIRecommendations from '@/components/matcher/AIRecommendations';
+import CourseComparison from '@/components/matcher/CourseComparison';
 
 const steps = [
   { id: 1, title: 'Education', icon: GraduationCap },
@@ -41,6 +43,14 @@ export default function CourseMatcher() {
   });
   const [matchedCourses, setMatchedCourses] = useState([]);
   const [isMatching, setIsMatching] = useState(false);
+  const [showAIRecommendations, setShowAIRecommendations] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState([]);
+  const [advancedFilters, setAdvancedFilters] = useState({
+    duration: '',
+    tuition_range: [0, 100000],
+    start_date: '',
+    scholarship_only: false
+  });
 
   const { data: courses = [] } = useQuery({
     queryKey: ['all-courses'],
@@ -81,7 +91,25 @@ export default function CourseMatcher() {
       const gpaPercent = (parseFloat(formData.gpa) / parseFloat(formData.gpa_scale)) * 100;
       const englishScore = parseFloat(formData.english_score);
       
-      const matched = courses.map(course => {
+      let filteredCourses = courses;
+      
+      // Apply advanced filters
+      if (advancedFilters.duration) {
+        filteredCourses = filteredCourses.filter(c => c.duration?.includes(advancedFilters.duration));
+      }
+      if (advancedFilters.tuition_range) {
+        filteredCourses = filteredCourses.filter(c => 
+          !c.tuition_fee_min || (c.tuition_fee_min >= advancedFilters.tuition_range[0] && c.tuition_fee_min <= advancedFilters.tuition_range[1])
+        );
+      }
+      if (advancedFilters.start_date) {
+        filteredCourses = filteredCourses.filter(c => c.intake?.includes(advancedFilters.start_date));
+      }
+      if (advancedFilters.scholarship_only) {
+        filteredCourses = filteredCourses.filter(c => c.scholarship_available);
+      }
+      
+      const matched = filteredCourses.map(course => {
         let score = 0;
         let eligibility = [];
         
@@ -168,6 +196,7 @@ export default function CourseMatcher() {
   const progress = (currentStep / steps.length) * 100;
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
       <section className="bg-gradient-to-br from-emerald-600 to-cyan-600 py-16">
@@ -180,6 +209,128 @@ export default function CourseMatcher() {
             <p className="text-xl text-white/80">
               Find courses that match your profile and eligibility
             </p>
+=======
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-education-blue to-alo-orange py-20">
+        <div className="container mx-auto px-6">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium mb-4">
+                <Sparkles className="w-4 h-4" />
+                ALO Education Course Matcher
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+                Find Your Perfect Course
+              </h1>
+              <p className="text-xl text-white/90 mb-12">
+                Match with courses tailored to your profile with ALO Education's smart search
+              </p>
+            </motion.div>
+            
+            {/* Tabs */}
+            <div className="flex gap-3 mb-8 justify-center">
+              <Button 
+                className={`px-8 py-6 text-base font-medium rounded-full ${
+                  currentStep === 1 
+                    ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                    : 'bg-white text-slate-900 hover:bg-slate-100'
+                }`}
+                onClick={() => setCurrentStep(1)}
+              >
+                COURSES
+              </Button>
+              <Button 
+                className={`px-8 py-6 text-base font-medium rounded-full ${
+                  currentStep === 2 
+                    ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                    : 'bg-white text-slate-900 hover:bg-slate-100'
+                }`}
+                onClick={() => setCurrentStep(2)}
+              >
+                UNIVERSITIES
+              </Button>
+            </div>
+            
+            {/* Search Form */}
+            <Card className="border-0 shadow-xl bg-white">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row gap-4 items-end">
+                  <div className="flex-1">
+                    <Label className="text-slate-700 mb-2 block text-sm">I'm looking for:</Label>
+                    <Select value={formData.field_of_study} onValueChange={(v) => updateField('field_of_study', v)}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Enter subject or course:" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="business">Business</SelectItem>
+                        <SelectItem value="engineering">Engineering</SelectItem>
+                        <SelectItem value="computer_science">Computer Science</SelectItem>
+                        <SelectItem value="medicine">Medicine</SelectItem>
+                        <SelectItem value="arts">Arts</SelectItem>
+                        <SelectItem value="law">Law</SelectItem>
+                        <SelectItem value="science">Science</SelectItem>
+                        <SelectItem value="social_sciences">Social Sciences</SelectItem>
+                        <SelectItem value="education">Education</SelectItem>
+                        <SelectItem value="hospitality">Hospitality</SelectItem>
+                        <SelectItem value="architecture">Architecture</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex-1">
+                    <Label className="text-slate-700 mb-2 block text-sm">I'm planning to study:</Label>
+                    <Select value={formData.preferred_degree} onValueChange={(v) => updateField('preferred_degree', v)}>
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select course type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="foundation">Foundation</SelectItem>
+                        <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
+                        <SelectItem value="pre_masters">Pre-Masters</SelectItem>
+                        <SelectItem value="master">Master's Degree</SelectItem>
+                        <SelectItem value="mres">MRes (Research)</SelectItem>
+                        <SelectItem value="phd">PhD</SelectItem>
+                        <SelectItem value="diploma">Diploma</SelectItem>
+                        <SelectItem value="english_course">English Course</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex-1">
+                    <Label className="text-slate-700 mb-2 block text-sm">I want to study in:</Label>
+                    <Select 
+                      value={formData.preferred_countries[0] || ''} 
+                      onValueChange={(v) => updateField('preferred_countries', [v])}
+                    >
+                      <SelectTrigger className="h-12">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="uk">United Kingdom</SelectItem>
+                        <SelectItem value="usa">United States</SelectItem>
+                        <SelectItem value="australia">Australia</SelectItem>
+                        <SelectItem value="canada">Canada</SelectItem>
+                        <SelectItem value="germany">Germany</SelectItem>
+                        <SelectItem value="ireland">Ireland</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button 
+                    className="bg-red-600 hover:bg-red-700 text-white h-12 px-8"
+                    onClick={() => setCurrentStep(4)}
+                  >
+                    <Sparkles className="w-5 h-5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+>>>>>>> last/main
           </div>
         </div>
       </section>
@@ -351,7 +502,7 @@ export default function CourseMatcher() {
                             variant={formData.preferred_countries.includes(country) ? 'default' : 'outline'}
                             className={`cursor-pointer transition-all ${
                               formData.preferred_countries.includes(country) 
-                                ? 'bg-emerald-500 hover:bg-emerald-600' 
+                                ? 'bg-education-blue hover:bg-education-blue/90' 
                                 : 'hover:bg-slate-100'
                             }`}
                             onClick={() => {
@@ -395,7 +546,7 @@ export default function CourseMatcher() {
                               variant={formData.preferred_fields.includes(fieldKey) ? 'default' : 'outline'}
                               className={`cursor-pointer transition-all ${
                                 formData.preferred_fields.includes(fieldKey) 
-                                  ? 'bg-emerald-500 hover:bg-emerald-600' 
+                                  ? 'bg-education-blue hover:bg-education-blue/90' 
                                   : 'hover:bg-slate-100'
                               }`}
                               onClick={() => {
@@ -430,93 +581,217 @@ export default function CourseMatcher() {
 
               {/* Step 4: Results */}
               {currentStep === 4 && (
-                <div>
-                  <Card className="border-0 shadow-lg mb-8">
+                <div className="space-y-8">
+                  {/* AI Recommendations Section */}
+                  {showAIRecommendations && (
+                    <AIRecommendations 
+                      profile={formData}
+                      courses={courses}
+                      universities={universities}
+                    />
+                  )}
+
+                  {/* Advanced Filters */}
+                  <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-white">
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-education-blue" />
+                        Refine Your Results
+                      </h3>
+                      <div className="grid md:grid-cols-4 gap-4">
+                        <div>
+                          <Label className="text-sm text-slate-600 mb-2 block">Duration</Label>
+                          <Select value={advancedFilters.duration} onValueChange={(v) => setAdvancedFilters({...advancedFilters, duration: v})}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={null}>Any Duration</SelectItem>
+                              <SelectItem value="1 year">1 Year</SelectItem>
+                              <SelectItem value="2 years">2 Years</SelectItem>
+                              <SelectItem value="3 years">3 Years</SelectItem>
+                              <SelectItem value="4 years">4 Years</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-sm text-slate-600 mb-2 block">Start Date</Label>
+                          <Select value={advancedFilters.start_date} onValueChange={(v) => setAdvancedFilters({...advancedFilters, start_date: v})}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Any" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value={null}>Any Intake</SelectItem>
+                              <SelectItem value="January">January</SelectItem>
+                              <SelectItem value="September">September</SelectItem>
+                              <SelectItem value="Fall">Fall</SelectItem>
+                              <SelectItem value="Spring">Spring</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="col-span-2">
+                          <Label className="text-sm text-slate-600 mb-2 block">
+                            Tuition Range: ${advancedFilters.tuition_range[0].toLocaleString()} - ${advancedFilters.tuition_range[1].toLocaleString()}
+                          </Label>
+                          <div className="pt-2">
+                            <input
+                              type="range"
+                              min="0"
+                              max="100000"
+                              step="5000"
+                              value={advancedFilters.tuition_range[1]}
+                              onChange={(e) => setAdvancedFilters({...advancedFilters, tuition_range: [0, parseInt(e.target.value)]})}
+                              className="w-full"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 mt-4">
+                        <input
+                          type="checkbox"
+                          id="scholarship_only"
+                          checked={advancedFilters.scholarship_only}
+                          onChange={(e) => setAdvancedFilters({...advancedFilters, scholarship_only: e.target.checked})}
+                          className="w-4 h-4 rounded border-slate-300 text-education-blue focus:ring-education-blue"
+                        />
+                        <Label htmlFor="scholarship_only" className="cursor-pointer text-sm">
+                          Show only courses with scholarships
+                        </Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-0 shadow-lg">
                     <CardHeader>
                       <CardTitle className="text-2xl flex items-center gap-2">
-                        <Sparkles className="w-6 h-6 text-emerald-500" />
+                        <Sparkles className="w-6 h-6 text-alo-orange" />
                         Your Matched Courses
                       </CardTitle>
-                      <CardDescription>Based on your profile and preferences</CardDescription>
+                      <CardDescription>Based on your profile and preferences • Select courses to compare</CardDescription>
                     </CardHeader>
                   </Card>
 
                   {isMatching ? (
                     <div className="text-center py-20">
-                      <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                      <div className="w-16 h-16 border-4 border-education-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                       <p className="text-slate-600">Finding your perfect matches...</p>
                     </div>
                   ) : matchedCourses.length === 0 ? (
                     <Card className="border-0 shadow-sm">
                       <CardContent className="p-8 text-center">
-                        <AlertCircle className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                        <AlertCircle className="w-12 h-12 text-alo-orange/30 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold mb-2">No matches found</h3>
                         <p className="text-slate-500">Try adjusting your preferences</p>
                       </CardContent>
                     </Card>
                   ) : (
-                    <div className="space-y-4">
-                      {matchedCourses.map((course, index) => (
-                        <motion.div
-                          key={course.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <Card className="border-0 shadow-sm hover:shadow-lg transition-all">
-                            <CardContent className="p-6">
-                              <div className="flex items-start gap-4">
-                                <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold ${
-                                  course.matchScore >= 80 ? 'bg-emerald-100 text-emerald-600' :
-                                  course.matchScore >= 60 ? 'bg-amber-100 text-amber-600' :
-                                  'bg-slate-100 text-slate-600'
-                                }`}>
-                                  {course.matchScore}%
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex flex-wrap gap-2 mb-2">
-                                    <Badge className="bg-emerald-50 text-emerald-700 capitalize">
-                                      {course.degree_level}
-                                    </Badge>
-                                    <Badge variant="outline" className="capitalize">
-                                      {course.field_of_study?.replace(/_/g, ' ')}
-                                    </Badge>
+                    <>
+                      <div className="space-y-4">
+                        {matchedCourses.map((course, index) => {
+                          const isSelected = selectedForComparison.includes(course.id);
+                          return (
+                            <motion.div
+                              key={course.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                            >
+                              <Card className={`border-0 shadow-sm hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-education-blue' : ''}`}>
+                                <CardContent className="p-6">
+                                  <div className="flex items-start gap-4">
+                                    {/* Checkbox for comparison */}
+                                    <input
+                                      type="checkbox"
+                                      checked={isSelected}
+                                      onChange={(e) => {
+                                        if (e.target.checked && selectedForComparison.length < 4) {
+                                          setSelectedForComparison([...selectedForComparison, course.id]);
+                                        } else if (!e.target.checked) {
+                                          setSelectedForComparison(selectedForComparison.filter(id => id !== course.id));
+                                        }
+                                      }}
+                                      className="mt-6 w-5 h-5 rounded border-slate-300 text-education-blue focus:ring-education-blue cursor-pointer"
+                                      disabled={!isSelected && selectedForComparison.length >= 4}
+                                    />
+                                    
+                                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold ${
+                                      course.matchScore >= 80 ? 'bg-emerald-100 text-emerald-600' :
+                                      course.matchScore >= 60 ? 'bg-amber-100 text-amber-600' :
+                                      'bg-slate-100 text-slate-600'
+                                    }`}>
+                                      {course.matchScore}%
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="flex flex-wrap gap-2 mb-2">
+                                        <Badge className="bg-education-blue/10 text-education-blue capitalize">
+                                          {course.level}
+                                        </Badge>
+                                        <Badge variant="outline" className="capitalize">
+                                          {course.subject_area?.replace(/_/g, ' ')}
+                                        </Badge>
+                                      </div>
+                                      <h3 className="text-lg font-bold text-slate-900 mb-1">{course.course_title}</h3>
+                                      {course.university && (
+                                        <p className="text-slate-500 flex items-center gap-1 mb-3">
+                                          <Building2 className="w-4 h-4" />
+                                          {course.university.university_name} • {course.university.city}, {course.university.country}
+                                        </p>
+                                      )}
+                                      
+                                      <div className="flex flex-wrap gap-2">
+                                        {course.eligibility.map((e, i) => (
+                                          <span key={i} className={`text-xs flex items-center gap-1 ${
+                                            e.type === 'pass' ? 'text-emerald-600' :
+                                            e.type === 'fail' ? 'text-red-600' :
+                                            'text-amber-600'
+                                          }`}>
+                                            {e.type === 'pass' ? <CheckCircle2 className="w-3 h-3" /> :
+                                             e.type === 'fail' ? <AlertCircle className="w-3 h-3" /> :
+                                             <AlertCircle className="w-3 h-3" />}
+                                            {e.text}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                      {course.duration && (
+                                        <span className="text-xs text-slate-500 flex items-center gap-1">
+                                          <Clock className="w-3 h-3" />
+                                          {course.duration}
+                                        </span>
+                                      )}
+                                      {course.tuition_fee_min && (
+                                        <span className="text-xs text-slate-500 flex items-center gap-1">
+                                          <DollarSign className="w-3 h-3" />
+                                          ${course.tuition_fee_min.toLocaleString()}/year
+                                        </span>
+                                      )}
+                                      <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
+                                        <Button className="bg-gradient-brand hover:opacity-90 text-white">
+                                          View
+                                          <ArrowRight className="w-4 h-4 ml-1" />
+                                        </Button>
+                                      </Link>
+                                    </div>
                                   </div>
-                                  <h3 className="text-lg font-bold text-slate-900 mb-1">{course.name}</h3>
-                                  {course.university && (
-                                    <p className="text-slate-500 flex items-center gap-1 mb-3">
-                                      <Building2 className="w-4 h-4" />
-                                      {course.university.name} • {course.university.city}, {course.university.country}
-                                    </p>
-                                  )}
-                                  
-                                  <div className="flex flex-wrap gap-2">
-                                    {course.eligibility.map((e, i) => (
-                                      <span key={i} className={`text-xs flex items-center gap-1 ${
-                                        e.type === 'pass' ? 'text-emerald-600' :
-                                        e.type === 'fail' ? 'text-red-600' :
-                                        'text-amber-600'
-                                      }`}>
-                                        {e.type === 'pass' ? <CheckCircle2 className="w-3 h-3" /> :
-                                         e.type === 'fail' ? <AlertCircle className="w-3 h-3" /> :
-                                         <AlertCircle className="w-3 h-3" />}
-                                        {e.text}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                                <Link to={createPageUrl('CourseDetails') + `?id=${course.id}`}>
-                                  <Button className="bg-slate-900 hover:bg-slate-800">
-                                    View
-                                    <ArrowRight className="w-4 h-4 ml-1" />
-                                  </Button>
-                                </Link>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </motion.div>
-                      ))}
-                    </div>
+                                </CardContent>
+                              </Card>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Course Comparison Section */}
+                      {selectedForComparison.length > 0 && (
+                        <div className="mt-8">
+                          <CourseComparison
+                            courses={matchedCourses.filter(c => selectedForComparison.includes(c.id))}
+                            universities={universities}
+                            onRemove={(courseId) => setSelectedForComparison(selectedForComparison.filter(id => id !== courseId))}
+                          />
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}

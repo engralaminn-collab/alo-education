@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, FileText, Building2, GraduationCap, 
   TrendingUp, TrendingDown, Inbox, CheckCircle,
-  Clock, AlertCircle, ArrowRight
+  Clock, AlertCircle, ArrowRight, Sparkles, RefreshCw
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -16,14 +17,23 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import CRMLayout from '@/components/crm/CRMLayout';
 import CounselorPerformance from '@/components/crm/CounselorPerformance';
 import { motion } from 'framer-motion';
+<<<<<<< HEAD
 import AtRiskAlerts from '@/components/crm/AtRiskAlerts';
 import CounselorMetrics from '@/components/crm/CounselorMetrics';
 import AIFollowUpGenerator from '@/components/crm/AIFollowUpGenerator';
 import AIDeadlineReminders from '@/components/crm/AIDeadlineReminders';
+=======
+import PredictiveAnalyticsDashboard from '@/components/dashboard/PredictiveAnalyticsDashboard';
+import PerformanceAlertsPanel from '@/components/dashboard/PerformanceAlertsPanel';
+import AtRiskStudentsPanel from '@/components/dashboard/AtRiskStudentsPanel';
+import { toast } from 'sonner';
+>>>>>>> last/main
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export default function CRMDashboard() {
+  const [predictiveAnalytics, setPredictiveAnalytics] = useState(null);
+
   const { data: inquiries = [] } = useQuery({
     queryKey: ['crm-inquiries'],
     queryFn: () => base44.entities.Inquiry.list('-created_date', 100),
@@ -49,6 +59,7 @@ export default function CRMDashboard() {
     queryFn: () => base44.entities.Course.list(),
   });
 
+<<<<<<< HEAD
   const { data: counselors = [] } = useQuery({
     queryKey: ['crm-counselors'],
     queryFn: () => base44.entities.Counselor.list(),
@@ -66,6 +77,20 @@ export default function CRMDashboard() {
       return counselors[0];
     },
     enabled: !!user?.email,
+=======
+  const generateAnalytics = useMutation({
+    mutationFn: async () => {
+      const response = await base44.functions.invoke('generatePredictiveAnalytics', {});
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setPredictiveAnalytics(data);
+      toast.success('Analytics generated!');
+    },
+    onError: (error) => {
+      toast.error('Failed: ' + error.message);
+    }
+>>>>>>> last/main
   });
 
   // Calculate stats
@@ -131,7 +156,38 @@ export default function CRMDashboard() {
   );
 
   return (
-    <CRMLayout title="Dashboard">
+    <CRMLayout 
+      title="Dashboard"
+      actions={
+        <Button
+          onClick={() => generateAnalytics.mutate()}
+          disabled={generateAnalytics.isPending}
+          className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+        >
+          {generateAnalytics.isPending ? (
+            <>
+              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+              Analyzing...
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 mr-2" />
+              AI Analytics
+            </>
+          )}
+        </Button>
+      }
+    >
+      <Tabs defaultValue="overview" className="mb-6">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="analytics">
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI Analytics
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview">
       {/* Stats Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
@@ -379,6 +435,68 @@ export default function CRMDashboard() {
           </CardContent>
         </Card>
       </div>
+        </TabsContent>
+
+        <TabsContent value="analytics" className="mt-6">
+          {!predictiveAnalytics ? (
+            <Card className="border-2 border-purple-200">
+              <CardContent className="py-12 text-center">
+                <Sparkles className="w-16 h-16 text-purple-300 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                  AI-Powered Analytics
+                </h3>
+                <p className="text-slate-600 mb-6 max-w-md mx-auto">
+                  Get predictive insights, student health scores, at-risk student alerts, and performance forecasts
+                </p>
+                <Button
+                  onClick={() => generateAnalytics.mutate()}
+                  disabled={generateAnalytics.isPending}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600"
+                >
+                  {generateAnalytics.isPending ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      Generating Analytics...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate Analytics
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-6">
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateAnalytics.mutate()}
+                  disabled={generateAnalytics.isPending}
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+              </div>
+
+              {predictiveAnalytics.alerts && predictiveAnalytics.alerts.length > 0 && (
+                <PerformanceAlertsPanel alerts={predictiveAnalytics.alerts} />
+              )}
+
+              <div className="grid lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <PredictiveAnalyticsDashboard analytics={predictiveAnalytics} />
+                </div>
+                <div>
+                  <AtRiskStudentsPanel atRiskStudents={predictiveAnalytics.at_risk_students || []} />
+                </div>
+              </div>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </CRMLayout>
   );
 }

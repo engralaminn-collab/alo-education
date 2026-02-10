@@ -1,10 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { GraduationCap, Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
+  const capColors = [
+    'text-orange-500', 'text-amber-400', 'text-slate-500', 'text-blue-500', 'text-cyan-400',
+    'text-slate-600', 'text-orange-400', 'text-amber-500', 'text-slate-400', 'text-orange-600',
+    'text-cyan-500', 'text-slate-700', 'text-blue-600', 'text-amber-600', 'text-slate-500'
+  ];
+
   return (
+<<<<<<< HEAD
     <footer className="bg-white text-slate-700">
       <div className="container mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
@@ -30,29 +37,71 @@ export default function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors" style={{ backgroundColor: '#0066CC', color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0066CC'}>
+=======
+    <footer className="bg-white text-slate-700 border-t">
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div>
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-education-blue to-alo-orange flex items-center justify-center shadow-lg">
+                  <GraduationCap className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-2xl">ALO Education</h3>
+                  <p className="text-alo-orange text-xs font-semibold italic">Your Dream, Our Commitment</p>
+                </div>
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                From your ambition to admission, ALO Education is with you all the way. Your trusted partner in international education since 2006.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <a href="https://www.facebook.com/aloeducationbangladesh/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="https://www.instagram.com/aloeducation.bd/" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-700 transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="https://www.linkedin.com/company/aloeducation/" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-800 transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="http://www.youtube.com/@ALOeducationbd" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 transition-colors">
+>>>>>>> last/main
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
           </div>
           
-          {/* Quick Links */}
+          {/* Destinations */}
           <div>
+<<<<<<< HEAD
             <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Quick Links</h4>
+=======
+            <h4 className="text-slate-900 font-semibold mb-6">Destinations:</h4>
+>>>>>>> last/main
             <ul className="space-y-3">
               {[
-                { label: 'Home', page: 'Home' },
-                { label: 'Universities', page: 'Universities' },
-                { label: 'Courses', page: 'Courses' },
-                { label: 'About Us', page: 'About' },
-                { label: 'Contact', page: 'Contact' },
+                { label: 'UK', page: 'StudyInUK' },
+                { label: 'Australia', page: 'StudyInAustralia' },
+                { label: 'Canada', page: 'StudyInCanada' },
+                { label: 'Ireland', page: 'StudyInIreland' },
+                { label: 'New Zealand', page: 'StudyInNewZealand' },
+                { label: 'USA', page: 'StudyInUSA' },
+                { label: 'Dubai', page: 'StudyInDubai' }
               ].map((link) => (
                 <li key={link.page}>
                   <Link 
                     to={createPageUrl(link.page)} 
+<<<<<<< HEAD
                     className="transition-colors"
                     style={{ color: 'var(--alo-blue)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+=======
+                    className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+>>>>>>> last/main
                   >
                     {link.label}
                   </Link>
@@ -61,28 +110,43 @@ export default function Footer() {
             </ul>
           </div>
           
-          {/* Destinations */}
+          {/* Quick Links */}
           <div>
+<<<<<<< HEAD
             <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Destinations</h4>
+=======
+            <h4 className="text-slate-900 font-semibold mb-6">Quick Links:</h4>
+>>>>>>> last/main
             <ul className="space-y-3">
-              {['United Kingdom', 'United States', 'Canada', 'Australia', 'Germany', 'Ireland'].map((country) => (
-                <li key={country}>
+              {[
+                { label: 'Course Finder', page: 'CourseFinder' },
+                { label: 'Services', page: 'Services' },
+                { label: 'Language Prep', page: 'LanguagePrep' },
+                { label: 'Scholarships', page: 'ScholarshipFinder' }
+              ].map((link) => (
+                <li key={link.page}>
                   <Link 
+<<<<<<< HEAD
                     to={createPageUrl('Universities') + `?country=${country.toLowerCase()}`}
                     className="transition-colors"
                     style={{ color: 'var(--alo-blue)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--alo-blue)'}
+=======
+                    to={createPageUrl(link.page)} 
+                    className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+>>>>>>> last/main
                   >
-                    Study in {country}
+                    {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
           
-          {/* Contact */}
+          {/* Company */}
           <div>
+<<<<<<< HEAD
             <h4 className="font-semibold mb-6" style={{ color: 'var(--alo-blue)' }}>Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
@@ -105,10 +169,71 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Clock className="w-5 h-5" style={{ color: '#F37021' }} />
                 <span>Sat-Thu: 10 AM - 6 PM</span>
+=======
+            <h4 className="text-slate-900 font-semibold mb-6">Company:</h4>
+            <ul className="space-y-3">
+              {[
+                { label: 'About Us', page: 'About' },
+                { label: 'Contact Us', page: 'Contact' },
+                { label: 'Code of Conduct', external: 'https://aloeducation.com/code-of-conduct' },
+                { label: 'Student Complaint Policy', external: 'https://aloeducation.com/complaint-policy' }
+              ].map((link) => (
+                <li key={link.label}>
+                  {link.external ? (
+                    <a 
+                      href={link.external} 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link 
+                      to={createPageUrl(link.page)} 
+                      className="text-education-blue hover:text-alo-orange transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="text-slate-900 font-semibold mb-6">Contact Info:</h4>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="mailto:info@aloeducation.com" className="text-education-blue hover:text-alo-orange transition-colors">
+                  info@aloeducation.com
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="tel:+8801805020101" className="text-education-blue hover:text-alo-orange transition-colors">
+                  +880 180 502 0101
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="https://wa.me/8801805020101" target="_blank" rel="noopener noreferrer" className="text-education-blue hover:text-alo-orange transition-colors">
+                  WhatsApp: +880 180 502 0101
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-alo-orange flex-shrink-0 mt-0.5" />
+                <a href="https://share.google/aarau5V2GfBrICZTj" target="_blank" rel="noopener noreferrer" className="text-education-blue hover:text-alo-orange transition-colors">
+                  Barek Mansion-02, 5th Floor<br />58/9 Box Culvert Road<br />Panthapath, Dhaka-1205
+                </a>
+>>>>>>> last/main
               </li>
             </ul>
           </div>
         </div>
+<<<<<<< HEAD
         
         <div className="mt-12" style={{ backgroundColor: '#0066CC', color: 'white', padding: '14px 0' }}>
         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -119,6 +244,23 @@ export default function Footer() {
             <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Privacy Policy</a>
             <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Terms of Service</a>
             <a href="#" className="transition-colors hover:text-white" style={{ color: 'white' }} onMouseEnter={(e) => e.currentTarget.style.color = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.color = 'white'}>Cookie Policy</a>
+=======
+
+        {/* Graduation Caps Row */}
+        <div className="mt-12 pt-8 border-t">
+          <div className="flex justify-center gap-6 flex-wrap mb-8">
+            {capColors.map((color, i) => (
+              <div key={i} className="animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}>
+                <GraduationCap className={`w-8 h-8 ${color}`} />
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+            <p className="text-slate-600">
+              © <span className="font-bold text-education-blue">ALO Education</span>. All rights reserved.
+            </p>
+>>>>>>> last/main
           </div>
         </div>
         </div>

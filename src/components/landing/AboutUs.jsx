@@ -7,7 +7,19 @@ export default function AboutUs() {
     <section className="py-24" style={{ backgroundColor: '#0066CC' }}>
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
+<<<<<<< HEAD
           <div className="text-center mb-12">
+=======
+          <div className="text-center mb-16">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
+            >
+              About Us
+            </motion.span>
+>>>>>>> last/main
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -52,10 +64,17 @@ export default function AboutUs() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+<<<<<<< HEAD
               className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
             >
               <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style={{ backgroundColor: 'white' }}>
                 <Target className="w-7 h-7" style={{ color: '#0066CC' }} />
+=======
+              className="bg-gradient-brand-light rounded-2xl p-8"
+            >
+              <div className="w-14 h-14 bg-education-blue rounded-xl flex items-center justify-center mb-6">
+                <Target className="w-7 h-7 text-white" />
+>>>>>>> last/main
               </div>
               <h3 className="text-2xl font-bold mb-4" style={{ color: '#FFB347' }}>Mission</h3>
               <p className="text-white leading-relaxed">
@@ -67,10 +86,17 @@ export default function AboutUs() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+<<<<<<< HEAD
               className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
             >
               <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6" style={{ backgroundColor: 'white' }}>
                 <Eye className="w-7 h-7" style={{ color: '#0066CC' }} />
+=======
+              className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-8"
+            >
+              <div className="w-14 h-14 bg-alo-orange rounded-xl flex items-center justify-center mb-6">
+                <Eye className="w-7 h-7 text-white" />
+>>>>>>> last/main
               </div>
               <h3 className="text-2xl font-bold mb-4" style={{ color: '#FFB347' }}>Vision</h3>
               <p className="text-white leading-relaxed">
@@ -79,7 +105,31 @@ export default function AboutUs() {
             </motion.div>
           </div>
 
+<<<<<<< HEAD
 
+=======
+          {/* Values */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-3 gap-6"
+          >
+            {[
+              { icon: Award, title: 'Excellence', desc: 'Committed to delivering the highest quality guidance and support' },
+              { icon: Target, title: 'Trust', desc: 'Building lasting relationships through transparency and integrity' },
+              { icon: TrendingUp, title: 'Innovation', desc: 'Continuously improving our services to meet evolving needs' }
+            ].map((value, i) => (
+              <div key={i} className="text-center p-6 bg-slate-50 rounded-xl">
+                <div className="w-12 h-12 bg-gradient-brand-light rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <value.icon className="w-6 h-6 text-education-blue" />
+                </div>
+                <h4 className="text-lg font-bold text-slate-900 mb-2">{value.title}</h4>
+                <p className="text-slate-600 text-sm">{value.desc}</p>
+              </div>
+            ))}
+          </motion.div>
+>>>>>>> last/main
         </div>
       </div>
     </section>

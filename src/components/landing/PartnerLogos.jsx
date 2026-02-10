@@ -20,10 +20,35 @@ export default function PartnerLogos() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
+<<<<<<< HEAD
           <h3 className="text-2xl font-bold text-slate-900 mb-2">
             Trusted by Leading <span style={{ color: '#0066CC' }}>Universities Worldwide</span>
           </h3>
           <p className="text-slate-600">Partner institutions across the globe</p>
+=======
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            200+ Global University Partners
+          </h2>
+          <p className="text-slate-600 mb-8">
+            Trusted partnerships with leading institutions worldwide
+          </p>
+          
+          <div className="bg-gradient-brand rounded-2xl p-8 text-white">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
+              {[
+                { name: 'UK Universities', count: '70+' },
+                { name: 'US Universities', count: '50+' },
+                { name: 'Australian Universities', count: '40+' },
+                { name: 'Canadian Universities', count: '40+' }
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-4xl font-bold mb-1">{stat.count}</div>
+                  <div className="text-white/80">{stat.name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+>>>>>>> last/main
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">

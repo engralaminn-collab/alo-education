@@ -4,7 +4,11 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
+<<<<<<< HEAD
   Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch, RefreshCw, Video
+=======
+  Inbox, UserCog, LogOut, ChevronLeft, Mail, Zap, Brain, Award, Shield, Send, TrendingUp, Upload
+>>>>>>> last/main
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';
@@ -12,17 +16,27 @@ import { cn } from "@/lib/utils";
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', page: 'CRMDashboard' },
+  { icon: Users, label: 'My Dashboard', page: 'CounselorDashboard' },
+  { icon: TrendingUp, label: 'Performance', page: 'CRMPerformanceDashboard' },
+  { icon: Award, label: 'Reports', page: 'CRMPerformanceReports' },
   { icon: Inbox, label: 'Inquiries', page: 'CRMInquiries' },
   { icon: Zap, label: 'Lead Nurturing', page: 'CRMLeadNurturing' },
   { icon: Sparkles, label: 'AI Assistant', page: 'CRMAIAssistant' },
   { icon: Users, label: 'Students', page: 'CRMStudents' },
+<<<<<<< HEAD
   { icon: MessageSquare, label: 'Collaboration', page: 'CRMCollaboration' },
+=======
+  { icon: Upload, label: 'Import Students', page: 'CRMImportStudents' },
+>>>>>>> last/main
   { icon: FileText, label: 'Applications', page: 'CRMApplications' },
+  { icon: TrendingUp, label: 'Student Success', page: 'CRMStudentSuccess' },
   { icon: Building2, label: 'Universities', page: 'CRMUniversities' },
   { icon: GraduationCap, label: 'Courses', page: 'CRMCourses' },
   { icon: RefreshCw, label: 'Data Updates', page: 'CRMDataUpdates' },
   { icon: UserCog, label: 'Counselors', page: 'CRMCounselors' },
+  { icon: Shield, label: 'Secure Docs', page: 'CRMSecureDocuments' },
   { icon: MessageSquare, label: 'Messages', page: 'CRMMessages' },
+<<<<<<< HEAD
   { icon: Video, label: 'Group Sessions', page: 'CRMGroupSessions' },
   { icon: Mail, label: 'Bulk Email', page: 'CRMBulkEmail' },
   { icon: Zap, label: 'Task Templates', page: 'CRMTaskTemplates' },
@@ -31,6 +45,13 @@ const menuItems = [
   { icon: TrendingUp, label: 'Custom Reports', page: 'CRMCustomReports' },
   { icon: Mail, label: 'University Outreach', page: 'CRMUniversityOutreach' },
   { icon: BarChart3, label: 'Performance', page: 'CRMPerformance' },
+=======
+  { icon: Mail, label: 'Uni Outreach', page: 'CRMUniversityOutreach' },
+  { icon: Brain, label: 'Communications', page: 'CRMCommunications' },
+  { icon: Send, label: 'Bulk Campaigns', page: 'CRMBulkCampaigns' },
+  { icon: Zap, label: 'Automation', page: 'CRMAutomation' },
+  { icon: BarChart3, label: 'AI Reports', page: 'CRMReports' },
+>>>>>>> last/main
   { icon: Settings, label: 'Settings', page: 'CRMSettings' },
 ];
 

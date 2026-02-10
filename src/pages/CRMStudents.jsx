@@ -43,14 +43,23 @@ export default function CRMStudents() {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showHandover, setShowHandover] = useState(false);
   const [page, setPage] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const perPage = 10;
 
   const queryClient = useQueryClient();
 
-  const { data: students = [], isLoading } = useQuery({
+  const { data: students = [], isLoading, refetch } = useQuery({
     queryKey: ['crm-students'],
     queryFn: () => base44.entities.StudentProfile.list('-created_date'),
   });
+
+  // Pull to refresh handler
+  const handlePullToRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+    toast.success('Students refreshed');
+  };
 
   const { data: counselors = [] } = useQuery({
     queryKey: ['counselors'],
@@ -105,17 +114,40 @@ export default function CRMStudents() {
     <CRMLayout 
       title="Students"
       actions={
-        <Button className="bg-emerald-500 hover:bg-emerald-600">
+        <Button className="bg-emerald-500 hover:bg-emerald-600 select-none">
           Export CSV
         </Button>
       }
     >
-      {/* Filters */}
-      <Card className="border-0 shadow-sm mb-6">
+      {/* Pull to Refresh Indicator */}
+      {isRefreshing && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-800 shadow-lg rounded-full px-4 py-2 z-50">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Refreshing...</p>
+        </div>
+      )}
+
+      {/* Pull to Refresh Area */}
+      <div 
+        className="md:hidden"
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          e.currentTarget.dataset.startY = touch.clientY;
+        }}
+        onTouchMove={(e) => {
+          const touch = e.touches[0];
+          const startY = parseFloat(e.currentTarget.dataset.startY || '0');
+          const diff = touch.clientY - startY;
+          if (diff > 80 && window.scrollY === 0 && !isRefreshing) {
+            handlePullToRefresh();
+          }
+        }}
+      >
+        {/* Filters */}
+        <Card className="border-0 shadow-sm mb-6 dark:bg-slate-800">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
               <Input
                 placeholder="Search students..."
                 value={search}
@@ -138,10 +170,10 @@ export default function CRMStudents() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card className="border-0 shadow-sm">
-        <div className="overflow-x-auto">
-          <Table>
+        {/* Table */}
+        <Card className="border-0 shadow-sm dark:bg-slate-800">
+          <div className="overflow-x-auto">
+            <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Student</TableHead>
@@ -176,7 +208,7 @@ export default function CRMStudents() {
                   return (
                     <TableRow 
                       key={student.id} 
-                      className="cursor-pointer hover:bg-slate-50"
+                      className="cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 select-none"
                       onClick={() => setSelectedStudent(student)}
                     >
                       <TableCell>
@@ -261,10 +293,10 @@ export default function CRMStudents() {
           </Table>
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between p-4 border-t">
-            <p className="text-sm text-slate-500">
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between p-4 border-t dark:border-slate-700">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Showing {(page - 1) * perPage + 1} to {Math.min(page * perPage, filteredStudents.length)} of {filteredStudents.length}
             </p>
             <div className="flex items-center gap-2">
@@ -273,22 +305,25 @@ export default function CRMStudents() {
                 size="sm"
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
+                className="select-none"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <span className="text-sm px-3">Page {page} of {totalPages}</span>
+              <span className="text-sm px-3 dark:text-slate-300">Page {page} of {totalPages}</span>
               <Button 
                 variant="outline" 
                 size="sm"
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
+                className="select-none"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </Card>
+          )}
+        </Card>
+      </div>
 
       {/* Student Detail Dialog */}
       <Dialog open={!!selectedStudent} onOpenChange={(open) => !open && setSelectedStudent(null)}>

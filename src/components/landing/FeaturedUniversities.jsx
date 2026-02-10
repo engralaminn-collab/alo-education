@@ -64,7 +64,7 @@ export default function FeaturedUniversities({ universities = [] }) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-emerald-600 font-semibold text-sm uppercase tracking-wider"
+              className="text-alo-orange font-semibold text-sm uppercase tracking-wider"
             >
               Top Destinations
             </motion.span>
@@ -79,7 +79,7 @@ export default function FeaturedUniversities({ universities = [] }) {
             </motion.h2>
           </div>
           <Link to={createPageUrl('Universities')}>
-            <Button variant="ghost" className="text-emerald-600 hover:text-emerald-700 mt-4 md:mt-0">
+            <Button variant="ghost" className="text-education-blue hover:text-education-blue/90 mt-4 md:mt-0">
               View All Universities
               <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
@@ -103,7 +103,7 @@ export default function FeaturedUniversities({ universities = [] }) {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
-                  <Badge className="absolute top-4 left-4 bg-emerald-500 text-white border-0">
+                  <Badge className="absolute top-4 left-4 bg-education-blue text-white border-0">
                     <Star className="w-3 h-3 mr-1" />
                     Rank #{uni.ranking}
                   </Badge>
@@ -121,12 +121,12 @@ export default function FeaturedUniversities({ universities = [] }) {
                       <Users className="w-4 h-4 text-slate-400" />
                       {uni.student_population?.toLocaleString()} students
                     </div>
-                    <div className="text-emerald-600 font-medium">
+                    <div className="text-education-blue font-medium">
                       {uni.acceptance_rate}% Accept Rate
                     </div>
                   </div>
                   <Link to={createPageUrl('UniversityDetails') + `?id=${uni.id}`}>
-                    <Button className="w-full mt-4 bg-slate-900 hover:bg-slate-800 text-white group/btn">
+                    <Button className="w-full mt-4 bg-gradient-brand hover:opacity-90 text-white group/btn">
                       Explore
                       <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                     </Button>

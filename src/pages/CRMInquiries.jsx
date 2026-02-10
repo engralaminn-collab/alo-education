@@ -11,7 +11,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { 
   Search, Mail, Phone, Calendar, ArrowRight, 
+<<<<<<< HEAD
   CheckCircle, XCircle, Clock, User, MessageSquare, Zap
+=======
+  CheckCircle, XCircle, Clock, User, MessageSquare, Sparkles, TrendingUp
+>>>>>>> last/main
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -35,13 +39,22 @@ export default function CRMInquiries() {
   const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [convertDialogOpen, setConvertDialogOpen] = useState(false);
   const [notes, setNotes] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { data: inquiries = [], isLoading } = useQuery({
+  const { data: inquiries = [], isLoading, refetch } = useQuery({
     queryKey: ['crm-inquiries'],
     queryFn: () => base44.entities.Inquiry.list('-created_date'),
   });
+
+  // Pull to refresh handler
+  const handlePullToRefresh = async () => {
+    setIsRefreshing(true);
+    await refetch();
+    setIsRefreshing(false);
+    toast.success('Inquiries refreshed');
+  };
 
   const { data: counselors = [] } = useQuery({
     queryKey: ['counselors'],
@@ -53,6 +66,16 @@ export default function CRMInquiries() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
       toast.success('Inquiry updated');
+    },
+  });
+
+  const qualifyLead = useMutation({
+    mutationFn: async (inquiry_id) => {
+      return await base44.functions.invoke('qualifyLead', { inquiry_id });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crm-inquiries'] });
+      toast.success('Lead qualified by AI');
     },
   });
 
@@ -109,6 +132,7 @@ export default function CRMInquiries() {
   const convertedCount = inquiries.filter(i => i.status === 'converted').length;
 
   return (
+<<<<<<< HEAD
     <CRMLayout 
       title="Inquiries"
       actions={
@@ -123,59 +147,89 @@ export default function CRMInquiries() {
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4 mb-6">
         <Card className="border-0 shadow-sm bg-emerald-50">
+=======
+    <CRMLayout title="Inquiries">
+      {/* Pull to Refresh Indicator */}
+      {isRefreshing && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-white dark:bg-slate-800 shadow-lg rounded-full px-4 py-2 z-50">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Refreshing...</p>
+        </div>
+      )}
+      
+      {/* Pull to Refresh Area */}
+      <div 
+        className="md:hidden"
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          e.currentTarget.dataset.startY = touch.clientY;
+        }}
+        onTouchMove={(e) => {
+          const touch = e.touches[0];
+          const startY = parseFloat(e.currentTarget.dataset.startY || '0');
+          const diff = touch.clientY - startY;
+          if (diff > 80 && window.scrollY === 0 && !isRefreshing) {
+            handlePullToRefresh();
+          }
+        }}
+      >
+        {/* Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <Card className="border-0 shadow-sm bg-emerald-50 dark:bg-emerald-950/30">
+>>>>>>> last/main
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-emerald-600">New</p>
-                <p className="text-2xl font-bold text-emerald-700">{newCount}</p>
+                <p className="text-sm text-emerald-600 dark:text-emerald-400">New</p>
+                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{newCount}</p>
               </div>
-              <Clock className="w-8 h-8 text-emerald-300" />
+              <Clock className="w-8 h-8 text-emerald-300 dark:text-emerald-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-blue-50">
+        <Card className="border-0 shadow-sm bg-blue-50 dark:bg-blue-950/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600">Contacted</p>
-                <p className="text-2xl font-bold text-blue-700">{contactedCount}</p>
+                <p className="text-sm text-blue-600 dark:text-blue-400">Contacted</p>
+                <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{contactedCount}</p>
               </div>
-              <MessageSquare className="w-8 h-8 text-blue-300" />
+              <MessageSquare className="w-8 h-8 text-blue-300 dark:text-blue-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-green-50">
+        <Card className="border-0 shadow-sm bg-green-50 dark:bg-green-950/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-600">Converted</p>
-                <p className="text-2xl font-bold text-green-700">{convertedCount}</p>
+                <p className="text-sm text-green-600 dark:text-green-400">Converted</p>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300">{convertedCount}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-300" />
+              <CheckCircle className="w-8 h-8 text-green-300 dark:text-green-600" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm bg-slate-50">
+        <Card className="border-0 shadow-sm bg-slate-50 dark:bg-slate-800">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600">Conversion Rate</p>
-                <p className="text-2xl font-bold text-slate-700">
+                <p className="text-sm text-slate-600 dark:text-slate-400">Conversion Rate</p>
+                <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">
                   {inquiries.length > 0 ? Math.round((convertedCount / inquiries.length) * 100) : 0}%
                 </p>
               </div>
-              <ArrowRight className="w-8 h-8 text-slate-300" />
+              <ArrowRight className="w-8 h-8 text-slate-300 dark:text-slate-600" />
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
 
       {/* Filters */}
-      <Card className="border-0 shadow-sm mb-6">
+      <Card className="border-0 shadow-sm mb-6 dark:bg-slate-800">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
               <Input
                 placeholder="Search inquiries..."
                 value={search}
@@ -279,16 +333,33 @@ export default function CRMInquiries() {
                           )}
                         </div>
                         <div className="flex flex-col gap-2">
-                          {inquiry.country_of_interest && (
-                            <Badge variant="outline" className="capitalize">
-                              {inquiry.country_of_interest}
-                            </Badge>
-                          )}
-                          {inquiry.degree_level && (
-                            <Badge variant="outline" className="capitalize">
-                              {inquiry.degree_level}
-                            </Badge>
-                          )}
+                         {inquiry.qualification_status && (
+                           <Badge className={
+                             inquiry.qualification_status === 'hot' ? 'bg-red-100 text-red-700 border-red-300' :
+                             inquiry.qualification_status === 'warm' ? 'bg-orange-100 text-orange-700 border-orange-300' :
+                             inquiry.qualification_status === 'cold' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                             'bg-gray-100 text-gray-700 border-gray-300'
+                           }>
+                             {inquiry.qualification_status === 'hot' ? '🔥' : 
+                              inquiry.qualification_status === 'warm' ? '☀️' :
+                              inquiry.qualification_status === 'cold' ? '❄️' : '⚪'} {inquiry.qualification_status.toUpperCase()}
+                           </Badge>
+                         )}
+                         {inquiry.qualification_score && (
+                           <Badge variant="outline" className="font-mono">
+                             {inquiry.qualification_score}/100
+                           </Badge>
+                         )}
+                         {inquiry.country_of_interest && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.country_of_interest}
+                           </Badge>
+                         )}
+                         {inquiry.degree_level && (
+                           <Badge variant="outline" className="capitalize">
+                             {inquiry.degree_level}
+                           </Badge>
+                         )}
                         </div>
                       </div>
                     </CardContent>
@@ -350,6 +421,7 @@ export default function CRMInquiries() {
                 </div>
               )}
 
+<<<<<<< HEAD
               {/* AI Lead Scoring */}
               <AILeadScoring 
                 inquiry={selectedInquiry} 
@@ -357,6 +429,42 @@ export default function CRMInquiries() {
                   setSelectedInquiry({ ...selectedInquiry, ...score });
                 }}
               />
+=======
+              {selectedInquiry.qualification_status && (
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="w-5 h-5 text-blue-600" />
+                    <h4 className="font-semibold text-blue-900">AI Qualification</h4>
+                  </div>
+                  <div className="flex items-center gap-4 mb-3">
+                    <Badge className={
+                      selectedInquiry.qualification_status === 'hot' ? 'bg-red-500' :
+                      selectedInquiry.qualification_status === 'warm' ? 'bg-orange-500' :
+                      selectedInquiry.qualification_status === 'cold' ? 'bg-blue-500' : 'bg-gray-500'
+                    }>
+                      {selectedInquiry.qualification_status.toUpperCase()}
+                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <span className="font-bold text-lg">{selectedInquiry.qualification_score}/100</span>
+                    </div>
+                  </div>
+                  {selectedInquiry.qualification_reasons && (
+                    <div>
+                      <p className="text-xs font-medium text-blue-700 mb-2">Qualification Factors:</p>
+                      <ul className="space-y-1">
+                        {selectedInquiry.qualification_reasons.map((reason, i) => (
+                          <li key={i} className="text-sm text-blue-900 flex items-start gap-2">
+                            <span className="text-blue-500 mt-0.5">•</span>
+                            <span>{reason}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+>>>>>>> last/main
 
               <div>
                 <label className="text-sm font-medium">Assign To</label>
@@ -382,6 +490,17 @@ export default function CRMInquiries() {
               </div>
 
               <DialogFooter className="flex-col sm:flex-row gap-2">
+                {!selectedInquiry.qualification_status && (
+                  <Button 
+                    variant="outline"
+                    onClick={() => qualifyLead.mutate(selectedInquiry.id)}
+                    disabled={qualifyLead.isPending}
+                    className="border-blue-300 text-blue-700 hover:bg-blue-50"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    {qualifyLead.isPending ? 'Qualifying...' : 'AI Qualify Lead'}
+                  </Button>
+                )}
                 {selectedInquiry.status === 'new' && (
                   <Button 
                     variant="outline"
