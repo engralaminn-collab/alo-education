@@ -120,7 +120,7 @@ Make it realistic and educational.
     }
 
     if (action === 'evaluate_progress') {
-      // Evaluate counselor progress
+      // Evaluate counselor progress with coaching integration
       const counselor = await base44.asServiceRole.entities.User.get(counselor_id);
       
       // Fetch performance data
@@ -128,28 +128,40 @@ Make it realistic and educational.
       const communications = await base44.asServiceRole.entities.CommunicationLog.filter({ 
         counselor_id 
       }, '-created_date', 100);
+      const tasks = await base44.asServiceRole.entities.Task.filter({ assigned_to: counselor_id });
+
+      const taskCompletionRate = tasks.length > 0 ? 
+        (tasks.filter(t => t.status === 'completed').length / tasks.length * 100) : 0;
+      const avgResponseTime = communications
+        .filter(c => c.response_time_minutes)
+        .reduce((sum, c) => sum + c.response_time_minutes, 0) / 
+        Math.max(communications.filter(c => c.response_time_minutes).length, 1);
 
       const evaluationPrompt = `
-Evaluate this new counselor's onboarding progress and provide personalized feedback.
+Evaluate this new counselor's onboarding progress and provide personalized feedback with coaching integration.
 
 Counselor: ${counselor.full_name}
 Time Since Start: [Calculate based on created_date]
 Students Assigned: ${students.length}
 Communications Made: ${communications.length}
+Tasks: ${tasks.length} (${taskCompletionRate.toFixed(1)}% completed)
+Average Response Time: ${avgResponseTime.toFixed(1)} minutes
 
 Performance Metrics:
-- Response times
-- Student engagement
-- Task completion
-- Communication quality
+- Response times: ${avgResponseTime < 120 ? 'Good' : 'Needs improvement'}
+- Student engagement: ${communications.length > students.length * 3 ? 'High' : 'Moderate'}
+- Task completion: ${taskCompletionRate > 70 ? 'Good' : 'Needs focus'}
+- Communication quality: [Based on sentiment analysis]
+
+Consider skill development needs and provide coaching-integrated feedback.
 
 Provide:
 1. Progress assessment (0-100%)
 2. Strengths identified
-3. Areas for improvement
-4. Personalized recommendations
-5. Next learning goals
-6. Coaching feedback
+3. Areas for improvement with specific skill gaps
+4. Personalized recommendations tied to coaching exercises
+5. Next learning goals with measurable targets
+6. Coaching feedback with actionable steps
 `;
 
       const evaluation = await base44.integrations.Core.InvokeLLM({
@@ -164,14 +176,31 @@ Provide:
             personalized_recommendations: { type: "array", items: { type: "string" } },
             next_goals: { type: "array", items: { type: "string" } },
             coaching_feedback: { type: "string" },
-            estimated_readiness_date: { type: "string" }
+            estimated_readiness_date: { type: "string" },
+            suggested_coaching_exercises: { type: "array", items: { type: "string" } },
+            skill_development_focus: { type: "array", items: { type: "string" } }
           }
         }
       });
 
+      // Save evaluation for coaching integration
+      await base44.asServiceRole.entities.CounselorInteraction?.create({
+        counselor_id,
+        interaction_type: 'onboarding_evaluation',
+        interaction_data: evaluation,
+        metrics: {
+          task_completion_rate: taskCompletionRate,
+          avg_response_time: avgResponseTime,
+          student_count: students.length,
+          communication_count: communications.length
+        },
+        created_at: new Date().toISOString()
+      });
+
       return Response.json({
         success: true,
-        evaluation
+        evaluation,
+        coaching_integration_available: true
       });
     }
 
