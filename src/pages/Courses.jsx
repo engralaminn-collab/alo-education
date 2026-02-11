@@ -17,6 +17,9 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/landing/Footer';
 import AIRecommendations from '@/components/recommendations/AIRecommendations';
+import CompareCourses from '@/components/courses/CompareCourses';
+import TrendingAnalysis from '@/components/discovery/TrendingAnalysis';
+import { Slider } from "@/components/ui/slider";
 
 const degreeLevels = [
   { value: 'all', label: 'All Levels' },
@@ -66,6 +69,10 @@ export default function Courses() {
   const [tuitionMax, setTuitionMax] = useState('');
   const [scholarshipOnly, setScholarshipOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedForCompare, setSelectedForCompare] = useState([]);
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [tuitionRange, setTuitionRange] = useState([0, 50000]);
+  const [sortBy, setSortBy] = useState('relevance');
 
   const { data: user } = useQuery({
     queryKey: ['current-user'],
@@ -103,6 +110,7 @@ export default function Courses() {
   }, {});
 
   const filteredCourses = courses.filter(course => {
+<<<<<<< HEAD
     const matchesSearch = course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDegree = degreeLevel === 'all' || course.level === degreeLevel;
@@ -112,6 +120,25 @@ export default function Courses() {
                            (!tuitionMax || course.tuition_fee_min <= parseInt(tuitionMax));
     const matchesScholarship = !scholarshipOnly || course.scholarship_available;
     return matchesSearch && matchesDegree && matchesField && matchesIntake && matchesTuition && matchesScholarship;
+=======
+    const matchesSearch = 
+      course.course_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.subject_area?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesDegree = degreeLevel === 'all' || course.level === degreeLevel;
+    const matchesField = fieldOfStudy === 'all' || course.subject_area === fieldOfStudy;
+    const matchesScholarship = !scholarshipOnly || course.scholarship_available;
+    const matchesCountry = countryFilter === 'all' || course.country === countryFilter;
+    const matchesTuition = !course.tuition_fee_min || 
+      (course.tuition_fee_min >= tuitionRange[0] && course.tuition_fee_min <= tuitionRange[1]);
+    
+    return matchesSearch && matchesDegree && matchesField && matchesScholarship && 
+           matchesCountry && matchesTuition;
+  }).sort((a, b) => {
+    if (sortBy === 'fees-low') return (a.tuition_fee_min || 0) - (b.tuition_fee_min || 0);
+    if (sortBy === 'fees-high') return (b.tuition_fee_min || 0) - (a.tuition_fee_min || 0);
+    if (sortBy === 'duration') return (a.duration || '').localeCompare(b.duration || '');
+    return 0;
+>>>>>>> last/main
   });
 
   const clearFilters = () => {
@@ -122,10 +149,28 @@ export default function Courses() {
     setTuitionMin('');
     setTuitionMax('');
     setScholarshipOnly(false);
+    setCountryFilter('all');
+    setTuitionRange([0, 50000]);
   };
 
   const FiltersContent = () => (
     <div className="space-y-6">
+      <div>
+        <label className="text-sm font-medium text-slate-700 mb-2 block">Country</label>
+        <Select value={countryFilter} onValueChange={setCountryFilter}>
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Countries</SelectItem>
+            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+            <SelectItem value="United States">United States</SelectItem>
+            <SelectItem value="Canada">Canada</SelectItem>
+            <SelectItem value="Australia">Australia</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div>
         <label className="text-sm font-medium text-slate-700 mb-2 block">Degree Level</label>
         <Select value={degreeLevel} onValueChange={setDegreeLevel}>
@@ -155,6 +200,7 @@ export default function Courses() {
       </div>
 
       <div>
+<<<<<<< HEAD
         <label className="text-sm font-medium text-slate-700 mb-2 block">Intake Month</label>
         <Select value={intakeMonth} onValueChange={setIntakeMonth}>
           <SelectTrigger>
@@ -186,6 +232,18 @@ export default function Courses() {
             className="h-10"
           />
         </div>
+=======
+        <label className="text-sm font-medium text-slate-700 mb-4 block">
+          Tuition Range: ${tuitionRange[0].toLocaleString()} - ${tuitionRange[1].toLocaleString()}
+        </label>
+        <Slider
+          value={tuitionRange}
+          onValueChange={setTuitionRange}
+          max={50000}
+          step={1000}
+          className="mt-2"
+        />
+>>>>>>> last/main
       </div>
 
       <div className="flex items-center gap-2">
@@ -208,6 +266,7 @@ export default function Courses() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+<<<<<<< HEAD
       {/* Hero with Background */}
       <section 
         className="relative py-32 bg-cover bg-center"
@@ -230,6 +289,28 @@ export default function Courses() {
           </motion.div>
         </div>
       </section>
+=======
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-education-blue to-alo-orange py-16">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-medium mb-4">
+                <BookOpen className="w-4 h-4" />
+                ALO Education Course Finder
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Find Your Perfect Course
+              </h1>
+              <p className="text-xl text-slate-300">
+                Explore {courses.length}+ programs from top universities worldwide with expert ALO Education guidance
+              </p>
+            </motion.div>
+          </div>
+>>>>>>> last/main
 
       {/* Search Section */}
       <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800">
@@ -295,6 +376,11 @@ export default function Courses() {
 
           {/* Main */}
           <div className="flex-1">
+            {/* Trending Analysis */}
+            <div className="mb-8">
+              <TrendingAnalysis type="courses" />
+            </div>
+
             {/* AI Recommendations */}
             {user && studentProfile && (
               <div className="mb-8">
@@ -307,9 +393,22 @@ export default function Courses() {
             )}
 
             <div className="flex items-center justify-between mb-6">
-              <p className="text-slate-600">
-                Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="text-slate-600">
+                  Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> courses
+                </p>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="relevance">Most Relevant</SelectItem>
+                    <SelectItem value="fees-low">Fees (Low to High)</SelectItem>
+                    <SelectItem value="fees-high">Fees (High to Low)</SelectItem>
+                    <SelectItem value="duration">Duration</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
                   <Button variant="outline" className="lg:hidden">
@@ -358,10 +457,35 @@ export default function Courses() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                       >
+<<<<<<< HEAD
                         <Link to={createPageUrl('CourseDetailsPage') + `?id=${course.id}`}>
                           <Card className="bg-white border-2 hover:shadow-xl transition-all h-full group" style={{ borderColor: '#0066CC' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}>
                             <CardContent className="p-6">
                               <div className="mb-4">
+=======
+                        <Card className={`border-0 shadow-sm hover:shadow-lg transition-all duration-300 group ${
+                          selectedForCompare.some(c => c.id === course.id) ? 'ring-2 ring-blue-500' : ''
+                        }`}>
+                          <CardContent className="p-6">
+                            <div className="absolute top-3 right-3 z-10">
+                              <input
+                                type="checkbox"
+                                checked={selectedForCompare.some(c => c.id === course.id)}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  if (e.target.checked) {
+                                    setSelectedForCompare([...selectedForCompare, course]);
+                                  } else {
+                                    setSelectedForCompare(selectedForCompare.filter(c => c.id !== course.id));
+                                  }
+                                }}
+                                className="w-5 h-5 rounded border-slate-300 text-blue-500 cursor-pointer"
+                                title="Select for comparison"
+                              />
+                            </div>
+                            <div className="flex flex-col md:flex-row md:items-center gap-4">
+                              <div className="flex-1">
+>>>>>>> last/main
                                 <div className="flex flex-wrap items-center gap-2 mb-3">
                                   <Badge className="bg-emerald-50 text-emerald-700 capitalize">
                                     {course.level}
@@ -420,6 +544,13 @@ export default function Courses() {
           </div>
         </div>
       </div>
+
+      <CompareCourses
+        selectedCourses={selectedForCompare}
+        universities={universities}
+        onRemove={(id) => setSelectedForCompare(selectedForCompare.filter(c => c.id !== id))}
+        onClear={() => setSelectedForCompare([])}
+      />
 
       <Footer />
     </div>
