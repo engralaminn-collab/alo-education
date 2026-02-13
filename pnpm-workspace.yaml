@@ -1,0 +1,8 @@
+packages:
+  - modules/*
+  - apps/*
+  - packages/*
+
+ignoredBuiltDependencies:
+  - core-js
+  - esbuild
