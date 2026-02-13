@@ -1,0 +1,49 @@
+name: Auto Sync RepoB into modules/alo-education-last
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"  # every 6 hours
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo A (alo-education)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout Repo B (alo-education-last) into temp
+        uses: actions/checkout@v4
+        with:
+          repository: engralaminn-collab/alo-education-last
+          token: ${{ secrets.REPO_SYNC_TOKEN }}
+          path: __repoB
+          fetch-depth: 1
+
+      - name: Replace modules/alo-education-last with RepoB contents
+        run: |
+          set -e
+          rm -rf modules/alo-education-last
+          mkdir -p modules/alo-education-last
+          rsync -a --delete --exclude ".git" __repoB/ modules/alo-education-last/
+
+      - name: Commit and push if changed
+        run: |
+          set -e
+          git config user.name "alo-sync-bot"
+          git config user.email "alo-sync-bot@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git add modules/alo-education-last
+          git commit -m "chore(sync): update modules/alo-education-last from RepoB"
+          git push
