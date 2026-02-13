@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    overscroll-behavior: none;
+  }
+
+  button, a[href] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  :root {
+    /* ALO BRAND - Primary Colors */
+    --alo-orange: 23 90% 54%;         /* #F37021 */
+    --education-blue: 210 100% 40%;   /* #0066CC */
+    --sunshine-accent: 255 179 71;
+    --neutral-black: 0 0 0;
+    --neutral-gray: 85 85 85;
+    
+    /* Tailwind default variables mapped to brand colors */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    
+    /* Primary = ALO Orange */
+    --primary: 23 90% 54%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    /* Accent = ALO Orange */
+    --accent: 23 90% 54%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    
+    /* Ring = ALO Blue for focus states */
+    --ring: 210 100% 40%;
+    --radius: 0.5rem;
+    
+    /* Sidebar tokens */
+    --sidebar-primary: 210 100% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-ring: 210 100% 40%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 23 90% 54%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 23 90% 54%;
+      --accent-foreground: 0 0% 100%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 210 100% 40%;
+    }
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 23 90% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 23 90% 54%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 210 100% 40%;
+  }
+
+  /* Typography - Brand Guidelines */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+  }
+
+  .subheading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+  }
+
+  .tagline {
+    font-style: italic;
+    color: rgb(var(--alo-orange));
+  }
+}
+
+@layer utilities {
+  /* Brand Color Utilities */
+  .text-alo-orange {
+    color: rgb(var(--alo-orange));
+  }
+  
+  .bg-alo-orange {
+    background-color: rgb(var(--alo-orange));
+  }
+  
+  .text-education-blue {
+    color: rgb(var(--education-blue));
+  }
+  
+  .bg-education-blue {
+    background-color: rgb(var(--education-blue));
+  }
+  
+  .text-sunshine {
+    color: rgb(var(--sunshine-accent));
+  }
+  
+  .bg-sunshine {
+    background-color: rgb(var(--sunshine-accent));
+  }
+  
+  .border-alo-orange {
+    border-color: rgb(var(--alo-orange));
+  }
+  
+  .border-education-blue {
+    border-color: rgb(var(--education-blue));
+  }
+
+  /* Gradient utilities with brand colors */
+  .bg-gradient-brand {
+    background: linear-gradient(135deg, rgb(var(--education-blue)), rgb(var(--alo-orange)));
+  }
+  
+  .bg-gradient-brand-light {
+    background: linear-gradient(135deg, rgb(var(--education-blue) / 0.1), rgb(var(--alo-orange) / 0.1));
+  }
+}
