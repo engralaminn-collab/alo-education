@@ -29,3 +29,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# build caches
+.turbo/
