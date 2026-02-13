@@ -4,13 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --quiet",
-    "lint:fix": "eslint . --fix",
-    "typecheck": "tsc -p ./jsconfig.json",
-    "preview": "vite preview",
-    "test": "echo \"skip tests\""
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.3",
@@ -102,7 +99,7 @@
     "vite": "^6.1.0"
   },
   "engines": {
-    "node": "18.x",
+    "node": ">=18 <21",
     "npm": "10.x"
   },
   "packageManager": "pnpm@10.29.3"
