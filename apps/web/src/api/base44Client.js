@@ -5,9 +5,17 @@ const { appId, serverUrl, token, functionsVersion } = appParams;
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const authLoginUrl = import.meta.env.VITE_AUTH_LOGIN_URL;
 
+const isEmptyOrNullishString = (value) => {
+  if (value === undefined || value === null) return true;
+  const normalized = String(value).trim().toLowerCase();
+  return normalized === '' || normalized === 'null' || normalized === 'undefined';
+};
+
 const shouldDisableBase44 =
   import.meta.env.VITE_DISABLE_BASE44 === 'true' ||
-  serverUrl?.includes('app.base44.com');
+  serverUrl?.includes('app.base44.com') ||
+  isEmptyOrNullishString(appId) ||
+  isEmptyOrNullishString(serverUrl);
 
 const buildUrl = (path, params = {}) => {
   const base = apiBaseUrl || '';
