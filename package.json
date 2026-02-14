@@ -99,8 +99,7 @@
     "vite": "^6.1.0"
   },
   "engines": {
-    "node": ">=18 <21",
-    "npm": "10.x"
+    "node": ">=18 <21"
   },
   "packageManager": "pnpm@10.29.3"
 }
