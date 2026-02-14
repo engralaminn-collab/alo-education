@@ -37,7 +37,7 @@ export default function StudyInUK() {
     'Public Health', 'Nursing', 'Law', 'Finance'
   ];
 
-  const { data: courses = [] } = useQuery({
+  const { data: courses2 = [] } = useQuery({
     queryKey: ['uk-courses'],
     queryFn: () => base44.entities.Course.filter({ country: 'United Kingdom', status: 'open' }),
   });
@@ -339,195 +339,13 @@ export default function StudyInUK() {
         </section>
 
         {/* All UK Universities List */}
-        <section className="mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold" style={{ color: '#0066CC' }}>
-              🇬🇧 All UK Universities
-            </h2>
-            <Link to={createPageUrl('Universities') + '?country=United Kingdom'}>
-              <Button variant="outline" style={{ borderColor: '#0066CC', color: '#0066CC' }}>
-                View All Universities
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {allUKUniversitiesData.map((uni) => (
-              <Link key={uni.id} to={createPageUrl('UniversityDetailsPage') + `?id=${uni.id}`}>
-                <Card 
-                  className="bg-white border-2 hover:shadow-xl transition-all h-full" 
-                  style={{ borderColor: '#0066CC' }} 
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = '#F37021'} 
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = '#0066CC'}
-                >
-                  <CardHeader className="text-center pb-3">
-                    {uni.logo && (
-                      <div className="w-16 h-16 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg p-2">
-                        <img src={uni.logo} alt={uni.university_name} className="w-full h-full object-contain" />
-                      </div>
-                    )}
-                    <CardTitle className="text-base leading-tight" style={{ color: '#F37021' }}>
-                      {uni.university_name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm">
-                    {uni.city && (
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <MapPin className="w-4 h-4" style={{ color: '#0066CC' }} />
-                        <span>{uni.city}</span>
-                      </div>
-                    )}
-                    {(uni.ranking || uni.qs_ranking) && (
-                      <div className="text-slate-600">
-                        <span className="font-semibold">Ranking:</span> #{uni.ranking || uni.qs_ranking}
-                      </div>
-                    )}
-                    {uni.intakes && (
-                      <div className="text-slate-600">
-                        <span className="font-semibold">Next intake:</span> {uni.intakes}
-                      </div>
-                    )}
-                    <Button className="w-full mt-3 font-semibold" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+        
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6">
+            <CountryUniversityGrid universities={universities} country="United Kingdom" />
           </div>
         </section>
 
-        {/* Entry Requirements & Fees */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="w-6 h-6" style={{ color: '#F37021' }} />
-                Tuition Fees (International)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-xl">
-                <h4 className="font-semibold text-slate-900 mb-2">Undergraduate</h4>
-                <p className="text-2xl font-bold" style={{ color: '#0066CC' }}>£11,400 – £38,000</p>
-                <p className="text-sm text-slate-600">per year (varies by university & subject)</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BookOpen className="w-6 h-6" style={{ color: '#F37021' }} />
-                Entry Requirements
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold text-slate-900 mb-2">Undergraduate (UG)</h4>
-                <ul className="space-y-2 text-slate-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5" />
-                    <span>HSC/A-Level/Foundation accepted</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5" />
-                    <span>IELTS usually 6.0–6.5 (or equivalent)</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-900 mb-2">Postgraduate (PG)</h4>
-                <ul className="space-y-2 text-slate-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5" />
-                    <span>Bachelor degree</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5" />
-                    <span>IELTS usually 6.5–7.0 (or equivalent)</span>
-                  </li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Intakes & Popular Subjects */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-6 h-6" style={{ color: '#F37021' }} />
-                Intakes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <span className="font-medium">January</span>
-                  <Badge variant="outline">Limited courses</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: '#0066CC20' }}>
-                  <span className="font-medium">September</span>
-                  <Badge style={{ backgroundColor: '#0066CC', color: 'white' }}>Main Intake</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-6 h-6" style={{ color: '#F37021' }} />
-                Popular Subjects
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {popularSubjects.map(subject => (
-                  <Badge key={subject} className="hover:opacity-80 cursor-pointer" style={{ backgroundColor: '#F37021', color: '#000000' }}>
-                    {subject}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Services */}
-        <Card className="border-0 shadow-lg mb-12">
-          <CardHeader>
-            <CardTitle>Services for UK</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {services.map(service => (
-                <div key={service} className="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
-                  <CheckCircle className="w-5 h-5" style={{ color: '#0066CC' }} />
-                  <span className="text-sm font-medium">{service}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* CTA */}
-        <Card className="border-0 shadow-xl text-white" style={{ backgroundColor: '#0066CC' }}>
-          <CardContent className="p-12 text-center">
-            <h3 className="text-3xl font-bold mb-4">Ready to Start Your UK Journey?</h3>
-            <p className="mb-6 text-white/90 text-lg">
-              Get personalized guidance from our expert counselors
-            </p>
-            <Link to={createPageUrl('Contact')}>
-              <Button size="lg" style={{ backgroundColor: '#F37021', color: '#000000' }} className="font-bold">
-                Book Free Consultation
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-          <CountryUniversityGrid universities={universities} country="United Kingdom" />
-        </section>
 
         {/* Cost of Study & Living */}
         <section>

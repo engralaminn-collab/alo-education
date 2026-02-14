@@ -160,71 +160,85 @@ export default function StudyInAustralia() {
         ]}
       />
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-6 h-6 text-purple-600" />
-                Intakes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                  <span className="font-medium">February</span>
-                  <Badge className="bg-purple-600 text-white">Main</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                  <span className="font-medium">July</span>
-                  <Badge className="bg-purple-600 text-white">Major</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <span className="font-medium">November</span>
-                  <Badge variant="outline">Limited</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <section className="py-16">
+          <div className="container mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-8 mb-12">
+              <Card className="border-0 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="w-6 h-6 text-purple-600" />
+                    Intakes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
 
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-amber-600" />
-                Popular Subjects
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {popularSubjects.map(subject => (
-                  <Badge key={subject} className="bg-amber-100 text-amber-700 hover:bg-amber-200">
-                    {subject}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                      <span className="font-medium">February</span>
+                      <Badge className="bg-purple-600 text-white">Main</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                      <span className="font-medium">July</span>
+                      <Badge className="bg-purple-600 text-white">Major</Badge>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                      <span className="font-medium">November</span>
+                      <Badge variant="outline">Limited</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-        <Card className="border-0 shadow-xl text-white" style={{ backgroundColor: 'var(--alo-blue)' }}>
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Ready to Study Down Under?</h3>
-            <p className="mb-6 text-white/90">
-              Get personalized guidance from our expert counselors
-            </p>
-            <Link to={createPageUrl('Contact')}>
-              <Button size="lg" className="text-white" style={{ backgroundColor: 'var(--alo-orange)' }}>
-                Book Free Counselling
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link to={createPageUrl('StudentPortal')}>
-              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 text-lg px-8 py-6 h-auto">
-                Access Student Portal
-              </Button>
-            </Link>
+              <Card className="border-0 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="w-6 h-6 text-amber-600" />
+                    Popular Subjects
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {popularSubjects?.map((subject) => (
+                      <Badge key={subject} className="bg-amber-100 text-amber-700 hover:bg-amber-200">
+                        {subject}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="mt-12">
+              <Card className="border-0 shadow-xl text-white" style={{ backgroundColor: 'var(--alo-blue)' }}>
+                <CardContent className="p-8 text-center">
+                  <h3 className="text-2xl font-bold mb-4">Ready to Study Down Under?</h3>
+                  <p className="mb-6 text-white/90">
+                    Get personalized guidance from our expert counselors
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link to={createPageUrl('Contact')}>
+                      <Button size="lg" className="text-white" style={{ backgroundColor: 'var(--alo-orange)' }}>
+                        Book Free Counselling
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
+
+                    <Link to={createPageUrl('StudentPortal')}>
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="border-2 border-white text-white hover:bg-white/20 text-lg px-8 py-6 h-auto"
+                      >
+                        Access Student Portal
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       <Footer />
     </div>

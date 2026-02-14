@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
 import { Label } from "@/components/ui/label";
 import { 
   X, Star, MapPin, Users, DollarSign, CheckCircle,
@@ -42,7 +42,7 @@ export default function CompareUniversities({
     enabled: !!user?.email,
   });
 
-  const saveComparison = useMutation({
+  const saveComparisonMutation = useMutation({
     mutationFn: async () => {
       if (!studentProfile?.id) {
         throw new Error('Please log in to save comparisons');
@@ -134,7 +134,7 @@ export default function CompareUniversities({
       toast.error('Please enter a comparison name');
       return;
     }
-    saveComparison.mutate();
+    saveComparisonMutation.mutate();
   };
 
   if (selectedUniversities.length === 0) return null;
@@ -794,10 +794,10 @@ export default function CompareUniversities({
               </Button>
               <Button
                 onClick={handleSave}
-                disabled={saveComparison.isPending}
+                disabled={saveComparisonMutation.isPending}
                 className="flex-1 bg-gradient-brand hover:opacity-90"
               >
-                {saveComparison.isPending ? 'Saving...' : 'Save'}
+                {saveComparisonMutation.isPending ? 'Saving...' : 'Save'}
               </Button>
             </div>
           </div>
@@ -837,11 +837,11 @@ export default function CompareUniversities({
                 Cancel
               </Button>
               <Button
-                onClick={() => saveComparison.mutate()}
-                disabled={saveComparison.isPending}
+                onClick={() => saveComparisonMutation.mutate()}
+                disabled={saveComparisonMutation.isPending}
                 className="flex-1 bg-purple-600 hover:bg-purple-700"
               >
-                {saveComparison.isPending ? 'Saving...' : 'Save Comparison'}
+                {saveComparisonMutation.isPending ? 'Saving...' : 'Save Comparison'}
               </Button>
             </div>
           </div>

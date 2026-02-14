@@ -87,7 +87,6 @@ export default function MyProfile() {
     work_experience_years: 0,
     recommendation_letters: [],
     preferred_countries: [],
-    preferred_degree_level: '',
     preferred_fields: [],
     academic_background_summary: '',
     career_goals: '',
