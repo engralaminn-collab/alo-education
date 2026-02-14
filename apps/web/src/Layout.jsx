@@ -1,6 +1,10 @@
 import React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Home, MessageSquare, Settings, Users } from 'lucide-react';
+import { createPageUrl } from '@/utils';
 import Navbar from '@/components/common/Navbar';
 import InquiryChatbot from '@/components/chat/InquiryChatbot';
+import NotificationCenter from '@/components/dashboard/NotificationCenter';
 
 export default function Layout({ children, currentPageName }) {
   const navigate = useNavigate();
