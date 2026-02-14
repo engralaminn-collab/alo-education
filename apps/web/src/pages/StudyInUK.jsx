@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   GraduationCap, DollarSign, BookOpen, Calendar, 
-  TrendingUp, ArrowRight, CheckCircle, MapPin, Trophy
+  TrendingUp, ArrowRight, CheckCircle, MapPin, Trophy, Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
