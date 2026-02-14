@@ -4,7 +4,8 @@ import { createPageUrl } from '@/utils';
 import { 
   LayoutDashboard, Users, GraduationCap, Building2, 
   FileText, MessageSquare, Settings, BarChart3, 
-  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch, RefreshCw, Video
+  Inbox, UserCog, LogOut, ChevronLeft, Zap, Sparkles, Mail, TrendingUp, GitBranch, RefreshCw, Video,
+  Award, Shield
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { base44 } from '@/api/base44Client';

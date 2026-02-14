@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label";
 import { 
   X, Star, MapPin, Users, DollarSign, CheckCircle,
-  Building2, ArrowRight, TrendingUp, Bookmark
+  Building2, ArrowRight, TrendingUp, Bookmark, Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
