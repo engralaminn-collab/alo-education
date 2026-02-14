@@ -7,13 +7,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
+  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
-  const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
-
-  const shouldDisableBase44 =
-    import.meta.env.VITE_DISABLE_BASE44 === 'true' ||
-    import.meta.env.VITE_BASE44_BACKEND_URL?.includes('app.base44.com');
+  const [appPublicSettings, setAppPublicSettings] = useState(null);
 
   const hasAuthToken = () => {
     if (typeof window === 'undefined') return false;
@@ -29,22 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAppState = async () => {
     try {
-      setIsLoadingPublicSettings(true);
       setAuthError(null);
-
-      if (shouldDisableBase44) {
-        setAppPublicSettings(null);
-        if (hasAuthToken()) {
-          await checkUserAuth();
-        } else {
-          setIsLoadingAuth(false);
-          setIsAuthenticated(false);
-        }
-        setIsLoadingPublicSettings(false);
-        return;
-      }
-
-      setIsLoadingPublicSettings(false);
       if (hasAuthToken()) {
         await checkUserAuth();
       } else {
@@ -57,26 +38,32 @@ export const AuthProvider = ({ children }) => {
         type: 'unknown',
         message: error.message || 'An unexpected error occurred'
       });
-      setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
     }
   };
 
   const checkUserAuth = async () => {
     try {
-      // Now check if the user is authenticated
       setIsLoadingAuth(true);
       const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      setIsAuthenticated(true);
+      if (currentUser) {
+        setUser(currentUser);
+        setIsAuthenticated(true);
+      } else {
+        // Token is invalid, clear it
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('base44_access_token');
+        setIsAuthenticated(false);
+      }
       setIsLoadingAuth(false);
     } catch (error) {
       console.error('User auth check failed:', error);
       setIsLoadingAuth(false);
       setIsAuthenticated(false);
       
-      // If user auth fails, it might be an expired token
       if (error.status === 401 || error.status === 403) {
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('base44_access_token');
         setAuthError({
           type: 'auth_required',
           message: 'Authentication required'
@@ -85,22 +72,53 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = (shouldRedirect = true) => {
-    setUser(null);
-    setIsAuthenticated(false);
-    
-    if (shouldRedirect) {
-      // Use the SDK's logout method which handles token cleanup and redirect
-      base44.auth.logout(window.location.href);
-    } else {
-      // Just remove the token without redirect
-      base44.auth.logout();
+  // ─── Login via API ────────────────────────────────────────────
+  const login = async (email, password) => {
+    try {
+      const result = await base44.auth.login(email, password);
+      if (result && result.token) {
+        window.localStorage.setItem('token', result.token);
+        setUser({ id: result.id, email: result.email, full_name: result.full_name, role: result.role });
+        setIsAuthenticated(true);
+        setAuthError(null);
+        return { success: true };
+      }
+      return { success: false, error: 'Invalid credentials' };
+    } catch (err) {
+      const msg = err.message || 'Login failed';
+      return { success: false, error: msg };
     }
   };
 
+  // ─── Register via API ─────────────────────────────────────────
+  const register = async (email, password, fullName, role = 'student') => {
+    try {
+      const result = await base44.auth.register(email, password, fullName, role);
+      if (result && result.token) {
+        window.localStorage.setItem('token', result.token);
+        setUser({ id: result.id, email: result.email, full_name: result.full_name, role: result.role });
+        setIsAuthenticated(true);
+        setAuthError(null);
+        return { success: true };
+      }
+      return { success: false, error: 'Registration failed' };
+    } catch (err) {
+      const msg = err.message || 'Registration failed';
+      return { success: false, error: msg };
+    }
+  };
+
+  const logout = (shouldRedirect = true) => {
+    setUser(null);
+    setIsAuthenticated(false);
+    base44.auth.logout(shouldRedirect ? '/' : undefined);
+  };
+
   const navigateToLogin = () => {
-    // Use the SDK's redirectToLogin method
-    base44.auth.redirectToLogin(window.location.href);
+    if (typeof window === 'undefined') return;
+    const loginUrl = new URL('/Login', window.location.origin);
+    loginUrl.searchParams.set('redirect', window.location.pathname);
+    window.location.href = loginUrl.toString();
   };
 
   return (
@@ -111,6 +129,8 @@ export const AuthProvider = ({ children }) => {
       isLoadingPublicSettings,
       authError,
       appPublicSettings,
+      login,
+      register,
       logout,
       navigateToLogin,
       checkAppState

@@ -26,26 +26,34 @@ const authPages = new Set([
   "PartnerPortal",
 ]);
 
+// Pages that render without the Layout wrapper
+const noLayoutPages = new Set(["Login"]);
+
 function AppRoutes() {
   const { Pages, mainPage, Layout } = pagesConfig;
   const pageEntries = useMemo(() => Object.entries(Pages), [Pages]);
   const mainPageKey = mainPage ?? pageEntries[0]?.[0];
 
-  const renderPage = (PageComponent, pageName) => (
-    <Layout currentPageName={pageName}>
-      {adminPages(pageName) ? (
-        <ProtectedRoute requiredRoles={["admin"]}>
+  const renderPage = (PageComponent, pageName) => {
+    if (noLayoutPages.has(pageName)) {
+      return <PageComponent />;
+    }
+    return (
+      <Layout currentPageName={pageName}>
+        {adminPages(pageName) ? (
+          <ProtectedRoute requiredRoles={["admin"]}>
+            <PageComponent />
+          </ProtectedRoute>
+        ) : authPages.has(pageName) ? (
+          <ProtectedRoute>
+            <PageComponent />
+          </ProtectedRoute>
+        ) : (
           <PageComponent />
-        </ProtectedRoute>
-      ) : authPages.has(pageName) ? (
-        <ProtectedRoute>
-          <PageComponent />
-        </ProtectedRoute>
-      ) : (
-        <PageComponent />
-      )}
-    </Layout>
-  );
+        )}
+      </Layout>
+    );
+  };
 
   return (
     <Routes>

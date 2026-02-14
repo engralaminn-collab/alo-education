@@ -8,12 +8,11 @@ static_sites:
       deploy_on_push: true
     build_command: corepack enable && pnpm install && pnpm run build
     output_dir: apps/web/dist
+    catchall_document: index.html
     envs:
       - key: VITE_DISABLE_BASE44
         value: "true"
       - key: VITE_API_BASE_URL
         value: https://api.aloeducation.co.uk
-      - key: VITE_AUTH_LOGIN_URL
-        value: https://aloeducation.co.uk/login
     routes:
       - path: /

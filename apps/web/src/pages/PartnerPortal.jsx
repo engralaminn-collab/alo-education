@@ -52,7 +52,7 @@ export default function PartnerPortal() {
             <h2 className="text-2xl font-bold mb-4">Partner Portal Login</h2>
             <p className="text-slate-600 mb-6">Submit student applications and track progress securely.</p>
             <Button 
-              onClick={() => base44.auth.redirectToLogin()}
+              onClick={() => window.location.href = '/Login?redirect=/PartnerPortal'}
               style={{ backgroundColor: '#0066CC', color: 'white' }}
               className="w-full"
             >

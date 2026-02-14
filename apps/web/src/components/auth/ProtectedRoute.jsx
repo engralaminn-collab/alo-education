@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
-import { base44 } from '@/api/base44Client';
 
 export default function ProtectedRoute({ children, requiredRoles = [] }) {
   const { isAuthenticated, isLoadingAuth, user } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoadingAuth && !isAuthenticated) {
-      base44.auth.redirectToLogin(location.pathname);
+      navigate(`/Login?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
     }
-  }, [isLoadingAuth, isAuthenticated, location.pathname]);
+  }, [isLoadingAuth, isAuthenticated, location.pathname, navigate]);
 
   if (isLoadingAuth) {
     return (

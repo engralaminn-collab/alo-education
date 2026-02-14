@@ -47,6 +47,7 @@ import IELTSTest from './pages/IELTSTest';
 import KaplanTest from './pages/KaplanTest';
 import LanguageCertTest from './pages/LanguageCertTest';
 import LanguagePrep from './pages/LanguagePrep';
+import Login from './pages/Login';
 import Messages from './pages/Messages';
 import MyApplications from './pages/MyApplications';
 import MyDocuments from './pages/MyDocuments';
@@ -131,6 +132,7 @@ export const PAGES = {
     "KaplanTest": KaplanTest,
     "LanguageCertTest": LanguageCertTest,
     "LanguagePrep": LanguagePrep,
+    "Login": Login,
     "Messages": Messages,
     "MyApplications": MyApplications,
     "MyDocuments": MyDocuments,

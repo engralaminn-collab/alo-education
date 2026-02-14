@@ -3,7 +3,6 @@ import { appParams } from '@/lib/app-params';
 
 const { appId, serverUrl, token, functionsVersion } = appParams;
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const authLoginUrl = import.meta.env.VITE_AUTH_LOGIN_URL;
 
 const isEmptyOrNullishString = (value) => {
   if (value === undefined || value === null) return true;
@@ -76,6 +75,13 @@ const createApiEntity = (entityName) => ({
       return [];
     }
   },
+  get: async (id) => {
+    try {
+      return await requestJson(buildUrl(`/api/${entityName}/${id}`));
+    } catch {
+      return null;
+    }
+  },
   create: async (data) =>
     requestJson(buildUrl(`/api/${entityName}`), {
       method: 'POST',
@@ -95,26 +101,44 @@ const createApiEntity = (entityName) => ({
 const createApiClient = () => ({
   auth: {
     me: async () => {
+      const authToken = getAuthToken();
+      if (!authToken) return null;
       try {
         return await requestJson(buildUrl('/api/auth/me'));
       } catch {
         return null;
       }
     },
+    login: async (email, password) => {
+      return await requestJson(buildUrl('/api/auth/login'), {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+    },
+    register: async (email, password, full_name, role) => {
+      return await requestJson(buildUrl('/api/auth/register'), {
+        method: 'POST',
+        body: JSON.stringify({ email, password, full_name, role }),
+      });
+    },
     logout: async (redirectUrl) => {
+      try {
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('base44_access_token');
+        window.localStorage.removeItem('alo_session');
+      } catch {}
       try {
         await requestJson(buildUrl('/api/auth/logout'), { method: 'POST' });
       } catch {
         // ignore logout errors
       }
-      if (redirectUrl && typeof window !== 'undefined') {
-        window.location.href = redirectUrl;
+      if (typeof window !== 'undefined') {
+        window.location.href = redirectUrl || '/';
       }
     },
     redirectToLogin: (redirectUrl) => {
       if (typeof window === 'undefined') return;
-      const destination = authLoginUrl || '/login';
-      const loginUrl = new URL(destination, window.location.origin);
+      const loginUrl = new URL('/Login', window.location.origin);
       if (redirectUrl) {
         loginUrl.searchParams.set('redirect', redirectUrl);
       }

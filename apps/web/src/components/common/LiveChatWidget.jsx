@@ -193,12 +193,12 @@ export default function LiveChatWidget() {
                   Start Chat
                 </Button>
                 <div className="text-center">
-                  <button 
-                    onClick={() => base44.auth.redirectToLogin()}
+                  <a 
+                    href="/Login"
                     className="text-sm text-emerald-600 hover:underline"
                   >
                     Already have an account? Sign in
-                  </button>
+                  </a>
                 </div>
               </div>
             ) : (

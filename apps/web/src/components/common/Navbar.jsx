@@ -11,16 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GraduationCap, Menu, User, LogOut, LayoutDashboard, FileText, MessageSquare, ChevronDown, Award } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/lib/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  const { data: user } = useQuery({
-    queryKey: ['current-user'],
-    queryFn: () => base44.auth.me(),
-  });
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   const destinations = [
     { label: 'United Kingdom', page: 'StudyInUK' },
@@ -140,7 +137,7 @@ export default function Navbar() {
                       <DropdownMenuSeparator />
                     </>
                   )}
-                  <DropdownMenuItem onClick={() => base44.auth.logout()} className="text-red-600">
+                  <DropdownMenuItem onClick={() => logout()} className="text-red-600">
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
@@ -150,7 +147,7 @@ export default function Navbar() {
               <Button 
                 variant="ghost" 
                 className="text-slate-900 hover:text-[#F37021]"
-                onClick={() => base44.auth.redirectToLogin()}
+                onClick={() => navigate('/Login')}
               >
                 Sign In
               </Button>
@@ -209,12 +206,12 @@ export default function Navbar() {
                     <Link to={createPageUrl('StudentDashboard')} onClick={() => setIsMobileOpen(false)} className="text-lg font-medium text-slate-900">
                       Dashboard
                     </Link>
-                    <Button variant="outline" onClick={() => { base44.auth.logout(); setIsMobileOpen(false); }} className="text-red-600 border-red-200">
+                    <Button variant="outline" onClick={() => { logout(); setIsMobileOpen(false); }} className="text-red-600 border-red-200">
                       Sign Out
                     </Button>
                   </>
                 ) : (
-                  <Button style={{ backgroundColor: '#F37021', color: '#000000' }} onClick={() => { base44.auth.redirectToLogin(); setIsMobileOpen(false); }}>
+                  <Button style={{ backgroundColor: '#F37021', color: '#000000' }} onClick={() => { navigate('/Login'); setIsMobileOpen(false); }}>
                     Book a Free Consultation
                   </Button>
                 )}
