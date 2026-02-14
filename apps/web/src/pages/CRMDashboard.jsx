@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from 'sonner';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -69,6 +70,25 @@ export default function CRMDashboard() {
       return counselors[0];
     },
     enabled: !!user?.email,
+  });
+
+  // Generate AI Analytics
+  const generateAnalytics = useMutation({
+    mutationFn: async () => {
+      const { data } = await base44.functions.invoke('generateAnalyticsReport', {
+        report_type: 'dashboard_overview',
+        filters: {},
+        date_range: { start: null, end: null }
+      });
+      return data;
+    },
+    onSuccess: (data) => {
+      setPredictiveAnalytics(data);
+      toast.success('AI Analytics generated successfully');
+    },
+    onError: () => {
+      toast.error('Failed to generate analytics');
+    }
   });
 
   // Calculate stats

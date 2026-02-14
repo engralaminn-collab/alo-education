@@ -157,6 +157,16 @@ const createApiClient = () => ({
       }
     },
   },
+  functions: {
+    invoke: async (functionName, payload) =>
+      requestJson(buildUrl('/api/ai/invoke'), {
+        method: 'POST',
+        body: JSON.stringify({
+          function_name: functionName,
+          payload: payload ?? {},
+        }),
+      }),
+  },
   integrations: {
     Core: {
       InvokeLLM: async (payload) =>

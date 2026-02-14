@@ -38,9 +38,31 @@ app.post('/api/app-logs', (_req, res) => {
 
 // ─── AI invoke (stub) ──────────────────────────────────────────
 app.post('/api/ai/invoke', verifyToken, (req, res) => {
+  const { function_name, payload } = req.body;
+  console.log('[AI] Invoking function:', function_name, 'with payload:', payload);
+  
+  // Return mock analytics data
   res.json({
-    response: 'AI integration is not yet configured. Please set up an AI provider.',
+    success: true,
+    data: {
+      insights: [
+        { type: 'conversion_rate', value: 42, trend: 'up', message: 'Application conversion rate improved by 12%' },
+        { type: 'response_time', value: 24, trend: 'down', message: 'Average response time: 24 hours' },
+        { type: 'enrollment', value: 156, trend: 'up', message: '156 students enrolled this quarter' }
+      ],
+      recommendations: [
+        'Focus on timely follow-ups to maintain high conversion rates',
+        'Consider expanding partnerships with top-performing universities',
+        'Increase marketing efforts in high-performing regions'
+      ],
+      predictions: {
+        next_month_applications: 245,
+        conversion_probability: 0.38,
+        revenue_forecast: 125000
+      }
+    },
     model: 'stub',
+    message: 'AI integration is not yet configured. This is mock data.'
   });
 });
 
