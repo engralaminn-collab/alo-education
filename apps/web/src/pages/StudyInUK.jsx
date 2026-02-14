@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
   GraduationCap, DollarSign, BookOpen, Calendar, 
-  TrendingUp, ArrowRight, CheckCircle, MapPin, Trophy, Award
+  TrendingUp, ArrowRight, CheckCircle, MapPin, Trophy, Award,
+  Briefcase, FileText, MessageSquare, Phone
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import CountryUniversityGrid from '@/components/country/CountryUniversityGrid';
