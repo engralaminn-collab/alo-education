@@ -8,7 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { 
   GraduationCap, FileText, MessageSquare, User, 
   Clock, CheckCircle, AlertCircle, ArrowRight,
-  Calendar, Upload, Building2, Award, Users
+  Calendar, Upload, Building2, Award, Users,
+  Gift, BookOpen, Copy, Share2, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';

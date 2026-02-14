@@ -11,7 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { 
   Search, Mail, Phone, Calendar, ArrowRight, 
-  CheckCircle, XCircle, Clock, User, MessageSquare, Zap
+  CheckCircle, XCircle, Clock, User, MessageSquare, Zap,
+  Sparkles, TrendingUp
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';

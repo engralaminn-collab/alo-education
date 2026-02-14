@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Shield, CheckCircle, XCircle, Clock, AlertCircle, FileText, Upload } from 'lucide-react';
+import { Shield, CheckCircle, XCircle, Clock, AlertCircle, FileText, Upload, Brain } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 

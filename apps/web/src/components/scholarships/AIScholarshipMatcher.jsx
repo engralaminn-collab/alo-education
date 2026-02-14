@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Sparkles, Loader2, Award, TrendingUp, DollarSign, Calendar, ExternalLink } from 'lucide-react';
+import { Sparkles, Loader2, Award, TrendingUp, DollarSign, Calendar, ExternalLink, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AIScholarshipMatcher({ studentProfile }) {

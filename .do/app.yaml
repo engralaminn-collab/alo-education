@@ -1,5 +1,10 @@
 name: squid-app
 region: sgp
+domains:
+  - domain: aloeducation.co.uk
+    type: PRIMARY
+  - domain: www.aloeducation.co.uk
+    type: ALIAS
 static_sites:
   - name: web-crm
     github:
