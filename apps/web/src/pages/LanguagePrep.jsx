@@ -269,7 +269,7 @@ export default function LanguagePrep() {
                   </tbody>
                 </table>
               </div>
-            </CardHeader>
+            </CardContent>
             <CardContent>
               <p className="text-lg text-slate-600 mb-8">
                 ALO Education provides end-to-end language preparation support to ensure your success:

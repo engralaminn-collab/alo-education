@@ -16,7 +16,6 @@ import CRMCustomReports from './pages/CRMCustomReports';
 import CRMDashboard from './pages/CRMDashboard';
 import CRMDataUpdates from './pages/CRMDataUpdates';
 import CRMGroupSessions from './pages/CRMGroupSessions';
-import CRMInquiries from './pages/CRMInquiries';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
 import CRMLeadNurturing from './pages/CRMLeadNurturing';
 import CRMMessages from './pages/CRMMessages';
@@ -101,7 +100,6 @@ export const PAGES = {
     "CRMDashboard": CRMDashboard,
     "CRMDataUpdates": CRMDataUpdates,
     "CRMGroupSessions": CRMGroupSessions,
-    "CRMInquiries": CRMInquiries,
     "CRMLeadGeneration": CRMLeadGeneration,
     "CRMLeadNurturing": CRMLeadNurturing,
     "CRMMessages": CRMMessages,
