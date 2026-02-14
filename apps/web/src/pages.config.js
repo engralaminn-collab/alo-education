@@ -14,6 +14,13 @@ import CRMCounselors from './pages/CRMCounselors';
 import CRMCourses from './pages/CRMCourses';
 import CRMCustomReports from './pages/CRMCustomReports';
 import CRMDashboard from './pages/CRMDashboard';
+import CRMInquiries from './pages/CRMInquiries';
+import CRMPerformanceDashboard from './pages/CRMPerformanceDashboard';
+import CRMPerformanceReports from './pages/CRMPerformanceReports';
+import CRMSecureDocuments from './pages/CRMSecureDocuments';
+import CRMStudentSuccess from './pages/CRMStudentSuccess';
+import CRMStudentProfile from './pages/CRMStudentProfile';
+import CounselorDashboard from './pages/CounselorDashboard';
 import CRMDataUpdates from './pages/CRMDataUpdates';
 import CRMGroupSessions from './pages/CRMGroupSessions';
 import CRMLeadGeneration from './pages/CRMLeadGeneration';
@@ -100,6 +107,13 @@ export const PAGES = {
     "CRMCustomReports": CRMCustomReports,
     "CRMDashboard": CRMDashboard,
     "CRMDataUpdates": CRMDataUpdates,
+    "CRMInquiries": CRMInquiries,
+    "CRMPerformanceDashboard": CRMPerformanceDashboard,
+    "CRMPerformanceReports": CRMPerformanceReports,
+    "CRMSecureDocuments": CRMSecureDocuments,
+    "CRMStudentProfile": CRMStudentProfile,
+    "CRMStudentSuccess": CRMStudentSuccess,
+    "CounselorDashboard": CounselorDashboard,
     "CRMGroupSessions": CRMGroupSessions,
     "CRMLeadGeneration": CRMLeadGeneration,
     "CRMLeadNurturing": CRMLeadNurturing,

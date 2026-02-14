@@ -188,7 +188,6 @@ export default function CRMInquiries() {
             </div>
           </CardContent>
         </Card>
-        </div>
       </div>
 
       {/* Filters */}
