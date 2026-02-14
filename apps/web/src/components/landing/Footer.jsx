@@ -81,7 +81,7 @@ export default function Footer() {
               ].map((link) => (
                 <li key={link.page}>
                   <Link 
-                    to={createPageUrl('Universities') + `?country=${country.toLowerCase()}`}
+                    to={createPageUrl(link.page)}
                     className="transition-colors"
                     style={{ color: 'var(--alo-blue)' }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--alo-orange)'}
